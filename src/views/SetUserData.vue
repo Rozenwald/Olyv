@@ -30,7 +30,7 @@ export default {
     height 170px
     border-radius 85px
     background #FFFFFF
-    margin 120px auto 0
+    margin 45px auto 0
   }
 
   .load-avatar-description{

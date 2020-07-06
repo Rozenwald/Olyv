@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import SetUserData from '../components/SetUserData.vue';
-import Setting from '../components/Setting.vue';
+import SetUserData from '../views/SetUserData.vue';
+import Setting from '../views/Setting.vue';
 
 Vue.use(VueRouter);
 

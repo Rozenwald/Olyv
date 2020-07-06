@@ -1,7 +1,7 @@
 <template lang="pug">
   #app
     v-app
-      Appbar(title="loh")
+      Appbar
       router-view
       BottomNavigation
 </template>
@@ -10,10 +10,11 @@
 
 import Appbar from './components/Appbar.vue';
 import BottomNavigation from './components/BottomNavigation.vue';
+import store from './store/index';
 
 export default {
   name: 'App',
-
+  store,
   components: {
     Appbar,
     BottomNavigation,

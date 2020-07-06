@@ -7,7 +7,11 @@
 <script>
 export default {
   name: 'Appbar',
-  props: ['title'],
+  computed: {
+    title() {
+      return this.$store.state.current_title;
+    },
+  },
 };
 </script>
 
@@ -16,6 +20,8 @@ export default {
   #toolbar{
     background-color #56D68B
     box-shadow 0px 2px 2px rgba(0, 0, 0, 0.05)
+    max-height 56px
+    position static
   }
 
   .toolbar-title-wrapper{

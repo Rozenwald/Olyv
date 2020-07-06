@@ -7,7 +7,7 @@
 
 <script>
 
-import UserProfileData from './UserProfileData.vue';
+import UserProfileData from '../components/UserProfileData.vue';
 
 export default {
   name: 'CustomerProfile',
@@ -25,7 +25,7 @@ export default {
   }
 
   .user-profile-wrp{
-    margin 170px auto 0
+    margin 95px auto 0
   }
 
   #btn-verification{

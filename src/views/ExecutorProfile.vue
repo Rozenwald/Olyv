@@ -15,7 +15,7 @@
 
 <script>
 
-import UserProfileData from './UserProfileData.vue';
+import UserProfileData from '../components/UserProfileData.vue';
 
 export default {
   name: 'ExecutorProfile',
@@ -33,7 +33,7 @@ export default {
   }
 
   .user-profile-wrp{
-    margin 120px auto 25px
+    margin 45px auto 25px
   }
 
   .custom-card-wrp{

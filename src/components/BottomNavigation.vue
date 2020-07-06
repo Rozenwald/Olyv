@@ -1,8 +1,11 @@
 <template lang="pug">
-  v-bottom-navigation#bottom-navigation(:value="activeBtn" fixed grow)
-    v-btn.nav-btn(v-for="item in items" :key="item.title" @click="route(item.routeName)")
-      span(v-text="item.title" v-if='item.title.length > 0')
-      v-icon.bottom-navigation-icon(v-text="item.icon" v-if='item.title.length > 0')
+  v-bottom-navigation#bottom-navigation(absolute grow)
+    v-btn.nav-btn(v-for="item in items"
+                  :key="item.title"
+                  @click="route(item.routeName, item.title)")
+      template(v-if='item.title.length > 0')
+        span(v-text="item.title")
+        v-icon.bottom-navigation-icon(v-text="item.icon")
       v-row#create-order-btn(v-else align='center', justify='center')
         v-icon(v-text="item.icon")
 </template>
@@ -10,20 +13,17 @@
 <script>
 export default {
   name: 'BottomNavigation',
-  data: () => ({
-    items: [
-      { title: 'Мои заявки', icon: '$vuetify.icons.my_orders', routeName: '' },
-      { title: 'Список заказов', icon: '$vuetify.icons.orders_list', routeName: '' },
-      { title: '', icon: '$vuetify.icons.plus' },
-      { title: 'Личный кабинет', icon: '$vuetify.icons.user', routeName: 'profile' },
-      { title: 'Настройки', icon: '$vuetify.icons.setting', routeName: 'setting' },
-    ],
-    activeBtn: 1,
-  }),
+
+  computed: {
+    items() {
+      return this.$store.state.bottomNavigation.items;
+    },
+  },
 
   methods: {
-    route(routeName) {
+    route(routeName, title) {
       this.$router.push(routeName);
+      this.$store.commit('setTitle', title);
     },
   },
 };
@@ -54,9 +54,11 @@ export default {
 
   #create-order-btn{
     position absolute
-    bottom 9px
-    height 60px
     width 60px
+    height 60px
+    bottom 9px
+    left 50%
+    margin-left -30px
     border-radius 30px
     background linear-gradient(180deg, #65EB9C 0%, #068B4B 100%)
     border 5px solid #FFFFFF
