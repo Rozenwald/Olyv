@@ -4,10 +4,16 @@ import SetUserData from '../views/SetUserData.vue';
 import Setting from '../views/Setting.vue';
 import MoiZakazi from '../views/CustomerMoreInfo.vue';
 import SpisokZakazov from '../views/SpisokZakazov.vue';
+import Registration from '../views/Registration.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    name: 'Registration',
+    path: '/Registration',
+    component: Registration,
+  },
   {
     name: 'MoiZakazi',
     path: '/MoiZakazi',
