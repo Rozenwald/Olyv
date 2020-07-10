@@ -41,6 +41,10 @@
                 template(v-slot:placeholder)
                   v-row.fill-height.ma-0(align='center', justify='center')
                     v-progress-circular(indeterminate, color='grey lighten-5')
+      v-row.edit-price(align='center', justify='center')
+        v-button.minus-btn -
+        .currentPrice 4554
+        v-button.plus-btn +
 </template>
 
 <script>
@@ -78,6 +82,10 @@ export default {
 
   .customer-more-info-header{
     padding 0 !important
+  }
+
+  .customer-more-info{
+    margin-bottom 56px
   }
 
   .parallax {
@@ -152,5 +160,16 @@ export default {
     white-space nowrap
     flex-wrap nowrap
     margin-top 10px
+  }
+
+  .plus-btn, .minus-btn {
+    width 40px
+    height 40px
+    opacity: 0.3;
+    border: 1px solid rgba(101, 104, 108, 0.8);
+    box-sizing: border-box;
+    border-radius 20px
+    line-height 40px
+    text-align center
   }
 </style>
