@@ -1,11 +1,11 @@
 <template lang='pug'>
     .container
-      OrderCard1(v-for='item in items' :key='item.id')
+      OrderCard1(v-for='item in items' :key='item.id' :title='item.title' :cost='item.cost')
 </template>
 
 <script>
 
-import OrderCard1 from './OrderCard1.vue';
+import OrderCard1 from './OrderCard2.vue';
 
 export default {
   name: 'OrderCard',

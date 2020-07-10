@@ -1,21 +1,19 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import bottomNavigation from './modules/bottomNavigaion';
+import appbar from './modules/appbar';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    current_title: null,
   },
   mutations: {
-    setTitle(state, title) {
-      state.current_title = title;
-    },
   },
   actions: {
   },
   modules: {
     bottomNavigation,
+    appbar,
   },
 });

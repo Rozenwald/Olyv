@@ -1,6 +1,6 @@
 <template lang='pug'>
     .container
-      OrderCard1(v-for='item in items' :key='item.id')
+      OrderCard1(v-for='item in items' :key='item.id' :title='item.title' :cost='item.cost')
 </template>
 
 <script>
@@ -16,6 +16,8 @@ export default {
       { title: 'Редактирвание профиля', cost: '10 909р', id: 3 },
       { title: 'Связь с разработчиком', cost: '10 909р', id: 4 },
       { title: 'Информация', cost: '10 909р', id: 5 },
+      { title: 'Уведомления', cost: '10 909р', id: 6 },
+      { title: 'Черный список', cost: '10 909р', id: 7 },
     ],
   }),
   components: {

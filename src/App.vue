@@ -1,9 +1,9 @@
 <template lang="pug">
   #app
     v-app
-      Appbar
+      appbar
       router-view
-      BottomNavigation
+      bottom-navigation
 </template>
 
 <script>

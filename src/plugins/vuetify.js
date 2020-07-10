@@ -11,6 +11,9 @@ import OrdersList from '../components/icons/OrdersList.vue';
 import User from '../components/icons/User.vue';
 import Setting from '../components/icons/Setting.vue';
 import Plus from '../components/icons/Plus.vue';
+import SaveDeal from '../components/icons/SaveDeal.vue';
+import Responded from '../components/icons/Responded.vue';
+import Distantion from '../components/icons/Distantion.vue';
 
 Vue.use(Vuetify);
 
@@ -49,6 +52,15 @@ export default new Vuetify({
       },
       plus: {
         component: Plus,
+      },
+      save_deal: {
+        component: SaveDeal,
+      },
+      responded: {
+        component: Responded,
+      },
+      distantion: {
+        component: Distantion,
       },
     },
   },

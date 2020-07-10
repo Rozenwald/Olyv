@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-bottom-navigation#bottom-navigation(absolute grow)
+  v-bottom-navigation#bottom-navigation(fixed grow)
     v-btn.nav-btn(v-for="item in items"
                   :key="item.title"
                   @click="route(item.routeName, item.title)")
@@ -11,12 +11,13 @@
 </template>
 
 <script>
+
 export default {
-  name: 'BottomNavigation',
+  name: 'bottom-navigation',
 
   computed: {
     items() {
-      return this.$store.state.bottomNavigation.items;
+      return this.$store.getters.getItems;
     },
   },
 

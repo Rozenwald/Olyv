@@ -6,10 +6,10 @@
 
 <script>
 export default {
-  name: 'Appbar',
+  name: 'appbar',
   computed: {
     title() {
-      return this.$store.state.current_title;
+      return this.$store.getters.getTitle;
     },
   },
 };

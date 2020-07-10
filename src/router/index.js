@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import SetUserData from '../views/SetUserData.vue';
 import Setting from '../views/Setting.vue';
-import MoiZakazi from '../views/MoiZakazi.vue';
+import MoiZakazi from '../views/CustomerMoreInfo.vue';
 import SpisokZakazov from '../views/SpisokZakazov.vue';
 
 Vue.use(VueRouter);

@@ -3,10 +3,20 @@
                 max-width
             )
                 #TextOrderContainer
-                    #Title
+                    #Title {{title}}
 
-                    #cost {{DataCard.Cost}}
+                    #cost {{cost}}
 </template>
+
+<script>
+export default {
+  name: 'OrderCard1',
+  props: {
+    title: String,
+    cost: String,
+  },
+};
+</script>
 
 <style lang="stylus" scoped>
 
