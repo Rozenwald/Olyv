@@ -42,9 +42,18 @@
                   v-row.fill-height.ma-0(align='center', justify='center')
                     v-progress-circular(indeterminate, color='grey lighten-5')
       v-row.edit-price(align='center', justify='center')
-        v-button.minus-btn -
-        .currentPrice 4554
-        v-button.plus-btn +
+        v-btn.minus-btn(@click='setPrice(-1 * changeValue)') -
+        input.currentPrice(
+                            v-model="currentPrice"
+                            type="text"
+                            :style="{width: inputWidth + 'px'}"
+                            size="10"
+                            maxlength="10"
+                          )
+        v-btn.plus-btn(@click='setPrice(changeValue)') +
+      v-row.btns(align='center', justify='space-between')
+        v-btn.accept-btn Согласиться
+        v-btn.chat-btn Перейти в чат
 </template>
 
 <script>
@@ -58,10 +67,39 @@ export default {
         responded: '$vuetify.icons.responded',
         distantion: '$vuetify.icons.distantion',
       },
+      changeValue: 1000,
+      currentPrice: 5000, // Number
       respondedCount: 12,
       distantion: 3,
+      inputWidth: null,
       description: 'Lorem Ipsum - це текст-"риба", що використовується в друкарстві та дизайні. Lorem Ipsum є, фактично, стандартною "рибою" аж з XVI сторіччя, коли невідомий друкар взяв шрифтову гранку та склав на ній підбірку зразків шрифтів. "Риба" не тільки успішно пережила пять століть, але й прижилася в електронному верстуванні, залишаючись по суті незмінною. Вона популяризувалась в 60-их роках минулого сторіччя завдяки виданню зразків шрифтів Letraset, які містили уривки з Lorem Ipsum, і вдруге - нещодавно завдяки програмам компютерного верстування на кшталт Aldus Pagemaker, які використовували різні версії Lorem Ipsum',
     };
+  },
+  methods: {
+    setPrice(val) {
+      if (Number.parseInt(this.currentPrice, 10) + val > 0) {
+        this.currentPrice = Number.parseInt(this.currentPrice, 10) + val;
+      }
+    },
+    setInputWidth() {
+      this.inputWidth = (this.currentPrice.toString().length + 1);
+      if (this.currentPrice.toString().length > 2) {
+        this.inputWidth *= 12;
+      } else {
+        this.inputWidth *= 16;
+      }
+    },
+  },
+  watch: {
+    currentPrice() {
+      this.setInputWidth();
+      if (Number.parseInt(this.currentPrice, 10) === 0) {
+        this.currentPrice = this.changeValue;
+      }
+    },
+  },
+  mounted() {
+    this.setInputWidth();
   },
 };
 </script>
@@ -163,13 +201,32 @@ export default {
   }
 
   .plus-btn, .minus-btn {
-    width 40px
-    height 40px
+    width 40px !important
+    height 40px !important
+    background none !important
     opacity: 0.3;
     border: 1px solid rgba(101, 104, 108, 0.8);
     box-sizing: border-box;
     border-radius 20px
-    line-height 40px
+    box-shadow none !important
+    min-width 0 !important
+    padding 0 !important
+  }
+
+  .currentPrice{
+    padding 0 12px
     text-align center
+    font-family Golos
+    font-style normal
+    font-size 14px
+    color #3C3F44
+  }
+
+  .btns{
+    margin-top 15px
+  }
+
+  .edit-price{
+    margin-top 3px
   }
 </style>

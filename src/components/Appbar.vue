@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-app-bar#toolbar(app)
+  v-app-bar#toolbar(app v-show="show")
     .toolbar-title-wrapper
       .toolbar-title {{title}}
 </template>
@@ -10,6 +10,9 @@ export default {
   computed: {
     title() {
       return this.$store.getters.getTitle;
+    },
+    show() {
+      return this.$store.getters.isVisibleAppbar;
     },
   },
 };

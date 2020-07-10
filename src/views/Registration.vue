@@ -32,18 +32,28 @@
                             |Правила и условия политики конфеденциальности
                         v-card-text#ModalRulesText
                         |Текст о правилах и политике конфеденциальности
-                        |бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла
+                        |бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="green darken-1" text @click="dialog = false">Disagree</v-btn>
+                            <v-btn color="green darken-1" text @click="dialog = false">Dis</v-btn>
                             <v-btn color="green darken-1" text @click="dialog = false">Agree</v-btn>
                         </v-card-actions>
                         </v-card>
             </template>
             v-btn#RegButton(
-            ) Зарегестрироваться      
+            ) Зарегестрироваться
             #RegBottomBar
 </template>
+
+<script>
+export default {
+  name: 'Registration',
+  created() {
+    this.$store.dispatch('showAppbar', false);
+    this.$store.dispatch('showBottomnavigation', false);
+  },
+};
+</script>
 
 <style lang="stylus" scoped>
     #ModalRulesText{
@@ -69,7 +79,7 @@
         color #FFF
         font-size: 13px
         background: linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
-        border none 
+        border none
         border-radius 30px
         height 6.8%
         width 72%
@@ -100,7 +110,7 @@
     #RegBottomBar{
         position fixed;
         bottom 0;
-        background-color: #2AB06A;   
+        background-color: #2AB06A;
         width: 100%;
         height 10%
         border: none;

@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-bottom-navigation#bottom-navigation(fixed grow)
+  v-bottom-navigation#bottom-navigation(fixed grow v-show="show")
     v-btn.nav-btn(v-for="item in items"
                   :key="item.title"
                   @click="route(item.routeName, item.title)")
@@ -18,6 +18,9 @@ export default {
   computed: {
     items() {
       return this.$store.getters.getItems;
+    },
+    show() {
+      return this.$store.getters.isVisibleBottomnavigation;
     },
   },
 

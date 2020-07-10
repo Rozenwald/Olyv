@@ -1,5 +1,18 @@
+const mutations = {
+  showBottomnavigation(state, flag) {
+    state.show = flag;
+  },
+};
+
+const actions = {
+  showBottomnavigation({ commit }) {
+    commit('showBottomnavigation');
+  },
+};
+
 const getters = {
   getItems: (state) => state.items,
+  isVisibleBottomnavigation: (state) => state.show,
 };
 
 const state = {
@@ -10,9 +23,13 @@ const state = {
     { title: 'Профиль', icon: '$vuetify.icons.user', routeName: 'profile' },
     { title: 'Настройки', icon: '$vuetify.icons.setting', routeName: 'setting' },
   ],
+  show: true,
 };
 
 export default {
   state,
   getters,
+  mutations,
+  actions,
+
 };
