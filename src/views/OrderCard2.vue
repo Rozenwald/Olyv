@@ -4,21 +4,72 @@
             )
                 #TextOrderContainer
                     #TextOrder {{title}}
-
-                    #cost {{cost}}
+                    #ContainerCost
+                        #cost1 {{cost1}}
+                        #cost2 {{cost2}}
 </template>
 
 <script>
 export default {
-  name: 'OrderCard1',
+  name: 'OrderCard2',
   props: {
     title: String,
-    cost: String,
+    cost1: String,
+    cost2: String,
   },
 };
 </script>
 
 <style lang="stylus" scoped>
+    #ContainerCost{
+        justify-content center
+        height 72px;
+        max-width content
+        padding 0px;
+        text-align: center;
+        vertical-align middle
+    }
+    #cost1{
+        display block
+        height 36px
+        line-height 22px
+        font-weight: bold;
+        font-family: Inter;
+        font-style: normal;
+        color #FE7664
+        padding-left 12px
+        padding-right 12px
+        padding-top 7px
+        padding-bottom 7px
+        position absolute
+
+        background-color #FEF5EE
+        border none
+        border-radius 5px 0px 0px 5px
+        font-size: 18px
+        right 0
+        top 14px
+    }
+    #cost2{
+        display block
+        height 20px
+        line-height 18px
+        font-weight: bold;
+        font-family: Inter;
+        font-style: normal;
+        color #FE7664
+        padding-left 12px
+        padding-right 12px
+        padding-top 7px
+        padding-bottom 7px
+        position absolute
+
+        border none
+        border-radius 5px 0px 0px 5px
+        font-size: 15px
+        right 0
+        top 50px
+    }
 
     #TextOrderContainer{
         width 100%
@@ -49,26 +100,6 @@ export default {
         font-size: 16px
         left  16px
         top 11px
-    }
-    #cost{
-        height 36px
-        line-height 22px
-        font-weight: bold;
-        font-family: Inter;
-        font-style: normal;
-        color #FE7664
-        padding-left 12px
-        padding-right 12px
-        padding-top 7px
-        padding-bottom 7px
-        position absolute
-
-        background-color #FEF5EE
-        border none
-        border-radius 5px 0px 0px 5px
-        font-size: 18px
-        right 0
-        top 14px
     }
 
     #Toolbar{
@@ -121,15 +152,6 @@ export default {
         border-radius 0px 15px 15px 15px
         background-color #d9d9d9
         margin-top 7px
-    }
-    .container{
-        justify-content center
-        position relative
-        width 100%;
-        height 100%;
-        padding 0px;
-        text-align: center;
-        vertical-align middle
     }
 
 </style>

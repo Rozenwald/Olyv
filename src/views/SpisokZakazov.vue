@@ -1,17 +1,27 @@
 <template lang='pug'>
     .container
-      OrderCard1(v-for='item in items' :key='item.id' :title='item.title' :cost='item.cost')
+      OrderCard2(
+        v-for='item in items'
+        :key='item.id'
+        :title='item.title'
+        :cost1='item.cost1'
+        :cost2='item.cost2')
 </template>
 
 <script>
 
-import OrderCard1 from './OrderCard2.vue';
+import OrderCard2 from './OrderCard2.vue';
 
 export default {
   name: 'OrderCard',
   data: () => ({
     items: [
-      { title: 'Уведомления', cost: '10 909р', id: 1 },
+      {
+        title: 'Уведомления',
+        cost1: '10 909р',
+        cost2: '🠇 10 909р',
+        id: 1,
+      },
       { title: 'Черный список', cost: '10 909р', id: 2 },
       { title: 'Редактирвание профиля', cost: '10 909р', id: 3 },
       { title: 'Связь с разработчиком', cost: '10 909р', id: 4 },
@@ -19,7 +29,7 @@ export default {
     ],
   }),
   components: {
-    OrderCard1,
+    OrderCard2,
   },
 };
 </script>
