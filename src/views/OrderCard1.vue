@@ -32,8 +32,6 @@ export default {
         padding-right 0
         padding-left 0
         margin-top 10px
-        margin-right 15px
-        margin-left 15px
         border 1px solid black
         border-radius 6px
     }

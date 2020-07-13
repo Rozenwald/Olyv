@@ -2,7 +2,7 @@
   .customer-profile-wrp
     .customer-profile
       UserProfileData
-      v-btn(rounded elevation="0" id="btn-verification") Пройти верификацию
+      v-btn#btn-verification(rounded elevation="0") Пройти верификацию
 </template>
 
 <script>
@@ -37,7 +37,7 @@ export default {
     width 240px
     margin-top 88px
     border 1px solid #56D68B
-    box-sizing border-box
     border-radius 100px
+    box-shadow none
   }
 </style>

@@ -5,15 +5,21 @@
                   @click="route(item.routeName, item.title)")
       template(v-if='item.title.length > 0')
         span(v-text="item.title")
-        v-icon.bottom-navigation-icon(v-text="item.icon")
+        svg-icon.bottom-navigation-icon(:name="item.icon" :height=19)
       v-row#create-order-btn(v-else align='center', justify='center')
-        v-icon(v-text="item.icon")
+        svg-icon(:name="item.icon")
 </template>
 
 <script>
 
+import SvgIcon from './SvgIcon.vue';
+
 export default {
   name: 'bottom-navigation',
+
+  components: {
+    SvgIcon,
+  },
 
   computed: {
     items() {
@@ -47,7 +53,7 @@ export default {
   }
 
   .bottom-navigation-icon{
-    padding-bottom 5px
+    margin-bottom 5px
   }
 
   .nav-btn{

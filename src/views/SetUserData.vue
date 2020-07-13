@@ -5,10 +5,10 @@
         img(src="../assets/photo-camera.png", alt="photo camera icon")
         .load-ur-photo Загрузите Ваше фото
 
-    v-text-field.input-data(label="Имя" dense color="#65686C")
-    v-text-field(label="Фамилия" dense color="#65686C")
+    v-text-field.input-data(label="Имя" dense color="#65686C" clearable)
+    v-text-field(label="Фамилия" dense color="#65686C" clearable)
 
-    v-btn(rounded id="btn-save") Сохранить
+    v-btn.btn-save(rounded) Сохранить
 
 </template>
 
@@ -50,7 +50,7 @@ export default {
     line-height 16px
   }
 
-  #btn-save{
+  .btn-save{
     background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
     font-style normal
     font-weight 600
@@ -58,6 +58,7 @@ export default {
     color #FFFFFF
     width 240px
     margin-top 40px
+    box-shadow none
   }
 
   .input-data{

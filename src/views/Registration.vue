@@ -5,13 +5,14 @@
                 .container
                     img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
             v-text-field.RegNumber(
-                v-model: 'Number'
-                label='Номер телефона'
+                v-model: 'email'
+                label='E-mail'
+                type='email'
                 required)
 
             v-text-field.RegNumber(
-                v-model: 'Email'
-                label='E-mail'
+                v-model: 'password'
+                label='Пароль'
                 required)
 
             span#SpanRulesNM Нажимая кнопку зарегестрироваться вы принимаете:
@@ -48,6 +49,49 @@
 <script>
 export default {
   name: 'Registration',
+  data() {
+    return {
+      email: null,
+      password: null,
+      error: null,
+    };
+  },
+  methods: {
+
+    validEmail(email) {
+      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return regex.test(email);
+    },
+
+    checkForm(e) {
+      if (!this.validEmail(this.email)) {
+        this.error = '';
+      }
+      /* eslint-disable no-return-assign */
+      if (!this.errors.length) {
+        this.$axios
+          .post('')
+          .then((response) => (this.checkResponse(response)))
+          .catch(() => this.error = '');
+      }
+      /* eslint-enable no-return-assign */
+
+      e.preventDefault();
+    },
+
+    checkResponse(response) {
+      return response;
+    },
+
+  },
+  computed: {
+    isError() {
+      if (this.error.length) {
+        return true;
+      }
+      return false;
+    },
+  },
   created() {
     this.$store.dispatch('showAppbar', false);
     this.$store.dispatch('showBottomnavigation', false);
