@@ -2,26 +2,27 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import SetUserData from '../views/SetUserData.vue';
 import Setting from '../views/Setting.vue';
-import MoiZakazi from '../views/CustomerMoreInfo.vue';
+import MoiZakazi from '../views/MoiZakazi.vue';
 import SpisokZakazov from '../views/SpisokZakazov.vue';
 import Registration from '../views/Registration.vue';
+import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    name: 'Registration',
-    path: '/Registration',
+    name: 'registration',
+    path: '/registration',
     component: Registration,
   },
   {
-    name: 'MoiZakazi',
-    path: '/MoiZakazi',
+    name: 'moiZakazi',
+    path: '/moiZakazi',
     component: MoiZakazi,
   },
   {
-    name: 'SpisokZakazov',
-    path: '/SpisokZakazov',
+    name: 'spisokZakazov',
+    path: '/spisokZakazov',
     component: SpisokZakazov,
   },
   {
@@ -33,6 +34,11 @@ const routes = [
     name: 'setting',
     path: '/setting',
     component: Setting,
+  },
+  {
+    name: 'customerMoreInfo',
+    path: '/customerMoreInfo',
+    component: CustomerMoreInfo,
   },
 ];
 

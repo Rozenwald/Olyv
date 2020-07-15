@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import bottomNavigation from './modules/bottomNavigaion';
 import appbar from './modules/appbar';
+import setting from './modules/setting';
+import loginDialog from './modules/loginDialog';
 
 Vue.use(Vuex);
 
@@ -15,5 +17,7 @@ export default new Vuex.Store({
   modules: {
     bottomNavigation,
     appbar,
+    setting,
+    loginDialog,
   },
 });

@@ -2,10 +2,11 @@
   v-bottom-navigation#bottom-navigation(fixed grow v-show="show")
     v-btn.nav-btn(v-for="item in items"
                   :key="item.title"
-                  @click="route(item.routeName, item.title)")
+                  @click="route(item.routeName)"
+                  )
       template(v-if='item.title.length > 0')
         span(v-text="item.title")
-        svg-icon.bottom-navigation-icon(:name="item.icon" :height=19)
+        svg-icon.bottom-navigation-icon(:name="item.icon" height="19")
       v-row#create-order-btn(v-else align='center', justify='center')
         svg-icon(:name="item.icon")
 </template>
@@ -23,17 +24,16 @@ export default {
 
   computed: {
     items() {
-      return this.$store.getters.getItems;
+      return this.$store.getters.getItemsBottomNavigaion;
     },
     show() {
-      return this.$store.getters.isVisibleBottomnavigation;
+      return this.$store.getters.isVisibleBottomNavigation;
     },
   },
 
   methods: {
-    route(routeName, title) {
+    route(routeName) {
       this.$router.push(routeName);
-      this.$store.commit('setTitle', title);
     },
   },
 };

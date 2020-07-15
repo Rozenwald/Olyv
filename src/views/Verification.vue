@@ -17,6 +17,9 @@ export default {
   data: () => ({
     photoIsLoad: false,
   }),
+  created() {
+    this.$store.commit('setTitle', 'Верификация');
+  },
 };
 </script>
 

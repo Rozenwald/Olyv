@@ -21,6 +21,9 @@ export default {
   components: {
     OrderCard1,
   },
+  created() {
+    this.$store.commit('setTitle', 'Мои заказы');
+  },
 
 };
 </script>

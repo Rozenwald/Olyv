@@ -8,13 +8,28 @@
     v-text-field.input-data(label="Имя" dense color="#65686C" clearable)
     v-text-field(label="Фамилия" dense color="#65686C" clearable)
 
-    v-btn.btn-save(rounded) Сохранить
+    v-btn.btn-save(rounded @click="showDialog") Сохранить
+
+    login-dialog
 
 </template>
 
 <script>
+import LoginDialog from './LoginDialog.vue';
+
 export default {
   name: 'SetUserData',
+  components: {
+    LoginDialog,
+  },
+  created() {
+    this.$store.commit('setTitle', 'Личный кабинет');
+  },
+  methods: {
+    showDialog() {
+      this.$store.dispatch('showLoginDialog', true);
+    },
+  },
 };
 </script>
 

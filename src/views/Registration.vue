@@ -5,20 +5,21 @@
                 .container
                     img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
             v-text-field.RegNumber(
-                v-model: 'email'
+                v-model="email"
                 label='E-mail'
                 type='email'
                 required)
 
             v-text-field.RegNumber(
-                v-model: 'password'
+                v-model="password"
+                type='password'
                 label='Пароль'
                 required)
 
             span#SpanRulesNM Нажимая кнопку зарегестрироваться вы принимаете:
             <template>
                     v-dialog(
-                        v-model: 'dialog'
+                        v-model= 'dialog'
                         width="600px")
                         <template v-slot:activator="{ on, attrs }">
                         v-btn#ModalRules(
@@ -41,14 +42,18 @@
                         </v-card-actions>
                         </v-card>
             </template>
-            v-btn#RegButton(
-            ) Зарегестрироваться
+            v-btn#RegButton(v-on:click="checkForm") Зарегестрироваться
             #RegBottomBar
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'Registration',
+  components: {
+    axios,
+  },
   data() {
     return {
       email: null,
@@ -63,24 +68,39 @@ export default {
       return regex.test(email);
     },
 
-    checkForm(e) {
-      if (!this.validEmail(this.email)) {
-        this.error = '';
-      }
+    signUp() {
       /* eslint-disable no-return-assign */
-      if (!this.errors.length) {
-        this.$axios
-          .post('')
-          .then((response) => (this.checkResponse(response)))
-          .catch(() => this.error = '');
-      }
+      axios
+        .post('http://test.cabinet.olyv.services:8888/api/v1/public/signup/email', {
+          email: this.email,
+          password: this.password,
+        })
+        .then((response) => (this.checkResponse(response)))
+        .catch((error) => console.log(error));
       /* eslint-enable no-return-assign */
+    },
+
+    checkForm(e) {
+      this.error = '';
+      if (!this.validEmail(this.email)) {
+        this.error = 'Некоректный email';
+      }
+
+      if (!this.error.length) {
+        this.signUp();
+      }
 
       e.preventDefault();
     },
 
     checkResponse(response) {
-      return response;
+      switch (response.data.status) {
+        case 'invalidEmail':
+          this.error = 'Некоректный email';
+          break;
+        default:
+          console.log(response);
+      }
     },
 
   },
@@ -94,7 +114,11 @@ export default {
   },
   created() {
     this.$store.dispatch('showAppbar', false);
-    this.$store.dispatch('showBottomnavigation', false);
+    this.$store.dispatch('showBottomNavigation', false);
+  },
+  beforeDestroy() {
+    this.$store.dispatch('showAppbar', true);
+    this.$store.dispatch('showBottomNavigation', true);
   },
 };
 </script>

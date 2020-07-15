@@ -14,6 +14,9 @@ export default {
   components: {
     UserProfileData,
   },
+  created() {
+    this.$store.commit('setTitle', 'Личный кабинет');
+  },
 };
 </script>
 

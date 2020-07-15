@@ -4,28 +4,30 @@
       v-list
         v-list-item(v-for="item in items" :key="item.title")
           v-list-item-icon
-            v-icon(v-text='item.icon')
+            svg-icon(:name='item.icon')
           v-list-item-content
             v-list-item-title(v-text='item.title')
           v-list-item-action
             v-btn(icon)
-              v-icon.right_arrow(v-text='right_arrow')
+              svg-icon(name='RightArrow' width="8" height="12")
 </template>
 
 <script>
+import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
+  components: {
+    SvgIcon,
+  },
   name: 'Setting',
-  data: () => ({
-    items: [
-      { title: 'Уведомления', icon: '$vuetify.icons.notification' },
-      { title: 'Черный список', icon: '$vuetify.icons.black_list' },
-      { title: 'Редактирвание профиля', icon: '$vuetify.icons.edit_profile' },
-      { title: 'Связь с разработчиком', icon: '$vuetify.icons.connect_dev' },
-      { title: 'Информация', icon: '$vuetify.icons.info' },
-    ],
-    right_arrow: '$vuetify.icons.right_arrow',
-  }),
+  computed: {
+    items() {
+      return this.$store.getters.getItemsSetting;
+    },
+  },
+  created() {
+    this.$store.commit('setTitle', 'Настройки');
+  },
 };
 </script>
 
@@ -33,11 +35,6 @@ export default {
   .setting{
     padding 0 15px
     background-color white
-  }
-
-  .right_arrow{
-    width 8px !important
-    height auto !important
   }
 
   .v-list-item{
