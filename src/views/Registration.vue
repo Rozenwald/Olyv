@@ -19,7 +19,6 @@
             span#SpanRulesNM Нажимая кнопку зарегестрироваться вы принимаете:
             <template>
                     v-dialog(
-                        v-model= 'dialog'
                         width="600px")
                         <template v-slot:activator="{ on, attrs }">
                         v-btn#ModalRules(
@@ -37,8 +36,8 @@
                         |бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="green darken-1" text @click="dialog = false">Dis</v-btn>
-                            <v-btn color="green darken-1" text @click="dialog = false">Agree</v-btn>
+                            <v-btn color="green darken-1">Dis</v-btn>
+                            <v-btn color="green darken-1">Agree</v-btn>
                         </v-card-actions>
                         </v-card>
             </template>

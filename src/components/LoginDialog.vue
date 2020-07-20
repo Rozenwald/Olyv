@@ -26,7 +26,7 @@ export default {
   methods: {
     route() {
       this.showDialog = false;
-      this.$router.push('Registration');
+      this.$router.push('registration');
     },
   },
 };
