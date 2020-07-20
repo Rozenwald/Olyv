@@ -6,6 +6,9 @@ import vuetify from './plugins/vuetify';
 import VueScrollmagic from './plugins/vue-scrollmagic';
 
 Vue.config.productionTip = false;
+Vue.prototype.$baseUrl = process.env.NODE_ENV === 'production'
+  ? 'http://cabinet.olyv.services:3000/'
+  : 'http://test.cabinet.olyv.services:3000/';
 
 new Vue({
   router,

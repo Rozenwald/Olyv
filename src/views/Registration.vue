@@ -80,6 +80,18 @@ export default {
       /* eslint-enable no-return-assign */
     },
 
+    signIn() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post('http://test.cabinet.olyv.services:8888/api/v1/public/signin/email', {
+          username: this.email,
+          password: this.password,
+        })
+        .then((response) => (console.log(response)))
+        .catch((error) => console.log(error));
+      /* eslint-enable no-return-assign */
+    },
+
     checkForm(e) {
       this.error = '';
       if (!this.validEmail(this.email)) {
@@ -98,8 +110,18 @@ export default {
         case 'invalidEmail':
           this.error = 'Некоректный email';
           break;
+        case 'invalidPassword':
+          this.error = 'Пароль должен содержать больше 6 символов';
+          break;
+        case 'existEmail':
+          this.error = 'Пароль должен содержать больше 6 символов';
+          break;
+        case 'notSuccess':
+          this.error = 'Ошибка регистрации';
+          break;
         default:
-          console.log(response);
+          this.signIn();
+          break;
       }
     },
 
