@@ -4,6 +4,7 @@
       appbar
       router-view
       bottom-navigation
+      login-dialog
 </template>
 
 <script>
@@ -11,6 +12,7 @@
 import Appbar from './components/Appbar.vue';
 import BottomNavigation from './components/BottomNavigation.vue';
 import store from './store/index';
+import LoginDialog from './components/LoginDialog.vue';
 
 export default {
   name: 'App',
@@ -18,6 +20,7 @@ export default {
   components: {
     Appbar,
     BottomNavigation,
+    LoginDialog,
   },
 
   data: () => ({

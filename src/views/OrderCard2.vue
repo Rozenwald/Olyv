@@ -1,6 +1,7 @@
 <template lang='pug'>
             v-card#Order(
                 max-width
+                @click="showLoginDialog"
             )
                 #TextOrderContainer
                     #TextOrder {{title}}
@@ -16,6 +17,11 @@ export default {
     title: String,
     cost1: String,
     cost2: String,
+  },
+  methods: {
+    showLoginDialog() {
+      this.$store.dispatch('showLoginDialog', true);
+    },
   },
 };
 </script>

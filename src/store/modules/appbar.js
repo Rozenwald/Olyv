@@ -8,8 +8,8 @@ const mutations = {
 };
 
 const actions = {
-  showAppbar({ commit }) {
-    commit('showAppbar');
+  showAppbar({ commit }, show) {
+    commit('showAppbar', show);
   },
 };
 

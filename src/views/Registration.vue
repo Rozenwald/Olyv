@@ -19,7 +19,6 @@
             span#SpanRulesNM Нажимая кнопку зарегестрироваться вы принимаете:
             <template>
                     v-dialog(
-                        v-model= 'dialog'
                         width="600px")
                         <template v-slot:activator="{ on, attrs }">
                         v-btn#ModalRules(
@@ -37,13 +36,17 @@
                         |бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="green darken-1" text @click="dialog = false">Dis</v-btn>
-                            <v-btn color="green darken-1" text @click="dialog = false">Agree</v-btn>
+                            <v-btn color="green darken-1">Dis</v-btn>
+                            <v-btn color="green darken-1">Agree</v-btn>
                         </v-card-actions>
                         </v-card>
             </template>
             v-btn#RegButton(v-on:click="checkForm") Зарегестрироваться
             #RegBottomBar
+            v-dialog(v-model="isError")
+              v-row(align='center' justify='center')
+                .dialog_title {{error}}
+              v-btn(@click="error = ''") ок
 </template>
 
 <script>
@@ -58,7 +61,7 @@ export default {
     return {
       email: null,
       password: null,
-      error: null,
+      error: '',
     };
   },
   methods: {
@@ -75,8 +78,20 @@ export default {
           email: this.email,
           password: this.password,
         })
-        .then((response) => (this.checkResponse(response)))
-        .catch((error) => console.log(error));
+        .then((response) => (this.checkSignUp(response)))
+        .catch(() => (this.error = 'Ошибка регистрации'));
+      /* eslint-enable no-return-assign */
+    },
+
+    signIn() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post('http://test.cabinet.olyv.services:8888/api/v1/public/signin/email', {
+          username: this.email,
+          password: this.password,
+        })
+        .then((response) => (this.checkSignIn(response)))
+        .catch(() => (this.error = 'Ошибка регистрации'));
       /* eslint-enable no-return-assign */
     },
 
@@ -93,23 +108,57 @@ export default {
       e.preventDefault();
     },
 
-    checkResponse(response) {
+    checkSignUp(response) {
       switch (response.data.status) {
         case 'invalidEmail':
           this.error = 'Некоректный email';
           break;
+        case 'invalidPassword':
+          this.error = 'Пароль должен содержать больше 6 символов';
+          break;
+        case 'existEmail':
+          this.error = 'Данная почта уже зарегистрирована';
+          break;
+        case 'notSuccess':
+          this.error = 'Ошибка регистрации';
+          break;
+        case 'success':
+          this.signIn();
+          break;
         default:
-          console.log(response);
+          this.error = 'Ошибка регистрации';
+          break;
+      }
+    },
+
+    checkSignIn(response) {
+      switch (response.data.status) {
+        case 'success':
+          window.localStorage.setItem('token', response.data.data);
+          this.$store.dispatch('setToken', response.data.data);
+          this.$router.back();
+          break;
+        case 'notSuccess':
+          this.error = 'Ошибка регистрации';
+          break;
+        default:
+          this.error = 'Ошибка регистрации';
+          break;
       }
     },
 
   },
   computed: {
-    isError() {
-      if (this.error.length) {
-        return true;
-      }
-      return false;
+    isError: {
+      get() {
+        if (this.error.length) {
+          return true;
+        }
+        return false;
+      },
+      set() {
+        this.error = '';
+      },
     },
   },
   created() {

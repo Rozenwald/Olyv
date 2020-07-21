@@ -5,8 +5,8 @@ const mutations = {
 };
 
 const actions = {
-  showBottomNavigation({ commit }) {
-    commit('showBottomNavigation');
+  showBottomNavigation({ commit }, show) {
+    commit('showBottomNavigation', show);
   },
 };
 

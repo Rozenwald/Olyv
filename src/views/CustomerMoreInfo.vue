@@ -42,7 +42,7 @@
                   template(v-slot:placeholder)
                     v-row.fill-height.ma-0(align='center', justify='center')
                       v-progress-circular(indeterminate, color='grey lighten-5')
-        v-row.edit-price(align='center', justify='center')
+        v-row.edit-price(align='center' justify='center')
           v-btn.minus-btn(@click='setPrice(-1 * changeValue)') -
           input.currentPrice(
                               v-model="currentPrice"
