@@ -2,14 +2,14 @@
   v-bottom-navigation#bottom-navigation(fixed grow v-show="show")
     v-btn.nav-btn(v-for="(item,index) in items"
                   :key="item.title"
-                  @click="route(item.routeName)"
+                  @click="clickBtn(index, item.routeName)"
                   :ripple="index!=2")
       template(v-if='item.title.length > 0')
         span(v-text="item.title")
         svg-icon.bottom-navigation-icon(:name="item.icon" height="19")
       v-row#create-order-btn(v-else align='center'
                              justify='center'
-                             @click.stop="route(item.routeName)"
+                             @click.stop="clickBtn(index, item.routeName)"
                             )
         svg-icon(:name="item.icon")
 </template>
@@ -33,6 +33,9 @@ export default {
     show() {
       return this.$store.getters.isVisibleBottomNavigation;
     },
+    isAuth() {
+      return this.$store.getters.isAuth;
+    },
   },
 
   methods: {
@@ -41,6 +44,13 @@ export default {
     },
     showLoginDialog() {
       this.$store.dispatch('showLoginDialog', true);
+    },
+    clickBtn(index, routeName) {
+      if ((index === 2 || index === 3) && !this.isAuth) {
+        this.showLoginDialog();
+      } else {
+        this.route(routeName);
+      }
     },
   },
 };
@@ -77,7 +87,7 @@ export default {
     position absolute
     width 60px
     height 60px
-    bottom 9px
+    bottom 7px
     left 50%
     margin-left -30px
     border-radius 30px

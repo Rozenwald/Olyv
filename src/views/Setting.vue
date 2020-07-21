@@ -1,15 +1,17 @@
 <template lang="pug">
-  .setting-wrp
+  v-container
     .setting
       v-list
-        v-list-item(v-for="item in items" :key="item.title")
-          v-list-item-icon
-            svg-icon(:name='item.icon')
-          v-list-item-content
-            v-list-item-title(v-text='item.title')
-          v-list-item-action
-            v-btn(icon)
-              svg-icon(name='RightArrow' width="8" height="12")
+        template(v-for="(item, index) in items")
+          v-list-item(:key="item.title")
+            v-list-item-icon
+              svg-icon(:name='item.icon')
+            v-list-item-content
+              v-list-item-title(v-text='item.title')
+            v-list-item-action
+              v-btn(icon)
+                svg-icon(name='RightArrow' width="8" height="12")
+          v-divider(v-if="index + 1 < items.length" :key="index")
 </template>
 
 <script>
@@ -32,18 +34,15 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .setting{
-    padding 0 15px
+  .container{
     background-color white
+    padding-top 0 !important
+    padding-bottom 0 !important
+    margin-bottom 65px
   }
 
-  .v-list-item{
-    border-bottom 0.5px solid #65686C
+  .v-list{
     padding 0 !important
-  }
-
-  .v-list-item:last-child {
-    border-bottom none
   }
 
 </style>

@@ -101,6 +101,10 @@ export default {
         this.error = 'Некоректный email';
       }
 
+      if (this.password.length < 6) {
+        this.error = 'Пароль должен содержать больше 6 символов';
+      }
+
       if (!this.error.length) {
         this.signUp();
       }

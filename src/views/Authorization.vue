@@ -18,6 +18,11 @@
 
             v-btn#RegButton(v-on:click="checkForm") Войти
             #RegBottomBar
+
+            v-dialog(v-model="isError")
+              v-row(align='center' justify='center')
+                .dialog_title {{error}}
+              v-btn(@click="error = ''") ок
 </template>
 
 <script>
@@ -31,8 +36,8 @@ export default {
   data() {
     return {
       email: null,
-      password: null,
-      error: null,
+      password: '',
+      error: '',
     };
   },
   methods: {
@@ -42,48 +47,70 @@ export default {
       return regex.test(email);
     },
 
-    signUp() {
+    signIn() {
       /* eslint-disable no-return-assign */
       axios
-        .post('http://test.cabinet.olyv.services:8888/api/v1/public/signup/email', {
-          email: this.email,
+        .post('http://test.cabinet.olyv.services:8888/api/v1/public/signin/email', {
+          username: this.email,
           password: this.password,
         })
-        .then((response) => (this.checkResponse(response)))
-        .catch((error) => console.log(error));
+        .then((response) => (this.checkSignIn(response)))
+        .catch(() => (this.error = 'Ошибка регистрации'));
       /* eslint-enable no-return-assign */
     },
 
     checkForm(e) {
       this.error = '';
+
+      if (this.password.length < 6) {
+        this.error = 'Пароль должен содержать больше 6 символов';
+      }
+
       if (!this.validEmail(this.email)) {
         this.error = 'Некоректный email';
       }
 
       if (!this.error.length) {
-        this.signUp();
+        this.signIn();
       }
 
       e.preventDefault();
     },
 
-    checkResponse(response) {
+    checkSignIn(response) {
       switch (response.data.status) {
+        case 'success':
+          window.localStorage.setItem('token', response.data.data);
+          this.$store.dispatch('setToken', response.data.data);
+          this.$router.back();
+          break;
+        case 'notSuccess':
+          this.error = 'Ошибка регистрации';
+          break;
         case 'invalidEmail':
-          this.error = 'Некоректный email';
+          this.error = 'Неверный email';
+          break;
+        case 'invalidPassword':
+          this.error = 'Неверный пароль';
           break;
         default:
-          console.log(response);
+          this.error = 'Ошибка регистрации';
+          break;
       }
     },
 
   },
   computed: {
-    isError() {
-      if (this.error.length) {
-        return true;
-      }
-      return false;
+    isError: {
+      get() {
+        if (this.error.length) {
+          return true;
+        }
+        return false;
+      },
+      set() {
+        this.error = '';
+      },
     },
   },
   created() {
@@ -118,7 +145,7 @@ export default {
     }
     #RegButton{
         margin-top 25px
-        color #56D68B;
+        color #56D68B
         font-size: 13px
         background: transparent
         border 1px solid #56D68B
@@ -128,40 +155,40 @@ export default {
     }
     .container{
         position relative
-        width 100%;
-        height 100%;
-        padding 0px;
+        width 100%
+        height 100%
+        padding 0px
         text-align: center;
         vertical-align middle
     }
-    .RegNumber{
+    .RegNumber {
         margin-top 10px
         padding-right 10px
         padding-left 10px
     }
-    #RegBigToolBar{
-        position relative;
+    #RegBigToolBar {
+        position relative
         margin-bottom 50px
-        background-color: #2AB06A;
-        height: 30vh;
-        width: 100%;
-        border: none;
-        border-radius:0px 0px 50px 0px;
-        text-align: center;
+        background-color: #2AB06A
+        height: 30vh
+        width: 100%
+        border: none
+        border-radius:0px 0px 50px 0px
+        text-align: center
     }
 
-    #RegBottomBar{
-        position fixed;
-        bottom 0;
-        background-color: #2AB06A;
-        width: 100%;
+    #RegBottomBar {
+        position fixed
+        bottom 0
+        background-color: #2AB06A
+        width: 100%
         height 10%
-        border: none;
-        border-radius:50px 0px 0px 0px;
-        align-items: center;
+        border: none
+        border-radius:50px 0px 0px 0px
+        align-items: center
     }
 
-    #regLogo{
+    #regLogo {
         position relative
         margin-top 13%
         margin-bottom 13%

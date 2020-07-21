@@ -7,6 +7,7 @@ import SpisokZakazov from '../views/SpisokZakazov.vue';
 import Registration from '../views/Registration.vue';
 import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 import Create from '../views/Create.vue';
+import Auth from '../views/Authorization.vue';
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,11 @@ const routes = [
     name: 'registration',
     path: '/registration',
     component: Registration,
+  },
+  {
+    name: 'auth',
+    path: '/auth',
+    component: Auth,
   },
   {
     name: 'moiZakazi',

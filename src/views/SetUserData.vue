@@ -10,14 +10,10 @@
       v-text-field.input-data(label="Имя"
                               dense color="#65686C"
                               clearable
-                              @focus="isFocus = true"
-                              @blur="isFocus = false"
                              )
       v-text-field(label="Фамилия"
                    dense color="#65686C"
                    clearable
-                   @focus="isFocus = true"
-                   @blur="isFocus = false"
                   )
 
       v-row.btn-wrapper(align='center' justify='center')
@@ -25,29 +21,30 @@
 </template>
 
 <script>
-const ElementQueries = require('css-element-queries/src/ElementQueries');
 
 export default {
-  components: {
-    ElementQueries,
-  },
   name: 'SetUserData',
   data() {
     return {
       isFocus: false,
-      bodyHeight: null,
+      windowHeight: null,
     };
   },
   created() {
     this.$store.commit('setTitle', 'Личный кабинет');
-    this.bodyHeight = window.innerHeight;
+    this.windowHeight = window.innerHeight;
     window.addEventListener('resize', () => {
-      if (window.innerHeight < this.bodyHeight) {
+      if (window.innerHeight < this.windowHeight) {
         this.isFocus = true;
       } else {
         this.isFocus = false;
       }
     });
+  },
+  computed: {
+    isAuth() {
+      return this.$store.getters.isAuth;
+    },
   },
   watch: {
     isFocus() {
@@ -64,7 +61,7 @@ export default {
   }
 
   .set-user-data{
-    margin-bottom 44px
+    margin-bottom 53px
   }
 
   .load-avatar{
