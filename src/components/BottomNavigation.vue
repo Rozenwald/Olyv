@@ -93,6 +93,6 @@ export default {
     border-radius 30px
     background linear-gradient(180deg, #65EB9C 0%, #068B4B 100%)
     border 5px solid #FFFFFF
-    box-shadow: 0px -8px 8px -9px rgba(0, 0, 0, 0.2)
+    box-shadow: 0px -9px 5px -8px rgba(0, 0, 0, 0.1)
   }
 </style>
