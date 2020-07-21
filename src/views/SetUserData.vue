@@ -40,9 +40,13 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Личный кабинет');
-    this.bodyHeight = document.body.offsetHeight;
-    ElementQueries.ResizeSensor(document.body, () => {
-      console.log(`Changed to ${document.body.clientWidth}`);
+    this.bodyHeight = window.innerHeight;
+    window.addEventListener('resize', () => {
+      if (window.innerHeight < this.bodyHeight) {
+        this.isFocus = true;
+      } else {
+        this.isFocus = false;
+      }
     });
   },
   watch: {

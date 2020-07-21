@@ -6,6 +6,7 @@ import MoiZakazi from '../views/MoiZakazi.vue';
 import SpisokZakazov from '../views/SpisokZakazov.vue';
 import Registration from '../views/Registration.vue';
 import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
+import Create from '../views/Create.vue';
 
 Vue.use(VueRouter);
 
@@ -39,6 +40,11 @@ const routes = [
     name: 'customerMoreInfo',
     path: '/customerMoreInfo',
     component: CustomerMoreInfo,
+  },
+  {
+    name: 'create',
+    path: '/create',
+    component: Create,
   },
 ];
 

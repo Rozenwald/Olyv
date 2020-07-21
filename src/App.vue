@@ -26,6 +26,10 @@ export default {
   data: () => ({
     //
   }),
+
+  created() {
+    this.$store.dispatch('setToken', window.localStorage.getItem('token'));
+  },
 };
 </script>
 
