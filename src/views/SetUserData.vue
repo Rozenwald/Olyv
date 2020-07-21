@@ -25,7 +25,12 @@
 </template>
 
 <script>
+const ElementQueries = require('css-element-queries/src/ElementQueries');
+
 export default {
+  components: {
+    ElementQueries,
+  },
   name: 'SetUserData',
   data() {
     return {
@@ -36,6 +41,9 @@ export default {
   created() {
     this.$store.commit('setTitle', 'Личный кабинет');
     this.bodyHeight = document.body.offsetHeight;
+    ElementQueries.ResizeSensor(document.body, () => {
+      console.log(`Changed to ${document.body.clientWidth}`);
+    });
   },
   watch: {
     isFocus() {

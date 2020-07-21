@@ -7,11 +7,12 @@
       template(v-if='item.title.length > 0')
         span(v-text="item.title")
         svg-icon.bottom-navigation-icon(:name="item.icon" height="19")
-      v-row#create-order-btn(v-else align='center', justify='center' @click.stop="showLoginDialog")
+      v-row#create-order-btn(v-else align='center', justify='center' @click.stop="go")
         svg-icon(:name="item.icon")
 </template>
 
 <script>
+import axios from 'axios';
 import SvgIcon from './SvgIcon.vue';
 
 export default {
@@ -19,6 +20,7 @@ export default {
 
   components: {
     SvgIcon,
+    axios,
   },
 
   computed: {
@@ -36,6 +38,19 @@ export default {
     },
     showLoginDialog() {
       this.$store.dispatch('showLoginDialog', true);
+    },
+    go() {
+      const hash = window.localStorage.getItem('hash');
+      /* eslint-disable no-return-assign */
+      axios
+        .post('http://test.cabinet.olyv.services:8888/api/v1/private/order', {
+          token: hash,
+          method: 'recive',
+          submethod: 'my',
+        })
+        .then((response) => (console.log(response)))
+        .catch((error) => console.log(error));
+      /* eslint-enable no-return-assign */
     },
   },
 };

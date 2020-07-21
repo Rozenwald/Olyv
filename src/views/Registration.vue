@@ -43,6 +43,10 @@
             </template>
             v-btn#RegButton(v-on:click="checkForm") Зарегестрироваться
             #RegBottomBar
+            v-dialog(v-model="isError")
+              v-row(align='center' justify='center')
+                .dialog_title {{error}}
+              v-btn(@click="error = ''") ок
 </template>
 
 <script>
@@ -57,7 +61,7 @@ export default {
     return {
       email: null,
       password: null,
-      error: null,
+      error: '',
     };
   },
   methods: {
@@ -74,8 +78,8 @@ export default {
           email: this.email,
           password: this.password,
         })
-        .then((response) => (this.checkResponse(response)))
-        .catch((error) => console.log(error));
+        .then((response) => (this.checkSignUp(response)))
+        .catch(() => (this.error = 'Ошибка регистрации'));
       /* eslint-enable no-return-assign */
     },
 
@@ -86,8 +90,8 @@ export default {
           username: this.email,
           password: this.password,
         })
-        .then((response) => (console.log(response)))
-        .catch((error) => console.log(error));
+        .then((response) => (this.checkSignIn(response)))
+        .catch(() => (this.error = 'Ошибка регистрации'));
       /* eslint-enable no-return-assign */
     },
 
@@ -104,7 +108,7 @@ export default {
       e.preventDefault();
     },
 
-    checkResponse(response) {
+    checkSignUp(response) {
       switch (response.data.status) {
         case 'invalidEmail':
           this.error = 'Некоректный email';
@@ -113,24 +117,48 @@ export default {
           this.error = 'Пароль должен содержать больше 6 символов';
           break;
         case 'existEmail':
-          this.error = 'Пароль должен содержать больше 6 символов';
+          this.error = 'Данная почта уже зарегистрирована';
+          break;
+        case 'notSuccess':
+          this.error = 'Ошибка регистрации';
+          break;
+        case 'success':
+          this.signIn();
+          break;
+        default:
+          this.error = 'Ошибка регистрации';
+          break;
+      }
+    },
+
+    checkSignIn(response) {
+      switch (response.data.status) {
+        case 'success':
+          window.localStorage.setItem('token', response.data.data);
+          this.$store.dispatch('setToken', response.data.data);
+          this.$router.back();
           break;
         case 'notSuccess':
           this.error = 'Ошибка регистрации';
           break;
         default:
-          this.signIn();
+          this.error = 'Ошибка регистрации';
           break;
       }
     },
 
   },
   computed: {
-    isError() {
-      if (this.error.length) {
-        return true;
-      }
-      return false;
+    isError: {
+      get() {
+        if (this.error.length) {
+          return true;
+        }
+        return false;
+      },
+      set() {
+        this.error = '';
+      },
     },
   },
   created() {
