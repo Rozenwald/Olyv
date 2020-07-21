@@ -45,4 +45,8 @@ export default {
     padding 0 !important
   }
 
+  .v-list-item{
+    padding 0 !important
+  }
+
 </style>
