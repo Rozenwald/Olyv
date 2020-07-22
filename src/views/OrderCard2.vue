@@ -89,7 +89,6 @@ export default {
         padding-right 0
         padding-left 0
         margin-top 10px
-        border 1px solid black
         border-radius 6px
     }
     #TextOrder{
