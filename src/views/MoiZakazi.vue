@@ -1,28 +1,56 @@
 <template lang='pug'>
     .container
-      OrderCard1(v-for='item in items' :key='item.id' :title='item.title' :cost='item.cost')
+      OrderCard1(v-for='item in items' :key='item.id' :title='item.description' :cost='item.cost')
 </template>
 
 <script>
-
+import axios from 'axios';
 import OrderCard1 from './OrderCard1.vue';
 
 export default {
   name: 'OrderCard',
   data: () => ({
-    items: [
-      { title: 'Уведомления', cost: '10 909р', id: 1 },
-      { title: 'Черный список', cost: '10 909р', id: 2 },
-      { title: 'Редактирвание профиля', cost: '10 909р', id: 3 },
-      { title: 'Связь с разработчиком', cost: '10 909р', id: 4 },
-      { title: 'Информация', cost: '10 909р', id: 5 },
-    ],
+    items: null,
+    error: '',
   }),
   components: {
     OrderCard1,
+    axios,
+  },
+  methods: {
+    getData() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post('http://test.cabinet.olyv.services:8888/api/v1/private/order', {
+          token: this.token,
+          method: 'receive',
+          submethod: 'my',
+          step: 0,
+        })
+        .then((response) => (this.checkResponse(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+    checkResponse(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.items = response.data.data;
+          console.log(response);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+  },
+  computed: {
+    token() {
+      return this.$store.getters.getToken;
+    },
   },
   created() {
     this.$store.commit('setTitle', 'Мои заказы');
+    this.getData();
   },
 
 };

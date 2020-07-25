@@ -1,44 +1,18 @@
 <template lang="pug">
-  v-bottom-sheet
-    template(v-slot:activator="{ on, attrs }")
-      v-bottom-navigation#bottom-navigation(fixed grow v-show="show")
-        v-btn.nav-btn(v-for="(item,index) in items"
-                      :key="item.title"
-                      @click="clickBtn(index, item.routeName)"
-                      :ripple="index!=2"
-                      )
-          template(v-if='item.title.length > 0')
-            span(v-text="item.title")
-            svg-icon.bottom-navigation-icon(:name="item.icon" height="19")
-          v-row#create-order-btn(v-else align='center'
-                                justify='center'
-                                @click.stop="clickBtn(index, item.routeName)"
-                                v-bind="attrs"
-                                v-on="on"
-                                )
-            svg-icon(:name="item.icon")
-    .create
-          v-text-field.RegNumber(
-                      label='Адрес:'
-                      required)
-          v-text-field.RegNumber(
-                      label='Цена'
-                      required)
-          v-textarea(
-            label="Описание"
-            auto-grow
-            outlined
-            rows="7"
-            row-height="25"
-            shaped)
-          .information-wrp
-            v-row.more-info-wrp-first(align='center' justify='space-between')
-              v-checkbox.save-deal(
-                label="Защищенная сделка"
-                align='center')
-            v-row.edit-price(align='center', justify='center')
-          v-row.btns(no-gutters  align='center' justify='center')
-              v-btn.accept-btn(align-content='center' rounded) Создать
+  v-bottom-navigation#bottom-navigation(fixed grow v-show="show")
+    v-btn.nav-btn(v-for="(item,index) in items"
+                  :key="item.title"
+                  @click="clickBtn(index, item.routeName)"
+                  :ripple="index!=2"
+                 )
+      template(v-if='index!=2')
+        span(v-text="item.title")
+        svg-icon.bottom-navigation-icon(:name="item.icon" height="19")
+      v-row#create-order-btn(v-else align='center'
+                             justify='center'
+                             @click.stop="clickBtn(index, item.routeName)"
+                            )
+        svg-icon(:name="item.icon")
 </template>
 
 <script>

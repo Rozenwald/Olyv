@@ -69,8 +69,6 @@ export default {
     },
 
     checkForm(e) {
-      this.error = '';
-
       if (this.password.length < 6) {
         this.error = 'Пароль должен содержать больше 6 символов';
       }

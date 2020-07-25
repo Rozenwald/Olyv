@@ -5,72 +5,134 @@
           label="Описание"
           auto-grow
           outlined
+          v-model="description"
           rows="7"
           row-height="25"
           shaped)
       v-text-field.RegNumber(
                   label='Цена'
+                  v-model="cost"
+                  type="number"
                   required)
       v-text-field.RegNumber(
                   label='Адрес'
+                  v-model="address"
                   required)
       .information-wrp
         v-row.more-info-wrp-first(align='center' justify='space-between')
           v-checkbox.save-deal(
             label="Защищенная сделка"
             align='center'
-            v-model="value"
+            v-model="saveDeal"
             value="value")
         v-row.edit-price(align='center', justify='center')
       v-row.btns(no-gutters  align='center' justify='center')
-          v-btn.accept-btn(align-content='center' rounded) Создать
+          v-btn.accept-btn(align-content='center' @click="checkForm" rounded) Создать
+    v-dialog(v-model="isError")
+      v-row(align='center' justify='center')
+        .dialog_title {{error}}
+      v-btn(@click="error = ''") ок
 </template>
 
 <script>
-
+import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
   name: 'Create',
   components: {
     SvgIcon,
+    axios,
   },
   data() {
     return {
-      starColor: '#FFCA10',
-      changeValue: 1000,
-      currentPrice: 5000, // Number
-      respondedCount: 12,
-      distantion: 3,
-      inputWidth: null,
-      description: 'Lorem Ipsum - це текст-"риба", що використовується в друкарстві та дизайні. Lorem Ipsum є, фактично, стандартною "рибою" аж з XVI сторіччя, коли невідомий друкар взяв шрифтову гранку та склав на ній підбірку зразків шрифтів. "Риба" не тільки успішно пережила пять століть, але й прижилася в електронному верстуванні, залишаючись по суті незмінною. Вона популяризувалась в 60-их роках минулого сторіччя завдяки виданню зразків шрифтів Letraset, які містили уривки з Lorem Ipsum, і вдруге - нещодавно завдяки програмам компютерного верстування на кшталт Aldus Pagemaker, які використовували різні версії Lorem Ipsum',
+      description: null,
+      cost: null,
+      address: null,
+      saveDeal: false,
+      error: '',
     };
   },
   methods: {
-    setPrice(val) {
-      if (Number.parseInt(this.currentPrice, 10) + val > 0) {
-        this.currentPrice = Number.parseInt(this.currentPrice, 10) + val;
+    checkForm() {
+      if (this.address == null) {
+        this.error = 'Укажите адресс';
       }
-    },
-    setInputWidth() {
-      this.inputWidth = (this.currentPrice.toString().length + 1);
-      if (this.currentPrice.toString().length > 2) {
-        this.inputWidth *= 12;
+
+      if (this.cost != null) {
+        if (!this.validCost(this.cost)) {
+          this.error = 'Неверный формат цены';
+        }
       } else {
-        this.inputWidth *= 16;
+        this.error = 'Укажите цену';
+      }
+
+      if (this.description != null) {
+        if (this.description.length < 10) {
+          this.error = 'Описание должно быть больше 10 символов';
+        }
+      } else {
+        this.error = 'Описание должно быть больше 10 символов';
+      }
+
+      if (this.error.length === 0) {
+        this.createOrder();
       }
     },
-  },
-  watch: {
-    currentPrice() {
-      this.setInputWidth();
-      if (Number.parseInt(this.currentPrice, 10) === 0) {
-        this.currentPrice = this.changeValue;
+
+    createOrder() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post('http://test.cabinet.olyv.services:8888/api/v1/private/order', {
+          token: this.token,
+          method: 'add',
+          description: this.description,
+          cost: this.cost,
+          protect: this.saveDeal ? 'yes' : 'no',
+        })
+        .then((response) => (this.checkResonse(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+
+    checkResonse(response) {
+      console.log(this.description);
+      switch (response.data.status) {
+        case 'invalidCost':
+          this.error = 'Неверный формат цены';
+          break;
+        case 'invalidDescription':
+          this.error = 'Описание должно быть больше 10 символов';
+          console.log(response);
+          break;
+        case 'success':
+          this.$router.push('moiZakazi');
+          break;
+        default:
+          this.error = 'Неизвестная ошибка';
       }
     },
+
+    validCost(cost) {
+      const regex = /\d+/;
+      return regex.test(cost);
+    },
   },
-  mounted() {
-    this.setInputWidth();
+  computed: {
+    isError: {
+      get() {
+        if (this.error.length) {
+          return true;
+        }
+        return false;
+      },
+      set() {
+        this.error = '';
+      },
+    },
+    token() {
+      return this.$store.getters.getToken;
+    },
   },
 };
 </script>
