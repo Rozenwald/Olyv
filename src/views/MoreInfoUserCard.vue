@@ -1,10 +1,6 @@
 <template lang='pug'>
-            v-card#Order(
-            )
-                template
-                    img#user-avatar(src="../assets/photo-camera.png", alt="фото профиля")
-                    #Title {{title}}
-                    #Cost {{cost}}
+  v-card
+    v-card-text
 </template>
 
 <script>

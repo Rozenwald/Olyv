@@ -35,7 +35,6 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.items = response.data.data;
-          console.log(response);
           break;
         default:
           this.error = 'Ошибка';
