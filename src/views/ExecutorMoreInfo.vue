@@ -1,14 +1,5 @@
 <template lang="pug">
   v-container
-    v-alert(v-model="alert"
-            close-text="Close"
-            dismissible
-            transition="scale-transition"
-            elevation="1"
-           )
-      v-row(align='center')
-        svg-icon(name="Responded")
-        .responded-text-header Откликнулось 12 человек
     .executor-more-info
       .information-wrp
         v-row.more-info-wrp-first(align='center' justify='space-between')
@@ -30,9 +21,8 @@
           v-col( v-for="n in 2" :key="n" align='center')
             v-btn.edit-btn(rounded v-if="n == 1") Редактирвать
             v-btn.delete-btn(rounded v-else) Удалить
-        v-row.btns(no-gutters  align='center')
-          v-col( v-for="n in 1" :key="n")
-            MoreInfoUserCard(
+        #responded-title Отозвались
+        MoreInfoUserCard(
               v-for='item in items'
               :key='item.id'
               :title='item.title'
@@ -217,6 +207,13 @@ export default {
     color #56D68B
     border 1px solid #56D68B
     box-shadow none !important
+  }
+
+  #responded-title{
+    text-align center
+    font-size 16px
+    color #56D68B
+    margin 15px 0
   }
 
   .v-alert{
