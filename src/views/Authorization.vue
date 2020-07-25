@@ -18,12 +18,15 @@
                 required)
 
             v-btn#RegButton(v-on:click="checkForm") Войти
+            v-btn#SmallAuthButton(@click="route('registration')") Пройти регистрацию
+
+            span#SpanRulesNM Войти с помощью:
 
             .iconContainer
-              svg-icon.regIcon(name='Facebook'  width='37' height='37')
               svg-icon.regIcon(name='VK'  width='37' height='37')
               svg-icon.regIcon(name='Google'  width='37' height='37')
-              svg-icon.regIcon(name='Instagram'  width='37' height='37')
+              svg-icon.regIcon(name='Facebook'  width='37' height='37')
+              //svg-icon.regIcon(name='Instagram'  width='37' height='37')
 
             #RegBottomBar
 
@@ -50,6 +53,9 @@ export default {
     };
   },
   methods: {
+    route(routeName) {
+      this.$router.push(routeName);
+    },
 
     validEmail(email) {
       const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -131,6 +137,11 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
+    #SpanRulesNM{
+        display block
+        font-size: 13px
+        text-align center
+    }
     .iconContainer{
       margin 10px
       height auto
@@ -144,8 +155,20 @@ export default {
     #V-card-title-rules{
         word-break normal
     }
+    #SmallAuthButton{
+        margin-top 10px
+        margin-bottom 10px
+        color #FFF
+        font-size: 10px
+        background: linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
+        border none
+        border-radius 30px
+        height 4%
+        width 50%
+    }
     #RegButton{
-        margin-top 25px
+        margin-top 10px
+        margin-bottom 10px
         color #56D68B
         font-size: 13px
         background: transparent

@@ -17,37 +17,38 @@
                 required)
 
             span#SpanRulesNM Нажимая кнопку зарегестрироваться вы принимаете:
-            <template>
-                    v-dialog(
-                        width="600px")
-                        <template v-slot:activator="{ on, attrs }">
-                        v-btn#ModalRules(
-                                text
-                                color="normal"
-                                v-bind="attrs"
-                                v-on="on") Правила и условия политики конфеденциальности
-                        </template>
-                        <v-card>
-                        v-card-title#V-card-title-rules
-                            span#SpanRulesM
-                            |Правила и условия политики конфеденциальности
-                        v-card-text#ModalRulesText
-                        |Текст о правилах и политике конфеденциальности
-                        |бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="green darken-1">Dis</v-btn>
-                            <v-btn color="green darken-1">Agree</v-btn>
-                        </v-card-actions>
-                        </v-card>
-            </template>
+
+            v-row(justify="center")
+              v-dialog(v-model='dialog')
+                template(v-slot:activator="{ on, attrs }")
+                  v-btn#ModalRules(text
+                                  color="normal"
+                                  v-bind="attrs"
+                                  v-on="on") Правила и условия политики конфеденциальности
+                v-card
+                  v-card-title#V-card-title-rules
+                    span#SpanRulesM
+                    |Правила и условия политики конфеденциальности
+                  v-card-text#ModalRulesText
+                  |Текст о правилах и политике конфеденциальности
+                  |бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла
+                  v-card-actions
+                    v-btn(color="green darken-1"
+                         @click="dialog = false") OK
+
             v-btn#RegButton(v-on:click="checkForm") Зарегестрироваться
+            v-btn#SmallAuthButton(@click="route('auth')") Уже есть аккаунт
+
+            span#SpanRulesNM Регистрация с помощью:
+
             .iconContainer
-              svg-icon.regIcon(name='Facebook'  width='37' height='37')
               svg-icon.regIcon(name='VK'  width='37' height='37')
               svg-icon.regIcon(name='Google'  width='37' height='37')
-              svg-icon.regIcon(name='Instagram'  width='37' height='37')
+              svg-icon.regIcon(name='Facebook'  width='37' height='37')
+              //svg-icon.regIcon(name='Instagram'  width='37' height='37')
+
             #RegBottomBar
+
             v-dialog(v-model="isError")
               v-row(align='center' justify='center')
                 .dialog_title {{error}}
@@ -69,10 +70,13 @@ export default {
       email: null,
       password: null,
       error: '',
+      dialog: false,
     };
   },
   methods: {
-
+    route(routeName) {
+      this.$router.push(routeName);
+    },
     validEmail(email) {
       const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return regex.test(email);
@@ -184,6 +188,13 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+    .ModalContainer{
+      height 75px
+      width 100%
+    }
+    .regIcon{
+      margin 5px
+    }
     .iconContainer{
       margin 10px
       height auto
@@ -195,6 +206,7 @@ export default {
         word-break normal
     }
     #SpanRulesNM{
+        display block
         font-size: 13px
         text-align center
     }
@@ -206,8 +218,20 @@ export default {
         font-size: 10px
         text-decoration:underline
     }
+    #SmallAuthButton{
+        margin-top 10px
+        margin-bottom 10px
+        color #56D68B
+        font-size: 10px
+        background: transparent
+        border 1px solid #56D68B
+        border-radius 30px
+        height 4%
+        width 50%
+    }
     #RegButton{
-        margin-top 25px
+        margin-top 10px
+        margin-bottom 10px
         color #FFF
         font-size: 13px
         background: linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
