@@ -6,7 +6,7 @@
         v-list-item-title 3 км от Вас
       v-list-item-action
         v-row.cost-wrp(align='center' justify='center')
-          .cost 4235
+          .cost 423
 </template>
 
 <script>
