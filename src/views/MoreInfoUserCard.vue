@@ -1,9 +1,8 @@
 <template lang='pug'>
   .swiper-container(:id="id")
     .swiper-wrapper
-      v-list(class="swiper-slide error")
-      v-list.swiper-slide
-        v-card.card
+      v-list(class="swiper-slide")
+      v-card.card.swiper-slide
           v-list-item(dense)
             v-list-item-avatar(color="grey")
             v-list-item-content
@@ -35,12 +34,9 @@ export default {
       speed: 150,
     });
 
-    // Event will be fired after transition
-    // eslint-disable-next-line func-names
     swiper.on('transitionEnd', function () {
       if (this.activeIndex === 0) {
         self.$emit('transitionEnd');
-        // Destroy slider instance and detach all events listeners
         this.destroy();
       }
     });
@@ -51,9 +47,6 @@ export default {
 <style lang="stylus" scoped>
   .card{
       margin-bottom 7px
-  }
-  .card:last-child{
-      margin-bottom 0
   }
 
   .cost-wrp {
