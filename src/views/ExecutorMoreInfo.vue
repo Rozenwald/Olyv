@@ -1,20 +1,15 @@
 <template lang="pug">
   v-container
-    .customer-more-info
-      v-row.customer-more-info-header(align='center' justify='space-between')
-        .name ggggg
-        v-rating(
-          :length="5"
-          :half-increments="true"
-          :dense="true"
-          :color="starColor"
-          :background-color="starColor"
-          size="14"
-          )
-      .parallax(
-        height="150"
-        src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg"
-      )
+    v-alert(v-model="alert"
+            close-text="Close"
+            dismissible
+            transition="scale-transition"
+            elevation="1"
+           )
+      v-row(align='center')
+        svg-icon(name="Responded")
+        .responded-text-header Откликнулось 12 человек
+    .executor-more-info
       .information-wrp
         v-row.more-info-wrp-first(align='center' justify='space-between')
           v-row.save-deal(align='center')
@@ -22,17 +17,6 @@
             span Защищенная сделка
           v-row.cost-wrp(align='center' justify='center')
             .cost 4235
-        v-row.more-info-wrp-second(align='center' justify='start')
-          v-row.responded(align='center')
-            svg-icon(name="Responded")
-            .responded-text
-              span Откликнулось <br/>
-              span.black-text {{respondedCount}} человек
-          v-row.distantion(align='center')
-            svg-icon(name="Distantion")
-            .distantion-text
-              span Расстояние <br/>
-              span.black-text {{distantion}} км
         .description {{description}}
         .media-files
           v-row
@@ -42,30 +26,29 @@
                   template(v-slot:placeholder)
                     v-row.fill-height.ma-0(align='center', justify='center')
                       v-progress-circular(indeterminate, color='grey lighten-5')
-        v-row.edit-price(align='center', justify='center')
-          v-btn.minus-btn(@click='setPrice(-1 * changeValue)') -
-          input.currentPrice(
-                              v-model="currentPrice"
-                              type="text"
-                              :style="{width: inputWidth + 'px'}"
-                              size="10"
-                              maxlength="10"
-                            )
-          v-btn.plus-btn(@click='setPrice(changeValue)') +
         v-row.btns(no-gutters  align='center')
           v-col( v-for="n in 2" :key="n" align='center')
-            v-btn.accept-btn(rounded v-if="n == 1") Согласиться
-            v-btn.chat-btn(rounded v-else) Чат
+            v-btn.edit-btn(rounded v-if="n == 1") Редактирвать
+            v-btn.delete-btn(rounded v-else) Удалить
+        v-row.btns(no-gutters  align='center')
+          v-col( v-for="n in 1" :key="n")
+            MoreInfoUserCard(
+              v-for='item in items'
+              :key='item.id'
+              :title='item.title'
+              :cost='item.cost')
 </template>
 
 <script>
 
 import SvgIcon from '../components/SvgIcon.vue';
+import MoreInfoUserCard from './MoreInfoUserCard.vue';
 
 export default {
   name: 'CustomerMoreInfoIspoln',
   components: {
     SvgIcon,
+    MoreInfoUserCard,
   },
   data() {
     return {
@@ -76,6 +59,13 @@ export default {
       distantion: 3,
       inputWidth: null,
       description: 'Lorem Ipsum - це текст-"риба", що використовується в друкарстві та дизайні. Lorem Ipsum є, фактично, стандартною "рибою" аж з XVI сторіччя, коли невідомий друкар взяв шрифтову гранку та склав на ній підбірку зразків шрифтів. "Риба" не тільки успішно пережила пять століть, але й прижилася в електронному верстуванні, залишаючись по суті незмінною. Вона популяризувалась в 60-их роках минулого сторіччя завдяки виданню зразків шрифтів Letraset, які містили уривки з Lorem Ipsum, і вдруге - нещодавно завдяки програмам компютерного верстування на кшталт Aldus Pagemaker, які використовували різні версії Lorem Ipsum',
+      items: [
+        { title: 'Уведомления', cost: '10 909р', id: 1 },
+        { title: 'Черный список', cost: '10 909р', id: 2 },
+        { title: 'Редактирвание профиля', cost: '10 909р', id: 3 },
+        { title: 'Связь с разработчиком', cost: '10 909р', id: 4 },
+        { title: 'Информация', cost: '10 909р', id: 5 },
+      ],
     };
   },
   methods: {
@@ -113,26 +103,22 @@ export default {
     background-color #fff
   }
 
-  .name {
+  .responded-text-header {
     font-style normal
     font-weight 500
-    font-size 15px
-    line-height 18px
-    color #000000
+    font-size 10px
+    line-height 10px
+    color #65EB9C
+    margin-left 5px
   }
 
-  .customer-more-info-header{
+  .executor-more-info-header{
     padding 0 !important
+    height 56px
   }
 
-  .customer-more-info{
-    margin-bottom 56px
-  }
-
-  .parallax {
-    margin 15px -12px
-    height 150px
-    background-color red
+  .executor-more-info{
+    margin-bottom 63px
   }
 
   .row{
@@ -164,32 +150,8 @@ export default {
     margin-left 5px
   }
 
-  .more-info-wrp-second {
-    margin 15px 0
-    text-align center
-    font-style normal
-    font-size 10px
-    line-height 1.4
-    color #65686C
-  }
-
-  .more-info-wrp-second div {
-    max-width 95px
-  }
-
-  .more-info-wrp-second .black-text {
-    color: #000000
-  }
-
-  .responded {
-    margin-right 15px
-  }
-
-  .responded-text, .distantion-text {
-    margin-left 5px
-  }
-
   .description {
+    margin-top 15px
     font-family Golos
     font-style normal
     font-weight normal
@@ -235,7 +197,7 @@ export default {
     margin-top 3px
   }
 
-  .accept-btn{
+  .edit-btn{
     width 90%
     margin-right 5%
     background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
@@ -246,7 +208,7 @@ export default {
     box-shadow none !important
   }
 
-  .chat-btn{
+  .delete-btn{
     width 90%
     background none !important
     font-style normal
@@ -255,5 +217,11 @@ export default {
     color #56D68B
     border 1px solid #56D68B
     box-shadow none !important
+  }
+
+  .v-alert{
+    margin -12px
+    margin-bottom 12px
+    border-radius 0 !important
   }
 </style>
