@@ -19,7 +19,7 @@
                       v-progress-circular(indeterminate, color='grey lighten-5')
         v-row.btns(no-gutters  align='center')
           v-col( v-for="n in 2" :key="n" align='center')
-            v-btn.edit-btn(rounded v-if="n == 1") Редактирвать
+            v-btn.edit-btn(rounded v-if="n == 1") Редактировать
             v-btn.delete-btn(rounded v-else) Удалить
         #responded-title Отозвались
         MoreInfoUserCard(
