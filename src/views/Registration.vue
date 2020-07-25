@@ -56,11 +56,13 @@
 
 <script>
 import axios from 'axios';
+import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
   name: 'Registration',
   components: {
     axios,
+    SvgIcon,
   },
   data() {
     return {
