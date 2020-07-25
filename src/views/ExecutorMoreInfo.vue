@@ -25,6 +25,7 @@
         MoreInfoUserCard(
               v-for='item in items'
               :key='item.id'
+              :id='item.title'
               :title='item.title'
               :cost='item.cost')
 </template>

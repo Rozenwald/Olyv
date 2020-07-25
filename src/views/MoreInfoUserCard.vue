@@ -1,20 +1,49 @@
 <template lang='pug'>
-  v-card.card
-    v-list-item(dense)
-      v-list-item-avatar(color="grey")
-      v-list-item-content
-        v-list-item-title 3 км от Вас
-      v-list-item-action
-        v-row.cost-wrp(align='center' justify='center')
-          .cost 42
+  .swiper-container(:id="id")
+    .swiper-wrapper
+      v-list(class="swiper-slide error")
+      v-list.swiper-slide
+        v-card.card
+          v-list-item(dense)
+            v-list-item-avatar(color="grey")
+            v-list-item-content
+              v-list-item-title 3 км от Вас
+            v-list-item-action
+              v-row.cost-wrp(align='center' justify='center')
+                .cost 42
 </template>
 
 <script>
+import 'swiper/swiper-bundle.css';
+import { Swiper } from 'swiper/swiper.esm';
+
 export default {
   name: 'OrderCard1',
   props: {
     title: String,
     cost: String,
+    id: String,
+  },
+  mounted() {
+    const self = this;
+    const el = `#${this.id}`;
+
+    // Initialize Swiper
+    const swiper = new Swiper(el, {
+      initialSlide: 1,
+      resistanceRatio: 0,
+      speed: 150,
+    });
+
+    // Event will be fired after transition
+    // eslint-disable-next-line func-names
+    swiper.on('transitionEnd', function () {
+      if (this.activeIndex === 0) {
+        self.$emit('transitionEnd');
+        // Destroy slider instance and detach all events listeners
+        this.destroy();
+      }
+    });
   },
 };
 </script>
