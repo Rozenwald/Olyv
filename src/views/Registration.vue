@@ -1,5 +1,4 @@
 <template lang="pug">
-    v-app
         .container
             #RegBigToolBar
                 .container
@@ -175,10 +174,14 @@ export default {
         this.error = '';
       },
     },
+    show() {
+      return this.$store.getters.isVisibleAppbar;
+    },
   },
-  created() {
+  mounted() {
     this.$store.dispatch('showAppbar', false);
     this.$store.dispatch('showBottomNavigation', false);
+    console.log(this.show);
   },
   beforeDestroy() {
     this.$store.dispatch('showAppbar', true);

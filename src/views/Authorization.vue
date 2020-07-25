@@ -1,5 +1,4 @@
 <template lang="pug">
-    v-app
         .container
             #RegBigToolBar
                 .container
@@ -126,7 +125,7 @@ export default {
       },
     },
   },
-  created() {
+  mounted() {
     this.$store.dispatch('showAppbar', false);
     this.$store.dispatch('showBottomNavigation', false);
   },
