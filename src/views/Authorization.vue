@@ -4,6 +4,7 @@
             #RegBigToolBar
                 .container
                     img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
+
             v-text-field.RegNumber(
                 v-model="email"
                 label='E-mail'
@@ -17,6 +18,13 @@
                 required)
 
             v-btn#RegButton(v-on:click="checkForm") Войти
+
+            .iconContainer
+              svg-icon.regIcon(name='Facebook'  width='37' height='37')
+              svg-icon.regIcon(name='VK'  width='37' height='37')
+              svg-icon.regIcon(name='Google'  width='37' height='37')
+              svg-icon.regIcon(name='Instagram'  width='37' height='37')
+
             #RegBottomBar
 
             v-dialog(v-model="isError")
@@ -24,14 +32,15 @@
                 .dialog_title {{error}}
               v-btn(@click="error = ''") ок
 </template>
-
 <script>
 import axios from 'axios';
+import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
   name: 'Authorization',
   components: {
     axios,
+    SvgIcon,
   },
   data() {
     return {
@@ -123,25 +132,19 @@ export default {
   },
 };
 </script>
-
 <style lang="stylus" scoped>
+    .iconContainer{
+      margin 10px
+      height auto
+    }
+    .regIcon{
+      margin 5px
+    }
     #ModalRulesText{
         font-size: 16px
     }
     #V-card-title-rules{
         word-break normal
-    }
-    #SpanRulesNM{
-        font-size: 13px
-        text-align center
-    }
-    #SpanRulesM{
-        font-size: 20px
-        text-align center
-    }
-    #ModalRules{
-        font-size: 10px
-        text-decoration:underline
     }
     #RegButton{
         margin-top 25px

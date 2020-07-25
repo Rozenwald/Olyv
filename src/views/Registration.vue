@@ -42,6 +42,11 @@
                         </v-card>
             </template>
             v-btn#RegButton(v-on:click="checkForm") Зарегестрироваться
+            .iconContainer
+              svg-icon.regIcon(name='Facebook'  width='37' height='37')
+              svg-icon.regIcon(name='VK'  width='37' height='37')
+              svg-icon.regIcon(name='Google'  width='37' height='37')
+              svg-icon.regIcon(name='Instagram'  width='37' height='37')
             #RegBottomBar
             v-dialog(v-model="isError")
               v-row(align='center' justify='center')
@@ -177,6 +182,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+    .iconContainer{
+      margin 10px
+      height auto
+    }
     #ModalRulesText{
         font-size: 16px
     }
