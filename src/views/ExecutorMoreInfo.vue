@@ -31,7 +31,7 @@
             v-btn.edit-btn(rounded v-if="n == 1") Редактирвать
             v-btn.delete-btn(rounded v-else) Удалить
         v-row.btns(no-gutters  align='center')
-          v-col( v-for="n in 1" :key="n" align='center')
+          v-col( v-for="n in 1" :key="n")
             MoreInfoUserCard(
               v-for='item in items'
               :key='item.id'
