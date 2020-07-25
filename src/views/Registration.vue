@@ -1,57 +1,56 @@
 <template lang="pug">
-        .container
-            #RegBigToolBar
-                .container
-                    img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
-            v-text-field.RegNumber(
-                v-model="email"
-                label='E-mail'
-                type='email'
-                required)
+  .container
+    #RegBigToolBar
+      .container
+        img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
 
-            v-text-field.RegNumber(
-                v-model="password"
-                type='password'
-                label='Пароль'
-                required)
+    v-text-field.RegNumber(v-model="email"
+                          label='E-mail'
+                          type='email'
+                          required)
 
-            span#SpanRulesNM Нажимая кнопку зарегестрироваться вы принимаете:
+    v-text-field.RegNumber(v-model="password"
+                          type='password'
+                          label='Пароль'
+                          required)
 
-            v-row(justify="center")
-              v-dialog(v-model='dialog')
-                template(v-slot:activator="{ on, attrs }")
-                  v-btn#ModalRules(text
-                                  color="normal"
-                                  v-bind="attrs"
-                                  v-on="on") Правила и условия политики конфеденциальности
-                v-card
-                  v-card-title#V-card-title-rules
-                    span#SpanRulesM
-                    |Правила и условия политики конфеденциальности
-                  v-card-text#ModalRulesText
-                  |Текст о правилах и политике конфеденциальности
-                  |бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла
-                  v-card-actions
-                    v-btn(color="green darken-1"
-                         @click="dialog = false") OK
+    span#SpanRulesNM Нажимая кнопку зарегестрироваться вы принимаете:
 
-            v-btn#RegButton(v-on:click="checkForm") Зарегестрироваться
-            v-btn#SmallAuthButton(@click="route('auth')") Уже есть аккаунт
+    v-row#modalContainer(justify="center")
+      v-dialog(v-model='dialog')
+        template(v-slot:activator="{ on, attrs }")
+          v-btn#ModalRules(text
+              color="normal"
+              v-bind="attrs"
+              v-on="on") Правила и условия политики конфеденциальности
+        v-card
+          v-card-title#V-card-title-rules
+            span#SpanRulesM
+            |Правила и условия политики конфеденциальности
+          v-card-text#ModalRulesText
+          |Текст о правилах и политике конфеденциальности
+          |бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла
+          v-card-actions
+            v-btn(color="green darken-1"
+            @click="dialog = false") OK
 
-            span#SpanRulesNM Регистрация с помощью:
+    v-btn#RegButton(v-on:click="checkForm") Зарегестрироваться
+    v-btn#SmallAuthButton(@click="route('auth')") Уже есть аккаунт
 
-            .iconContainer
-              svg-icon.regIcon(name='VK'  width='37' height='37')
-              svg-icon.regIcon(name='Google'  width='37' height='37')
-              svg-icon.regIcon(name='Facebook'  width='37' height='37')
-              //svg-icon.regIcon(name='Instagram'  width='37' height='37')
+    span#SpanRulesNM Регистрация с помощью:
 
-            #RegBottomBar
+    .iconContainer
+    svg-icon.regIcon(name='VK'  width='37' height='37')
+    svg-icon.regIcon(name='Google'  width='37' height='37')
+    svg-icon.regIcon(name='Facebook'  width='37' height='37')
+    //svg-icon.regIcon(name='Instagram'  width='37' height='37')
 
-            v-dialog(v-model="isError")
-              v-row(align='center' justify='center')
-                .dialog_title {{error}}
-              v-btn(@click="error = ''") ок
+    #RegBottomBar
+
+    v-dialog(v-model="isError")
+      v-row(align='center' justify='center')
+      .dialog_title {{error}}
+          v-btn(@click="error = ''") ок
 </template>
 
 <script>
@@ -181,7 +180,6 @@ export default {
   mounted() {
     this.$store.dispatch('showAppbar', false);
     this.$store.dispatch('showBottomNavigation', false);
-    console.log(this.show);
   },
   beforeDestroy() {
     this.$store.dispatch('showAppbar', true);
@@ -191,99 +189,98 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-    .ModalContainer{
-      height 75px
-      width 100%
-    }
-    .regIcon{
-      margin 5px
-    }
-    .iconContainer{
-      margin 10px
-      height auto
-    }
-    #ModalRulesText{
-        font-size: 16px
-    }
-    #V-card-title-rules{
-        word-break normal
-    }
-    #SpanRulesNM{
-        display block
-        font-size: 13px
-        text-align center
-    }
-    #SpanRulesM{
-        font-size: 20px
-        text-align center
-    }
-    #ModalRules{
-        font-size: 10px
-        text-decoration:underline
-    }
-    #SmallAuthButton{
-        margin-top 10px
-        margin-bottom 10px
-        color #56D68B
-        font-size: 10px
-        background: transparent
-        border 1px solid #56D68B
-        border-radius 30px
-        height 4%
-        width 50%
-    }
-    #RegButton{
-        margin-top 10px
-        margin-bottom 10px
-        color #FFF
-        font-size: 13px
-        background: linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
-        border none
-        border-radius 30px
-        height 6.8%
-        width 72%
-    }
-    .container{
-        position relative
-        width 100%;
-        height 100%;
-        padding 0px;
-        text-align: center;
-        vertical-align middle
-    }
-    .RegNumber{
-        margin-top 10px
-        padding-right 10px
-        padding-left 10px
-    }
-    #RegBigToolBar{
-        position relative;
-        background-color: #2AB06A;
-        height: 30vh;
-        width: 100%;
-        border: none;
-        border-radius:0px 0px 50px 0px;
-        text-align: center;
-    }
+          #modalContainer{
+            margin 0
+          }
+          .regIcon{
+            margin 5px
+          }
+          .iconContainer{
+            margin 10px
+            height auto
+          }
+          #ModalRulesText{
+            font-size: 16px
+          }
+          #V-card-title-rules{
+            word-break normal
+          }
+          #SpanRulesNM{
+            display block
+            font-size: 13px
+            text-align center
+          }
+          #SpanRulesM{
+            font-size: 20px
+            text-align center
+          }
+          #ModalRules{
+            font-size: 10px
+            text-decoration:underline
+          }
+          #SmallAuthButton{
+            margin-top 10px
+            margin-bottom 10px
+            color #56D68B
+            font-size: 10px
+            background: transparent
+            border 1px solid #56D68B
+            border-radius 30px
+            height 4%
+            width 50%
+          }
+          #RegButton{
+            margin-top 10px
+            margin-bottom 10px
+            color #FFF
+            font-size: 13px
+            background: linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
+            border none
+            border-radius 30px
+            height 6.8%
+            width 72%
+          }
+          .container{
+            position relative
+            width 100%;
+            height 100%;
+            padding 0
+            text-align: center;
+            vertical-align middle
+          }
+          .RegNumber{
+            margin-top 10px
+            padding-right 10px
+            padding-left 10px
+            }
+            #RegBigToolBar{
+            position relative;
+            background-color: #2AB06A;
+            height: 30vh;
+            width: 100%;
+            border: none;
+            border-radius:0px 0px 50px 0px;
+            text-align: center;
+          }
 
-    #RegBottomBar{
-        position fixed;
-        bottom 0;
-        background-color: #2AB06A;
-        width: 100%;
-        height 10%
-        border: none;
-        border-radius:50px 0px 0px 0px;
-        align-items: center;
-    }
+          #RegBottomBar{
+            position fixed;
+            bottom 0;
+            background-color: #2AB06A;
+            width: 100%;
+            height 10%
+            border: none;
+            border-radius:50px 0px 0px 0px;
+            align-items: center;
+          }
 
-    #regLogo{
-        position relative
-        margin-top 13%
-        margin-bottom 13%
-        vertical-align middle
-        width:auto;
-        height:50%;
-    }
+          #regLogo{
+            position relative
+            margin-top 13%
+            margin-bottom 13%
+            vertical-align middle
+            width:auto;
+            height:50%;
+          }
 
 </style>
