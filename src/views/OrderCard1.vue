@@ -1,19 +1,31 @@
 <template lang='pug'>
             v-card#Order(
                 max-width
+                @click="this.route"
             )
                 #TextOrderContainer
-                    #Title {{title}}
+                    #Title {{item.description}}
 
-                    #cost {{cost}}
+                    #cost {{item.cost}}
 </template>
 
 <script>
 export default {
   name: 'OrderCard1',
   props: {
-    title: String,
-    cost: String,
+    item: Object,
+  },
+  methods: {
+    route() {
+      // eslint-disable-next-line no-underscore-dangle
+      this.$store.dispatch('setMyOrderId', this.item._id);
+      this.$router.push('myOrder');
+    },
+  },
+  computed: {
+    token() {
+      return this.$store.getters.getToken;
+    },
   },
 };
 </script>

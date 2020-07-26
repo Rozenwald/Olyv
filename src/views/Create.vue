@@ -23,11 +23,14 @@
           v-checkbox.save-deal(
             label="Защищенная сделка"
             align='center'
-            v-model="saveDeal"
-            value="value")
+            v-model="saveDeal")
         v-row.edit-price(align='center', justify='center')
       v-row.btns(no-gutters  align='center' justify='center')
-          v-btn.accept-btn(align-content='center' @click="checkForm" rounded) Создать
+          v-btn.accept-btn(align-content='center'
+                           @click="checkForm"
+                           rounded
+                           v-text="isEdit ? 'Редактировать' : 'Создать'"
+                          )
     v-dialog(v-model="isError")
       v-row(align='center' justify='center')
         .dialog_title {{error}}
@@ -51,6 +54,8 @@ export default {
       address: null,
       saveDeal: false,
       error: '',
+      isEdit: false,
+      id: null,
     };
   },
   methods: {
@@ -76,7 +81,11 @@ export default {
       }
 
       if (this.error.length === 0) {
-        this.createOrder();
+        if (this.isEdit) {
+          this.editOrder();
+        } else {
+          this.createOrder();
+        }
       }
     },
 
@@ -95,18 +104,32 @@ export default {
       /* eslint-enable no-return-assign */
     },
 
+    editOrder() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post('http://test.cabinet.olyv.services:8888/api/v1/private/order', {
+          token: this.token,
+          method: 'update',
+          description: this.description,
+          cost: this.cost,
+          protect: this.saveDeal ? 'yes' : 'no',
+          id: this.id,
+        })
+        .then((response) => (this.checkResonse(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+
     checkResonse(response) {
-      console.log(this.description);
       switch (response.data.status) {
         case 'invalidCost':
           this.error = 'Неверный формат цены';
           break;
         case 'invalidDescription':
           this.error = 'Описание должно быть больше 10 символов';
-          console.log(response);
           break;
         case 'success':
-          this.$router.push('moiZakazi');
+          this.$router.back();
           break;
         default:
           this.error = 'Неизвестная ошибка';
@@ -116,6 +139,17 @@ export default {
     validCost(cost) {
       const regex = /\d+/;
       return regex.test(cost);
+    },
+
+    setEditData() {
+      if (Object.keys(this.$route.params).length !== 0) {
+        this.isEdit = true;
+        this.description = this.$route.params.order.description;
+        this.cost = this.$route.params.order.cost;
+        this.saveDeal = this.$route.params.order.protect === 'yes';
+        // eslint-disable-next-line no-underscore-dangle
+        this.id = this.$route.params.order._id;
+      }
     },
   },
   computed: {
@@ -133,6 +167,9 @@ export default {
     token() {
       return this.$store.getters.getToken;
     },
+  },
+  created() {
+    this.setEditData();
   },
 };
 </script>

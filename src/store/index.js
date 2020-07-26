@@ -5,6 +5,7 @@ import appbar from './modules/appbar';
 import setting from './modules/setting';
 import loginDialog from './modules/loginDialog';
 import user from './modules/user';
+import myOrderId from './modules/myOrderId';
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -20,5 +21,6 @@ export default new Vuex.Store({
     setting,
     loginDialog,
     user,
+    myOrderId,
   },
 });

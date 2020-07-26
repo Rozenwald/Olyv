@@ -3,11 +3,12 @@ import VueRouter from 'vue-router';
 import SetUserData from '../views/SetUserData.vue';
 import Setting from '../views/Setting.vue';
 import MoiZakazi from '../views/MoiZakazi.vue';
-import SpisokZakazov from '../views/ExecutorMoreInfo.vue';
+import SpisokZakazov from '../views/SpisokZakazov.vue';
 import Registration from '../views/Registration.vue';
 import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 import Create from '../views/Create.vue';
 import Auth from '../views/Authorization.vue';
+import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
 
 Vue.use(VueRouter);
 
@@ -51,6 +52,11 @@ const routes = [
     name: 'create',
     path: '/create',
     component: Create,
+  },
+  {
+    name: 'myOrder',
+    path: '/myOrder',
+    component: ExecutorMoreInfo,
   },
 ];
 

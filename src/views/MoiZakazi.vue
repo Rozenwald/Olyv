@@ -1,6 +1,6 @@
 <template lang='pug'>
     .container
-      OrderCard1(v-for='item in items' :key='item.id' :title='item.description' :cost='item.cost')
+      OrderCard1(v-for='item in items' :key='item.id' :item='item')
 </template>
 
 <script>
@@ -34,7 +34,7 @@ export default {
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.items = response.data.data;
+          this.items = response.data.data.reverse();
           break;
         default:
           this.error = 'Ошибка';
