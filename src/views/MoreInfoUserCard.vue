@@ -6,7 +6,7 @@
           v-list-item(dense)
             v-list-item-avatar(color="grey")
             v-list-item-content
-              v-list-item-title 3 км от Вас
+              v-list-item-title 3 к м от Вас
             v-list-item-action
               v-row.cost-wrp(align='center' justify='center')
                 .cost 42
