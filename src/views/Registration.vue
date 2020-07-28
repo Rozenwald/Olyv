@@ -39,10 +39,10 @@
     span#SpanRulesNM(v-show="!isFocus") Регистрация с помощью:
 
     .iconContainer(v-show="!isFocus")
-    svg-icon.regIcon(name='VK'  width='37' height='37')
-    svg-icon.regIcon(name='Google'  width='37' height='37')
-    svg-icon.regIcon(name='Facebook'  width='37' height='37')
-    //svg-icon.regIcon(name='Instagram'  width='37' height='37')
+      svg-icon.regIcon(name='VK'  width='37' height='37')
+      svg-icon.regIcon(name='Google'  width='37' height='37')
+      svg-icon.regIcon(name='Facebook'  width='37' height='37')
+      //svg-icon.regIcon(name='Instagram'  width='37' height='37')
 
     #RegBottomBar(v-show="!isFocus")
 
@@ -297,7 +297,7 @@ export default {
             margin-bottom 13%
             vertical-align middle
             width:auto;
-            height:30%;
+            height:60%;
           }
 
 </style>
