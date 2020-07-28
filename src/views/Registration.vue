@@ -273,6 +273,7 @@ export default {
             position relative;
             background-color: #2AB06A;
             margin 0
+            margin-bottom 50px
             height: 30vh;
             width: 100%;
             border: none;

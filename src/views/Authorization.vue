@@ -173,7 +173,7 @@ export default {
         background: linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
         border none
         border-radius 30px
-        height 4%
+        height 30px
         width 50%
     }
     #RegButton{
@@ -184,7 +184,7 @@ export default {
         background: transparent
         border 1px solid #56D68B
         border-radius 30px
-        height 6.8%
+        height 56px
         width 72%
     }
     .container{
@@ -204,6 +204,7 @@ export default {
         position relative
         margin-bottom 50px
         background-color: #2AB06A
+        margin 0
         height: 30vh
         width: 100%
         border: none
