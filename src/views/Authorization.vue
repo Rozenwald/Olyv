@@ -203,8 +203,10 @@ export default {
     #RegBigToolBar {
         position relative
         margin-bottom 50px
+        margin-right 0
+        margin-left 0
+        margin-top 0
         background-color: #2AB06A
-        margin 0
         height: 30vh
         width: 100%
         border: none
