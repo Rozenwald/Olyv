@@ -293,11 +293,9 @@ export default {
 
           #regLogo{
             position relative
-            margin-top 13%
-            margin-bottom 13%
             vertical-align middle
             width:auto;
-            height:60%;
+            height:50%;
           }
 
 </style>

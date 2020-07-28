@@ -1,8 +1,7 @@
 <template lang="pug">
         .container
-            #RegBigToolBar
-                .container
-                    img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
+            v-row#RegBigToolBar(align='center' justify='center')
+              img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
 
             v-text-field.RegNumber(
                 v-model="email"
@@ -19,15 +18,15 @@
             v-btn#RegButton(v-on:click="checkForm") Войти
             v-btn#SmallAuthButton(@click="route('registration')") Пройти регистрацию
 
-            span#SpanRulesNM Войти с помощью:
+            span#SpanRulesNM(v-show="!isFocus") Войти с помощью:
 
-            .iconContainer
+            .iconContainer(v-show="!isFocus")
               svg-icon.regIcon(name='VK'  width='37' height='37')
               svg-icon.regIcon(name='Google'  width='37' height='37')
               svg-icon.regIcon(name='Facebook'  width='37' height='37')
               //svg-icon.regIcon(name='Instagram'  width='37' height='37')
 
-            #RegBottomBar
+            #RegBottomBar(v-show="!isFocus")
 
             v-dialog(v-model="isError")
               v-row(align='center' justify='center')
@@ -49,7 +48,19 @@ export default {
       email: null,
       password: '',
       error: '',
+      isFocus: false,
+      windowHeight: null,
     };
+  },
+  created() {
+    this.windowHeight = window.innerHeight;
+    window.addEventListener('resize', () => {
+      if (window.innerHeight < this.windowHeight) {
+        this.isFocus = true;
+      } else {
+        this.isFocus = false;
+      }
+    });
   },
   methods: {
     route(routeName) {
