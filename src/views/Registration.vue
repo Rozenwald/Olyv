@@ -1,7 +1,7 @@
 <template lang="pug">
   .container
     v-row#RegBigToolBar(align='center' justify='center')
-          img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
+      img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
 
     v-text-field.RegNumber(v-model="email"
                           label='E-mail'
@@ -36,9 +36,9 @@
     v-btn#RegButton(v-on:click="checkForm") Зарегестрироваться
     v-btn#SmallAuthButton(@click="route('auth')") Уже есть аккаунт
 
-    span#SpanRulesNM Регистрация с помощью:
+    span#SpanRulesNM(v-show="!isFocus") Регистрация с помощью:
 
-    .iconContainer
+    .iconContainer(v-show="!isFocus")
     svg-icon.regIcon(name='VK'  width='37' height='37')
     svg-icon.regIcon(name='Google'  width='37' height='37')
     svg-icon.regIcon(name='Facebook'  width='37' height='37')
@@ -242,7 +242,7 @@ export default {
             background: transparent
             border 1px solid #56D68B
             border-radius 30px
-            height 4%
+            height 30px
             width 50%
           }
           #RegButton{
@@ -297,7 +297,7 @@ export default {
             margin-bottom 13%
             vertical-align middle
             width:auto;
-            height:50%;
+            height:30%;
           }
 
 </style>
