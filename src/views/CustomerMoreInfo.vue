@@ -59,13 +59,16 @@
 </template>
 
 <script>
-
+import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
+import store from '../store';
 
 export default {
-  name: 'CustomerMoreInfo',
+  name: 'moreInfoOrder',
   components: {
     SvgIcon,
+    axios,
+    store,
   },
   data() {
     return {

@@ -1,13 +1,11 @@
 <template lang='pug'>
-            v-card#Order(
-                max-width
-                @click="showLoginDialog"
-            )
-                #TextOrderContainer
-                    #TextOrder {{title}}
-                    #ContainerCost
-                        #cost1 {{cost1}}
-                        #cost2 {{cost2}}
+  v-card#Order(max-width
+               @click='this.route')
+    #TextOrderContainer
+      #TextOrder {{item.description}}
+      #ContainerCost
+        #cost1 {{item.cost1}}
+        #cost2 {{item.cost2}}
 </template>
 
 <script>
@@ -20,7 +18,7 @@ export default {
     route() {
       // eslint-disable-next-line no-underscore-dangle
       this.$store.dispatch('setMyOrderId', this.item._id);
-      this.$router.push('myOrder');
+      this.$router.push('moreInfoOrder');
     },
   },
   computed: {

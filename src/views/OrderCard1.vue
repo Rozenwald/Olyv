@@ -1,11 +1,8 @@
 <template lang='pug'>
-            v-card#Order(
-                max-width
-                @click="this.route"
-            )
+            v-card#Order(max-width
+                        @click="this.route")
                 #TextOrderContainer
                     #Title {{item.description}}
-
                     #cost {{item.cost}}
 </template>
 
