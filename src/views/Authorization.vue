@@ -16,7 +16,10 @@
                 required)
 
             v-btn#RegButton(v-on:click="checkForm") Войти
-            v-btn#SmallAuthButton(@click="route('registration')") Пройти регистрацию
+            v-btn#SmallAuthButton(
+              @click="route('registration')"
+              v-model="regButton")
+              |Пройти регистрацию
 
             span#SpanRulesNM(v-show="!isFocus") Войти с помощью:
 
@@ -65,6 +68,7 @@ export default {
   methods: {
     route(routeName) {
       this.$router.push(routeName);
+      this.password.blur();
     },
 
     validEmail(email) {
@@ -105,7 +109,7 @@ export default {
         case 'success':
           window.localStorage.setItem('token', response.data.data);
           this.$store.dispatch('setToken', response.data.data);
-          this.$router.back();
+          this.$router.push('spisokZakazov');
           break;
         case 'notSuccess':
           this.error = 'Ошибка регистрации';
