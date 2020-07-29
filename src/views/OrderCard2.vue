@@ -14,13 +14,18 @@
 export default {
   name: 'OrderCard2',
   props: {
-    title: String,
-    cost1: String,
-    cost2: String,
+    item: Object,
   },
   methods: {
-    showLoginDialog() {
-      this.$store.dispatch('showLoginDialog', true);
+    route() {
+      // eslint-disable-next-line no-underscore-dangle
+      this.$store.dispatch('setMyOrderId', this.item._id);
+      this.$router.push('myOrder');
+    },
+  },
+  computed: {
+    token() {
+      return this.$store.getters.getToken;
     },
   },
 };
