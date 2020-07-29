@@ -72,6 +72,16 @@ export default {
       windowHeight: null,
     };
   },
+  created(){
+    this.windowHeight = window.innerHeight;
+    window.addEventListener('resize', () => {
+      if (window.innerHeight < this.windowHeight) {
+        this.isFocus = true;
+      } else {
+        this.isFocus = false;
+      }
+    });
+  }
   methods: {
     route(routeName) {
       this.$router.push(routeName);
@@ -160,16 +170,7 @@ export default {
           break;
       }
     },
-  },
-  mounted(){
-    this.windowHeight = window.innerHeight;
-    window.addEventListener('resize', () => {
-      if (window.innerHeight < this.windowHeight) {
-        this.isFocus = true;
-      } else {
-        this.isFocus = false;
-      }
-    });
+  
   },
   computed: {
     isError: {

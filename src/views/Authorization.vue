@@ -52,6 +52,16 @@ export default {
       windowHeight: null,
     };
   },
+  created(){
+    this.windowHeight = window.innerHeight;
+    window.addEventListener('resize', () => {
+      if (window.innerHeight < this.windowHeight) {
+        this.isFocus = true;
+      } else {
+        this.isFocus = false;
+      }
+    });
+  }
   methods: {
     route(routeName) {
       this.$router.push(routeName);
@@ -129,14 +139,6 @@ export default {
   mounted() {
     this.$store.dispatch('showAppbar', false);
     this.$store.dispatch('showBottomNavigation', false);
-    this.windowHeight = window.innerHeight;
-    window.addEventListener('resize', () => {
-      if (window.innerHeight < this.windowHeight) {
-        this.isFocus = true;
-      } else {
-        this.isFocus = false;
-      }
-    });
   },
   beforeDestroy() {
     this.$store.dispatch('showAppbar', true);
