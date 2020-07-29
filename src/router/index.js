@@ -9,10 +9,17 @@ import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 import Create from '../views/Create.vue';
 import Auth from '../views/Authorization.vue';
 import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
+import BottomShit from '../views/BottomShit.vue';
+import Verification from '../views/Verification.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    name: 'bottomshit',
+    path: '/bottomshit',
+    component: BottomShit,
+  },
   {
     name: 'registration',
     path: '/registration',
@@ -57,6 +64,11 @@ const routes = [
     name: 'myOrder',
     path: '/myOrder',
     component: ExecutorMoreInfo,
+  },
+  {
+    name: 'verification',
+    path: '/Verification',
+    component: Verification,
   },
 ];
 

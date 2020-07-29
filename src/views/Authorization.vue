@@ -109,7 +109,7 @@ export default {
         case 'success':
           window.localStorage.setItem('token', response.data.data);
           this.$store.dispatch('setToken', response.data.data);
-          this.$router.push('spisokZakazov');
+          this.$router.push('verification');
           break;
         case 'notSuccess':
           this.error = 'Ошибка регистрации';
