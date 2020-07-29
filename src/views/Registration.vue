@@ -72,7 +72,7 @@ export default {
       windowHeight: null,
     };
   },
-  created(){
+  created() {
     this.windowHeight = window.innerHeight;
     window.addEventListener('resize', () => {
       if (window.innerHeight < this.windowHeight) {
@@ -81,7 +81,7 @@ export default {
         this.isFocus = false;
       }
     });
-  }
+  },
   methods: {
     route(routeName) {
       this.$router.push(routeName);
@@ -170,7 +170,6 @@ export default {
           break;
       }
     },
-  
   },
   computed: {
     isError: {
