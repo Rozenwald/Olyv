@@ -1,6 +1,10 @@
 <template lang='pug'>
     .container
-      OrderCard1(v-for='item in items' :key='item.id' :item='item')
+      OrderCard1(
+      v-for='item in items'
+      :key='item.id'
+      :title='item.title'
+      :cost1='item.cost1')
 </template>
 
 <script>
@@ -51,7 +55,6 @@ export default {
     this.$store.commit('setTitle', 'Мои заказы');
     this.getData();
   },
-
 };
 </script>
 

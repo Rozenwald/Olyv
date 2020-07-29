@@ -9,50 +9,52 @@
 </template>
 
 <script>
-
+import axios from 'axios';
 import OrderCard2 from './OrderCard2.vue';
 
 export default {
   name: 'OrderCard',
   data: () => ({
-    items: [
-      {
-        title: 'Уведомления',
-        cost1: '10 909р',
-        cost2: '🠇 10 909р',
-        id: 1,
-      },
-      {
-        title: 'Уведомления',
-        cost1: '10 909р',
-        cost2: '🠇 10 909р',
-        id: 2,
-      },
-      {
-        title: 'Уведомления',
-        cost1: '10 909р',
-        cost2: '🠇 10 909р',
-        id: 3,
-      },
-      {
-        title: 'Уведомления',
-        cost1: '10 909р',
-        cost2: '🠇 10 909р',
-        id: 4,
-      },
-      {
-        title: 'Уведомления',
-        cost1: '10 909р',
-        cost2: '🠇 10 909р',
-        id: 5,
-      },
-    ],
+    items: null,
+    error: '',
   }),
   components: {
     OrderCard2,
+    axios,
+  },
+  methods: {
+    getData() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post('http://test.cabinet.olyv.services:8888/api/v1/private/order', {
+          token: this.token,
+          method: 'receive',
+          submethod: 'my',
+          step: 0,
+        })
+        .then((response) => (this.checkResponse(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+    checkResponse(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.items = response.data.data.reverse();
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+  },
+  computed: {
+    token() {
+      return this.$store.getters.getToken;
+    },
   },
   created() {
     this.$store.commit('setTitle', 'Список заказов');
+    this.getData();
   },
 };
 </script>
