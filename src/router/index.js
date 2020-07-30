@@ -61,6 +61,11 @@ const routes = [
     component: Create,
   },
   {
+    name: 'moreInfoOrder',
+    path: '/moreInfoOrder',
+    component: CustomerMoreInfo,
+  },
+  {
     name: 'myOrder',
     path: '/myOrder',
     component: ExecutorMoreInfo,
