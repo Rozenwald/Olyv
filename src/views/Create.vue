@@ -102,6 +102,7 @@ export default {
         .then((response) => (this.checkResonse(response)))
         .catch(() => (this.error = 'Ошибка'));
       /* eslint-enable no-return-assign */
+      this.$router.push('moiZakazi');
     },
 
     editOrder() {
