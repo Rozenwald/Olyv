@@ -1,4 +1,4 @@
-<template lang='pug'>
+<template lang="pug">
     .container
       OrderCard2(v-for='item in items'
                 :key='item.id'
@@ -7,7 +7,7 @@
 
 <script>
 import axios from 'axios';
-import OrderCard2 from './OrderCard1.vue';
+import OrderCard2 from './OrderCard2.vue';
 
 export default {
   name: 'spisokZakazov',
