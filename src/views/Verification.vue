@@ -128,7 +128,7 @@ export default {
 
   input[type="file"]{
     position absolute
-    left  -500px
+    left -500px
   }
 
   .selected-img-wrp{
