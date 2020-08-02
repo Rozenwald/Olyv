@@ -197,10 +197,6 @@ export default {
     padding 0 !important
   }
 
-  .customer-more-info{
-    margin-bottom 56px
-  }
-
   .parallax {
     margin 15px -12px
     height 150px

@@ -1,5 +1,5 @@
 <template lang='pug'>
-    .container
+    v-container
       OrderCard1(v-for='item in items'
                 :key='item.id'
                 :item='item')
@@ -57,23 +57,5 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .setting{
-    padding 0 15px
-    background-color white
-  }
-
-  .right_arrow{
-    width 8px !important
-    height auto !important
-  }
-
-  .v-list-item{
-    border-bottom 0.5px solid #65686C
-    padding 0 !important
-  }
-
-  .v-list-item:last-child {
-    border-bottom none
-  }
 
 </style>

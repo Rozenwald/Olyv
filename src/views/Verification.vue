@@ -16,7 +16,7 @@
               v-row.more-action-img(align='center' justify='center' v-show="moreActionImg")
                 span(@click="choosePhoto") Загрузить заново
           v-btn.send-btn(@click="sendData") Отправить
-    input(type="file" @change="handleFileUpload" ref="input" v-show="!src")
+      input(type="file" @change="handleFileUpload" ref="input" v-show="!src")
 
 </template>
 
@@ -26,16 +26,12 @@ import animate from 'animate.css';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
-<<<<<<< HEAD
   name: 'Verification',
   components: {
     SvgIcon,
     animate,
     axios,
   },
-=======
-  name: 'verification',
->>>>>>> 18e6fa27fcd00011c6c3b691f8c1d3d37b814205
   data: () => ({
     photoIsLoad: false,
     description: 'Для получения статуса исполнителя необходимо пройти верификацию. Пожалуйста, загрузите фотографию паспорта',
@@ -110,6 +106,8 @@ export default {
 
   .container{
     height 100vh
+    padding-bottom 0
+    padding-top 0
   }
 
   .verification{
@@ -130,7 +128,7 @@ export default {
 
   input[type="file"]{
     position absolute
-    width -500px
+    left  -500px
   }
 
   .selected-img-wrp{

@@ -9,6 +9,9 @@ Vue.config.productionTip = false;
 Vue.prototype.$baseUrl = process.env.NODE_ENV === 'production'
   ? 'http://cabinet.olyv.services:8888/'
   : 'http://test.cabinet.olyv.services:8888/';
+window.$baseUrl = process.env.NODE_ENV === 'production'
+  ? 'http://cabinet.olyv.services:8888/'
+  : 'http://test.cabinet.olyv.services:8888/';
 new Vue({
   router,
   store,

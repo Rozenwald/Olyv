@@ -110,7 +110,7 @@ export default {
     function getData(id, token) {
       /* eslint-disable no-return-assign */
       return axios
-        .post(`${this.$baseUrl}api/v1/private/order`, {
+        .post(`${window.$baseUrl}api/v1/private/order`, {
           token,
           method: 'receive',
           submethod: 'my',
@@ -145,10 +145,6 @@ export default {
   .executor-more-info-header{
     padding 0 !important
     height 56px
-  }
-
-  .executor-more-info{
-    margin-bottom 63px
   }
 
   .row{
