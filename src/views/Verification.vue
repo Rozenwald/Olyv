@@ -26,12 +26,16 @@ import animate from 'animate.css';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
+<<<<<<< HEAD
   name: 'Verification',
   components: {
     SvgIcon,
     animate,
     axios,
   },
+=======
+  name: 'verification',
+>>>>>>> 18e6fa27fcd00011c6c3b691f8c1d3d37b814205
   data: () => ({
     photoIsLoad: false,
     description: 'Для получения статуса исполнителя необходимо пройти верификацию. Пожалуйста, загрузите фотографию паспорта',

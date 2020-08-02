@@ -1,8 +1,7 @@
 <template lang="pug">
   .container
-    #RegBigToolBar
-      .container
-        img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
+    v-row#RegBigToolBar(align='center' justify='center')
+      img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
 
     v-text-field.RegNumber(v-model="email"
                           label='E-mail'
@@ -14,9 +13,9 @@
                           label='Пароль'
                           required)
 
-    span#SpanRulesNM Нажимая кнопку зарегестрироваться вы принимаете:
+    span#SpanRulesNM(v-show="!isFocus") Нажимая кнопку зарегестрироваться вы принимаете:
 
-    v-row#modalContainer(justify="center")
+    v-row#modalContainer(v-show="!isFocus" justify="center")
       v-dialog(v-model='dialog')
         template(v-slot:activator="{ on, attrs }")
           v-btn#ModalRules(text
@@ -37,15 +36,15 @@
     v-btn#RegButton(v-on:click="checkForm") Зарегестрироваться
     v-btn#SmallAuthButton(@click="route('auth')") Уже есть аккаунт
 
-    span#SpanRulesNM Регистрация с помощью:
+    span#SpanRulesNM(v-show="!isFocus") Регистрация с помощью:
 
-    .iconContainer
-    svg-icon.regIcon(name='VK'  width='37' height='37')
-    svg-icon.regIcon(name='Google'  width='37' height='37')
-    svg-icon.regIcon(name='Facebook'  width='37' height='37')
-    //svg-icon.regIcon(name='Instagram'  width='37' height='37')
+    .iconContainer(v-show="!isFocus")
+      svg-icon.regIcon(name='VK'  width='37' height='37')
+      svg-icon.regIcon(name='Google'  width='37' height='37')
+      svg-icon.regIcon(name='Facebook'  width='37' height='37')
+      //svg-icon.regIcon(name='Instagram'  width='37' height='37')
 
-    #RegBottomBar
+    #RegBottomBar(v-show="!isFocus")
 
     v-dialog(v-model="isError")
       v-row(align='center' justify='center')
@@ -69,7 +68,19 @@ export default {
       password: null,
       error: '',
       dialog: false,
+      isFocus: false,
+      windowHeight: null,
     };
+  },
+  created() {
+    this.windowHeight = window.innerHeight;
+    window.addEventListener('resize', () => {
+      if (window.innerHeight < this.windowHeight) {
+        this.isFocus = true;
+      } else {
+        this.isFocus = false;
+      }
+    });
   },
   methods: {
     route(routeName) {
@@ -159,7 +170,6 @@ export default {
           break;
       }
     },
-
   },
   computed: {
     isError: {
@@ -191,6 +201,11 @@ export default {
 <style lang="stylus" scoped>
           #modalContainer{
             margin 0
+          }
+          toolbarIcon{
+            width 100%
+            height 100%
+            display block
           }
           .regIcon{
             margin 5px
@@ -226,7 +241,7 @@ export default {
             background: transparent
             border 1px solid #56D68B
             border-radius 30px
-            height 4%
+            height 30px
             width 50%
           }
           #RegButton{
@@ -237,7 +252,7 @@ export default {
             background: linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
             border none
             border-radius 30px
-            height 6.8%
+            height 56px
             width 72%
           }
           .container{
@@ -253,9 +268,13 @@ export default {
             padding-right 10px
             padding-left 10px
             }
-            #RegBigToolBar{
+          #RegBigToolBar{
             position relative;
             background-color: #2AB06A;
+            margin-bottom 50px
+            margin-right 0
+            margin-left 0
+            margin-top 0
             height: 30vh;
             width: 100%;
             border: none;
@@ -276,8 +295,6 @@ export default {
 
           #regLogo{
             position relative
-            margin-top 13%
-            margin-bottom 13%
             vertical-align middle
             width:auto;
             height:50%;

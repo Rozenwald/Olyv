@@ -1,6 +1,8 @@
 <template lang='pug'>
     .container
-      OrderCard1(v-for='item in items' :key='item.id' :item='item')
+      OrderCard1(v-for='item in items'
+                :key='item.id'
+                :item='item')
 </template>
 
 <script>
@@ -8,7 +10,7 @@ import axios from 'axios';
 import OrderCard1 from './OrderCard1.vue';
 
 export default {
-  name: 'OrderCard',
+  name: 'moiZakazi',
   data: () => ({
     items: null,
     error: '',
@@ -51,7 +53,6 @@ export default {
     this.$store.commit('setTitle', 'Мои заказы');
     this.getData();
   },
-
 };
 </script>
 

@@ -9,11 +9,20 @@ import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 import Create from '../views/Create.vue';
 import Auth from '../views/Authorization.vue';
 import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
+<<<<<<< HEAD
+=======
+import BottomShit from '../views/BottomShit.vue';
+>>>>>>> 18e6fa27fcd00011c6c3b691f8c1d3d37b814205
 import Verification from '../views/Verification.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    name: 'bottomshit',
+    path: '/bottomshit',
+    component: BottomShit,
+  },
   {
     name: 'registration',
     path: '/registration',
@@ -55,13 +64,22 @@ const routes = [
     component: Create,
   },
   {
+    name: 'moreInfoOrder',
+    path: '/moreInfoOrder',
+    component: CustomerMoreInfo,
+  },
+  {
     name: 'myOrder',
     path: '/myOrder',
     component: ExecutorMoreInfo,
   },
   {
     name: 'verification',
+<<<<<<< HEAD
     path: '/verification',
+=======
+    path: '/Verification',
+>>>>>>> 18e6fa27fcd00011c6c3b691f8c1d3d37b814205
     component: Verification,
   },
 ];

@@ -2,7 +2,7 @@
   v-container
     .customer-more-info
       v-row.customer-more-info-header(align='center' justify='space-between')
-        .name Лавр гей
+        .name asgasdfgasg
         v-rating(
           :length="5"
           :half-increments="true"
@@ -21,7 +21,7 @@
             svg-icon(name="SaveDeal")
             span Защищенная сделка
           v-row.cost-wrp(align='center' justify='center')
-            .cost 4235
+            .cost 5000
         v-row.more-info-wrp-second(align='center' justify='start')
           v-row.responded(align='center')
             svg-icon(name="Responded")
@@ -59,16 +59,20 @@
 </template>
 
 <script>
-
+import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
+import store from '../store';
 
 export default {
-  name: 'CustomerMoreInfo',
+  name: 'moreInfoOrder',
   components: {
     SvgIcon,
+    axios,
+    store,
   },
   data() {
     return {
+      order: [],
       starColor: '#FFCA10',
       changeValue: 1000,
       currentPrice: 5000, // Number

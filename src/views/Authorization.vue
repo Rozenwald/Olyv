@@ -1,8 +1,7 @@
 <template lang="pug">
         .container
-            #RegBigToolBar
-                .container
-                    img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
+            v-row#RegBigToolBar(align='center' justify='center')
+              img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
 
             v-text-field.RegNumber(
                 v-model="email"
@@ -17,17 +16,20 @@
                 required)
 
             v-btn#RegButton(v-on:click="checkForm") Войти
-            v-btn#SmallAuthButton(@click="route('registration')") Пройти регистрацию
+            v-btn#SmallAuthButton(
+              @click="route('registration')"
+              v-model="regButton")
+              |Пройти регистрацию
 
-            span#SpanRulesNM Войти с помощью:
+            span#SpanRulesNM(v-show="!isFocus") Войти с помощью:
 
-            .iconContainer
+            .iconContainer(v-show="!isFocus")
               svg-icon.regIcon(name='VK'  width='37' height='37')
               svg-icon.regIcon(name='Google'  width='37' height='37')
               svg-icon.regIcon(name='Facebook'  width='37' height='37')
               //svg-icon.regIcon(name='Instagram'  width='37' height='37')
 
-            #RegBottomBar
+            #RegBottomBar(v-show="!isFocus")
 
             v-dialog(v-model="isError")
               v-row(align='center' justify='center')
@@ -49,11 +51,24 @@ export default {
       email: null,
       password: '',
       error: '',
+      isFocus: false,
+      windowHeight: null,
     };
+  },
+  created() {
+    this.windowHeight = window.innerHeight;
+    window.addEventListener('resize', () => {
+      if (window.innerHeight < this.windowHeight) {
+        this.isFocus = true;
+      } else {
+        this.isFocus = false;
+      }
+    });
   },
   methods: {
     route(routeName) {
       this.$router.push(routeName);
+      this.password.blur();
     },
 
     validEmail(email) {
@@ -94,7 +109,7 @@ export default {
         case 'success':
           window.localStorage.setItem('token', response.data.data);
           this.$store.dispatch('setToken', response.data.data);
-          this.$router.back();
+          this.$router.push('verification');
           break;
         case 'notSuccess':
           this.error = 'Ошибка регистрации';
@@ -162,7 +177,7 @@ export default {
         background: linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
         border none
         border-radius 30px
-        height 4%
+        height 30px
         width 50%
     }
     #RegButton{
@@ -173,7 +188,7 @@ export default {
         background: transparent
         border 1px solid #56D68B
         border-radius 30px
-        height 6.8%
+        height 56px
         width 72%
     }
     .container{
@@ -192,6 +207,9 @@ export default {
     #RegBigToolBar {
         position relative
         margin-bottom 50px
+        margin-right 0
+        margin-left 0
+        margin-top 0
         background-color: #2AB06A
         height: 30vh
         width: 100%
@@ -213,8 +231,6 @@ export default {
 
     #regLogo {
         position relative
-        margin-top 13%
-        margin-bottom 13%
         vertical-align middle
         width:auto;
         height:50%;
