@@ -25,6 +25,7 @@
     "cordova-serve-osx": "cross-env CORDOVA_PLATFORM=osx vue-cli-service cordova-serve-osx"
   },
   "dependencies": {
+    "animate.css": "^4.1.0",
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "css-element-queries": "^1.2.3",

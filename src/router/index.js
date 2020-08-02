@@ -9,6 +9,7 @@ import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 import Create from '../views/Create.vue';
 import Auth from '../views/Authorization.vue';
 import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
+import Verification from '../views/Verification.vue';
 
 Vue.use(VueRouter);
 
@@ -57,6 +58,11 @@ const routes = [
     name: 'myOrder',
     path: '/myOrder',
     component: ExecutorMoreInfo,
+  },
+  {
+    name: 'verification',
+    path: '/verification',
+    component: Verification,
   },
 ];
 

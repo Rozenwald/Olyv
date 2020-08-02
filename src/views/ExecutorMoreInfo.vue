@@ -64,7 +64,7 @@ export default {
     delOrder() {
       /* eslint-disable no-return-assign */
       axios
-        .post('http://test.cabinet.olyv.services:8888/api/v1/private/order', {
+        .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
           method: 'del',
           // eslint-disable-next-line no-underscore-dangle
@@ -110,7 +110,7 @@ export default {
     function getData(id, token) {
       /* eslint-disable no-return-assign */
       return axios
-        .post('http://test.cabinet.olyv.services:8888/api/v1/private/order', {
+        .post(`${this.$baseUrl}api/v1/private/order`, {
           token,
           method: 'receive',
           submethod: 'my',
