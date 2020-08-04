@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-app-bar#toolbar(app v-show="show")
+  v-app-bar#toolbar(app v-show="show" fixed)
     .toolbar-title-wrapper
       .toolbar-title {{title}}
 </template>
@@ -25,7 +25,6 @@ export default {
     background-color #56D68B
     box-shadow 0px 2px 2px rgba(0, 0, 0, 0.05)
     max-height 56px
-    position static
   }
 
   .toolbar-title-wrapper{

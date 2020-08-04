@@ -36,9 +36,9 @@ export default {
 <style lang="stylus" scoped>
   .container{
     background-color white
-    padding-top 0 !important
+    padding-top 56px !important
     padding-bottom 0 !important
-    margin-bottom 65px
+    margin-bottom 63px
   }
 
   .v-list{

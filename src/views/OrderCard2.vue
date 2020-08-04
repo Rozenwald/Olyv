@@ -33,6 +33,9 @@ export default {
         width 100%
         height 65%
     }
+    #Order:first-child{
+      margin-top 0
+    }
     #Order{
         text-align left
         position relative

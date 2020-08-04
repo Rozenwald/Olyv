@@ -39,6 +39,7 @@ export default {
       speed: 150,
     });
 
+    // eslint-disable-next-line func-names
     swiper.on('transitionEnd', function () {
       if (this.activeIndex === 0) {
         self.$emit('transitionEnd');

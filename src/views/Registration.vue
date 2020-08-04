@@ -94,7 +94,7 @@ export default {
     signUp() {
       /* eslint-disable no-return-assign */
       axios
-        .post('http://test.cabinet.olyv.services:8888/api/v1/public/signup/email', {
+        .post(`${this.$baseUrl}api/v1/public/signup/email`, {
           email: this.email,
           password: this.password,
         })
@@ -106,7 +106,7 @@ export default {
     signIn() {
       /* eslint-disable no-return-assign */
       axios
-        .post('http://test.cabinet.olyv.services:8888/api/v1/public/signin/email', {
+        .post(`${this.$baseUrl}api/v1/public/signin/email`, {
           username: this.email,
           password: this.password,
         })

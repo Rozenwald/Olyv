@@ -95,7 +95,7 @@ export default {
     createOrder() {
       /* eslint-disable no-return-assign */
       axios
-        .post('http://test.cabinet.olyv.services:8888/api/v1/private/order', {
+        .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
           method: 'add',
           description: this.description,
@@ -110,7 +110,7 @@ export default {
     editOrder() {
       /* eslint-disable no-return-assign */
       axios
-        .post('http://test.cabinet.olyv.services:8888/api/v1/private/order', {
+        .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
           method: 'update',
           description: this.description,
@@ -194,10 +194,6 @@ export default {
 
   .customer-more-info-header{
     padding 0 !important
-  }
-
-  .customer-more-info{
-    margin-bottom 56px
   }
 
   .parallax {

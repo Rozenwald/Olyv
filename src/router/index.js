@@ -78,7 +78,7 @@ const routes = [
   },
   {
     name: 'verification',
-    path: '/Verification',
+    path: '/verification',
     component: Verification,
   },
 ];
