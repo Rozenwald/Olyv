@@ -10,25 +10,88 @@
       v-text-field.input-data(label="Имя"
                               dense color="#65686C"
                               clearable
+                              v-model="firstName"
                              )
       v-text-field(label="Фамилия"
                    dense color="#65686C"
                    clearable
+                   v-model="lastName"
                   )
 
       v-row.btn-wrapper(align='center' justify='center')
-        v-btn.btn-save(rounded) Сохранить
+        v-btn.btn-save(rounded @click="checkForm") Сохранить
 </template>
 
 <script>
+import axios from 'axios';
 
 export default {
   name: 'SetUserData',
+  components: {
+    axios,
+  },
   data() {
     return {
       isFocus: false,
       windowHeight: null,
+      firstName: null,
+      lastName: null,
+      error: '',
     };
+  },
+  methods: {
+    checkForm() {
+      if (this.firstName !== null) {
+        if (this.firstName.length === 0) {
+          this.error = 'Введите имя';
+        }
+      } else {
+        this.error = 'Введите имя';
+      }
+
+      if (this.error.length === 0) {
+        this.sendData();
+      }
+    },
+    sendData() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/user`, {
+          method: 'update',
+          submethod: 'nameLastname',
+          token: this.token,
+          name: this.firstName,
+          lastname: this.lastName,
+        })
+        .then((response) => (this.checkResponse(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'Ошибка'));
+    },
+    checkResponse(response) {
+      switch (response.data.status) {
+        case 'success':
+          if (response.data.data == null) {
+            this.getData();
+          } else {
+            this.$store.dispatch('setUser', response.data.data);
+            this.$router.push('customerProfile');
+          }
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+    getData() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/user`, {
+          method: 'receive',
+          submethod: 'my',
+          token: this.token,
+        })
+        .then((response) => (this.checkResponse(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'Ошибка'));
+    },
   },
   created() {
     this.$store.commit('setTitle', 'Личный кабинет');
@@ -44,6 +107,9 @@ export default {
   computed: {
     isAuth() {
       return this.$store.getters.isAuth;
+    },
+    token() {
+      return this.$store.getters.getToken;
     },
   },
   watch: {

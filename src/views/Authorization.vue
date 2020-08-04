@@ -109,7 +109,7 @@ export default {
         case 'success':
           window.localStorage.setItem('token', response.data.data);
           this.$store.dispatch('setToken', response.data.data);
-          this.$router.push('verification');
+          this.getData();
           break;
         case 'notSuccess':
           this.error = 'Ошибка регистрации';
@@ -122,6 +122,28 @@ export default {
           break;
         default:
           this.error = 'Ошибка регистрации';
+          break;
+      }
+    },
+    getData() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/user`, {
+          method: 'receive',
+          submethod: 'my',
+          token: window.localStorage.getItem('token'),
+        })
+        .then((response) => (this.checkUserData(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'Ошибка'));
+    },
+    checkUserData(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.$store.dispatch('setUser', response.data.data);
+          this.$router.go(-1);
+          break;
+        default:
+          this.error = 'Ошибка';
           break;
       }
     },

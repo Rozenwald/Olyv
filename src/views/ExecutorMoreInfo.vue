@@ -1,14 +1,39 @@
 <template lang="pug">
   v-container
-    .executor-more-info
+    .customer-more-info
+      v-row.customer-more-info-header(align='center' justify='space-between')
+        .name asgasdfgasg
+        v-rating(
+          :length="5"
+          :half-increments="true"
+          :dense="true"
+          :color="starColor"
+          :background-color="starColor"
+          size="14"
+          )
+      .parallax(
+        height="150"
+        src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg"
+      )
       .information-wrp
         v-row.more-info-wrp-first(align='center' justify='space-between')
           v-row.save-deal(align='center')
-            svg-icon(name="SaveDeal" v-show="isSaveDeal")
-            span(v-show="isSaveDeal") Защищенная сделка
+            svg-icon(name="SaveDeal")
+            span Защищенная сделка
           v-row.cost-wrp(align='center' justify='center')
-            .cost {{order.cost}}
-        .description {{order.description}}
+            .cost 5000
+        v-row.more-info-wrp-second(align='center' justify='start')
+          v-row.responded(align='center')
+            svg-icon(name="Responded")
+            .responded-text
+              span Откликнулось <br/>
+              span.black-text {{respondedCount}} человек
+          v-row.distantion(align='center')
+            svg-icon(name="Distantion")
+            .distantion-text
+              span Расстояние <br/>
+              span.black-text {{distantion}} км
+        .description {{description}}
         .media-files
           v-row
             v-col.d-flex.child-flex.custom-card-wrp(v-for='n in 5', :key='n', cols='4')
@@ -17,112 +42,71 @@
                   template(v-slot:placeholder)
                     v-row.fill-height.ma-0(align='center', justify='center')
                       v-progress-circular(indeterminate, color='grey lighten-5')
+        v-row.edit-price(align='center' justify='center')
+          v-btn.minus-btn(@click='setPrice(-1 * changeValue)') -
+          input.currentPrice(
+                              v-model="currentPrice"
+                              type="text"
+                              :style="{width: inputWidth + 'px'}"
+                              size="10"
+                              maxlength="10"
+                            )
+          v-btn.plus-btn(@click='setPrice(changeValue)') +
         v-row.btns(no-gutters  align='center')
           v-col( v-for="n in 2" :key="n" align='center')
-            v-btn.edit-btn(rounded v-if="n == 1" @click="editOrder") Редактировать
-            v-btn.delete-btn(rounded v-else @click="delOrder") Удалить
-        #responded-title Отозвались
-        MoreInfoUserCard(
-              v-for='item in items'
-              :key='item.id'
-              :id='item.title'
-              :title='item.title'
-              :cost='item.cost')
+            v-btn.accept-btn(rounded v-if="n == 1") Согласиться
+            v-btn.chat-btn(rounded v-else) Чат
 </template>
 
 <script>
 import axios from 'axios';
-import store from '../store';
 import SvgIcon from '../components/SvgIcon.vue';
-import MoreInfoUserCard from './MoreInfoUserCard.vue';
+import store from '../store';
 
 export default {
-  name: 'CustomerMoreInfoIspoln',
+  name: 'moreInfoOrder',
   components: {
     SvgIcon,
-    MoreInfoUserCard,
     axios,
     store,
   },
   data() {
     return {
       order: [],
+      starColor: '#FFCA10',
+      changeValue: 1000,
       currentPrice: 5000, // Number
       respondedCount: 12,
       distantion: 3,
+      inputWidth: null,
       description: 'Lorem Ipsum - це текст-"риба", що використовується в друкарстві та дизайні. Lorem Ipsum є, фактично, стандартною "рибою" аж з XVI сторіччя, коли невідомий друкар взяв шрифтову гранку та склав на ній підбірку зразків шрифтів. "Риба" не тільки успішно пережила пять століть, але й прижилася в електронному верстуванні, залишаючись по суті незмінною. Вона популяризувалась в 60-их роках минулого сторіччя завдяки виданню зразків шрифтів Letraset, які містили уривки з Lorem Ipsum, і вдруге - нещодавно завдяки програмам компютерного верстування на кшталт Aldus Pagemaker, які використовували різні версії Lorem Ipsum',
-      items: [
-        { title: 'Уведомления', cost: '10 909р', id: 1 },
-        { title: 'Черныйсписок', cost: '10 909р', id: 2 },
-        { title: 'Редактирваниепрофиля', cost: '10 909р', id: 3 },
-        { title: 'Связьсразработчиком', cost: '10 909р', id: 4 },
-        { title: 'Информация', cost: '10 909р', id: 5 },
-      ],
     };
   },
   methods: {
-    delOrder() {
-      /* eslint-disable no-return-assign */
-      axios
-        .post(`${this.$baseUrl}api/v1/private/order`, {
-          token: this.token,
-          method: 'del',
-          // eslint-disable-next-line no-underscore-dangle
-          id: this.order._id,
-        })
-        .then((response) => (this.checkResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
-      /* eslint-enable no-return-assign */
+    setPrice(val) {
+      if (Number.parseInt(this.currentPrice, 10) + val > 0) {
+        this.currentPrice = Number.parseInt(this.currentPrice, 10) + val;
+      }
     },
-
-    editOrder() {
-      this.$router.push({ name: 'create', params: { order: this.order } });
-    },
-
-    checkResponse(response) {
-      switch (response.data.status) {
-        case 'success':
-          if (response.data.data !== null) {
-            // eslint-disable-next-line prefer-destructuring
-            this.order = response.data.data[0];
-          } else {
-            this.$router.back();
-          }
-          break;
-        default:
-          this.error = 'Ошибка';
-          break;
+    setInputWidth() {
+      this.inputWidth = (this.currentPrice.toString().length + 1);
+      if (this.currentPrice.toString().length > 2) {
+        this.inputWidth *= 12;
+      } else {
+        this.inputWidth *= 16;
       }
     },
   },
-  computed: {
-    token() {
-      return this.$store.getters.getToken;
-    },
-    isSaveDeal() {
-      if (this.order.protect === 'no') {
-        return false;
+  watch: {
+    currentPrice() {
+      this.setInputWidth();
+      if (Number.parseInt(this.currentPrice, 10) === 0) {
+        this.currentPrice = this.changeValue;
       }
-      return true;
     },
   },
-  beforeRouteEnter(to, from, next) {
-    function getData(id, token) {
-      /* eslint-disable no-return-assign */
-      return axios
-        .post(`${window.$baseUrl}api/v1/private/order`, {
-          token,
-          method: 'receive',
-          submethod: 'my',
-          step: 0,
-          id,
-        });
-      /* eslint-enable no-return-assign */
-    }
-
-    getData(store.getters.getMyOrderId, store.getters.getToken).then((response) => {
-      next((vm) => vm.checkResponse(response));
-    });
+  mounted() {
+    this.setInputWidth();
   },
 };
 </script>
@@ -133,18 +117,22 @@ export default {
     background-color #fff
   }
 
-  .responded-text-header {
+  .name {
     font-style normal
     font-weight 500
-    font-size 10px
-    line-height 10px
-    color #65EB9C
-    margin-left 5px
+    font-size 15px
+    line-height 18px
+    color #000000
   }
 
-  .executor-more-info-header{
+  .customer-more-info-header{
     padding 0 !important
-    height 56px
+  }
+
+  .parallax {
+    margin 15px -12px
+    height 150px
+    background-color red
   }
 
   .row{
@@ -176,8 +164,32 @@ export default {
     margin-left 5px
   }
 
+  .more-info-wrp-second {
+    margin 15px 0
+    text-align center
+    font-style normal
+    font-size 10px
+    line-height 1.4
+    color #65686C
+  }
+
+  .more-info-wrp-second div {
+    max-width 95px
+  }
+
+  .more-info-wrp-second .black-text {
+    color: #000000
+  }
+
+  .responded {
+    margin-right 15px
+  }
+
+  .responded-text, .distantion-text {
+    margin-left 5px
+  }
+
   .description {
-    margin-top 15px
     font-family Golos
     font-style normal
     font-weight normal
@@ -223,7 +235,7 @@ export default {
     margin-top 3px
   }
 
-  .edit-btn{
+  .accept-btn{
     width 90%
     margin-right 5%
     background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
@@ -234,7 +246,7 @@ export default {
     box-shadow none !important
   }
 
-  .delete-btn{
+  .chat-btn{
     width 90%
     background none !important
     font-style normal
@@ -243,18 +255,5 @@ export default {
     color #56D68B
     border 1px solid #56D68B
     box-shadow none !important
-  }
-
-  #responded-title{
-    text-align center
-    font-size 16px
-    color #56D68B
-    margin 15px 0
-  }
-
-  .v-alert{
-    margin -12px
-    margin-bottom 12px
-    border-radius 0 !important
   }
 </style>

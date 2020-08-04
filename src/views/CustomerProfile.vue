@@ -2,20 +2,43 @@
   .customer-profile-wrp
     .customer-profile
       UserProfileData
-      v-btn#btn-verification(rounded elevation="0") Пройти верификацию
+      v-btn#btn-verification(rounded
+                             elevation="0"
+                             @click="route('verification')"
+                             v-text="'Пройти верификацию'"
+                            )
 </template>
 
 <script>
-
+import axios from 'axios';
+import store from '../store';
 import UserProfileData from '../components/UserProfileData.vue';
 
 export default {
   name: 'CustomerProfile',
   components: {
     UserProfileData,
+    store,
+    axios,
+  },
+  methods: {
+    route(routeName) {
+      this.$router.push(routeName);
+    },
   },
   created() {
     this.$store.commit('setTitle', 'Личный кабинет');
+  },
+  beforeRouteEnter(to, from, next) {
+    if (store.getters.getUser != null) {
+      if (store.getters.getUser.name == null) {
+        next('profile');
+      } else {
+        next();
+      }
+    } else {
+      next();
+    }
   },
 };
 </script>

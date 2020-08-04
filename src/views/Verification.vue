@@ -2,21 +2,26 @@
   v-container
     v-row.verification(align='center' justify='center' ref="wrp")
       .center-wrp
-        .verification-description(v-text="description")
-        v-col.circle-photo-wrp(align='center' v-show="!src")
+        .verification-description(v-text="isAwait ? descriptionAwait : description")
+        v-col.circle-photo-wrp(align='center' v-show="!src && !isAwait")
           v-row.circle-photo(align='center'
                              justify='center'
                              class="animate__animated animate__pulse animate__infinite"
                              @click="choosePhoto"
                             )
             svg-icon(name="PhotoCamera" width="37" height="37")
-        .selected-img-wrp(v-show="src")
+        .selected-img-wrp(v-show="src && !isAwait")
           .img-wrp(@click="setMoreActionImg")
-            v-img.img(:src="src" max-height="300" :width="wrpWidth")
+            v-img.img(:src="src" :width="wrpWidth")
               v-row.more-action-img(align='center' justify='center' v-show="moreActionImg")
                 span(@click="choosePhoto") Загрузить заново
           v-btn.send-btn(@click="sendData") Отправить
       input(type="file" @change="handleFileUpload" ref="input" v-show="!src")
+
+    v-dialog(v-model="isError")
+      v-row(align='center' justify='center')
+        .dialog_title {{error}}
+      v-btn(@click="error = ''") ок
 
 </template>
 
@@ -34,11 +39,14 @@ export default {
   },
   data: () => ({
     photoIsLoad: false,
+    descriptionAwait: 'Ожидание верификации',
     description: 'Для получения статуса исполнителя необходимо пройти верификацию. Пожалуйста, загрузите фотографию паспорта',
     content: '',
     wrpWidth: null,
     moreActionImg: false,
     file: null,
+    error: '',
+    isAwait: false,
   }),
   methods: {
     setMoreActionImg(event) {
@@ -84,8 +92,55 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         })
-        .then((response) => (console.log(response)))
-        .catch((error) => (console.log(error)));
+        .then((response) => (this.checkResponse(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'Ошибка'));
+    },
+
+    checkResponse(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.getData();
+          break;
+        case 'invalidPhoto':
+          this.error = 'Неверный формат фото';
+          break;
+        case 'already':
+          this.getData();
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+
+    getData() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/passport`, {
+          method: 'receive',
+          submethod: 'verification',
+          token: this.token,
+        })
+        .then((response) => (this.checkStatusResponse(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'Ошибка'));
+    },
+    checkStatusResponse(response) {
+      if (response.data.status === 'success') {
+        switch (response.data.data.verification) {
+          case 'notCompleted':
+            this.isAwait = false;
+            break;
+          case 'await':
+            this.isAwait = true;
+            break;
+          default:
+            this.$router.back();
+            break;
+        }
+      } else {
+        this.error = 'Ошибка';
+      }
     },
   },
   computed: {
@@ -95,9 +150,21 @@ export default {
     token() {
       return this.$store.getters.getToken;
     },
+    isError: {
+      get() {
+        if (this.error.length) {
+          return true;
+        }
+        return false;
+      },
+      set() {
+        this.error = '';
+      },
+    },
   },
   created() {
     this.$store.commit('setTitle', 'Верификация');
+    this.getData();
   },
 };
 </script>
@@ -106,8 +173,6 @@ export default {
 
   .container{
     height 100vh
-    padding-bottom 0
-    padding-top 0
   }
 
   .verification{
@@ -145,6 +210,10 @@ export default {
     line-height 0
     margin-top 46px
     border-radius: 5px
+  }
+
+  .img{
+    max-height 300px
   }
 
   .v-image{

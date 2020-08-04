@@ -11,6 +11,8 @@ import Auth from '../views/Authorization.vue';
 import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
 import BottomShit from '../views/BottomShit.vue';
 import Verification from '../views/Verification.vue';
+import ExecutorProfile from '../views/ExecutorProfile.vue';
+import CustomerProfile from '../views/CustomerProfile.vue';
 
 Vue.use(VueRouter);
 
@@ -75,6 +77,16 @@ const routes = [
     path: '/verification',
     component: Verification,
   },
+  {
+    name: 'executorProfile',
+    path: '/executorProfile',
+    component: ExecutorProfile,
+  },
+  {
+    name: 'customerProfile',
+    path: '/customerProfile',
+    component: CustomerProfile,
+  },
 ];
 
 const router = new VueRouter({
@@ -82,5 +94,10 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
+/* router.beforeEach((to, from, next) => {
+  if (to.name === 'executorProfile') next({ name: 'profile' });
+  else next();
+}); */
 
 export default router;

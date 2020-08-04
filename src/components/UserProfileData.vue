@@ -3,12 +3,27 @@
     .user-avatar-wrp
       .user-avatar
         img(src="../assets/photo-camera.png", alt="фото профиля")
-    .user-name User Name
+    .user-name {{user.name}} {{user.lastname}}
 </template>
 
 <script>
 export default {
   name: 'UserProfileData',
+  data() {
+    return {
+      user: {},
+    };
+  },
+  computed: {
+    getUser() {
+      return this.$store.getters.getUser;
+    },
+  },
+  created() {
+    if (this.getUser != null) {
+      this.user = this.getUser;
+    }
+  },
 };
 </script>
 
