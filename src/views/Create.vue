@@ -131,9 +131,6 @@ export default {
         case 'invalidDescription':
           this.error = 'Описание должно быть больше 10 символов';
           break;
-        case 'success':
-          this.$router.back();
-          break;
         default:
           this.error = 'Неизвестная ошибка';
       }
