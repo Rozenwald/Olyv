@@ -11,6 +11,7 @@ import Auth from '../views/Authorization.vue';
 import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
 import BottomShit from '../views/BottomShit.vue';
 import Verification from '../views/Verification.vue';
+import Chat from '../views/Chat.vue';
 
 Vue.use(VueRouter);
 
@@ -59,6 +60,11 @@ const routes = [
     name: 'create',
     path: '/create',
     component: Create,
+  },
+  {
+    name: 'chat',
+    path: '/chat',
+    component: Chat,
   },
   {
     name: 'moreInfoOrder',

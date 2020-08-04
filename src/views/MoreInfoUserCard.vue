@@ -2,11 +2,11 @@
   .swiper-container(:id="id")
     .swiper-wrapper
       v-list(class="swiper-slide")
-      v-card.card.swiper-slide
+      v-card.card.swiper-slide(@click="route('create')")
           v-list-item(dense)
             v-list-item-avatar(color="grey")
             v-list-item-content
-              v-list-item-title 3 к м от Вас
+              v-list-item-title 3 км от Вас
             v-list-item-action
               v-row.cost-wrp(align='center' justify='center')
                 .cost 42
@@ -22,6 +22,11 @@ export default {
     title: String,
     cost: String,
     id: String,
+  },
+  methods: {
+    route(routeName) {
+      this.$router.push(routeName);
+    },
   },
   mounted() {
     const self = this;

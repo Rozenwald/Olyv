@@ -12,6 +12,7 @@ export default {
       return this.$store.getters.getTitle;
     },
     show() {
+      console.log(this.$store.getters.isVisibleAppbar);
       return this.$store.getters.isVisibleAppbar;
     },
   },

@@ -55,7 +55,7 @@
         v-row.btns(no-gutters  align='center')
           v-col( v-for="n in 2" :key="n" align='center')
             v-btn.accept-btn(rounded v-if="n == 1") Согласиться
-            v-btn.chat-btn(rounded v-else) Чат
+            v-btn.chat-btn(rounded v-else @click="route('chat')") Чат
 </template>
 
 <script>
@@ -83,6 +83,9 @@ export default {
     };
   },
   methods: {
+    route(routeName) {
+      this.$router.push(routeName);
+    },
     setPrice(val) {
       if (Number.parseInt(this.currentPrice, 10) + val > 0) {
         this.currentPrice = Number.parseInt(this.currentPrice, 10) + val;
