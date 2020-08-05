@@ -19,7 +19,6 @@
                       v-progress-circular(indeterminate, color='grey lighten-5')
         v-row.btns(no-gutters  align='center')
           v-col( v-for="n in 2" :key="n" align='center')
-<<<<<<< HEAD
             v-btn.edit-btn(rounded v-if="n == 1" @click="editOrder") Редактировать
             v-btn.delete-btn(rounded v-else @click="delOrder") Удалить
         #responded-title Отозвались
@@ -29,10 +28,8 @@
               :id='item.title'
               :title='item.title'
               :cost='item.cost')
-=======
-            v-btn.accept-btn(rounded v-if="n == 1") Согласиться
-            v-btn.chat-btn(rounded v-else @click="route('chat')") Чат
->>>>>>> refs/remotes/origin/master
+        v-btn.accept-btn(rounded v-if="n == 1") Согласиться
+        v-btn.chat-btn(rounded v-else @click="route('chat')") Чат
 </template>
 
 <script>
@@ -66,7 +63,6 @@ export default {
     };
   },
   methods: {
-<<<<<<< HEAD
     delOrder() {
       /* eslint-disable no-return-assign */
       axios
@@ -83,15 +79,16 @@ export default {
 
     editOrder() {
       this.$router.push({ name: 'create', params: { order: this.order } });
-=======
+    },
+
     route(routeName) {
       this.$router.push(routeName);
     },
+
     setPrice(val) {
       if (Number.parseInt(this.currentPrice, 10) + val > 0) {
         this.currentPrice = Number.parseInt(this.currentPrice, 10) + val;
       }
->>>>>>> refs/remotes/origin/master
     },
 
     checkResponse(response) {
