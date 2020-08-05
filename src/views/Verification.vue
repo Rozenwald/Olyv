@@ -2,21 +2,25 @@
   v-container
     v-row.verification(align='center' justify='center' ref="wrp")
       .center-wrp
-        .verification-description(v-text="isAwait ? descriptionAwait : description")
-        v-col.circle-photo-wrp(align='center' v-show="!src && !isAwait")
+        .verification-description(
+          v-text="description"
+          v-show="verificationStatus == 'notCompleted'"
+        )
+        .await-description(v-text="descriptionAwait" v-show="verificationStatus == 'await'")
+        v-col.circle-photo-wrp(align='center' v-show="!src && verificationStatus != 'await'")
           v-row.circle-photo(align='center'
                              justify='center'
                              class="animate__animated animate__pulse animate__infinite"
                              @click="choosePhoto"
                             )
             svg-icon(name="PhotoCamera" width="37" height="37")
-        .selected-img-wrp(v-show="src && !isAwait")
+        .selected-img-wrp(v-show="src")
           .img-wrp(@click="setMoreActionImg")
             v-img.img(:src="src" :width="wrpWidth")
               v-row.more-action-img(align='center' justify='center' v-show="moreActionImg")
                 span(@click="choosePhoto") Загрузить заново
           v-btn.send-btn(@click="sendData") Отправить
-      input(type="file" @change="handleFileUpload" ref="input" v-show="!src")
+      input(type="file" @change="handleFileUpload" ref="input")
 
     v-dialog(v-model="isError")
       v-row(align='center' justify='center')
@@ -46,7 +50,7 @@ export default {
     moreActionImg: false,
     file: null,
     error: '',
-    isAwait: false,
+    verificationStatus: '',
   }),
   methods: {
     setMoreActionImg(event) {
@@ -100,7 +104,8 @@ export default {
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.getData();
+          this.verificationStatus = 'await';
+          this.content = '';
           break;
         case 'invalidPhoto':
           this.error = 'Неверный формат фото';
@@ -125,19 +130,10 @@ export default {
         // eslint-disable-next-line no-return-assign
         .catch(() => (this.error = 'Ошибка'));
     },
+
     checkStatusResponse(response) {
       if (response.data.status === 'success') {
-        switch (response.data.data.verification) {
-          case 'notCompleted':
-            this.isAwait = false;
-            break;
-          case 'await':
-            this.isAwait = true;
-            break;
-          default:
-            this.$router.back();
-            break;
-        }
+        this.verificationStatus = response.data.data.verification;
       } else {
         this.error = 'Ошибка';
       }

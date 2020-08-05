@@ -1,7 +1,7 @@
 <template lang="pug">
   .executor-profile-wrp
     .executor-profile
-      UserProfileData
+      user-profile-header
       v-container(fluid)
         v-row
           v-col.d-flex.child-flex.custom-card-wrp(v-for='n in 10', :key='n', cols='4')
@@ -15,12 +15,12 @@
 
 <script>
 
-import UserProfileData from '../components/UserProfileData.vue';
+import UserProfileHeader from '../components/UserProfileHeader.vue';
 
 export default {
   name: 'ExecutorProfile',
   components: {
-    UserProfileData,
+    UserProfileHeader,
   },
   created() {
     this.$store.commit('setTitle', 'Личный кабинет');

@@ -43,8 +43,8 @@ const routes = [
     component: SpisokZakazov,
   },
   {
-    name: 'profile',
-    path: '/profile',
+    name: 'setUserData',
+    path: '/setUserData',
     component: SetUserData,
   },
   {

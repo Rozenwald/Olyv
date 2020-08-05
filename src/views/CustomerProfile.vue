@@ -1,23 +1,25 @@
 <template lang="pug">
-  .customer-profile-wrp
-    .customer-profile
-      UserProfileData
-      v-btn#btn-verification(rounded
-                             elevation="0"
-                             @click="route('verification')"
-                             v-text="'Пройти верификацию'"
-                            )
+  v-container
+    user-profile-header
+    v-divider
+    user-profile-subheader
+    v-divider
+    review
 </template>
 
 <script>
 import axios from 'axios';
 import store from '../store';
-import UserProfileData from '../components/UserProfileData.vue';
+import Review from '../components/Review.vue';
+import UserProfileHeader from '../components/UserProfileHeader.vue';
+import UserProfileSubheader from '../components/UserProfileSubheader.vue';
 
 export default {
   name: 'CustomerProfile',
   components: {
-    UserProfileData,
+    UserProfileHeader,
+    UserProfileSubheader,
+    Review,
     store,
     axios,
   },
@@ -29,29 +31,14 @@ export default {
   created() {
     this.$store.commit('setTitle', 'Личный кабинет');
   },
-  beforeRouteEnter(to, from, next) {
-    if (store.getters.getUser != null) {
-      if (store.getters.getUser.name == null) {
-        next('profile');
-      } else {
-        next();
-      }
-    } else {
-      next();
-    }
-  },
 };
 </script>
 
 <style lang="stylus" scoped>
 
-  .customer-profile{
-    margin 0 15px
-    text-align center
-  }
-
-  .user-profile-wrp{
-    margin 95px auto 0
+  .v-divider{
+    margin 12px -12px
+    max-width none
   }
 
   #btn-verification{

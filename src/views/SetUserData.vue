@@ -4,22 +4,24 @@
       v-row.load-avatar-wrapper(align='center' justify='center')
         .load-avatar(align='center' justify='center')
           .load-avatar-description
-            img(src="../assets/photo-camera.png", alt="photo camera icon")
+            img(:src="src ? src : '../assets/photo-camera.png'", alt="photo camera icon")
             .load-ur-photo(v-show="!isFocus") Загрузите Ваше фото
-
-      v-text-field.input-data(label="Имя"
-                              dense color="#65686C"
-                              clearable
-                              v-model="firstName"
-                             )
-      v-text-field(label="Фамилия"
-                   dense color="#65686C"
-                   clearable
-                   v-model="lastName"
-                  )
-
+      v-text-field.input-data(
+        label="Имя"
+        dense color="#65686C"
+        clearable
+        v-model="firstName"
+      )
+      v-text-field(
+        label="Фамилия"
+        dense color="#65686C"
+        clearable
+        v-model="lastName"
+      )
       v-row.btn-wrapper(align='center' justify='center')
         v-btn.btn-save(rounded @click="checkForm") Сохранить
+
+    input(type="file" @change="handleFileUpload" ref="input")
 </template>
 
 <script>
@@ -37,9 +39,35 @@ export default {
       firstName: null,
       lastName: null,
       error: '',
+      content: '',
+      file: null,
     };
   },
   methods: {
+    choosePhoto(event) {
+      event.preventDefault();
+      this.$refs.input.click();
+    },
+
+    handleFileUpload(event) {
+      event.preventDefault();
+      this.selectImage(event.target.files[0]);
+    },
+
+    selectImage(file) {
+      this.file = file;
+      const reader = new FileReader();
+      reader.onload = this.onImageLoad;
+      reader.readAsDataURL(file);
+    },
+
+    onImageLoad(e) {
+      this.content = e.target.result;
+      const filename = this.file instanceof File ? this.file.name : '';
+      this.$emit('input', filename);
+      this.$emit('image-changed', this.content);
+    },
+
     checkForm() {
       if (this.firstName !== null) {
         if (this.firstName.length === 0) {
@@ -111,6 +139,9 @@ export default {
     token() {
       return this.$store.getters.getToken;
     },
+    src() {
+      return this.content;
+    },
   },
   watch: {
     isFocus() {
@@ -167,5 +198,10 @@ export default {
     color #FFFFFF
     width 240px
     box-shadow none
+  }
+
+  input[type="file"]{
+    position absolute
+    left -500px
   }
 </style>

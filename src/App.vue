@@ -64,7 +64,7 @@ export default {
 
 <style lang="stylus">
   #app{
-    background-color #E5E5E5;
+    background-color #f7f7f7;
     font-family Inter
   }
   .router{
