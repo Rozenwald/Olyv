@@ -31,6 +31,7 @@
                            rounded
                            v-text="isEdit ? 'Редактировать' : 'Создать'"
                           )
+
     v-dialog(v-model="isError")
       v-row(align='center' justify='center')
         .dialog_title {{error}}
@@ -83,8 +84,10 @@ export default {
       if (this.error.length === 0) {
         if (this.isEdit) {
           this.editOrder();
+          this.$router.go(-1);
         } else {
           this.createOrder();
+          this.$router.push('moiZakazi');
         }
       }
     },
@@ -102,7 +105,6 @@ export default {
         .then((response) => (this.checkResonse(response)))
         .catch(() => (this.error = 'Ошибка'));
       /* eslint-enable no-return-assign */
-      this.$router.push('moiZakazi');
     },
 
     editOrder() {
@@ -128,9 +130,6 @@ export default {
           break;
         case 'invalidDescription':
           this.error = 'Описание должно быть больше 10 символов';
-          break;
-        case 'success':
-          this.$router.back();
           break;
         default:
           this.error = 'Неизвестная ошибка';

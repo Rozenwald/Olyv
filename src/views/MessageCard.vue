@@ -1,15 +1,10 @@
 <template lang='pug'>
   .swiper-container(:id="id")
     .swiper-wrapper
-      v-list(class="swiper-slide")
-      v-card.card.swiper-slide(@click="route('create')")
+      v-card.card.swiper-slide
           v-list-item(dense)
-            v-list-item-avatar(color="grey")
             v-list-item-content
-              v-list-item-title 3 км от Вас
-            v-list-item-action
-              v-row.cost-wrp(align='center' justify='center')
-                .cost 42
+              v-list-item-title {{message}}
 </template>
 
 <script>
@@ -17,15 +12,18 @@ import 'swiper/swiper-bundle.css';
 import { Swiper } from 'swiper/swiper.esm';
 
 export default {
-  name: 'OrderCard1',
+  name: 'msgCard',
   props: {
-    title: String,
-    cost: String,
-    id: String,
+    message: String,
   },
   methods: {
     route(routeName) {
       this.$router.push(routeName);
+    },
+  },
+  computed: {
+    token() {
+      return this.$store.getters.getToken;
     },
   },
   mounted() {
@@ -39,7 +37,6 @@ export default {
       speed: 150,
     });
 
-    // eslint-disable-next-line func-names
     swiper.on('transitionEnd', function () {
       if (this.activeIndex === 0) {
         self.$emit('transitionEnd');
