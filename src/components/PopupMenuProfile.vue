@@ -26,7 +26,7 @@
         v-btn.go-verification-await(
           text
           v-text="'Ожидание верификации'"
-          v-show="verificationStatus=='await'"
+          v-show="verificationStatus=='await' && user.name != null"
           @click='route("verification")'
         )
 </template>=

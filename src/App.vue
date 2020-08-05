@@ -43,9 +43,13 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
+          this.$store.dispatch('setToken', window.localStorage.getItem('token'));
+          break;
+        case 'notAuthentucate':
+          this.error = 'Пользователь не авторизован';
           break;
         default:
-          this.error = 'Ошибка';
+          this.error = 'Ошибка входа';
           break;
       }
     },
@@ -56,7 +60,6 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('setToken', window.localStorage.getItem('token'));
     this.getData();
   },
 };

@@ -121,7 +121,7 @@ export default {
           this.error = 'Неверный пароль';
           break;
         default:
-          this.error = 'Ошибка регистрации';
+          this.error = 'Ошибка авторизации';
           break;
       }
     },
