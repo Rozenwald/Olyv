@@ -33,7 +33,7 @@ export default {
         .post(`${this.$baseUrl}api/v1/private/user`, {
           method: 'receive',
           submethod: 'my',
-          token: this.token,
+          token: window.localStorage.getItem('token'),
         })
         .then((response) => (this.checkResponse(response)))
         // eslint-disable-next-line no-return-assign
