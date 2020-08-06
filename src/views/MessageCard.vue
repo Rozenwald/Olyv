@@ -50,6 +50,9 @@ export default {
 <style lang="stylus" scoped>
   .card{
       margin-bottom 7px
+      background-color #C9F0D9
+      max-width 80%
+      to right
   }
 
   .cost-wrp {

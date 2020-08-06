@@ -1,7 +1,7 @@
 <template lang="pug">
   v-container.container
     MessageCard(v-for='newMessage in messages'
-                :text=newMessage )
+                :message= 'newMessage' )
 
     v-row.container-message(align='center' justify='space-between')
       v-text-field.send-message.ma-0(solo
