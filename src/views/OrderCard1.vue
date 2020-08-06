@@ -18,7 +18,7 @@ export default {
     route() {
       // eslint-disable-next-line no-underscore-dangle
       this.$store.dispatch('setMyOrderId', this.item._id);
-      this.$router.push('myOrder');
+      this.$router.push('moreInfoOrder');
     },
   },
   computed: {
