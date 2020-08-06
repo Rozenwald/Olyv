@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       newMessage: '',
-      messages: [''],
+      messages: [],
     };
   },
   methods: {
