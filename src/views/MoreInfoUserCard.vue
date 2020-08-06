@@ -2,7 +2,7 @@
   .swiper-container(:id="id")
     .swiper-wrapper
       v-list(class="swiper-slide")
-      v-card.card.swiper-slide(@click="route('create')")
+      v-card.card.swiper-slide(@click="route('chat')")
           v-list-item(dense)
             v-list-item-avatar(color="grey")
             v-list-item-content
