@@ -8,27 +8,28 @@
       v-btn.btn(v-bind="attrs" v-on="on" rounded)
         v-img(src="../assets/i.png" height='30' width='2')
     .menu-wrp
-      v-row.notification-wrp(align='center' justify='center')
+      v-row.notification-wrp(align='center' justify='center' ref="wrp")
         span Нет уведомлений
       v-divider
-      .btn-wrp
-        v-btn.go-edit-data(
-          text
-          v-text="'Редактировать данные'"
-          v-show="this.user.name == null"
-          @click='route("setUserData")')
-        v-btn.go-verification(
-          text
-          v-text="'Стать исполнителем'"
-          v-show="verificationStatus=='notCompleted' && user.name != null"
-          @click='route("verification")'
-        )
-        v-btn.go-verification-await(
-          text
-          v-text="'Ожидание верификации'"
-          v-show="verificationStatus=='await' && user.name != null"
-          @click='route("verification")'
-        )
+      v-skeleton-loader.skeleton(type="button" :loading="!verificationStatus")
+        .btn-wrp
+          v-btn.go-edit-data(
+            text
+            v-text="'Редактировать данные'"
+            v-show="this.user.name == null"
+            @click='route("setUserData")')
+          v-btn.go-verification(
+            text
+            v-text="'Стать исполнителем'"
+            v-show="verificationStatus=='notCompleted' && user.name != null"
+            @click='route("verification")'
+          )
+          v-btn.go-verification-await(
+            text
+            v-text="'Ожидание верификации'"
+            v-show="verificationStatus=='await' && user.name != null"
+            @click='route("verification")'
+          )
 </template>=
 
 <script>
@@ -42,8 +43,9 @@ export default {
   data() {
     return {
       menu: false,
-      verificationStatus: '',
+      verificationStatus: null,
       error: '',
+      wrpWidth: null,
     };
   },
   methods: {
@@ -91,6 +93,9 @@ export default {
     height 30px !important
     min-width 0 !important
     padding 0 !important
+    position absolute
+    top 12px
+    right 12px
   }
 
   .menu-wrp {
@@ -117,5 +122,21 @@ export default {
   .go-verification-await {
     padding 0
     color #FFFF00
+  }
+
+  .v-skeleton-loader {
+    border-radius 0
+  }
+  .v-skeleton-loader {
+    height 36px
+    border-radius 0
+    margin-bottom 0
+  }
+</style>
+
+<style lang="stylus">
+  .v-skeleton-loader__button {
+    border-radius 0 !important
+    width inherit !important
   }
 </style>

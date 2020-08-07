@@ -1,11 +1,9 @@
 <template lang="pug">
   v-container
     .set-user-data
-      v-row.load-avatar-wrapper(align='center' justify='center')
-        .load-avatar(align='center' justify='center')
-          .load-avatar-description
-            img(:src="src ? src : '../assets/photo-camera.png'", alt="photo camera icon")
-            .load-ur-photo(v-show="!isFocus") Загрузите Ваше фото
+      v-row(align='center' justify='center')
+        v-avatar(size='62' color='#56D68B')
+          svg-icon(name='PhotoCamera'  width='60' height='15')
       v-text-field.input-data(
         label="Имя"
         dense color="#65686C"
@@ -26,11 +24,13 @@
 
 <script>
 import axios from 'axios';
+import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
   name: 'SetUserData',
   components: {
     axios,
+    SvgIcon,
   },
   data() {
     return {
@@ -140,6 +140,9 @@ export default {
       return this.$store.getters.getToken;
     },
     src() {
+      if (!this.content) {
+        return '@/assets/photo-camera.png';
+      }
       return this.content;
     },
   },
@@ -153,37 +156,13 @@ export default {
 
 <style lang="stylus" scoped>
 
-  .load-avatar-wrapper{
-    height 40vh
-  }
-
-  .set-user-data{
-    margin-bottom 53px
-  }
-
-  .load-avatar{
-    width 27vh !important
-    height 27vh !important
-    border-radius 14vh
-    background #FFFFFF
-    display block
-  }
-
-  .load-avatar-description{
-    width 27vh
-    height 27vh
-    vertical-align middle
-    display table-cell
-    text-align center
-  }
-
-  .load-ur-photo{
-    margin-bottom 0
-    margin-top 10px
-    font-style normal
-    font-weight normal
-    font-size 13px
-    line-height 16px
+  .set-user-data {
+    background-color #FFFFFF
+    padding 12px
+    box-shadow 0 1px 3px rgba(0,0,0,0.12),
+               0 1px 2px rgba(0,0,0,0.12)
+    border-radius 2px
+    margin-bottom 12px
   }
 
   .btn-wrapper{

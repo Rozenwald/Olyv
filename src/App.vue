@@ -43,10 +43,9 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
-          this.$store.dispatch('setToken', window.localStorage.getItem('token'));
           break;
-        case 'notAuthentucate':
-          this.error = 'Пользователь не авторизован';
+        case 'notAuthenticate':
+          this.$store.dispatch('showLoginDialog', true);
           break;
         default:
           this.error = 'Ошибка входа';
@@ -60,7 +59,10 @@ export default {
     },
   },
   created() {
-    this.getData();
+    this.$store.dispatch('setToken', window.localStorage.getItem('token'));
+    if (window.localStorage.getItem('token') != null) {
+      this.getData();
+    }
   },
 };
 </script>

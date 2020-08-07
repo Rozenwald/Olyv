@@ -143,9 +143,6 @@ export default {
         case 'existEmail':
           this.error = 'Данная почта уже зарегистрирована';
           break;
-        case 'notSuccess':
-          this.error = 'Ошибка регистрации';
-          break;
         case 'success':
           this.signIn();
           break;
@@ -161,9 +158,6 @@ export default {
           window.localStorage.setItem('token', response.data.data);
           this.$store.dispatch('setToken', response.data.data);
           this.getData();
-          break;
-        case 'notSuccess':
-          this.error = 'Ошибка регистрации';
           break;
         default:
           this.error = 'Ошибка регистрации';

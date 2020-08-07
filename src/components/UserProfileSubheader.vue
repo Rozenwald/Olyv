@@ -20,9 +20,6 @@ export default {
   .num {
     font-weight bold
   }
-  .statistic {
-    line-height 1.2
-  }
   .description {
     color #656565
   }

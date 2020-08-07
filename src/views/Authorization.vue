@@ -84,7 +84,7 @@ export default {
           password: this.password,
         })
         .then((response) => (this.checkSignIn(response)))
-        .catch(() => (this.error = 'Ошибка регистрации'));
+        .catch(() => (this.error = 'Ошибка Авторизации'));
       /* eslint-enable no-return-assign */
     },
 
@@ -110,9 +110,6 @@ export default {
           window.localStorage.setItem('token', response.data.data);
           this.$store.dispatch('setToken', response.data.data);
           this.getData();
-          break;
-        case 'notSuccess':
-          this.error = 'Ошибка регистрации';
           break;
         case 'invalidEmail':
           this.error = 'Неверный email';

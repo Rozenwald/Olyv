@@ -1,9 +1,7 @@
 <template lang="pug">
   v-container
     user-profile-header
-    v-divider
-    user-profile-subheader
-    v-divider
+    verification-status
     review
 </template>
 
@@ -12,13 +10,13 @@ import axios from 'axios';
 import store from '../store';
 import Review from '../components/Review.vue';
 import UserProfileHeader from '../components/UserProfileHeader.vue';
-import UserProfileSubheader from '../components/UserProfileSubheader.vue';
+import VerificationStatus from '../components/VerificationStatus.vue';
 
 export default {
   name: 'CustomerProfile',
   components: {
     UserProfileHeader,
-    UserProfileSubheader,
+    VerificationStatus,
     Review,
     store,
     axios,
@@ -27,9 +25,42 @@ export default {
     route(routeName) {
       this.$router.push(routeName);
     },
+    getData() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/passport`, {
+          method: 'receive',
+          submethod: 'verification',
+          token: this.token,
+        })
+        .then((response) => (this.checkResponse(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch((error) => (console.log(error)));
+    },
+    checkResponse(response) {
+      switch (response) {
+        case 'notAuthenticate':
+          this.$store.dispatch('showLoginDialog', true);
+          break;
+        case 'success':
+          this.$store.dispatch('comment', response.data.comment);
+          break;
+        default:
+          this.error = 'Ошибка входа';
+          break;
+      }
+    },
+  },
+  computed: {
+    token() {
+      return this.$store.getters.getToken;
+    },
+    user() {
+      return this.$store.getters.getUser;
+    },
   },
   created() {
     this.$store.commit('setTitle', 'Личный кабинет');
+    this.getData();
   },
 };
 </script>

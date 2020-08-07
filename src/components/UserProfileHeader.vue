@@ -1,33 +1,50 @@
 <template lang="pug">
-  v-row.header
-    v-row(align='center' justify='space-between')
-      v-row(align='center')
+  .header
+    v-row.avatar(align='center' justify='center')
+      v-skeleton-loader(type="avatar" :loading="!this.user.email")
         v-avatar(size='62' color='#56D68B')
           svg-icon(name='PhotoCamera'  width='60' height='15')
-        .name-ratting-wrp
-          .name {{name}} {{lastname}}
-          .ratting
-            v-rating(
-              :length="5"
-              readonly
-              :half-increments="true"
-              :dense="true"
-              color="#FFCA10"
-              background-color="#FFCA10"
-              size="14"
-            )
-      popup-menu-profile
+    v-row.name(align='center' justify='center')
+      v-skeleton-loader(type="text" :loading="!this.user.email" width="90")
+        span {{name}} {{lastname}}
+    v-row.ratting(align='center' justify='center')
+      v-skeleton-loader(type="text" :loading="!this.user.email" width="70")
+        v-rating(
+          :length="5"
+          readonly
+          :half-increments="true"
+          dense
+          color="#FFCA10"
+          background-color="#FFCA10"
+          size="14"
+        )
+    user-profile-subheader
+    v-row.actions(align='center' justify='center')
+      v-btn.edit-data(
+        text
+        v-show="Object.keys(user).length && user.name == null"
+        v-text="'Редактировать данные'"
+        @click='route("setUserData")'
+      )
+      v-btn.go-verification(
+        text
+        v-text="'Стать исполнителем'"
+        v-show="user.verification == 'notCompleted' && user.name != null && !comment"
+        @click='route("verification")'
+      )
 </template>
 
 <script>
 import SvgIcon from './SvgIcon.vue';
 import PopupMenuProfile from './PopupMenuProfile.vue';
+import UserProfileSubheader from './UserProfileSubheader.vue';
 
 export default {
   name: 'user-profile-header',
   components: {
     SvgIcon,
     PopupMenuProfile,
+    UserProfileSubheader,
   },
   data() {
     return {
@@ -47,6 +64,12 @@ export default {
     lastname() {
       return this.user.lastname;
     },
+    comment() {
+      if (this.$store.getters.getUser == null) {
+        return 'comment';
+      }
+      return this.$store.getters.getComment;
+    },
   },
   created() {
   },
@@ -58,19 +81,40 @@ export default {
     margin 0
   }
 
-  .col {
-    padding 0
+  .header {
+    background-color #FFFFFF
+    padding 12px
+    box-shadow 0 1px 3px rgba(0,0,0,0.12),
+               0 1px 2px rgba(0,0,0,0.12)
+    border-radius 2px
+    margin-bottom 12px
   }
 
-  .v-avatar {
-    margin-right 12px
+  .avatar, .ratting {
+    margin-bottom 15px
   }
 
-  .name-ratting-wrp {
+  .actions button {
+    width 100%
+    margin-top 15px
+    margin-bottom -12px
+    border-radius 0
+  }
+
+  .actions {
+    margin 0 -12px
+  }
+
+  .name, .ratting {
     line-height 1.2
   }
 
   .name {
     font-weight bold
+  }
+
+  .v-skeleton-loader__text{
+    height 36px !important
+    border-radius 0 !important
   }
 </style>

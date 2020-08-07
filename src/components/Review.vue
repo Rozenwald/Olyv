@@ -19,11 +19,14 @@ export default {
 <style lang="stylus" scoped>
   .title-review {
     color #656565
-    text-align center
   }
 
   .review {
-    margin 0
+    background-color #FFFFFF
+    padding 12px
+    box-shadow 0 1px 3px rgba(0,0,0,0.12),
+               0 1px 2px rgba(0,0,0,0.12)
+    border-radius 2px
   }
 
   .comment:first-child {

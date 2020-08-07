@@ -30,7 +30,7 @@ const getters = {
 const state = {
   token: null,
   isAuth: null,
-  user: null,
+  user: {},
 };
 
 export default {
