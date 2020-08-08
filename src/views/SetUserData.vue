@@ -2,18 +2,26 @@
   v-container
     .set-user-data
       v-row(align='center' justify='center')
-        v-avatar(size='62' color='#56D68B')
-          svg-icon(name='PhotoCamera'  width='60' height='15')
-      v-text-field.input-data(
+        v-avatar(size='100' color='#56D68B')
+          svg-icon(name='PhotoCamera'  width='100' height='25')
+      v-text-field.edit-data(
         label="Имя"
-        dense color="#65686C"
+        dense
+        color="#65686C"
         clearable
+        hide-details="auto"
+        solo
+        rounded
         v-model="firstName"
       )
-      v-text-field(
+      v-text-field.edit-data(
         label="Фамилия"
-        dense color="#65686C"
+        dense
+        color="#65686C"
         clearable
+        solo
+        hide-details="auto"
+        rounded
         v-model="lastName"
       )
       v-row.btn-wrapper(align='center' justify='center')
@@ -131,6 +139,7 @@ export default {
         this.isFocus = false;
       }
     });
+    console.log(this.$vuetify.application.bottom);
   },
   computed: {
     isAuth() {
@@ -163,6 +172,10 @@ export default {
                0 1px 2px rgba(0,0,0,0.12)
     border-radius 2px
     margin-bottom 12px
+  }
+
+  .edit-data {
+    margin 12px 0 0 !important
   }
 
   .btn-wrapper{
