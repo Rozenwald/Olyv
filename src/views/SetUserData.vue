@@ -8,9 +8,7 @@
         label="Имя"
         dense
         color="#65686C"
-        clearable
         hide-details="auto"
-        solo
         rounded
         v-model="firstName"
       )
@@ -18,8 +16,6 @@
         label="Фамилия"
         dense
         color="#65686C"
-        clearable
-        solo
         hide-details="auto"
         rounded
         v-model="lastName"
