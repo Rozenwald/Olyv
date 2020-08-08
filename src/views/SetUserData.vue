@@ -9,15 +9,15 @@
         dense
         color="#65686C"
         hide-details="auto"
-        rounded
+        solo
         v-model="firstName"
       )
       v-text-field.edit-data(
         label="Фамилия"
         dense
         color="#65686C"
+        solo
         hide-details="auto"
-        rounded
         v-model="lastName"
       )
       v-row.btn-wrapper(align='center' justify='center')
