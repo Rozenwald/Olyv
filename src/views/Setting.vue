@@ -3,7 +3,7 @@
     .setting
       v-list
         template(v-for="(item, index) in items")
-          v-list-item(:key="item.title")
+          v-list-item(:key="item.title"  @click="route('setUserdata')")
             v-list-item-icon
               svg-icon(:name='item.icon')
             v-list-item-content
@@ -18,10 +18,15 @@
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
+  name: 'Setting',
   components: {
     SvgIcon,
   },
-  name: 'Setting',
+  methods: {
+    route(routeName) {
+      this.$router.push(routeName);
+    },
+  },
   computed: {
     items() {
       return this.$store.getters.getItemsSetting;

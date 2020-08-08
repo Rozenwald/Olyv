@@ -21,6 +21,11 @@ export default {
     store,
     axios,
   },
+  data() {
+    return {
+      error: '',
+    };
+  },
   methods: {
     route(routeName) {
       this.$router.push(routeName);
