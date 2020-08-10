@@ -137,7 +137,7 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
-          this.$router.go(-1);
+          this.$router.back();
           break;
         default:
           this.error = 'Ошибка';

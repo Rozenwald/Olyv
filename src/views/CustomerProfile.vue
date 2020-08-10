@@ -34,15 +34,15 @@ export default {
       axios
         .post(`${this.$baseUrl}api/v1/private/passport`, {
           method: 'receive',
-          submethod: 'verification',
+          submethod: 'comment',
           token: this.token,
         })
         .then((response) => (this.checkResponse(response)))
         // eslint-disable-next-line no-return-assign
-        .catch((error) => (console.log(error)));
+        .catch(() => (this.error = 'Ошибка'));
     },
     checkResponse(response) {
-      switch (response) {
+      switch (response.data.status) {
         case 'notAuthenticate':
           this.$store.dispatch('showLoginDialog', true);
           break;
@@ -65,7 +65,9 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Личный кабинет');
-    this.getData();
+    if (this.user.verification === 'notCompleted') {
+      this.getData();
+    }
   },
 };
 </script>

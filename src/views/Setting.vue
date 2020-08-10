@@ -3,7 +3,7 @@
     .setting
       v-list
         template(v-for="(item, index) in items")
-          v-list-item(:key="item.title"  @click="route('setUserdata')")
+          v-list-item(:key="item.title"  @click="route(item.route)")
             v-list-item-icon
               svg-icon(:name='item.icon')
             v-list-item-content

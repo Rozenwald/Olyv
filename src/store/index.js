@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import bottomNavigation from './modules/bottomNavigaion';
 import appbar from './modules/appbar';
 import setting from './modules/setting';
+import comment from './modules/comment';
 import loginDialog from './modules/loginDialog';
 import userDataDialog from './modules/userDataDialog';
 import user from './modules/user';
@@ -24,5 +25,6 @@ export default new Vuex.Store({
     userDataDialog,
     user,
     myOrderId,
+    comment,
   },
 });

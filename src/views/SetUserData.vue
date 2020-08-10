@@ -2,24 +2,26 @@
   v-container
     .set-user-data
       v-row(align='center' justify='center')
-        v-avatar(size='100' color='#56D68B')
-          svg-icon(name='PhotoCamera'  width='100' height='25')
-      v-text-field.edit-data(
-        label="Имя"
-        dense
-        color="#65686C"
-        hide-details="auto"
-        solo
-        v-model="firstName"
-      )
-      v-text-field.edit-data(
-        label="Фамилия"
-        dense
-        color="#65686C"
-        solo
-        hide-details="auto"
-        v-model="lastName"
-      )
+        v-skeleton-loader(type="avatar" :loading="!hasData")
+          v-avatar(size='100' color='#56D68B' @click="choosePhoto")
+            svg-icon(name='PhotoCamera'  width='100' height='25' v-show="!src")
+            v-img(:src="src" v-show="src")
+      v-skeleton-loader(type="text" :loading="!hasData")
+        v-text-field.edit-data(
+          label="Имя"
+          dense
+          color="#65686C"
+          hide-details="auto"
+          v-model="firstName"
+        )
+      v-skeleton-loader(type="text" :loading="!hasData")
+        v-text-field.edit-data(
+          label="Фамилия"
+          dense
+          color="#65686C"
+          hide-details="auto"
+          v-model="lastName"
+        )
       v-row.btn-wrapper(align='center' justify='center')
         v-btn.btn-save(rounded @click="checkForm") Сохранить
 
@@ -28,12 +30,14 @@
 
 <script>
 import axios from 'axios';
+import store from '../store';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
   name: 'SetUserData',
   components: {
     axios,
+    store,
     SvgIcon,
   },
   data() {
@@ -85,6 +89,7 @@ export default {
         this.sendData();
       }
     },
+
     sendData() {
       axios
         .post(`${this.$baseUrl}api/v1/private/user`, {
@@ -98,31 +103,83 @@ export default {
         // eslint-disable-next-line no-return-assign
         .catch(() => (this.error = 'Ошибка'));
     },
+
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          if (response.data.data == null) {
-            this.getData();
-          } else {
-            this.$store.dispatch('setUser', response.data.data);
-            this.$router.push('customerProfile');
+          this.getUserData();
+          if (this.file) {
+            this.sendPhoto();
           }
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showLoginDialog', true);
           break;
         default:
           this.error = 'Ошибка';
           break;
       }
     },
-    getData() {
+
+    sendPhoto() {
+      // eslint-disable-next-line prefer-const
+      let data = new FormData();
+      data.append('token', this.token);
+      data.append('method', 'update');
+      data.append('photo', this.file);
+      data.append('submethod', 'photo');
+      axios
+        .post(`${this.$baseUrl}api/v1/private/user`, data)
+        .then((response) => (this.checkPhoto(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'Ошибка загрузки фото'));
+    },
+
+    checkPhoto(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.file = null;
+          this.getUserData();
+          break;
+        case 'invalidPhoto':
+          this.error = 'Неверный формат фото';
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка загрузки фото';
+          break;
+      }
+    },
+
+    getUserData() {
       axios
         .post(`${this.$baseUrl}api/v1/private/user`, {
           method: 'receive',
           submethod: 'my',
           token: this.token,
         })
-        .then((response) => (this.checkResponse(response)))
+        .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
         .catch(() => (this.error = 'Ошибка'));
+    },
+
+    checkUserData(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.$store.dispatch('setUser', response.data.data);
+          if (!this.file) {
+            this.$router.back();
+          }
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
     },
   },
   created() {
@@ -135,7 +192,6 @@ export default {
         this.isFocus = false;
       }
     });
-    console.log(this.$vuetify.application.bottom);
   },
   computed: {
     isAuth() {
@@ -145,16 +201,27 @@ export default {
       return this.$store.getters.getToken;
     },
     src() {
-      if (!this.content) {
-        return '@/assets/photo-camera.png';
-      }
       return this.content;
+    },
+    user() {
+      return this.$store.getters.getUser;
+    },
+    hasData() {
+      return this.$store.getters.hasData;
     },
   },
   watch: {
     isFocus() {
       this.$store.dispatch('showBottomNavigation', !this.isFocus);
     },
+  },
+  beforeRouteEnter(to, from, next) {
+    if (!store.getters.isAuth) {
+      next(from.name);
+      this.$store.dispatch('showLoginDialog', true);
+    } else {
+      next();
+    }
   },
 };
 </script>
@@ -175,7 +242,7 @@ export default {
   }
 
   .btn-wrapper{
-    min-height 20vh
+    margin-top 24px
   }
 
   .btn-save{

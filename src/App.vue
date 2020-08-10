@@ -47,6 +47,9 @@ export default {
         case 'notAuthenticate':
           this.$store.dispatch('showLoginDialog', true);
           break;
+        case 'notExist':
+          this.$store.dispatch('showLoginDialog', true);
+          break;
         default:
           this.error = 'Ошибка входа';
           break;
