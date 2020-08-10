@@ -1,16 +1,16 @@
 <template lang="pug">
   v-container.createdOrder
+    v-row.createLogo(v-show="!isFocus" align='center' justify='center')
+          v-avatar(size='162' color='#56D68B')
+            svg-icon(name='Plus'  width='110' height='110')
     .customer-more-info
-      v-row.createLogo(v-show="!isFocus" align='center' justify='center')
-        v-avatar(size='162' color='#56D68B')
-          svg-icon(name='Plus'  width='110' height='110')
       v-textarea(
           hide-details
           label="Описание"
           auto-grow
           outlined
           v-model="description"
-          rows="7"
+          rows="5"
           row-height="25"
           shaped)
       v-text-field.RegNumber(
@@ -198,16 +198,14 @@ export default {
     flex: 0 1 auto
   }
   .add-file-text{
-    margin-left 5px
     margin-top 5px
-    font-weight 550
+    font-weight normal
     justify-content: flex-start;
   }
   .add-file{
     margin-left 5px
     margin-top 7px
     margin-bottom 7px
-    margin-right 7px
     padding 0px
   }
   .save-deal{
@@ -219,7 +217,6 @@ export default {
     margin-left 5px
   }
   .createLogo{
-    margin-bottom: 30px !important
   }
   .logo{
     width:auto;
