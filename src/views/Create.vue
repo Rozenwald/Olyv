@@ -202,6 +202,16 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .dialog_title{
+    background-color #E5E5E5
+    width 100%
+    font-size 20px
+    text-align center
+    padding 10px
+  }
+  .error-message{
+    background-color #000
+  }
   .add-cost{
     margin-right 2px
   }
