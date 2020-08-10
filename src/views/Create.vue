@@ -58,6 +58,8 @@ export default {
   },
   data() {
     return {
+      isFocus: false,
+      windowHeight: null,
       description: null,
       cost: null,
       address: null,
@@ -179,6 +181,14 @@ export default {
   created() {
     this.$store.commit('setTitle', 'Создание заказа');
     this.setEditData();
+    this.windowHeight = window.innerHeight;
+    window.addEventListener('resize', () => {
+      if (window.innerHeight < this.windowHeight) {
+        this.isFocus = true;
+      } else {
+        this.isFocus = false;
+      }
+    });
   },
 };
 </script>
