@@ -4,24 +4,31 @@
           v-avatar(size='162' color='#56D68B')
             svg-icon(name='Plus'  width='110' height='110')
     .customer-more-info
-      v-textarea(
+      v-textarea.description(
           hide-details
           label="Описание"
-          auto-grow
           outlined
           v-model="description"
-          rows="3"
+          rows="4"
           row-height="20")
-      v-text-field.RegNumber(
-                  label='Цена'
-                  hide-details
-                  v-model="cost"
-                  type="number"
-                  required)
-      v-text-field.RegNumber(
-                  label='Адрес'
-                  v-model="address"
-                  required)
+      v-row.add-cost-addres(align='center' justify='center')
+        v-textarea.add-cost(
+                    rows="1"
+                    row-height="20"
+                    outlined
+                    label='Цена'
+                    hide-details
+                    v-model="cost"
+                    type="number"
+                    required)
+        v-textarea.add-addres(
+                    rows="1"
+                    row-height="20"
+                    outlined
+                    label='Адрес'
+                    hide-details
+                    v-model="address"
+                    required)
       .information-wrp
         v-row(align='center' justify='space-between')
           v-checkbox.save-deal(
@@ -29,9 +36,14 @@
             align='center'
             v-model="saveDeal"
             hide-details)
-          v-row.add-files(align='center' justify='space-between')
-            v-file-input.add-file(hide-input)
-            span.add-file-text Прикрепить файл
+          v-row.add-files(outlined
+                          dense
+                          filled
+                          align='center'
+                          justify='space-between'
+                          prepend-icon="PhotoCamera")
+            v-file-input.add-file
+            //span.add-file-text Прикрепить файл
       v-row.btns(no-gutters  align='center' justify='center')
           v-btn.accept-btn(align-content='center'
                            @click="checkForm"
@@ -39,7 +51,7 @@
                            v-text="isEdit ? 'Редактировать' : 'Создать'"
                           )
 
-    v-dialog(v-model="isError")
+    v-dialog.error-message(v-model="isError")
       v-row(align='center' justify='center')
         .dialog_title {{error}}
       v-btn(@click="error = ''") ок
@@ -193,8 +205,23 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .add-cost{
+    margin-right 2px
+  }
+  .add-addres{
+    margin-left 2px
+  }
+  .error-message{
+    background-color: #E5E5E5
+  }
+  .add-cost-addres{
+    margin-top 10px !important
+    width 100%
+    flex: 1 1 auto
+    flex-wrap: nowrap
+  }
   .add-files{
-    flex: 0 1 auto
+    flex: 1 1 auto
   }
   .add-file-text{
     margin-top 5px
@@ -221,9 +248,6 @@ export default {
     width:auto;
     height:50%;
   }
-  .v-input{
-    flex: none
-  }
   .createdOrder{
     height: 100vh;
     display: flex;
@@ -231,25 +255,8 @@ export default {
     flex-wrap: wrap;
     justify-content: flex-end;
   }
-  .RegNumber{
-    margin-top 10px
-    padding-right 10px
-    padding-left 10px
-  }
   .container {
     background-color #fff
-  }
-  .name {
-    font-style normal
-    font-weight 500
-    font-size 15px
-    line-height 18px
-    color #000000
-  }
-  .parallax {
-    margin 15px -12px
-    height 150px
-    background-color red
   }
   .row{
     margin 0
