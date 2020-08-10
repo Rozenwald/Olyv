@@ -11,8 +11,7 @@
           outlined
           v-model="description"
           rows="3"
-          row-height="20"
-          shaped)
+          row-height="20")
       v-text-field.RegNumber(
                   label='Цена'
                   hide-details
