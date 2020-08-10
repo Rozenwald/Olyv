@@ -8,8 +8,8 @@
         )
         .await-description(v-text="descriptionAwait" v-show="user.verification == 'await'")
         v-col.circle-photo-wrp(align='center' v-show="!src && user.verification == 'notCompleted'")
-          v-row.circle-photo(align='center'
-                             justify='center'
+          v-row.circle-photo(align='center' //просто задаю ему нужные классы, они есть на сайте
+                             justify='center' //animate.css вроде
                              class="animate__animated animate__pulse animate__infinite"
                              @click="choosePhoto"
                             )
