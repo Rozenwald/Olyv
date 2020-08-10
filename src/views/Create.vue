@@ -30,20 +30,17 @@
                     v-model="address"
                     required)
       .information-wrp
-        v-row(align='center' justify='space-between')
-          v-checkbox.save-deal(
-            label="Защищенная сделка"
-            align='center'
-            v-model="saveDeal"
-            hide-details)
-          v-row.add-files(outlined
-                          dense
-                          filled
-                          align='center'
-                          justify='space-between'
-                          prepend-icon="PhotoCamera")
-            v-file-input.add-file
-            //span.add-file-text Прикрепить файл
+        v-row.add-files(align='center' justify='space-between')
+          v-checkbox.save-deal(label="Защищенная сделка"
+                              align='center'
+                              v-model="saveDeal"
+                              hide-details)
+          v-file-input.add-img(solo
+                               flat
+                               class='add-img-padding'
+                               hide-details
+                               dense
+                               label="Прикрепить файл")
       v-row.btns(no-gutters  align='center' justify='center')
           v-btn.accept-btn(align-content='center'
                            @click="checkForm"
@@ -221,21 +218,20 @@ export default {
     flex-wrap: nowrap
   }
   .add-files{
+    flex-wrap: wrap
     flex: 1 1 auto
   }
-  .add-file-text{
-    margin-top 5px
-    font-weight normal
-    justify-content: flex-start;
-  }
-  .add-file{
+  .add-img{
     margin-left 5px
     margin-top 7px
     margin-bottom 7px
     padding 0px
   }
+  .add-img-padding.v-input__slot{
+    padding-left 0px !important
+  }
   .save-deal{
-    width: 100%
+    width 100%
     font-style normal
     font-weight bold
     font-size 10px
@@ -287,19 +283,15 @@ export default {
   .more-info-wrp-second div {
     max-width 95px
   }
-
   .more-info-wrp-second .black-text {
     color: #000000
   }
-
   .responded {
     margin-right 15px
   }
-
   .responded-text, .distantion-text {
     margin-left 5px
   }
-
   .description {
     font-family Golos
     font-style normal
@@ -308,14 +300,6 @@ export default {
     line-height 19px
     color #3C3F44
   }
-
-  .media-files .row {
-    overflow auto
-    white-space nowrap
-    flex-wrap nowrap
-    margin-top 10px
-  }
-
   .btns{
     margin-top 15px
     margin-bottom 15px
