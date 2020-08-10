@@ -1,30 +1,46 @@
 <template lang="pug">
-  v-container
+  v-container.createdOrder
+    v-row.createLogo(v-show="!isFocus" align='center' justify='center')
+          v-avatar(size='162' color='#56D68B')
+            svg-icon(name='Plus'  width='110' height='110')
     .customer-more-info
-      v-textarea(
+      v-textarea.description(
+          hide-details
           label="Описание"
-          auto-grow
           outlined
           v-model="description"
-          rows="7"
-          row-height="25"
-          shaped)
-      v-text-field.RegNumber(
-                  label='Цена'
-                  v-model="cost"
-                  type="number"
-                  required)
-      v-text-field.RegNumber(
-                  label='Адрес'
-                  v-model="address"
-                  required)
+          rows="4"
+          row-height="20")
+      v-row.add-cost-addres(align='center' justify='center')
+        v-textarea.add-cost(
+                    rows="1"
+                    row-height="20"
+                    outlined
+                    label='Цена'
+                    hide-details
+                    v-model="cost"
+                    type="number"
+                    required)
+        v-textarea.add-addres(
+                    rows="1"
+                    row-height="20"
+                    outlined
+                    label='Адрес'
+                    hide-details
+                    v-model="address"
+                    required)
       .information-wrp
-        v-row.more-info-wrp-first(align='center' justify='space-between')
-          v-checkbox.save-deal(
-            label="Защищенная сделка"
-            align='center'
-            v-model="saveDeal")
-        v-row.edit-price(align='center', justify='center')
+        v-row.add-files(align='center' justify='space-between')
+          v-checkbox.save-deal(label="Защищенная сделка"
+                              align='center'
+                              v-model="saveDeal"
+                              hide-details)
+          v-file-input.add-img(solo
+                               flat
+                               class='add-img-padding'
+                               hide-details
+                               dense
+                               label="Прикрепить файл")
       v-row.btns(no-gutters  align='center' justify='center')
           v-btn.accept-btn(align-content='center'
                            @click="checkForm"
@@ -32,7 +48,7 @@
                            v-text="isEdit ? 'Редактировать' : 'Создать'"
                           )
 
-    v-dialog(v-model="isError")
+    v-dialog.error-message(v-model="isError")
       v-row(align='center' justify='center')
         .dialog_title {{error}}
       v-btn(@click="error = ''") ок
@@ -50,6 +66,8 @@ export default {
   },
   data() {
     return {
+      isFocus: false,
+      windowHeight: null,
       description: null,
       cost: null,
       address: null,
@@ -169,43 +187,86 @@ export default {
     },
   },
   created() {
+    this.$store.commit('setTitle', 'Создание заказа');
     this.setEditData();
+    this.windowHeight = window.innerHeight;
+    window.addEventListener('resize', () => {
+      if (window.innerHeight < this.windowHeight) {
+        this.isFocus = true;
+      } else {
+        this.isFocus = false;
+      }
+    });
   },
 };
 </script>
 
 <style lang="stylus" scoped>
-  .RegNumber{
-    margin-top 10px
-    padding-right 10px
-    padding-left 10px
+  .dialog_title{
+    background-color #E5E5E5
+    width 100%
+    font-size 20px
+    text-align center
+    padding 10px
+  }
+  .error-message{
+    background-color #000
+  }
+  .add-cost{
+    margin-right 2px
+  }
+  .add-addres{
+    margin-left 2px
+  }
+  .error-message{
+    background-color: #E5E5E5
+  }
+  .add-cost-addres{
+    margin-top 10px !important
+    width 100%
+    flex: 1 1 auto
+    flex-wrap: nowrap
+  }
+  .add-files{
+    flex-wrap: wrap
+    flex: 1 1 auto
+  }
+  .add-img{
+    margin-left 5px
+    margin-top 7px
+    margin-bottom 7px
+    padding 0px
+  }
+  .add-img-padding.v-input__slot{
+    padding-left 0px !important
+  }
+  .save-deal{
+    width 100%
+    font-style normal
+    font-weight bold
+    font-size 10px
+    color #FE7664
+    margin-left 5px
+  }
+  .createLogo{
+  }
+  .logo{
+    width:auto;
+    height:50%;
+  }
+  .createdOrder{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
   .container {
     background-color #fff
   }
-
-  .name {
-    font-style normal
-    font-weight 500
-    font-size 15px
-    line-height 18px
-    color #000000
-  }
-
-  .customer-more-info-header{
-    padding 0 !important
-  }
-
-  .parallax {
-    margin 15px -12px
-    height 150px
-    background-color red
-  }
-
   .row{
     margin 0
   }
-
   .cost-wrp {
     background #FEF5EE
     border-radius 10px 0 0 10px
@@ -214,7 +275,6 @@ export default {
     max-width 100px
     margin 0 -12px 0 0
   }
-
   .cost {
     font-family Golos
     font-style normal
@@ -222,15 +282,6 @@ export default {
     font-size 18px
     color: #FE7664
   }
-
-  .save-deal{
-    font-style normal
-    font-weight bold
-    font-size 10px
-    color #FE7664
-    margin-left 5px
-  }
-
   .more-info-wrp-second {
     margin 15px 0
     text-align center
@@ -239,23 +290,18 @@ export default {
     line-height 1.4
     color #65686C
   }
-
   .more-info-wrp-second div {
     max-width 95px
   }
-
   .more-info-wrp-second .black-text {
     color: #000000
   }
-
   .responded {
     margin-right 15px
   }
-
   .responded-text, .distantion-text {
     margin-left 5px
   }
-
   .description {
     font-family Golos
     font-style normal
@@ -264,38 +310,9 @@ export default {
     line-height 19px
     color #3C3F44
   }
-
-  .media-files .row {
-    overflow auto
-    white-space nowrap
-    flex-wrap nowrap
-    margin-top 10px
-  }
-
-  .plus-btn, .minus-btn {
-    width 40px !important
-    height 40px !important
-    background none !important
-    opacity: 0.3;
-    border: 1px solid rgba(101, 104, 108, 0.8);
-    box-sizing: border-box;
-    border-radius 20px
-    box-shadow none !important
-    min-width 0 !important
-    padding 0 !important
-  }
-
-  .currentPrice{
-    padding 0 12px
-    text-align center
-    font-family Golos
-    font-style normal
-    font-size 14px
-    color #3C3F44
-  }
-
   .btns{
     margin-top 15px
+    margin-bottom 15px
     text-align center
   }
 
