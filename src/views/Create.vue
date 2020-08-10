@@ -10,7 +10,7 @@
           auto-grow
           outlined
           v-model="description"
-          rows="1"
+          rows="2"
           row-height="25"
           shaped)
       v-text-field.RegNumber(
