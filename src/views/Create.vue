@@ -1,7 +1,11 @@
 <template lang="pug">
-  v-container
+  v-container.createdOrder
     .customer-more-info
+      v-row.createLogo(v-show="!isFocus" align='center' justify='center')
+        v-avatar(size='162' color='#56D68B')
+          svg-icon(name='Plus'  width='110' height='110')
       v-textarea(
+          hide-details
           label="Описание"
           auto-grow
           outlined
@@ -11,6 +15,7 @@
           shaped)
       v-text-field.RegNumber(
                   label='Цена'
+                  hide-details
                   v-model="cost"
                   type="number"
                   required)
@@ -19,12 +24,15 @@
                   v-model="address"
                   required)
       .information-wrp
-        v-row.more-info-wrp-first(align='center' justify='space-between')
+        v-row(align='center' justify='space-between')
           v-checkbox.save-deal(
             label="Защищенная сделка"
             align='center'
-            v-model="saveDeal")
-        v-row.edit-price(align='center', justify='center')
+            v-model="saveDeal"
+            hide-details)
+          v-row.add-files(align='center' justify='space-between')
+            v-file-input.add-file(hide-input)
+            span.add-file-text Прикрепить файл
       v-row.btns(no-gutters  align='center' justify='center')
           v-btn.accept-btn(align-content='center'
                            @click="checkForm"
@@ -169,12 +177,54 @@ export default {
     },
   },
   created() {
+    this.$store.commit('setTitle', 'Создание заказа');
     this.setEditData();
   },
 };
 </script>
 
 <style lang="stylus" scoped>
+  .add-files{
+    flex: 0 1 auto
+  }
+  .add-file-text{
+    margin-left 5px
+    margin-top 5px
+    font-weight 550
+    justify-content: flex-start;
+  }
+  .add-file{
+    margin-left 5px
+    margin-top 7px
+    margin-bottom 7px
+    margin-right 7px
+    padding 0px
+  }
+  .save-deal{
+    width: 100%
+    font-style normal
+    font-weight bold
+    font-size 10px
+    color #FE7664
+    margin-left 5px
+  }
+  .createLogo{
+    margin-bottom: 30px !important
+  }
+  .logo{
+    width:auto;
+    height:50%;
+  }
+  .v-input{
+    flex: none
+  }
+  .createdOrder{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
   .RegNumber{
     margin-top 10px
     padding-right 10px
@@ -183,7 +233,6 @@ export default {
   .container {
     background-color #fff
   }
-
   .name {
     font-style normal
     font-weight 500
@@ -191,21 +240,14 @@ export default {
     line-height 18px
     color #000000
   }
-
-  .customer-more-info-header{
-    padding 0 !important
-  }
-
   .parallax {
     margin 15px -12px
     height 150px
     background-color red
   }
-
   .row{
     margin 0
   }
-
   .cost-wrp {
     background #FEF5EE
     border-radius 10px 0 0 10px
@@ -214,7 +256,6 @@ export default {
     max-width 100px
     margin 0 -12px 0 0
   }
-
   .cost {
     font-family Golos
     font-style normal
@@ -222,15 +263,6 @@ export default {
     font-size 18px
     color: #FE7664
   }
-
-  .save-deal{
-    font-style normal
-    font-weight bold
-    font-size 10px
-    color #FE7664
-    margin-left 5px
-  }
-
   .more-info-wrp-second {
     margin 15px 0
     text-align center
@@ -239,7 +271,6 @@ export default {
     line-height 1.4
     color #65686C
   }
-
   .more-info-wrp-second div {
     max-width 95px
   }
@@ -272,30 +303,9 @@ export default {
     margin-top 10px
   }
 
-  .plus-btn, .minus-btn {
-    width 40px !important
-    height 40px !important
-    background none !important
-    opacity: 0.3;
-    border: 1px solid rgba(101, 104, 108, 0.8);
-    box-sizing: border-box;
-    border-radius 20px
-    box-shadow none !important
-    min-width 0 !important
-    padding 0 !important
-  }
-
-  .currentPrice{
-    padding 0 12px
-    text-align center
-    font-family Golos
-    font-style normal
-    font-size 14px
-    color #3C3F44
-  }
-
   .btns{
     margin-top 15px
+    margin-bottom 15px
     text-align center
   }
 
