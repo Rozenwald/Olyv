@@ -10,8 +10,8 @@
           auto-grow
           outlined
           v-model="description"
-          rows="2"
-          row-height="25"
+          rows="3"
+          row-height="20"
           shaped)
       v-text-field.RegNumber(
                   label='Цена'
