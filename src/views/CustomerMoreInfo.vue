@@ -78,7 +78,7 @@ export default {
     },
 
     editOrder() {
-      this.$router.push({ name: 'create', params: { order: this.order } });
+      this.$router.push({ name: 'editOrder', params: { order: this.order } });
     },
 
     route(routeName) {

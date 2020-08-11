@@ -109,6 +109,7 @@ export default {
         case 'success':
           window.localStorage.setItem('token', response.data.data);
           this.$store.dispatch('setToken', response.data.data);
+          this.$router.back();
           this.getData();
           break;
         case 'invalidEmail':
@@ -137,7 +138,6 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
-          this.$router.back();
           break;
         default:
           this.error = 'Ошибка';

@@ -5,6 +5,7 @@
       router-view.router
       bottom-navigation
       login-dialog
+      repeat-login-dialog
 </template>
 
 <script>
@@ -13,6 +14,7 @@ import Appbar from './components/Appbar.vue';
 import BottomNavigation from './components/BottomNavigation.vue';
 import store from './store/index';
 import LoginDialog from './components/LoginDialog.vue';
+import RepeatLoginDialog from './components/RepeatLoginDialog.vue';
 
 export default {
   name: 'App',
@@ -22,6 +24,7 @@ export default {
     Appbar,
     BottomNavigation,
     LoginDialog,
+    RepeatLoginDialog,
   },
 
   data: () => ({
@@ -45,7 +48,7 @@ export default {
           this.$store.dispatch('setUser', response.data.data);
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showLoginDialog', true);
+          this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         case 'notExist':
           this.$store.dispatch('showLoginDialog', true);
@@ -54,11 +57,6 @@ export default {
           this.error = 'Ошибка входа';
           break;
       }
-    },
-  },
-  computed: {
-    token() {
-      return this.$store.getters.getToken;
     },
   },
   created() {

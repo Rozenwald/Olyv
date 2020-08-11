@@ -8,8 +8,8 @@
         )
         .await-description(v-text="descriptionAwait" v-show="user.verification == 'await'")
         v-col.circle-photo-wrp(align='center' v-show="!src && user.verification == 'notCompleted'")
-          v-row.circle-photo(align='center' //просто задаю ему нужные классы, они есть на сайте
-                             justify='center' //animate.css вроде
+          v-row.circle-photo(align='center'
+                             justify='center'
                              class="animate__animated animate__pulse animate__infinite"
                              @click="choosePhoto"
                             )
@@ -114,7 +114,7 @@ export default {
           this.error = 'Вы уже отправили запрос';
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showLoginDialog', true);
+          this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
           this.error = 'Ошибка';

@@ -44,10 +44,10 @@ export default {
     checkResponse(response) {
       switch (response.data.status) {
         case 'notAuthenticate':
-          this.$store.dispatch('showLoginDialog', true);
+          this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         case 'success':
-          this.$store.dispatch('comment', response.data.comment);
+          this.$store.dispatch('setComment', response.data.comment);
           break;
         default:
           this.error = 'Ошибка входа';
@@ -67,6 +67,14 @@ export default {
     this.$store.commit('setTitle', 'Личный кабинет');
     if (this.user.verification === 'notCompleted') {
       this.getData();
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    if (!store.getters.isAuth) {
+      next(from.name);
+      this.$store.dispatch('showLoginDialog', true);
+    } else {
+      next();
     }
   },
 };

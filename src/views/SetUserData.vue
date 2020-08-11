@@ -174,7 +174,7 @@ export default {
           }
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showLoginDialog', true);
+          this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
           this.error = 'Ошибка';
@@ -218,7 +218,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     if (!store.getters.isAuth) {
       next(from.name);
-      this.$store.dispatch('showLoginDialog', true);
+      store.dispatch('showLoginDialog', true);
     } else {
       next();
     }
