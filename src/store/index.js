@@ -7,7 +7,7 @@ import comment from './modules/comment';
 import loginDialog from './modules/loginDialog';
 import userDataDialog from './modules/userDataDialog';
 import user from './modules/user';
-import myOrderId from './modules/myOrderId';
+import myOrder from './modules/myOrder';
 import repeatLoginDialog from './modules/repeatLoginDialog';
 
 Vue.use(Vuex);
@@ -25,7 +25,7 @@ export default new Vuex.Store({
     loginDialog,
     userDataDialog,
     user,
-    myOrderId,
+    myOrder,
     comment,
     repeatLoginDialog,
   },

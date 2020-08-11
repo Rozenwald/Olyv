@@ -157,7 +157,6 @@ export default {
         case 'success':
           window.localStorage.setItem('token', response.data.data);
           this.$store.dispatch('setToken', response.data.data);
-          this.$router.go(-2);
           this.getData();
           break;
         default:
@@ -180,6 +179,7 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
+          this.$router.go(-2);
           break;
         default:
           this.error = 'Ошибка';

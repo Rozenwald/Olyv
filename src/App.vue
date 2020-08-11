@@ -31,18 +31,18 @@ export default {
     error: '',
   }),
   methods: {
-    getData() {
+    getUserData() {
       axios
         .post(`${this.$baseUrl}api/v1/private/user`, {
           method: 'receive',
           submethod: 'my',
           token: window.localStorage.getItem('token'),
         })
-        .then((response) => (this.checkResponse(response)))
+        .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
         .catch(() => (this.error = 'Ошибка'));
     },
-    checkResponse(response) {
+    checkUserData(response) {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
@@ -51,6 +51,7 @@ export default {
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         case 'notExist':
+          this.$store.dispatch('setToken', null);
           this.$store.dispatch('showLoginDialog', true);
           break;
         default:
@@ -62,7 +63,7 @@ export default {
   created() {
     this.$store.dispatch('setToken', window.localStorage.getItem('token'));
     if (window.localStorage.getItem('token') != null) {
-      this.getData();
+      this.getUserData();
     }
   },
 };

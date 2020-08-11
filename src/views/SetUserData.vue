@@ -64,6 +64,7 @@ export default {
 
     selectImage(file) {
       this.file = file;
+      this.sendPhoto();
       const reader = new FileReader();
       reader.onload = this.onImageLoad;
       reader.readAsDataURL(file);
@@ -108,12 +109,9 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.getUserData();
-          if (this.file) {
-            this.sendPhoto();
-          }
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showLoginDialog', true);
+          this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
           this.error = 'Ошибка';
@@ -138,14 +136,13 @@ export default {
     checkPhoto(response) {
       switch (response.data.status) {
         case 'success':
-          this.file = null;
           this.getUserData();
           break;
         case 'invalidPhoto':
           this.error = 'Неверный формат фото';
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showLoginDialog', true);
+          this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
           this.error = 'Ошибка загрузки фото';
@@ -172,6 +169,7 @@ export default {
           if (!this.file) {
             this.$router.back();
           }
+          this.file = null;
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);

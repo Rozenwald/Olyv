@@ -48,7 +48,6 @@ export default {
   },
   data() {
     return {
-      order: [],
       currentPrice: 5000, // Number
       respondedCount: 12,
       distantion: 3,
@@ -94,12 +93,10 @@ export default {
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          if (response.data.data !== null) {
-            // eslint-disable-next-line prefer-destructuring
-            this.order = response.data.data[0];
-          } else {
-            this.$router.back();
-          }
+          this.$router.back();
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
           this.error = 'Ошибка';
@@ -111,30 +108,15 @@ export default {
     token() {
       return this.$store.getters.getToken;
     },
+    order() {
+      return this.$store.getters.getMyOrder;
+    },
     isSaveDeal() {
       if (this.order.protect === 'no') {
         return false;
       }
       return true;
     },
-  },
-  beforeRouteEnter(to, from, next) {
-    function getData(id, token) {
-      /* eslint-disable no-return-assign */
-      return axios
-        .post(`${window.$baseUrl}api/v1/private/order`, {
-          token,
-          method: 'receive',
-          submethod: 'my',
-          step: 0,
-          id,
-        });
-      /* eslint-enable no-return-assign */
-    }
-
-    getData(store.getters.getMyOrderId, store.getters.getToken).then((response) => {
-      next((vm) => vm.checkResponse(response));
-    });
   },
 };
 </script>

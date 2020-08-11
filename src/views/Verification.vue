@@ -4,7 +4,11 @@
       .center-wrp
         .verification-description(
           v-text="description"
-          v-show="user.verification == 'notCompleted'"
+          v-show="user.verification == 'notCompleted' && !src && !comment"
+        )
+        .comment-description(
+          v-text="description"
+          v-show="comment"
         )
         .await-description(v-text="descriptionAwait" v-show="user.verification == 'await'")
         v-col.circle-photo-wrp(align='center' v-show="!src && user.verification == 'notCompleted'")
@@ -151,9 +155,11 @@ export default {
     src() {
       return this.content;
     },
+
     token() {
       return this.$store.getters.getToken;
     },
+
     isError: {
       get() {
         if (this.error.length) {
@@ -165,8 +171,13 @@ export default {
         this.error = '';
       },
     },
+
     user() {
       return this.$store.getters.getUser;
+    },
+
+    comment() {
+      return this.$store.getters.getComment;
     },
   },
   created() {

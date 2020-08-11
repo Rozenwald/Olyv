@@ -38,6 +38,9 @@ export default {
         case 'success':
           this.items = response.data.data.reverse();
           break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
         default:
           this.error = 'Ошибка';
           break;
