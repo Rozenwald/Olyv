@@ -10,10 +10,10 @@
           .lowcost-cost {{item.cost}} ₽
     .icon-container
       .icon-first
-        svg-icon.icon(name='Responded'  width='20' height='20')
+        svg-icon.icon(name='Responded'  width='30' height='30')
         .icon-text
       .icon-second
-        svg-icon.icon(name='Time'  width='20' height='20')
+        svg-icon.icon(name='Time'  width='30' height='30')
         .icon-text
 </template>
 
@@ -82,6 +82,7 @@ export default {
           word-break normal
           white-space: normal
           font-size: 15px
+          padding 5px
         }
       .cost-container{
         flex-wrap nowrap
