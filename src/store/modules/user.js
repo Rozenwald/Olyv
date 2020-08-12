@@ -9,6 +9,7 @@ const mutations = {
   },
   setUser(state, user) {
     state.user = user;
+    state.hasData = true;
   },
 };
 
@@ -25,12 +26,14 @@ const getters = {
   getToken: (state) => state.token,
   isAuth: (state) => state.isAuth,
   getUser: (state) => state.user,
+  hasData: (state) => state.hasData,
 };
 
 const state = {
   token: null,
   isAuth: null,
   user: {},
+  hasData: false,
 };
 
 export default {

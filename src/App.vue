@@ -5,6 +5,7 @@
       router-view.router
       bottom-navigation
       login-dialog
+      repeat-login-dialog
 </template>
 
 <script>
@@ -13,6 +14,7 @@ import Appbar from './components/Appbar.vue';
 import BottomNavigation from './components/BottomNavigation.vue';
 import store from './store/index';
 import LoginDialog from './components/LoginDialog.vue';
+import RepeatLoginDialog from './components/RepeatLoginDialog.vue';
 
 export default {
   name: 'App',
@@ -22,29 +24,34 @@ export default {
     Appbar,
     BottomNavigation,
     LoginDialog,
+    RepeatLoginDialog,
   },
 
   data: () => ({
     error: '',
   }),
   methods: {
-    getData() {
+    getUserData() {
       axios
         .post(`${this.$baseUrl}api/v1/private/user`, {
           method: 'receive',
           submethod: 'my',
           token: window.localStorage.getItem('token'),
         })
-        .then((response) => (this.checkResponse(response)))
+        .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
         .catch(() => (this.error = 'Ошибка'));
     },
-    checkResponse(response) {
+    checkUserData(response) {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
           break;
         case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        case 'notExist':
+          this.$store.dispatch('setToken', null);
           this.$store.dispatch('showLoginDialog', true);
           break;
         default:
@@ -53,15 +60,10 @@ export default {
       }
     },
   },
-  computed: {
-    token() {
-      return this.$store.getters.getToken;
-    },
-  },
   created() {
     this.$store.dispatch('setToken', window.localStorage.getItem('token'));
     if (window.localStorage.getItem('token') != null) {
-      this.getData();
+      this.getUserData();
     }
   },
 };

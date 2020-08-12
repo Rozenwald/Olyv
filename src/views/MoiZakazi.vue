@@ -26,7 +26,7 @@ export default {
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
           method: 'receive',
-          submethod: 'my',
+          submethod: 'customer',
           step: 0,
         })
         .then((response) => (this.checkResponse(response)))
@@ -37,6 +37,9 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.items = response.data.data.reverse();
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
           this.error = 'Ошибка';

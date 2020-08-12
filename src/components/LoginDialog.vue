@@ -1,8 +1,11 @@
 <template lang="pug">
   v-dialog(v-model="showDialog")
-    v-row(align='center' justify='center')
-      .dialog_title Необходима авторизация
-    v-btn(@click="route") Войти
+    v-card
+      v-card-title.headline Авторизация
+      v-card-text Необходима авторизация
+      v-card-actions
+        v-spacer
+        v-btn(color="green darken-1" text @click="route") Перейти
 </template>
 
 <script>

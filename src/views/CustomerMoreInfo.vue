@@ -72,9 +72,6 @@ export default {
   },
   data() {
     return {
-      order: [],
-      starColor: '#FFCA10',
-      changeValue: 1000,
       currentPrice: 5000, // Number
       respondedCount: 12,
       distantion: 3,
@@ -83,6 +80,24 @@ export default {
     };
   },
   methods: {
+    delOrder() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/private/order`, {
+          token: this.token,
+          method: 'del',
+          // eslint-disable-next-line no-underscore-dangle
+          id: this.order._id,
+        })
+        .then((response) => (this.checkResponse(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+
+    editOrder() {
+      this.$router.push({ name: 'editOrder', params: { order: this.order } });
+    },
+
     route(routeName) {
       this.$router.push(routeName);
     },
@@ -91,25 +106,33 @@ export default {
         this.currentPrice = Number.parseInt(this.currentPrice, 10) + val;
       }
     },
-    setInputWidth() {
-      this.inputWidth = (this.currentPrice.toString().length + 1);
-      if (this.currentPrice.toString().length > 2) {
-        this.inputWidth *= 12;
-      } else {
-        this.inputWidth *= 16;
+
+    checkResponse(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.$router.back();
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
       }
     },
   },
-  watch: {
-    currentPrice() {
-      this.setInputWidth();
-      if (Number.parseInt(this.currentPrice, 10) === 0) {
-        this.currentPrice = this.changeValue;
+  computed: {
+    token() {
+      return this.$store.getters.getToken;
+    },
+    order() {
+      return this.$store.getters.getMyOrder;
+    },
+    isSaveDeal() {
+      if (this.order.protect === 'no') {
+        return false;
       }
     },
-  },
-  mounted() {
-    this.setInputWidth();
   },
 };
 </script>

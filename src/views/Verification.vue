@@ -4,10 +4,14 @@
       .center-wrp
         .verification-description(
           v-text="description"
-          v-show="verificationStatus == 'notCompleted'"
+          v-show="user.verification == 'notCompleted' && !src && !comment"
         )
-        .await-description(v-text="descriptionAwait" v-show="verificationStatus == 'await'")
-        v-col.circle-photo-wrp(align='center' v-show="!src && verificationStatus != 'await'")
+        .comment-description(
+          v-text="description"
+          v-show="comment"
+        )
+        .await-description(v-text="descriptionAwait" v-show="user.verification == 'await'")
+        v-col.circle-photo-wrp(align='center' v-show="!src && user.verification == 'notCompleted'")
           v-row.circle-photo(align='center'
                              justify='center'
                              class="animate__animated animate__pulse animate__infinite"
@@ -32,6 +36,7 @@
 <script>
 import axios from 'axios';
 import animate from 'animate.css';
+import store from '../store';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
@@ -40,6 +45,7 @@ export default {
     SvgIcon,
     animate,
     axios,
+    store,
   },
   data: () => ({
     photoIsLoad: false,
@@ -50,7 +56,6 @@ export default {
     moreActionImg: false,
     file: null,
     error: '',
-    verificationStatus: '',
   }),
   methods: {
     setMoreActionImg(event) {
@@ -104,38 +109,45 @@ export default {
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.verificationStatus = 'await';
-          this.content = '';
+          this.getUserData();
           break;
         case 'invalidPhoto':
           this.error = 'Неверный формат фото';
           break;
         case 'already':
-          this.getData();
+          this.error = 'Вы уже отправили запрос';
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
           this.error = 'Ошибка';
           break;
       }
     },
-
-    getData() {
+    getUserData() {
       axios
-        .post(`${this.$baseUrl}api/v1/private/passport`, {
+        .post(`${this.$baseUrl}api/v1/private/user`, {
           method: 'receive',
-          submethod: 'verification',
+          submethod: 'my',
           token: this.token,
         })
-        .then((response) => (this.checkStatusResponse(response)))
+        .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
         .catch(() => (this.error = 'Ошибка'));
     },
-
-    checkStatusResponse(response) {
-      if (response.data.status === 'success') {
-        this.verificationStatus = response.data.data.verification;
-      } else {
-        this.error = 'Ошибка';
+    checkUserData(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.$store.dispatch('setUser', response.data.data);
+          this.content = '';
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
       }
     },
   },
@@ -143,9 +155,11 @@ export default {
     src() {
       return this.content;
     },
+
     token() {
       return this.$store.getters.getToken;
     },
+
     isError: {
       get() {
         if (this.error.length) {
@@ -157,10 +171,25 @@ export default {
         this.error = '';
       },
     },
+
+    user() {
+      return this.$store.getters.getUser;
+    },
+
+    comment() {
+      return this.$store.getters.getComment;
+    },
   },
   created() {
     this.$store.commit('setTitle', 'Верификация');
-    this.getData();
+  },
+  beforeRouteEnter(to, from, next) {
+    if (!store.getters.isAuth) {
+      next(from.name);
+      this.$store.dispatch('showLoginDialog', true);
+    } else {
+      next();
+    }
   },
 };
 </script>

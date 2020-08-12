@@ -32,7 +32,7 @@ export default {
   methods: {
     route() {
       // eslint-disable-next-line no-underscore-dangle
-      this.$store.dispatch('setMyOrderId', this.item._id);
+      this.$store.dispatch('setMyOrder', this.item);
       this.$router.push('moreInfoOrder');
     },
   },

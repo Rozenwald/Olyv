@@ -1,12 +1,12 @@
 const mutations = {
-  comment(state, comment) {
+  setComment(state, comment) {
     state.comment = comment;
   },
 };
 
 const actions = {
-  comment({ commit }, comment) {
-    commit('showAppbar', comment);
+  setComment({ commit }, comment) {
+    commit('setComment', comment);
   },
 };
 

@@ -7,6 +7,7 @@ import SpisokZakazov from '../views/SpisokZakazov.vue';
 import Registration from '../views/Registration.vue';
 import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 import Create from '../views/Create.vue';
+import EditOrder from '../views/EditOrder.vue';
 import Auth from '../views/Authorization.vue';
 import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
 import BottomShit from '../views/BottomShit.vue';
@@ -92,6 +93,11 @@ const routes = [
     name: 'customerProfile',
     path: '/customerProfile',
     component: CustomerProfile,
+  },
+  {
+    name: 'editOrder',
+    path: '/editOrder',
+    component: EditOrder,
   },
 ];
 

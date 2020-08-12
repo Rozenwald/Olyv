@@ -100,19 +100,20 @@ export default {
       }
 
       if (!this.error) {
-        this.createOrder();
+        this.editOrder();
       }
     },
 
-    createOrder() {
+    editOrder() {
       /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
-          method: 'add',
+          method: 'update',
           description: this.description,
           cost: this.cost,
           protect: this.saveDeal ? 'yes' : 'no',
+          id: this.id,
         })
         .then((response) => (this.checkResonse(response)))
         .catch(() => (this.error = 'Ошибка'));
@@ -142,6 +143,17 @@ export default {
       const regex = /\d+/;
       return regex.test(cost);
     },
+
+    setEditData() {
+      if (Object.keys(this.$route.params).length !== 0) {
+        this.isEdit = true;
+        this.description = this.$route.params.order.description;
+        this.cost = this.$route.params.order.cost;
+        this.saveDeal = this.$route.params.order.protect === 'yes';
+        // eslint-disable-next-line no-underscore-dangle
+        this.id = this.$route.params.order._id;
+      }
+    },
   },
   computed: {
     isError: {
@@ -161,6 +173,7 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Создание заказа');
+    this.setEditData();
     this.windowHeight = window.innerHeight;
     window.addEventListener('resize', () => {
       if (window.innerHeight < this.windowHeight) {

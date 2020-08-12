@@ -30,7 +30,7 @@
             v-show="verificationStatus=='await' && user.name != null"
             @click='route("verification")'
           )
-</template>=
+</template>
 
 <script>
 import axios from 'axios';

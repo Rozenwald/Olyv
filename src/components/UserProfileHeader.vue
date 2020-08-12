@@ -1,14 +1,15 @@
 <template lang="pug">
   .header
     v-row.avatar(align='center' justify='center')
-      v-skeleton-loader(type="avatar" :loading="!this.user.email")
+      v-skeleton-loader(type="avatar" :loading="!hasData")
         v-avatar(size='62' color='#56D68B')
-          svg-icon(name='PhotoCamera'  width='60' height='15')
+          svg-icon(name='PhotoCamera'  width='60' height='15'  v-if="!this.photo")
+          v-img(:src="this.photo" v-if="this.photo")
     v-row.name(align='center' justify='center')
-      v-skeleton-loader(type="text" :loading="!this.user.email" width="90")
+      v-skeleton-loader(type="text" :loading="!hasData" width="90")
         span {{name}} {{lastname}}
     v-row.ratting(align='center' justify='center')
-      v-skeleton-loader(type="text" :loading="!this.user.email" width="70")
+      v-skeleton-loader(type="text" :loading="!hasData" width="70")
         v-rating(
           :length="5"
           readonly
@@ -51,9 +52,25 @@ export default {
 
     };
   },
+  methods: {
+    route(routeName) {
+      this.$router.push(routeName);
+    },
+  },
   computed: {
     user() {
       return this.$store.getters.getUser;
+    },
+    hasData() {
+      return this.$store.getters.hasData;
+    },
+    photo() {
+      if (this.hasData) {
+        if (this.user.photo.length) {
+          return this.user.photo[this.user.photo.length - 1].urlMin;
+        }
+      }
+      return '';
     },
     name() {
       if (this.user.name == null) {
@@ -65,13 +82,11 @@ export default {
       return this.user.lastname;
     },
     comment() {
-      if (this.$store.getters.getUser == null) {
-        return 'comment';
+      if (this.$store.getters.getComment == null) {
+        return '';
       }
       return this.$store.getters.getComment;
     },
-  },
-  created() {
   },
 };
 </script>
