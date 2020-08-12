@@ -1,11 +1,26 @@
-<template lang='pug'>
-  v-card#Order(max-width
-               @click='this.route')
+<template lang="pug">
+  v-card.Order(max-width @click='this.route')
+    .text-cost-container
+      .text-container
+        .text {{item.description}}
+      .cost-container
+        .cost {{item.cost}}
+        .lowcost
+          svg-icon  .lowcost-icon
+          .lowcost-cost {{item.cost}}
+    .icon-container
+      .icon-first
+        svg-icon.icon
+        .icon-text
+      .icon-second
+        svg-icon.icon
+        .icon-text
+
     #TextOrderContainer
-      #TextOrder {{item.description}}
+      #TextOrder
       #ContainerCost
-        #cost1 {{item.cost}}
-        #cost2 {{item.cost}}
+        #cost1
+        #cost2
 </template>
 
 <script>
@@ -30,6 +45,31 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .Order{
+    .text-cost-container{
+      .text-container{
+        .text{}
+      }
+      .cost-container{
+        .cost{}
+        .lowcost{
+          .lowcost-icon{}
+          .lowcost-cost{}
+        }
+      }
+    }
+    .icon-container{
+      .icon-first{
+        .icon{}
+        .icon-text{}
+      }
+      .icon-second{
+        .icon{}
+        .icon-text{}
+      }
+    }
+  }
+
     #ContainerCost{
         justify-content center
         height 72px;
