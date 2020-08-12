@@ -50,9 +50,9 @@
                           )
 
     v-dialog.error-message(v-model="isError")
-      v-row(align='center' justify='center')
+      v-row.error-message( align='center' justify='center')
         .dialog_title {{error}}
-        v-btn(fab @click="error = ''") ок
+        v-btn.circle-btn(@click="error = ''") ок
 </template>
 
 <script>
@@ -175,17 +175,28 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .v-dialog{
+    box-shadow none !important
+  }
+  .circle-btn{
+    background: linear-gradient(180deg, #FFA967 0%, #FD7363 100%) !important
+    border-radius 50%
+    width 80px
+    height 80px !important
+    margin 5px
+  }
   .dialog_title{
-    background-color #E5E5E5
+    background-color #e5e5e5
     width 100%
     font-size 20px
     text-align center
     padding 10px
-    border-radius 30px
-    margin 10px
+    border-radius 15px
+    margin 5px
   }
   .error-message{
-    background-color transparent
+    background-color transparent !important
+    box-shadow none !important
   }
   .add-cost{
     margin-right 2px
