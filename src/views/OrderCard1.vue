@@ -67,6 +67,11 @@ export default {
         flex-wrap nowrap
         flex 1 1 70%
         height 100%
+        overflow hidden
+        text-overflow ellipsis
+        text-align left
+        word-break normal
+        white-space: normal
       }
         .text{
           width 100%
@@ -103,11 +108,17 @@ export default {
           border none
           border-radius 5px 0px 0px 5px
           font-size: 17px
-          right 0
-          top 14px
         }
         .lowcost{
           display flex
+          height 30px
+          padding-top 5px
+          padding-bottom 5px
+          padding-left 12px
+          padding-right 12px
+          text-align: center;
+          vertical-align middle
+          justify-content center
         }
           .lowcost-icon{
             flex-wrap nowrap
@@ -118,21 +129,15 @@ export default {
           .lowcost-cost{
             flex-wrap nowrap
             height 20px
-            line-height 18px
+            line-height 16px
             font-weight: bold;
             font-family: Inter;
             font-style: normal;
             color #FE7664
-            padding-left 12px
-            padding-right 12px
-            padding-top 7px
-            padding-bottom 7px
 
             border none
             border-radius 5px 0px 0px 5px
-            font-size: 14px
-            right 0
-            top 50px
+            font-size: 15px
           }
     .icon-container{
       justify-content space-around
