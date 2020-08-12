@@ -66,45 +66,43 @@ export default {
         display flex
         flex-wrap nowrap
         flex 1 1 70%
+        height 100%
       }
         .text{
-          width 70%
+          width 100%
           height 100%
           overflow hidden
           text-overflow ellipsis
           text-align left
           word-break normal
           white-space: normal
-          position relative
-          font-size: 16px
-          left  16px
-          top 11px
+          font-size: 15px
         }
       .cost-container{
         flex-wrap nowrap
         flex 1 1 30%
         justify-content center
-        height 72px;
+        height 70px;
         padding 0px;
         text-align: center;
         vertical-align middle
       }
         .cost{
           display block
-          height 36px
-          line-height 22px
+          height 30px
+          line-height 20px
           font-weight: bold;
           font-family: Inter;
           font-style: normal;
           color #FE7664
           padding-left 12px
           padding-right 12px
-          padding-top 7px
-          padding-bottom 7px
+          padding-top 5px
+          padding-bottom 5px
           background-color #FEF5EE
           border none
           border-radius 5px 0px 0px 5px
-          font-size: 18px
+          font-size: 17px
           right 0
           top 14px
         }
@@ -132,20 +130,26 @@ export default {
 
             border none
             border-radius 5px 0px 0px 5px
-            font-size: 15px
+            font-size: 14px
             right 0
             top 50px
           }
     .icon-container{
+      justify-content space-around
       height 30px
       display flex
       flex-wrap wrap
       width 100%
+      align-items center
     }
-      .icon-first{}
-        .icon{}
+      .icon-first{
+        padding-top 5px
+      }
+        .icon{
+        }
         .icon-text{}
       .icon-second{
+        padding-top 5px
       }
         .icon{}
         .icon-text{}
