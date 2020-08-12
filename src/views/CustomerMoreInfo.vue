@@ -132,6 +132,7 @@ export default {
       if (this.order.protect === 'no') {
         return false;
       }
+      return true;
     },
   },
 };

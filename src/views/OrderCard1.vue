@@ -4,28 +4,27 @@
       .text-container
         .text {{item.description}}
       .cost-container
-        .cost {{item.cost}}
+        .cost {{item.cost}} ₽
         .lowcost
-          svg-icon  .lowcost-icon
-          .lowcost-cost {{item.cost}}
+          svg-icon.lowcost-icon(name='Lowcost'  width='16' height='16')
+          .lowcost-cost {{item.cost}} ₽
     .icon-container
       .icon-first
-        svg-icon.icon
+        svg-icon.icon(name='Responded'  width='20' height='20')
         .icon-text
       .icon-second
-        svg-icon.icon
+        svg-icon.icon(name='Time'  width='20' height='20')
         .icon-text
-
-    #TextOrderContainer
-      #TextOrder
-      #ContainerCost
-        #cost1
-        #cost2
 </template>
 
 <script>
+import SvgIcon from '../components/SvgIcon.vue';
+
 export default {
   name: 'OrderCard2',
+  components: {
+    SvgIcon,
+  },
   props: {
     item: Object,
   },
@@ -46,161 +45,112 @@ export default {
 
 <style lang="stylus" scoped>
   .Order{
-    .text-cost-container{
-      .text-container{
-        .text{}
-      }
-      .cost-container{
-        .cost{}
-        .lowcost{
-          .lowcost-icon{}
-          .lowcost-cost{}
-        }
-      }
-    }
-    .icon-container{
-      .icon-first{
-        .icon{}
-        .icon-text{}
-      }
-      .icon-second{
-        .icon{}
-        .icon-text{}
-      }
-    }
+    text-align left
+    display flex
+    background-color #FFFFFF
+    height 120px
+    padding-top 10px
+    padding-left 10px
+    padding-bottom 10px
+    margin-top 10px
+    border-radius 6px
+    flex-wrap wrap
   }
-
-    #ContainerCost{
+    .text-cost-container{
+        width 100%
+        height 70px
+        display flex
+        flex-wrap wrap
+    }
+      .text-container{
+        display flex
+        flex-wrap nowrap
+        flex 1 1 70%
+      }
+        .text{
+          width 70%
+          height 100%
+          overflow hidden
+          text-overflow ellipsis
+          text-align left
+          word-break normal
+          white-space: normal
+          position relative
+          font-size: 16px
+          left  16px
+          top 11px
+        }
+      .cost-container{
+        flex-wrap nowrap
+        flex 1 1 30%
         justify-content center
         height 72px;
-        max-width content
         padding 0px;
         text-align: center;
         vertical-align middle
-    }
-    #cost1{
-        display block
-        height 36px
-        line-height 22px
-        font-weight: bold;
-        font-family: Inter;
-        font-style: normal;
-        color #FE7664
-        padding-left 12px
-        padding-right 12px
-        padding-top 7px
-        padding-bottom 7px
-        position absolute
+      }
+        .cost{
+          display block
+          height 36px
+          line-height 22px
+          font-weight: bold;
+          font-family: Inter;
+          font-style: normal;
+          color #FE7664
+          padding-left 12px
+          padding-right 12px
+          padding-top 7px
+          padding-bottom 7px
+          background-color #FEF5EE
+          border none
+          border-radius 5px 0px 0px 5px
+          font-size: 18px
+          right 0
+          top 14px
+        }
+        .lowcost{
+          display flex
+        }
+          .lowcost-icon{
+            flex-wrap nowrap
+            justify-content center
+            text-align center
+            vertical-align middle
+          }
+          .lowcost-cost{
+            flex-wrap nowrap
+            height 20px
+            line-height 18px
+            font-weight: bold;
+            font-family: Inter;
+            font-style: normal;
+            color #FE7664
+            padding-left 12px
+            padding-right 12px
+            padding-top 7px
+            padding-bottom 7px
 
-        background-color #FEF5EE
-        border none
-        border-radius 5px 0px 0px 5px
-        font-size: 18px
-        right 0
-        top 14px
+            border none
+            border-radius 5px 0px 0px 5px
+            font-size: 15px
+            right 0
+            top 50px
+          }
+    .icon-container{
+      height 30px
+      display flex
+      flex-wrap wrap
+      width 100%
     }
-    #cost2{
-        display block
-        height 20px
-        line-height 18px
-        font-weight: bold;
-        font-family: Inter;
-        font-style: normal;
-        color #FE7664
-        padding-left 12px
-        padding-right 12px
-        padding-top 7px
-        padding-bottom 7px
-        position absolute
-
-        border none
-        border-radius 5px 0px 0px 5px
-        font-size: 15px
-        right 0
-        top 50px
-    }
-
-    #TextOrderContainer{
-        width 100%
-        height 65%
-    }
-    #Order:first-child{
-      margin-top 0
-    }
-    #Order{
-        text-align left
-        position relative
-        background-color #FFFFFF
-        height 120px
-        padding-right 0
-        padding-left 0
-        margin-top 10px
-        border-radius 6px
-    }
-    #TextOrder{
-        width 70%
-        height 100%
-        overflow hidden
-        text-overflow ellipsis
-        text-align left
-        word-break normal
-        white-space: normal
-        position relative
-        font-size: 16px
-        left  16px
-        top 11px
-    }
-
-    #Toolbar{
-        background-color: #56D68B
-    }
-    .write{
-        color #FFA967
-        position fixed
-        bottom: 0;
-        right 0;
-        left 0;
-        margin-right 15px;
-    }
-    #You{
-        text-align right
-        margin 15px
-        align-items flex-start
-    }
-    #YouBtn{
-        position relative
-        background-color #C9F0D9
-        width 70%
-        height 70px
-        border none
-        border-radius 15px 0px 15px 15px
-        right: 0;
-    }
-    #Friend{
-        display block
-        text-align left
-        margin 15px
-    }
-    #FriendImg{
-        display inline-block
-        position relative
-        margin  7px
-        background-color #d9d9d9
-        height 40px
-        width 40px
-        border none
-        border-radius 50%
-        left 0
-    }
-    #FriendBtn{
-        display inline-block
-        display flex
-        height 40px
-        width 70%
-        border none
-        border-radius 0px 15px 15px 15px
-        background-color #d9d9d9
-        margin-top 7px
-    }
+      .icon-first{}
+        .icon{}
+        .icon-text{}
+      .icon-second{
+      }
+        .icon{}
+        .icon-text{}
+  .Order:first-child{
+    margin-top 0
+  }
 
 </style>
