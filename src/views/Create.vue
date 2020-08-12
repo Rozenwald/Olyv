@@ -37,6 +37,7 @@
                               hide-details)
           v-file-input.add-img(solo
                                flat
+                               multiple
                                class='add-img-padding'
                                hide-details
                                dense
@@ -51,7 +52,7 @@
     v-dialog.error-message(v-model="isError")
       v-row(align='center' justify='center')
         .dialog_title {{error}}
-      v-btn(@click="error = ''") ок
+        v-btn(fab @click="error = ''") ок
 </template>
 
 <script>
@@ -180,9 +181,11 @@ export default {
     font-size 20px
     text-align center
     padding 10px
+    border-radius 30px
+    margin 10px
   }
   .error-message{
-    background-color #000
+    background-color transparent
   }
   .add-cost{
     margin-right 2px

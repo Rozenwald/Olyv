@@ -11,10 +11,10 @@
     .icon-container
       .icon-first
         svg-icon.icon(name='Responded'  width='25' height='25')
-        .icon-text
+        .icon-text Откликнулось
       .icon-second
         svg-icon.icon(name='Time'  width='25' height='25')
-        .icon-text
+        .icon-text Время создания
 </template>
 
 <script>
@@ -142,23 +142,37 @@ export default {
             font-size: 13px
           }
     .icon-container{
-      justify-content space-around
-      margin-top 5px
-      height 25px
+      margin-top 4px
+      height 26px
       display flex
       flex-wrap wrap
       width 100%
       align-items center
     }
       .icon-first{
+        display flex
+        flex-wrap nowrap
+        margin-right 25px
       }
         .icon{
+          flex 1 1 auto
         }
-        .icon-text{}
+        .icon-text{
+          flex 1 1 auto
+          margin-left 7px
+          line-height 13px
+          font-size 13 px
+        }
       .icon-second{
+        display flex
+        flex-wrap nowrap
       }
-        .icon{}
-        .icon-text{}
+        .icon{
+          flex 1 1 auto
+        }
+        .icon-text{
+          flex 1 1 auto
+        }
   .Order:first-child{
     margin-top 0
   }
