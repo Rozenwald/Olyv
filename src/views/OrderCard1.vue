@@ -6,14 +6,14 @@
       .cost-container
         .cost {{item.cost}} ₽
         .lowcost
-          svg-icon.lowcost-icon(name='Lowcost'  width='16' height='16')
+          svg-icon.lowcost-icon(name='Lowcost'  width='13' height='13')
           .lowcost-cost {{item.cost}} ₽
     .icon-container
       .icon-first
-        svg-icon.icon(name='Responded'  width='30' height='30')
+        svg-icon.icon(name='Responded'  width='25' height='25')
         .icon-text
       .icon-second
-        svg-icon.icon(name='Time'  width='30' height='30')
+        svg-icon.icon(name='Time'  width='25' height='25')
         .icon-text
 </template>
 
@@ -81,15 +81,15 @@ export default {
           text-align left
           word-break normal
           white-space: normal
-          font-size: 15px
+          font-size: 14px
           padding 5px
         }
       .cost-container{
         flex-wrap nowrap
         flex 1 1 30%
-        justify-content center
         height 70px;
         padding 0px;
+        justify-content center
         text-align: center;
         vertical-align middle
       }
@@ -123,6 +123,7 @@ export default {
         }
           .lowcost-icon{
             flex-wrap nowrap
+            line-height 13px
             justify-content center
             text-align center
             vertical-align middle
@@ -130,7 +131,7 @@ export default {
           .lowcost-cost{
             flex-wrap nowrap
             height 20px
-            line-height 16px
+            line-height 20px
             font-weight: bold;
             font-family: Inter;
             font-style: normal;
@@ -138,24 +139,23 @@ export default {
 
             border none
             border-radius 5px 0px 0px 5px
-            font-size: 15px
+            font-size: 13px
           }
     .icon-container{
       justify-content space-around
-      height 30px
+      margin-top 5px
+      height 25px
       display flex
       flex-wrap wrap
       width 100%
       align-items center
     }
       .icon-first{
-        padding-top 5px
       }
         .icon{
         }
         .icon-text{}
       .icon-second{
-        padding-top 5px
       }
         .icon{}
         .icon-text{}
