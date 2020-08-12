@@ -81,8 +81,9 @@ export default {
           text-align left
           word-break normal
           white-space: normal
-          font-size: 14px
-          padding 5px
+          font-size: 15px
+          padding-bottom 5px
+          padding-right 5px
         }
       .cost-container{
         flex-wrap nowrap

@@ -183,16 +183,16 @@ export default {
     border-radius 50%
     width 80px
     height 80px !important
-    margin 5px
+    margin 10px
   }
   .dialog_title{
+    display flex
     background-color #e5e5e5
     width 100%
     font-size 20px
     text-align center
-    padding 10px
+    padding 20px
     border-radius 15px
-    margin 5px
   }
   .error-message{
     background-color transparent !important
