@@ -59,14 +59,18 @@ export default {
     border-radius 6px
     background-color #f7f7f7
   }
+  .swiper:translate3d{
+
+  }
   .order{
     text-align left
     display flex
     background-color #FFFFFF
     padding-top 10px
     padding-left 10px
-    padding-bottom 10px
     border-radius 6px
+    margin-left 5px
+    margin-right 5px
     flex-wrap wrap
   }
     .text-cost-container{
