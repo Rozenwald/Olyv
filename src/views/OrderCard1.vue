@@ -1,6 +1,6 @@
 <template lang="pug">
-    swiper.swiper.Order
-      v-card.Order(max-width @click='this.route')
+    swiper.swiper
+      v-card.order(max-width @click='this.route')
         .text-cost-container
           .text-container
             .text {{item.description}}
@@ -50,15 +50,19 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .Order{
+  .swiper{
+    height 120px
+    margin-top 10px
+    display flex
+    border-radius 6px
+  }
+  .order{
     text-align left
     display flex
     background-color #FFFFFF
-    height 120px
     padding-top 10px
     padding-left 10px
     padding-bottom 10px
-    margin-top 10px
     border-radius 6px
     flex-wrap wrap
   }
