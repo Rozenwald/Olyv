@@ -1,5 +1,5 @@
 <template lang="pug">
-    swiper.swiper
+    swiper.swiper.Order
       v-card.Order(max-width @click='this.route')
         .text-cost-container
           .text-container
