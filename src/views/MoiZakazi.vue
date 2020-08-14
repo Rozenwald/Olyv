@@ -1,4 +1,4 @@
-<template lang='pug'>
+<template lang="pug">
     v-container
       OrderCard1(v-for='item in items'
                 :key='item.id'

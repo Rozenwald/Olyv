@@ -1,29 +1,33 @@
 <template lang="pug">
-  v-card.Order(max-width @click='this.route')
-    .text-cost-container
-      .text-container
-        .text {{item.description}}
-      .cost-container
-        .cost {{item.cost}} ₽
-        .lowcost
-          svg-icon.lowcost-icon(name='Lowcost'  width='13' height='13')
-          .lowcost-cost {{item.cost}} ₽
-    .icon-container
-      .icon-first
-        svg-icon.icon(name='Responded'  width='25' height='25')
-        .icon-text Откликнулось
-      .icon-second
-        svg-icon.icon(name='Time'  width='25' height='25')
-        .icon-text Время создания
+    swiper.swiper
+      v-card.Order(max-width @click='this.route')
+        .text-cost-container
+          .text-container
+            .text {{item.description}}
+          .cost-container
+            .cost {{item.cost}} ₽
+            .lowcost
+              svg-icon.lowcost-icon(name='Lowcost'  width='13' height='13')
+              .lowcost-cost {{item.cost}} ₽
+        .icon-container
+          .icon-first
+            svg-icon.icon(name='Responded'  width='25' height='25')
+            .icon-text Откликнулось
+          .icon-second
+            svg-icon.icon(name='Time'  width='25' height='25')
+            .icon-text Время создания
 </template>
 
 <script>
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
-  name: 'OrderCard2',
+  name: 'OrderCard1',
   components: {
     SvgIcon,
+    Swiper,
+    SwiperSlide,
   },
   props: {
     item: Object,
@@ -32,13 +36,15 @@ export default {
     route() {
       // eslint-disable-next-line no-underscore-dangle
       this.$store.dispatch('setMyOrder', this.item);
-      this.$router.push('moreInfoOrder');
+      this.$router.push('myOrder');
     },
   },
   computed: {
     token() {
       return this.$store.getters.getToken;
     },
+  },
+  mounted() {
   },
 };
 </script>
