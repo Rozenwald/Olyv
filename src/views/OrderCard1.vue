@@ -69,8 +69,8 @@ export default {
     padding-top 10px
     padding-left 10px
     border-radius 6px
-    margin-left 5px
-    margin-right 5px
+    margin-left 15px
+    margin-right 15px
     flex-wrap wrap
   }
     .text-cost-container{
