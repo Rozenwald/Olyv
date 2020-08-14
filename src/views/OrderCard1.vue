@@ -64,10 +64,11 @@ export default {
   }
   .order{
     text-align left
+    width 100%
     display flex
     background-color #FFFFFF
     padding-top 10px
-    padding-left 10px
+    padding-left 8px
     border-radius 6px
     margin-left 15px
     margin-right 15px
