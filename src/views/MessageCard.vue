@@ -1,20 +1,22 @@
-<template lang='pug'>
-  .swiper-container(:id="id")
-    .swiper-wrapper
-      v-card.card.swiper-slide
-          v-list-item(dense)
-            v-list-item-content
-              v-list-item-title {{message}}
+<template lang="pug">
+  swiper.swiper
+    v-card.card
+        v-list-item(dense)
+          v-list-item-content
+            v-list-item-title {{message}}
 </template>
 
 <script>
-import 'swiper/swiper-bundle.css';
-import { Swiper } from 'swiper/swiper.esm';
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 
 export default {
   name: 'msgCard',
   props: {
     message: String,
+  },
+  components: {
+    Swiper,
+    SwiperSlide,
   },
   methods: {
     route(routeName) {
@@ -48,11 +50,17 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  swiper{
+    width 100%
+    padding-top 1px
+    padding-bottom 1px
+    background-color #f7f7f7
+  }
   .card{
       margin-bottom 7px
       background-color #C9F0D9
       max-width 80%
-      to right
+      position right !important
   }
 
   .cost-wrp {

@@ -6,7 +6,7 @@
     v-row.container-message(align='center' justify='space-between')
       v-text-field.send-message.ma-0(solo
                                     flat
-                                    dense
+                                    hide-details
                                     label='Сообщение'
                                     v-model="newMessage"
                                     required

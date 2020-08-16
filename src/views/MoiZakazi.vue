@@ -1,4 +1,4 @@
-<template lang='pug'>
+<template lang="pug">
     v-container
       OrderCard1(v-for='item in items'
                 :key='item.id'
@@ -60,5 +60,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
+ .container{
+   padding-left 0.01px
+   padding-right 0.01px
+ }
 </style>

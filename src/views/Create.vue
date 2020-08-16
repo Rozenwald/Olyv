@@ -37,6 +37,7 @@
                               hide-details)
           v-file-input.add-img(solo
                                flat
+                               multiple
                                class='add-img-padding'
                                hide-details
                                dense
@@ -49,9 +50,9 @@
                           )
 
     v-dialog.error-message(v-model="isError")
-      v-row(align='center' justify='center')
+      v-row.error-message( align='center' justify='center')
         .dialog_title {{error}}
-      v-btn(@click="error = ''") ок
+        v-btn.circle-btn(@click="error = ''") ок
 </template>
 
 <script>
@@ -174,15 +175,28 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .v-dialog{
+    box-shadow none !important
+  }
+  .circle-btn{
+    background: linear-gradient(180deg, #FFA967 0%, #FD7363 100%) !important
+    border-radius 50%
+    width 80px
+    height 80px !important
+    margin 10px
+  }
   .dialog_title{
-    background-color #E5E5E5
+    display flex
+    background-color #e5e5e5
     width 100%
     font-size 20px
     text-align center
-    padding 10px
+    padding 20px
+    border-radius 15px
   }
   .error-message{
-    background-color #000
+    background-color transparent !important
+    box-shadow none !important
   }
   .add-cost{
     margin-right 2px
