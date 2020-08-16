@@ -55,7 +55,6 @@ export default {
     padding-top 1px
     padding-bottom 1px
     margin-top 10px
-    display flex
     border-radius 6px
     background-color #f7f7f7
   }
