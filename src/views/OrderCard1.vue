@@ -64,7 +64,6 @@ export default {
   }
   .order{
     text-align left
-    width 100%
     display flex
     background-color #FFFFFF
     padding-top 10px

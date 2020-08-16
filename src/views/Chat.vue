@@ -7,7 +7,6 @@
       v-text-field.send-message.ma-0(solo
                                     flat
                                     hide-details
-                                    dense
                                     label='Сообщение'
                                     v-model="newMessage"
                                     required
