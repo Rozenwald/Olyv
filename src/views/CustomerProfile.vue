@@ -47,7 +47,7 @@ export default {
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         case 'success':
-          this.$store.dispatch('setComment', response.data.comment);
+          this.$store.dispatch('setComment', response.data.data.comment);
           break;
         default:
           this.error = 'Ошибка входа';

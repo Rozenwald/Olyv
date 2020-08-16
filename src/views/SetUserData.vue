@@ -199,7 +199,10 @@ export default {
       return this.$store.getters.getToken;
     },
     src() {
-      return this.content;
+      if (this.content) {
+        return this.content;
+      }
+      return this.user.photo[this.user.photo.length - 1].urlMin;
     },
     user() {
       return this.$store.getters.getUser;

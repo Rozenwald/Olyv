@@ -52,6 +52,7 @@ export default {
           break;
         case 'notExist':
           this.$store.dispatch('setToken', null);
+          window.localStorage.removeItem('token');
           this.$store.dispatch('showLoginDialog', true);
           break;
         default:
@@ -62,9 +63,7 @@ export default {
   },
   created() {
     this.$store.dispatch('setToken', window.localStorage.getItem('token'));
-    if (window.localStorage.getItem('token') != null) {
-      this.getUserData();
-    }
+    this.getUserData();
   },
 };
 </script>

@@ -4,7 +4,8 @@
     v-row.status-wrp(align='center' justify='center')
       .await(v-text="'Ожидание верификации'" v-show="user.verification == 'await'")
       .fail(v-text="'Отказ в верификации'" v-show="comment")
-    v-btn.comment(v-text="'Посмотреть комментарий'" v-show="comment")
+    v-row.action(align='center' justify='center')
+      v-btn.comment(v-text="'Посмотреть комментарий'" text v-show="comment" @click='route')
 </template>
 
 <script>
@@ -14,6 +15,11 @@ export default {
   name: 'verification-status',
   components: {
     axios,
+  },
+  methods: {
+    route() {
+      this.$router.push('verification');
+    },
   },
   computed: {
     comment() {
@@ -46,5 +52,16 @@ export default {
 
   .status-wrp {
     margin 15px 0
+  }
+
+  .action {
+    margin 0 -12px
+  }
+
+  .comment {
+    width 100%
+    margin-top 15px
+    margin-bottom -12px
+    border-radius 0
   }
 </style>
