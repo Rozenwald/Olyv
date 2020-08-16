@@ -55,7 +55,7 @@ export default {
     getMyResponseOrder() {
       /* eslint-disable no-return-assign */
       axios
-        .post('http://test.cabinet.olyv.services:8888/api/v1/private/response', {
+        .post(`${this.$baseUrl}api/v1/private/response`, {
           token: this.token,
           method: 'receive',
           submethod: 'executor',
@@ -66,7 +66,6 @@ export default {
       /* eslint-enable no-return-assign */
     },
     checkMyResponseOrder(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           response.data.data.forEach((element) => {
@@ -88,7 +87,7 @@ export default {
     getOrder(id) {
       /* eslint-disable no-return-assign */
       axios
-        .post('http://test.cabinet.olyv.services:8888/api/v1/private/order', {
+        .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
           method: 'receive',
           submethod: 'executor',

@@ -1,0 +1,634 @@
+[33mcommit 1d8ade03abb1212b4f449f45636407f3b9e4321e[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 25652bc b4d38c0
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Sun Aug 16 20:33:27 2020 +0300
+
+    executor start
+
+[33mcommit 25652bcb1b90a84bea77a219750b4d8baf7ddf79[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Sun Aug 16 20:15:55 2020 +0300
+
+    executor start
+
+[33mcommit b4d38c0a07f9a25b911d951ddf11e7166ab7293b[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Mon Aug 17 01:22:03 2020 +1000
+
+    fix chat
+
+[33mcommit ca0ceb5217332d824680680cc079de25708dbbfe[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Mon Aug 17 01:16:39 2020 +1000
+
+    fix chat
+
+[33mcommit 4ff501f749549f008f33c3932b636e164f407b27[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Mon Aug 17 01:07:26 2020 +1000
+
+    fix chat
+
+[33mcommit 5738f139b37cc857a76d2049926d958fb013521c[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Fri Aug 14 22:49:17 2020 +1000
+
+    fix
+
+[33mcommit 98913cb7c259837495ab3f575a4b61d5adbc5145[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Fri Aug 14 22:39:56 2020 +1000
+
+    fix
+
+[33mcommit ab5727fdebc0e78dfd956f4f017cdc7f629b0d78[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Fri Aug 14 22:26:18 2020 +1000
+
+    fix
+
+[33mcommit 7338829db2db844bf60a94082455e0a961c01708[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Fri Aug 14 22:00:31 2020 +1000
+
+    early swipe
+
+[33mcommit bf8337d16c4046e9e17b9b226fb4e284c367324b[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Fri Aug 14 21:43:50 2020 +1000
+
+    early swipe
+
+[33mcommit 078a8dc04fb8b1bcd7eb66a1961a89f1203c21e2[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Fri Aug 14 20:57:38 2020 +1000
+
+    early swipe
+
+[33mcommit 68d12a8f02fbbdb6dda8b92b89f4e44aad039c57[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Fri Aug 14 20:53:35 2020 +1000
+
+    early swipe
+
+[33mcommit e6def4680decf6f07ec946fcebdaeb8d6f008933[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Fri Aug 14 20:50:28 2020 +1000
+
+    early swipe
+
+[33mcommit 1612fdc46b8fc7beec35f7246f785f281fbaf1d5[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Aug 13 02:47:02 2020 +1000
+
+    fix order
+
+[33mcommit a482ebcfd5e7ece1aa008c220c7a04d923e8e46a[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Aug 13 02:17:05 2020 +1000
+
+    fix order
+
+[33mcommit c8cdf486b455d7600c5aa474687baab347241b70[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Aug 13 01:40:42 2020 +1000
+
+    fix order
+
+[33mcommit f384fbe78b67d4e57c25da5702d0abd1d7eed936[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Aug 13 01:25:34 2020 +1000
+
+    fix order
+
+[33mcommit 085ea6173e200e6340f3cb1a34a495abd1047b58[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Aug 13 01:12:53 2020 +1000
+
+    fix order
+
+[33mcommit 19506c6537569a514838662d990f3bee132e339a[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Aug 13 01:07:40 2020 +1000
+
+    fix order
+
+[33mcommit 32ee26d8d29625371ee896a3eaed4e7cc1667e45[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Aug 13 00:48:38 2020 +1000
+
+    fix order
+
+[33mcommit 59e1883a65c6c975a718c4b4c7209860fbb2e0b8[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Aug 12 20:37:20 2020 +1000
+
+    50% ordercard
+
+[33mcommit 8558e959a9d250d3f26c35ead2db325f7cd8528e[m
+Merge: 3c204b4 ba318b6
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Aug 12 11:48:26 2020 +1000
+
+    for merge
+
+[33mcommit 3c204b4d4d2f19bb98a483480efaea2708fbe2c4[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Aug 12 11:42:09 2020 +1000
+
+    for merge
+
+[33mcommit ba318b632479a03b80dc96fef4cff38c1a9e190a[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Wed Aug 12 02:18:10 2020 +0300
+
+    fix
+
+[33mcommit 9e143565e670273a4b9eddb2975c77c5cdc10f37[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Tue Aug 11 22:08:30 2020 +0300
+
+    route permissions demo 1
+
+[33mcommit 01c627d8c0c6604ba14b52ea58e672465fbcc13f[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Mon Aug 10 22:06:35 2020 +0300
+
+    Love you 3000 ps Kolyan pidor
+
+[33mcommit dfcc7fd9c6bba66e5302f6383adeb63d1bafa92f[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Mon Aug 10 21:51:21 2020 +0300
+
+    profile avatar
+
+[33mcommit d010f7f86aea81a185ea88f3edba929bdd549beb[m
+Merge: 09a3d94 d90d3d8
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Mon Aug 10 21:48:58 2020 +0300
+
+    Merge branch 'master' of https://github.com/SavchukNikita/olyv-front into master
+
+[33mcommit d90d3d85c7e5f992a3df5de00b9d5b59063d940b[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Mon Aug 10 20:35:09 2020 +1000
+
+    fix
+
+[33mcommit 2f047d3e8a513af0cebfa753a0cb532d9edf9348[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Mon Aug 10 20:22:58 2020 +1000
+
+    fix
+
+[33mcommit 29d729c4ba279ea207a1b6a1da5890d21567088e[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Mon Aug 10 19:23:45 2020 +1000
+
+    fix
+
+[33mcommit 0bb21db968bf5195ea7820f6ce518a1335909d5e[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Mon Aug 10 18:37:16 2020 +1000
+
+    fix
+
+[33mcommit df5e7d037a7a8f3500252a377a1ec80a8c4c59ed[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Mon Aug 10 18:20:44 2020 +1000
+
+    fix
+
+[33mcommit 8b48fa3024ecdf84a8fd707ba39ed94e017a0dc0[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Mon Aug 10 18:05:23 2020 +1000
+
+    fix
+
+[33mcommit e0ecc4c123f382be17028abbfe3bf41f262edf2f[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Mon Aug 10 18:01:50 2020 +1000
+
+    fix
+
+[33mcommit ed0082d6b22d6a786912df7431bf897e02892ee1[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Mon Aug 10 17:57:04 2020 +1000
+
+    fix
+
+[33mcommit ebe95773edb12c851e4d0b82de98ed91f3f29369[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Mon Aug 10 16:12:04 2020 +1000
+
+    fix
+
+[33mcommit 2cdedc3a5d4392b735ce1813effd686310aacf1d[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Mon Aug 10 16:08:12 2020 +1000
+
+    create
+
+[33mcommit 09a3d94be41ecc6e356aed527c8339397d885c82[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Sat Aug 8 17:25:46 2020 +0300
+
+    profile
+
+[33mcommit 0a7c46b38c7f822c5c65d99406e160e8c72ec715[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Sat Aug 8 17:12:22 2020 +0300
+
+    profile
+
+[33mcommit 76ee1acb15a986931b7fa46be376c8bd1f515b01[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Sat Aug 8 17:07:16 2020 +0300
+
+    edit data
+
+[33mcommit f274f64e7c00241230514379f20d3e12738f8779[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Sat Aug 8 10:00:54 2020 +0300
+
+    profile
+
+[33mcommit a9506232ede60932b42962509458b4f403339182[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Sat Aug 8 01:05:49 2020 +0300
+
+    profile
+
+[33mcommit a0b0a0d1b52fee372c582922fe939e7f43caf645[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Aug 6 21:08:38 2020 +1000
+
+    fix
+
+[33mcommit 6a9c417f3cf74af3bc9ce2599c8a2774e7b96def[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Aug 6 21:02:42 2020 +1000
+
+    fix
+
+[33mcommit ae7c266e3b9f4c090b5ca5146c0abee3707645ea[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Aug 6 20:59:13 2020 +1000
+
+    fix path
+
+[33mcommit 76793bda6cae4c40e40b1fb1216aaa9e92c95caf[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Aug 6 13:41:55 2020 +1000
+
+    chat
+
+[33mcommit 67788313244cc00ac0ac6bcf6991df06c81403a7[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Aug 6 09:14:32 2020 +1000
+
+    fix path to chat
+
+[33mcommit e772684b6ba256af7042cb0893bfe32c2f7fffaa[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Wed Aug 5 14:01:52 2020 +0300
+
+    fix
+
+[33mcommit b5c09ca2319bf0be868767679dab7c16f78504c1[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Wed Aug 5 13:47:00 2020 +0300
+
+    fix
+
+[33mcommit ca95fc1f6380cfc7b79ad81e2bdb7545ba04f8fe[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Wed Aug 5 12:03:43 2020 +0300
+
+    wtf with CustomerMoreInfo
+
+[33mcommit 302369f8d02e872e843717c624601276af473716[m
+Merge: 59c43b4 1d4a247
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Wed Aug 5 11:48:55 2020 +0300
+
+    merge Lavr's chat and Nikita's profile
+
+[33mcommit 59c43b4706beb376765393fea4522ce50b536d50[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Wed Aug 5 11:44:04 2020 +0300
+
+    verification and profile v2
+
+[33mcommit 1d4a247f1c528ad1c666a7eb622c25aaeeab3848[m
+Merge: a0d6fe7 a996c70
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Tue Aug 4 20:47:02 2020 +1000
+
+    Merge branch 'master' of https://github.com/SavchukNikita/olyv-front
+
+[33mcommit a0d6fe7d529ad318bca34e6299561a9d8357bac2[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Tue Aug 4 20:46:29 2020 +1000
+
+    create path to moizakazi
+
+[33mcommit 7d1e0235e797c910db6c36a0eea0c6219ac949c4[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Tue Aug 4 20:19:17 2020 +1000
+
+    fix
+
+[33mcommit 6e0ea6291f84bc407c00a3f31e7d7889162bd30b[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Tue Aug 4 20:18:29 2020 +1000
+
+    path to back create
+
+[33mcommit 01f10a53c3afe71fc142e147c664335b9e883564[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Tue Aug 4 12:30:31 2020 +0300
+
+    profile and verification demo
+
+[33mcommit a996c70560c128b99dc37bb499f9669770f960aa[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Sun Aug 2 12:58:41 2020 +0300
+
+    fix
+
+[33mcommit 111302437e336812a1958f52b0063f44fd7fceba[m[33m ([m[1;32mNikita[m[33m)[m
+Author: SavchukNikita <nikita.savchuk.2000@gmail.com>
+Date:   Sun Aug 2 12:46:24 2020 +0300
+
+    fix padding
+
+[33mcommit 1bc8c3c370adf829464dce0482d14465027c1a6c[m
+Merge: da82b5b 18e6fa2
+Author: Nikita <nikita.savchuk.2000@gmail.com>
+Date:   Sun Aug 2 17:32:15 2020 +1000
+
+    verifivation v.1
+
+[33mcommit da82b5b6848b2e947e3851db917743a19037efea[m
+Author: Nikita <nikita.savchuk.2000@gmail.com>
+Date:   Sun Aug 2 17:28:48 2020 +1000
+
+    verification v.1
+
+[33mcommit 18e6fa27fcd00011c6c3b691f8c1d3d37b814205[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Jul 30 10:45:11 2020 +1000
+
+    fix
+
+[33mcommit cdfe25f960fd4012ef6d845ea5b12281a118755f[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Jul 30 10:21:17 2020 +1000
+
+    fix
+
+[33mcommit d46a311495b52277ed6e44ac332f7c0bf9520312[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Jul 30 10:14:43 2020 +1000
+
+    path to moreOrderInfo
+
+[33mcommit 4aaed64574334f8d20822545ac546ea6eb75f6a4[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Jul 30 08:34:38 2020 +1000
+
+    fix card
+
+[33mcommit c65bf7faeb48a27769aa10442aaf95c4fb485e0b[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Jul 30 05:05:05 2020 +1000
+
+    fix
+
+[33mcommit 0a140e75cbaf6a607b1c2075717a2d44e39cab44[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Jul 30 04:55:11 2020 +1000
+
+    Список заказов
+
+[33mcommit 9b14f7529536ace4a4265dcae64aa188f0edb02a[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Jul 29 17:38:39 2020 +1000
+
+    path to verification
+
+[33mcommit 6d4e7a92ed2efbb0c57a1936970d8444805f647d[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Jul 29 16:41:40 2020 +1000
+
+    fix auth + reg
+
+[33mcommit 7c3d33f00114088050bff771c54d7ac60e8770d9[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Jul 29 10:54:22 2020 +1000
+
+    fix auth + reg
+
+[33mcommit 28cd09d50ac92e9a0582158ff2e91cc6a686eff3[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Jul 29 10:30:54 2020 +1000
+
+    fix auth + reg
+
+[33mcommit 7cfd1bbefdac34ab198bd92c07df2fbc050f32c0[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Jul 29 05:17:51 2020 +1000
+
+    fix auth + reg
+
+[33mcommit 9151dd58b9aee9679769d49af8265ef0ca93aa6e[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Jul 29 05:08:04 2020 +1000
+
+    fix auth
+
+[33mcommit 90f05a550bb322b27372a50ae4084271f723772f[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Jul 29 04:56:16 2020 +1000
+
+    fix reg + auth
+
+[33mcommit 9b71b7f311f4f9457c9f22938d443271a436f4f1[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Jul 29 04:48:52 2020 +1000
+
+    fix reg + auth
+
+[33mcommit 164287f1906e6ae301bb6ef5129b06fccc471456[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Jul 29 04:42:20 2020 +1000
+
+    fix reg + auth
+
+[33mcommit 670620980775ff8c00c8dbed4999e444dfcd6e14[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Jul 29 04:36:30 2020 +1000
+
+    fix reg
+
+[33mcommit 519d585a6df6c56e9d99a6fe165207edb9e0a016[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Jul 29 04:32:50 2020 +1000
+
+    fix reg
+
+[33mcommit 233ac3594a9f7c8c7fdf2bf52a82c76e1238d956[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Wed Jul 29 04:12:57 2020 +1000
+
+    fix reg
+
+[33mcommit 7aa33a8bdf8ad1bc4fd9eceba6b96ce9ee5653ea[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Mon Jul 27 05:02:19 2020 +1000
+
+    fix
+
+[33mcommit 1f786a1db08eef3a1c75310e3f8391b03d0eee14[m
+Author: Nikita <nikita.savchuk.2000@gmail.com>
+Date:   Sun Jul 26 15:44:47 2020 +1000
+
+    update and del order
+
+[33mcommit 6cd874fdb5440fa59dcfc3a4824755937788f263[m
+Author: Nikita <nikita.savchuk.2000@gmail.com>
+Date:   Sun Jul 26 02:30:03 2020 +1000
+
+    swipe
+
+[33mcommit bf4d26bdea7bdd697809a54bf21313ece07bcdf1[m
+Author: Nikita <nikita.savchuk.2000@gmail.com>
+Date:   Sun Jul 26 02:14:47 2020 +1000
+
+    fix
+
+[33mcommit 4f5208103099c27bd39bc68be2cad51ed0ba33b5[m
+Merge: 7dc7e5c 89ab77c
+Author: Nikita <nikita.savchuk.2000@gmail.com>
+Date:   Sun Jul 26 02:13:55 2020 +1000
+
+    Merge branch 'master' of https://github.com/SavchukNikita/olyv-front
+
+[33mcommit 7dc7e5c63b350c531690390ec64dc05953b1a47a[m
+Author: Nikita <nikita.savchuk.2000@gmail.com>
+Date:   Sun Jul 26 02:07:36 2020 +1000
+
+    fix
+
+[33mcommit 89ab77c11b8e8b50bfbbf18385a79592540a3ad4[m
+Merge: 25a7a3d 084c7f2
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Sun Jul 26 01:45:30 2020 +1000
+
+    Merge branch 'master' of https://github.com/SavchukNikita/olyv-front
+
+[33mcommit 25a7a3dd13cd3f550f78341d4b5131d5a7b0c7d1[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Sun Jul 26 01:45:20 2020 +1000
+
+    fix
+
+[33mcommit 084c7f26f44795d0db6eb56b7494fc8adbd3d3d9[m
+Author: Nikita <nikita.savchuk.2000@gmail.com>
+Date:   Sun Jul 26 01:21:54 2020 +1000
+
+    fix
+
+[33mcommit a06c55d910acbef02d2d02f15e5749f07b233e04[m
+Merge: 26ecd46 b767b55
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Sun Jul 26 00:37:39 2020 +1000
+
+    Merge branch 'master' of https://github.com/SavchukNikita/olyv-front
+
+[33mcommit 26ecd46313022dba3be09003a35ba4a42ac9ddc6[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Sun Jul 26 00:37:30 2020 +1000
+
+    hook fix
+
+[33mcommit b767b55498f43cfb2dc9603a969c75a42afe8f35[m
+Author: Nikita <nikita.savchuk.2000@gmail.com>
+Date:   Sun Jul 26 00:13:09 2020 +1000
+
+    WTF
+
+[33mcommit d95aebc1d62e241875a00c23ad23054e275713bb[m
+Merge: 453c367 854ba9f
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Sun Jul 26 00:02:25 2020 +1000
+
+    Merge branch 'master' of https://github.com/SavchukNikita/olyv-front
+
+[33mcommit 453c367235f1eae4cc4697acd2205f6e6dc214fe[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Sun Jul 26 00:01:23 2020 +1000
+
+    fix
+
+[33mcommit 854ba9f7becdcf2c06237eedb3311d73161e10c5[m
+Author: Nikita <nikita.savchuk.2000@gmail.com>
+Date:   Sat Jul 25 23:52:59 2020 +1000
+
+    fix
+
+[33mcommit 58b56690f6e209940698f0785afd16298c063700[m
+Author: Nikita <nikita.savchuk.2000@gmail.com>
+Date:   Sat Jul 25 23:43:38 2020 +1000
+
+    fix
+
+[33mcommit f34c4ec37a84866e02d74e93a47f71e924e0a26b[m
+Author: Nikita <nikita.savchuk.2000@gmail.com>
+Date:   Sat Jul 25 21:32:11 2020 +1000
+
+    Executor More Info fix
+
+[33mcommit 9dc3311a0c3c16404e585c3b65f95031516c0bb1[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Sat Jul 25 21:26:37 2020 +1000
+
+    regServ
+
+[33mcommit 473f863a9d44a264d755a089f865eda5d0064afa[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Sat Jul 25 21:18:44 2020 +1000
+
+    ...
+
+[33mcommit 950c08430bcfeb05f9f7b515e98ad1eeae5f4139[m
+Merge: 0d22d19 47cea17
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Sat Jul 25 17:05:56 2020 +1000
+
+    Merge branch 'master' of https://github.com/SavchukNikita/olyv-front
+
+[33mcommit 0d22d1917f9ea510478665e4751a2e2ab0fbbcd2[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Sat Jul 25 17:03:35 2020 +1000
+
+    reg&auth + icons
+
+[33mcommit 47cea178d9b8efeb226f0f18d39b1420316352c1[m
+Author: Nikita <nikita.savchuk.2000@gmail.com>
+Date:   Thu Jul 23 17:38:03 2020 +1000
+
+    create and show my order
+
+[33mcommit 957ca6c08f6cb0cd5324fccd758e779eeb98fd0f[m
+Author: rozenwald <rozenwald@inbox.ru>
+Date:   Thu Jul 23 07:48:27 2020 +1000
+
+    bottom shit, no border card
+
+[33mcommit 3447ec5fadd8e913c9a5dc886ddf393f9e5541fe[m
+Author: Nikita <nikita.savchuk.2000@gmail.com>
+Date:   Wed Jul 22 02:09:59 2020 +1000
+
+    fix
