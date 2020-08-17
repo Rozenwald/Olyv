@@ -22,12 +22,12 @@
             v-btn.edit-btn(rounded v-if="n == 1" @click="editOrder") Редактировать
             v-btn.delete-btn(rounded v-else @click="delOrder") Удалить
         .responded-title Отозвались
-        MoreInfoUserCard(
-              v-for='item in items'
-              :key='item.id'
-              :id='item.title'
-              :title='item.title'
-              :cost='item.cost')
+        .responded-list(v-for="item in responseList" :key="item.id")
+          MoreInfoUserCard(
+            :key='item._id'
+            :idUser='item.idUserResponse'
+            :cost='item.comment'
+          )
 </template>
 
 <script>
@@ -49,13 +49,7 @@ export default {
       currentPrice: 5000, // Number
       respondedCount: 12,
       distantion: 3,
-      items: [
-        { title: 'Уведомления', cost: '10 909р', id: 1 },
-        { title: 'Черныйсписок', cost: '10 909р', id: 2 },
-        { title: 'Редактирваниепрофиля', cost: '10 909р', id: 3 },
-        { title: 'Связьсразработчиком', cost: '10 909р', id: 4 },
-        { title: 'Информация', cost: '10 909р', id: 5 },
-      ],
+      responseList: null,
     };
   },
   methods: {
@@ -103,11 +97,25 @@ export default {
           method: 'receive',
           submethod: 'customer',
           // eslint-disable-next-line no-underscore-dangle
-          id: this.order._id,
+          idOrder: this.order._id,
         })
-        .then((response) => (console.log(response)))
+        .then((response) => (this.checkOrderResponse(response)))
         .catch(() => (this.error = 'Ошибка'));
       /* eslint-enable no-return-assign */
+    },
+
+    checkOrderResponse(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.responseList = response.data.data;
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
     },
   },
   computed: {
@@ -120,8 +128,6 @@ export default {
   },
   created() {
     this.getOrderResponse();
-    // eslint-disable-next-line no-underscore-dangle
-    console.log(this.order._id);
   },
 };
 </script>

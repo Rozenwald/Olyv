@@ -125,6 +125,7 @@ export default {
           break;
       }
     },
+
     acceptOrder() {
       /* eslint-disable no-underscore-dangle */
       /* eslint-disable no-return-assign */

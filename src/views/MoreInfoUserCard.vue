@@ -6,10 +6,10 @@
           v-list-item(dense)
             v-list-item-avatar(color="grey")
             v-list-item-content
-              v-list-item-title 3 км от Вас
+              v-list-item-title {{distation}}
             v-list-item-action
               v-row.cost-wrp(align='center' justify='center')
-                .cost 42
+                .cost {{cost}}
 </template>
 
 <script>
@@ -21,11 +21,21 @@ export default {
   props: {
     title: String,
     cost: String,
-    id: String,
+    distation: String,
+    idUser: String,
+  },
+  data() {
+    return {
+      id: String,
+    };
   },
   methods: {
     route(routeName) {
       this.$router.push(routeName);
+    },
+
+    getRandomId() {
+      return `id${Math.floor(Math.random * Math.floor(100))}`;
     },
   },
   mounted() {
@@ -44,6 +54,10 @@ export default {
         this.destroy();
       }
     });
+  },
+
+  created() {
+    this.id = this.getRandomId();
   },
 };
 </script>
