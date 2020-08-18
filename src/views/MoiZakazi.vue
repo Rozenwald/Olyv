@@ -1,8 +1,11 @@
 <template lang="pug">
     v-container
-      OrderCard1(v-for='item in items'
-                :key='item.id'
-                :item='item')
+      .order-list
+        OrderCard1(
+          v-for='item in items'
+          :key='item.id'
+          :item='item'
+        )
 </template>
 
 <script>
@@ -63,5 +66,8 @@ export default {
  .container{
    padding-left 0.01px
    padding-right 0.01px
+ }
+ .order-list:first-child {
+   margin-top 0
  }
 </style>
