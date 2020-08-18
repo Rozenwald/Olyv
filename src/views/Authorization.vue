@@ -126,7 +126,7 @@ export default {
         .post(`${this.$baseUrl}api/v1/private/user`, {
           method: 'receive',
           submethod: 'my',
-          token: this.token(),
+          token: this.token,
         })
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
@@ -156,9 +156,9 @@ export default {
       set() {
         this.error = '';
       },
-      token() {
-        return this.$store.getters.getToken;
-      },
+    },
+    token() {
+      return this.$store.getters.getToken;
     },
   },
   mounted() {

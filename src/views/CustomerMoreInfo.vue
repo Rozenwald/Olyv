@@ -22,7 +22,7 @@
             v-btn.edit-btn(rounded v-if="n == 1" @click="editOrder") Редактировать
             v-btn.delete-btn(rounded v-else @click="delOrder") Удалить
         .responded-title Отозвались
-        .responded-list(v-for="item in responseList" :key="item.id")
+        .responded-list(v-for="item in responseList" :key="item._id")
           MoreInfoUserCard(
             :key='item._id'
             :idUser='item.idUserResponse'

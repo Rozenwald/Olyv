@@ -2,7 +2,9 @@
   .review
     .title-review Отзывы
     .comments
-      comment(v-for="item in 3" :key="item.id")
+      comment(v-for="item in items" :key="item.id" v-show="items")
+      v-row.no-comments-wrp(align='center' justify='center')
+        .no-comments Никто не оставил отзывов
 </template>
 
 <script>
@@ -12,6 +14,11 @@ export default {
   name: 'review',
   components: {
     Comment,
+  },
+  data() {
+    return {
+      items: null,
+    };
   },
 };
 </script>
@@ -31,5 +38,9 @@ export default {
 
   .comment:first-child {
     margin-top 0
+  }
+
+  .no-comments-wrp {
+    margin 15px
   }
 </style>
