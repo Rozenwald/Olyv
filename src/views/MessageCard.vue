@@ -29,22 +29,6 @@ export default {
     },
   },
   mounted() {
-    const self = this;
-    const el = `#${this.id}`;
-
-    // Initialize Swiper
-    const swiper = new Swiper(el, {
-      initialSlide: 1,
-      resistanceRatio: 0,
-      speed: 150,
-    });
-
-    swiper.on('transitionEnd', function () {
-      if (this.activeIndex === 0) {
-        self.$emit('transitionEnd');
-        this.destroy();
-      }
-    });
   },
 };
 </script>
