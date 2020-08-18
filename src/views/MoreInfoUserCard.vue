@@ -1,4 +1,4 @@
-<template lang='pug'>
+<template lang="pug">
   .swiper-container(:id="id")
     .swiper-wrapper
       v-list(class="swiper-slide")

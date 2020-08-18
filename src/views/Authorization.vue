@@ -84,7 +84,7 @@ export default {
           password: this.password,
         })
         .then((response) => (this.checkSignIn(response)))
-        .catch(() => (this.error = 'Ошибка Авторизации'));
+        .catch(() => (this.error = 'Ошибка авторизации'));
       /* eslint-enable no-return-assign */
     },
 

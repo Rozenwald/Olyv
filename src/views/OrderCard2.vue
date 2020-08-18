@@ -1,4 +1,4 @@
-<template lang='pug'>
+<template lang="pug">
             v-card#Order(max-width
                         @click="this.route")
                 #TextOrderContainer
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'OrderCard1',
+  name: 'OrderCard2',
   props: {
     item: Object,
   },
@@ -16,7 +16,7 @@ export default {
     route() {
       // eslint-disable-next-line no-underscore-dangle
       this.$store.dispatch('setMyOrderId', this.item._id);
-      this.$router.push('myOrder');
+      this.$router.push('moreInfoOrder');
     },
   },
   computed: {

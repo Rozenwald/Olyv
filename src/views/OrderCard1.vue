@@ -51,10 +51,12 @@ export default {
 
 <style lang="stylus" scoped>
   .swiper{
+    width inherit
     height 122px
     padding-top 1px
     padding-bottom 1px
     margin-top 10px
+    display flex
     border-radius 6px
     background-color #f7f7f7
   }
@@ -62,6 +64,7 @@ export default {
 
   }
   .order{
+    width 100%
     text-align left
     display flex
     background-color #FFFFFF
