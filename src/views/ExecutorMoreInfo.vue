@@ -2,13 +2,13 @@
   v-container
     .customer-more-info
       v-row.customer-more-info-header(align='center' justify='space-between')
-        .name asgasdfgasg
+        .name {{customerUser.name}} {{customerUser.lastName}}
         v-rating(
           :length="5"
           :half-increments="true"
           :dense="true"
-          :color="starColor"
-          :background-color="starColor"
+          color="#FFCA10"
+          background-color="#FFCA10"
           size="14"
           )
       .parallax(
@@ -18,10 +18,10 @@
       .information-wrp
         v-row.more-info-wrp-first(align='center' justify='space-between')
           v-row.save-deal(align='center')
-            svg-icon(name="SaveDeal")
-            span Защищенная сделка
+            svg-icon(name="SaveDeal"  v-show="order.protect == 'yes'")
+            span( v-show="order.protect == 'yes'") Защищенная сделка
           v-row.cost-wrp(align='center' justify='center')
-            .cost 5000
+            .cost {{order.cost}}
         v-row.more-info-wrp-second(align='center' justify='start')
           v-row.responded(align='center')
             svg-icon(name="Responded")
@@ -33,7 +33,7 @@
             .distantion-text
               span Расстояние <br/>
               span.black-text {{distantion}} км
-        .description {{description}}
+        .description {{order.description}}
         .media-files
           v-row
             v-col.d-flex.child-flex.custom-card-wrp(v-for='n in 5', :key='n', cols='4')
@@ -54,7 +54,7 @@
           v-btn.plus-btn(@click='setPrice(changeValue)') +
         v-row.btns(no-gutters  align='center')
           v-col( v-for="n in 2" :key="n" align='center')
-            v-btn.accept-btn(rounded v-if="n == 1") Согласиться
+            v-btn.accept-btn(rounded v-if="n == 1" @click="acceptOrder") Согласиться
             v-btn.chat-btn(rounded v-else @click="route('chat')") Чат
 </template>
 
@@ -72,25 +72,25 @@ export default {
   },
   data() {
     return {
-      order: [],
-      starColor: '#FFCA10',
+      customerUser: {},
       changeValue: 1000,
-      currentPrice: 5000, // Number
+      currentPrice: null, // Number
       respondedCount: 12,
       distantion: 3,
       inputWidth: null,
-      description: 'Lorem Ipsum - це текст-"риба", що використовується в друкарстві та дизайні. Lorem Ipsum є, фактично, стандартною "рибою" аж з XVI сторіччя, коли невідомий друкар взяв шрифтову гранку та склав на ній підбірку зразків шрифтів. "Риба" не тільки успішно пережила пять століть, але й прижилася в електронному верстуванні, залишаючись по суті незмінною. Вона популяризувалась в 60-их роках минулого сторіччя завдяки виданню зразків шрифтів Letraset, які містили уривки з Lorem Ipsum, і вдруге - нещодавно завдяки програмам компютерного верстування на кшталт Aldus Pagemaker, які використовували різні версії Lorem Ipsum',
     };
   },
   methods: {
     route(routeName) {
       this.$router.push(routeName);
     },
+
     setPrice(val) {
       if (Number.parseInt(this.currentPrice, 10) + val > 0) {
         this.currentPrice = Number.parseInt(this.currentPrice, 10) + val;
       }
     },
+
     setInputWidth() {
       this.inputWidth = (this.currentPrice.toString().length + 1);
       if (this.currentPrice.toString().length > 2) {
@@ -98,6 +98,71 @@ export default {
       } else {
         this.inputWidth *= 16;
       }
+    },
+
+    getCustomerUserData() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/user`, {
+          method: 'receive',
+          token: this.token,
+          id: this.order.idUser,
+        })
+        .then((response) => (this.checkCustomerUserData(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'Ошибка загрузки данных'));
+    },
+
+    checkCustomerUserData(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.customerUser = response.data.data;
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка загрузки данных';
+          break;
+      }
+    },
+
+    acceptOrder() {
+      /* eslint-disable no-underscore-dangle */
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/private/response`, {
+          token: this.token,
+          method: 'add',
+          submethod: 'executor',
+          idOrder: this.order._id,
+          comment: this.currentPrice,
+        })
+        .then((response) => (this.checkOrderResponse(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-underscore-dangle */
+      /* eslint-enable no-return-assign */
+    },
+    checkOrderResponse(response) {
+      // eslint-disable-next-line no-underscore-dangle
+      switch (response.data.status) {
+        case 'success':
+          this.$router.back();
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+  },
+  computed: {
+    order() {
+      return this.$store.getters.getMyOrder;
+    },
+    token() {
+      return this.$store.getters.getToken;
     },
   },
   watch: {
@@ -110,6 +175,12 @@ export default {
   },
   mounted() {
     this.setInputWidth();
+  },
+  created() {
+    this.getCustomerUserData();
+    if (this.order) {
+      this.currentPrice = this.order.cost;
+    }
   },
 };
 </script>

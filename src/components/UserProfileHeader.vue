@@ -65,12 +65,13 @@ export default {
       return this.$store.getters.hasData;
     },
     photo() {
-      if (this.hasData) {
-        if (this.user.photo.length) {
-          return this.user.photo[this.user.photo.length - 1].urlMin;
-        }
+      if (!this.hasData) {
+        return null;
       }
-      return '';
+      if (!this.user.photo.length) {
+        return null;
+      }
+      return this.user.photo[this.user.photo.length - 1].urlMin;
     },
     name() {
       if (this.user.name == null) {

@@ -7,7 +7,7 @@
           v-show="user.verification == 'notCompleted' && !src && !comment"
         )
         .comment-description(
-          v-text="description"
+          v-text="comment"
           v-show="comment"
         )
         .await-description(v-text="descriptionAwait" v-show="user.verification == 'await'")
@@ -110,6 +110,9 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.getUserData();
+          if (this.comment) {
+            this.$store.dispatch('setComment', null);
+          }
           break;
         case 'invalidPhoto':
           this.error = 'Неверный формат фото';

@@ -6,10 +6,10 @@
           v-list-item(dense)
             v-list-item-avatar(color="grey")
             v-list-item-content
-              v-list-item-title 3 км от Вас
+              v-list-item-title {{distation}}
             v-list-item-action
               v-row.cost-wrp(align='center' justify='center')
-                .cost 42
+                .cost {{cost}}
 </template>
 
 <script>
@@ -21,24 +21,32 @@ export default {
   props: {
     title: String,
     cost: String,
-    id: String,
+    distation: String,
+    idUser: String,
+  },
+  data() {
+    return {
+      id: String,
+    };
   },
   methods: {
     route(routeName) {
       this.$router.push(routeName);
     },
+
+    getRandomId() {
+      return `id${Math.floor(Math.random * Math.floor(100))}`;
+    },
   },
   mounted() {
     const self = this;
     const el = `#${this.id}`;
-
     // Initialize Swiper
     const swiper = new Swiper(el, {
       initialSlide: 1,
       resistanceRatio: 0,
       speed: 150,
     });
-
     // eslint-disable-next-line func-names
     swiper.on('transitionEnd', function () {
       if (this.activeIndex === 0) {
@@ -47,6 +55,10 @@ export default {
       }
     });
   },
+
+  created() {
+    this.id = this.getRandomId();
+  },
 };
 </script>
 
@@ -54,7 +66,6 @@ export default {
   .card{
       margin-bottom 7px
   }
-
   .cost-wrp {
     background #FEF5EE
     border-radius 10px 0 0 10px
@@ -63,7 +74,6 @@ export default {
     max-width 100px
     margin-right -16px
   }
-
   .cost {
     font-family Golos
     font-style normal

@@ -55,11 +55,6 @@ const routes = [
     component: Setting,
   },
   {
-    name: 'customerMoreInfo',
-    path: '/customerMoreInfo',
-    component: CustomerMoreInfo,
-  },
-  {
     name: 'create',
     path: '/create',
     component: Create,
@@ -70,13 +65,13 @@ const routes = [
     component: Chat,
   },
   {
-    name: 'moreInfoOrder',
-    path: '/moreInfoOrder',
+    name: 'customerMoreInfo',
+    path: '/customerMoreInfo',
     component: CustomerMoreInfo,
   },
   {
-    name: 'myOrder',
-    path: '/myOrder',
+    name: 'executorMoreInfo',
+    path: '/executorMoreInfo',
     component: ExecutorMoreInfo,
   },
   {

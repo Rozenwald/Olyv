@@ -36,7 +36,7 @@ export default {
     route() {
       // eslint-disable-next-line no-underscore-dangle
       this.$store.dispatch('setMyOrder', this.item);
-      this.$router.push('myOrder');
+      this.$router.push('customerMoreInfo');
     },
   },
   computed: {

@@ -17,8 +17,7 @@
 
             v-btn#RegButton(v-on:click="checkForm") Войти
             v-btn#SmallAuthButton(
-              @click="route('registration')"
-              v-model="regButton")
+              @click="route('registration')")
               |Пройти регистрацию
 
             span#SpanRulesNM(v-show="!isFocus") Войти с помощью:
@@ -127,7 +126,7 @@ export default {
         .post(`${this.$baseUrl}api/v1/private/user`, {
           method: 'receive',
           submethod: 'my',
-          token: window.localStorage.getItem('token'),
+          token: this.token(),
         })
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
@@ -156,6 +155,9 @@ export default {
       },
       set() {
         this.error = '';
+      },
+      token() {
+        return this.$store.getters.getToken;
       },
     },
   },
