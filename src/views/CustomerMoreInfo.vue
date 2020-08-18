@@ -32,7 +32,6 @@
 
 <script>
 import axios from 'axios';
-import { SwipeList } from 'vue-swipe-actions';
 import SvgIcon from '../components/SvgIcon.vue';
 import MoreInfoUserCard from './MoreInfoUserCard.vue';
 import store from '../store';
@@ -44,7 +43,6 @@ export default {
     axios,
     store,
     MoreInfoUserCard,
-    SwipeList,
   },
   data() {
     return {

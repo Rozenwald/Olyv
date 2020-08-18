@@ -1,40 +1,15 @@
 <template lang="pug">
-  swipe-list(
-    ref="list"
-    class="card"
-    :disabled="!enabled"
-    :items="mockSwipeList"
-    item-key="id"
-    @swipeout:click="itemClick")
-      <template v-slot="{ item, index, revealLeft, revealRight, close }">
-        <div class="card-content">
-          <h2>{{ item.title }}</h2>
-          <p>{{ item.description }}</p>
-          <span>{{ index }}</span>
-        </div>
-      </template>
-      <template v-slot:left="{ item, close }">
-        <div class="swipeout-action red" title="remove" @click="remove(item)">
-          <i class="fa fa-trash"></i>
-        </div>
-        <div class="swipeout-action purple" @click="close">
-          <i class="fa fa-close"></i>
-        </div>
-      </template>
-      <template v-slot:right="{ item }">
-        <div class="swipeout-action blue">
-          <i class="fa fa-heart"></i>
-        </div>
-        <div class="swipeout-action green">
-          <i class="fa fa-heart"></i>
-        </div>
-      </template>
-      <template v-slot:empty>
-        <div>
-          list is empty ( filtered or just empty )
-        </div>
-      </template>
-  </swipe-list>
+  .swiper-container(:id="id")
+    .swiper-wrapper
+      v-list(class="swiper-slide")
+      v-card.card.swiper-slide(@click="route('chat')")
+          v-list-item(dense)
+            v-list-item-avatar(color="grey")
+            v-list-item-content
+              v-list-item-title {{distation}}
+            v-list-item-action
+              v-row.cost-wrp(align='center' justify='center')
+                .cost {{cost}}
 </template>
 
 <script>
