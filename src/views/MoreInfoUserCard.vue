@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import { SwipeList, SwipeOut } from 'vue-swipe-actions';
 
 export default {
   name: 'OrderCard1',
@@ -24,12 +23,10 @@ export default {
     idUser: String,
   },
   components: {
-    SwipeOut,
-    SwipeList,
   },
   data() {
     return {
-        id: String,
+      id: String,
     };
   },
 
