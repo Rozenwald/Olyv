@@ -63,7 +63,10 @@ export default {
   },
   created() {
     this.$store.dispatch('setToken', window.localStorage.getItem('token'));
-    this.getUserData();
+
+    if (window.localStorage.getItem('token')) {
+      this.getUserData();
+    }
   },
 };
 </script>
