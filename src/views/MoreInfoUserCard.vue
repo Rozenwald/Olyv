@@ -27,7 +27,7 @@
           svg-icon.icon(name='Facebook')
         </div>
         <div class="swipeout-action green">
-          svg-icon.icon(name='VK')
+          svg-icon.icon(name='Instagram')
         </div>
       </template>
       <template v-slot:empty>
