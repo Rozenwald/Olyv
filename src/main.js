@@ -19,6 +19,5 @@ new Vue({
   vuetify,
   VueAwesomeSwiper,
   VueScrollmagic,
-  IosSwiper,
   render: (h) => h(App),
 }).$mount('#app');
