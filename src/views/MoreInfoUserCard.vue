@@ -19,7 +19,7 @@
           svg-icon.icon(name='VK')
         </div>
         <div class="swipeout-action purple" @click="close">
-          svg-icon.icon(name='VK')
+          svg-icon.icon(name='Google')
         </div>
       </template>
       <template v-slot:right="{ item }">
