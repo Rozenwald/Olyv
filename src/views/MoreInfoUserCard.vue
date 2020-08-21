@@ -13,7 +13,7 @@
           v-row.avatar-name-container(align='center')
             .avatar
               v-avatar(size='60' color='#fff' border-color='#000')
-                svg-icon(name='VK' width='45' height='45')
+                svg-icon(name='User' width='45' height='45')
             .name
               span Имя
           v-row.cost(align='center')
@@ -131,7 +131,7 @@ export default {
     margin-left 0px
   }
     .chat{
-        background-color: #f5f5f5 !important;
+        background-color: #fff !important;
         border: 1px solid #56d68b !important}
     .delete{
         background-color: #F44336 !important;
