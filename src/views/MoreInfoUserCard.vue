@@ -10,9 +10,14 @@
                     )
       template(v-slot="{ item, index, revealLeft, revealRight, close }")
         .card-content
-          v-avatar()
-          .name()
-          .cost()
+          v-row.avatar-name-container(align='center')
+            .avatar
+              v-avatar(size='60' color='#fff' border-color='#000')
+                svg-icon(name='VK' width='45' height='45')
+            .name
+              span Имя
+          v-row.cost(align='center')
+            span 1000Р
 
       template(v-slot:left="{ item, close }")
         .swipeout-action.delete.red(@click="remove(item)")
@@ -35,7 +40,7 @@ import { SwipeList, SwipeOut } from 'vue-swipe-actions';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
-  name: 'OrderCard1',
+  name: 'userCard',
   props: {
     title: String,
     cost: String,
@@ -98,19 +103,45 @@ export default {
 </script>
 
 <style lang="stylus">
-.chat{
-    background-color: #f5f5f5 !important;
-    border-color: #56d68b !important;
-    border: 1px solid #d3d3d3}
-.delete{
-    background-color: #F44336 !important;
-    border-color: #F44336 !important;
+
+.card-content{
+  display flex !important
+  height 100% !important
+  width 100% !important
+  padding 5px !important
 }
-.agree{
-    background-color: #56d68b !important;
-    border-color: #56d68b !important;}
+  .avatar-name-container{
+    width 75%
+    display flex
+    flex-wrap nowrap
+    margin-right 0px
+    margin-left 0px
+  }
+    .avatar{
+      flex-wrap nowrap
+    }
+    .name{
+      flex-wrap nowrap
+    }
+  .cost{
+    display flex
+    flex-wrap nowrap
+    justify-content center
+    margin-right 0px
+    margin-left 0px
+  }
+    .chat{
+        background-color: #f5f5f5 !important;
+        border: 1px solid #56d68b !important}
+    .delete{
+        background-color: #F44336 !important;
+        border-color: #F44336 !important;
+    }
+    .agree{
+        background-color: #56d68b !important;
+        border-color: #56d68b !important;}
 .usercard{
-  height 65px
+  height 70px
 }
 .icon{
   display: inline-block;
@@ -181,11 +212,8 @@ export default {
 .card {
   width: 100%;
   background-color: white;
-  border-radius: 3px;
+  border-radius: 5px;
   box-shadow: none;
   border: 1px solid lightgray;
-}
-.card-content {
-  padding: 1rem;
 }
 </style>
