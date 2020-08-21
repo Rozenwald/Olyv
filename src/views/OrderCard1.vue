@@ -68,7 +68,6 @@ export default {
   }
 
   .order{
-    width 100%
     text-align left
     display flex
     background-color #FFFFFF
@@ -93,7 +92,7 @@ export default {
         overflow hidden
         text-overflow ellipsis
         text-align left
-        word-break normal
+        word-break break-all
         white-space: normal
       }
         .text{
@@ -102,7 +101,7 @@ export default {
           overflow hidden
           text-overflow ellipsis
           text-align left
-          word-break normal
+          word-break break-all
           white-space: normal
           font-size: 15px
           padding-bottom 5px
@@ -200,5 +199,4 @@ export default {
   .Order:first-child{
     margin-top 0
   }
-
 </style>

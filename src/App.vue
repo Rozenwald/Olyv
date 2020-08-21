@@ -6,11 +6,13 @@
       bottom-navigation
       login-dialog
       repeat-login-dialog
+      bottom-sheet
 </template>
 
 <script>
 import axios from 'axios';
 import Appbar from './components/Appbar.vue';
+import BottomSheet from './components/BottomShit.vue';
 import BottomNavigation from './components/BottomNavigation.vue';
 import store from './store/index';
 import LoginDialog from './components/LoginDialog.vue';
@@ -22,6 +24,7 @@ export default {
   axios,
   components: {
     Appbar,
+    BottomSheet,
     BottomNavigation,
     LoginDialog,
     RepeatLoginDialog,

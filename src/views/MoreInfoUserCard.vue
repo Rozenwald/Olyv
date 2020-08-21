@@ -1,41 +1,38 @@
 <template lang="pug">
-  swipe-list(
-    ref="list"
-    class="card"
-    :disabled="!enabled"
-    :items="mockSwipeList"
-    item-key="id"
-    @swipeout:click="itemClick"
-    :id="id")
-      <template v-slot="{ item, index, revealLeft, revealRight, close }">
-        <div class="card-content">
-          <h2>{{ item.title }}</h2>
-          <p>{{ item.description }}</p>
-          <span>{{ index }}</span>
-        </div>
-      </template>
-      <template v-slot:left="{ item, close }">
-        <div class="swipeout-action red" title="remove" @click="remove(item)">
-          svg-icon.icon(name='VK')
-        </div>
-        <div class="swipeout-action purple" @click="close">
-          svg-icon.icon(name='Google')
-        </div>
-      </template>
-      <template v-slot:right="{ item }">
-        <div class="swipeout-action blue">
-          svg-icon.icon(name='Facebook')
-        </div>
-        <div class="swipeout-action green">
-          svg-icon.icon(name='Instagram')
-        </div>
-      </template>
-      <template v-slot:empty>
-        <div>
+  swipe-list.usercard(
+                      ref="list"
+                      class="card"
+                      :disabled="!enabled"
+                      :items="mockSwipeList"
+                      item-key="id"
+                      @swipeout:click="itemClick"
+                      :id="id"
+                    )
+      template(v-slot="{ item, index, revealLeft, revealRight, close }")
+        .card-content
+          v-row.avatar-name-container(align='center')
+            .avatar
+              v-avatar(size='60' color='#fff' border-color='#000')
+                svg-icon(name='User' width='45' height='45')
+            .name
+              span Имя
+          v-row.cost(align='center')
+            span 1000Р
+
+      template(v-slot:left="{ item, close }")
+        .swipeout-action.delete.red(@click="remove(item)")
+          svg-icon.icon(name='Delete')
+
+      template(v-slot:right="{ item}")
+        .swipeout-action.chat(@click="route('chat')")
+          svg-icon.icon(name='Chat')
+        .swipeout-action.agree()
+          svg-icon.icon(name='Agree')
+
+      template(v-slot:empty)
+        .divclass
           list is empty ( filtered or just empty )
-        </div>
-      </template>
-  </swipe-list>
+
 </template>
 
 <script>
@@ -43,7 +40,7 @@ import { SwipeList, SwipeOut } from 'vue-swipe-actions';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
-  name: 'OrderCard1',
+  name: 'userCard',
   props: {
     title: String,
     cost: String,
@@ -107,6 +104,45 @@ export default {
 
 <style lang="stylus">
 
+.card-content{
+  display flex !important
+  height 100% !important
+  width 100% !important
+  padding 5px !important
+}
+  .avatar-name-container{
+    width 75%
+    display flex
+    flex-wrap nowrap
+    margin-right 0px
+    margin-left 0px
+  }
+    .avatar{
+      flex-wrap nowrap
+    }
+    .name{
+      flex-wrap nowrap
+    }
+  .cost{
+    display flex
+    flex-wrap nowrap
+    justify-content center
+    margin-right 0px
+    margin-left 0px
+  }
+    .chat{
+        background-color: #fff !important;
+        border: 1px solid #56d68b !important}
+    .delete{
+        background-color: #F44336 !important;
+        border-color: #F44336 !important;
+    }
+    .agree{
+        background-color: #56d68b !important;
+        border-color: #56d68b !important;}
+.usercard{
+  height 70px
+}
 .icon{
   display: inline-block;
     font: normal normal normal 14px/1 FontAwesome;
@@ -146,7 +182,7 @@ export default {
   display: flex;
     display: flex;
     align-items: center;
-    padding: 0 3rem;
+    padding: 0 1.5rem;
     cursor: pointer;
 
   &.action-panel-right {
@@ -176,11 +212,8 @@ export default {
 .card {
   width: 100%;
   background-color: white;
-  border-radius: 3px;
+  border-radius: 5px;
   box-shadow: none;
   border: 1px solid lightgray;
-}
-.card-content {
-  padding: 1rem;
 }
 </style>

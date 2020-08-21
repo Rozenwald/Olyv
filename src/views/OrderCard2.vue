@@ -1,13 +1,31 @@
 <template lang="pug">
-  v-card#Order(max-width @click="this.route")
-    #TextOrderContainer
-      #Title {{item.description}}
-      #cost {{item.cost}}
+    swiper.swiper
+      v-card.order(max-width @click='this.route')
+        .text-cost-container
+          .text-container
+            .text {{item.description}}
+          .cost-container
+            .cost {{item.cost}} ₽
+        .icon-container
+          .icon-first
+            svg-icon.icon(name='Responded'  width='25' height='25')
+            .icon-text Откликнулось
+          .icon-second
+            svg-icon.icon(name='Distantion'  width='25' height='25')
+            .icon-text Расстояние
 </template>
 
 <script>
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+import SvgIcon from '../components/SvgIcon.vue';
+
 export default {
   name: 'OrderCard2',
+  components: {
+    SvgIcon,
+    Swiper,
+    SwiperSlide,
+  },
   props: {
     item: Object,
   },
@@ -27,117 +45,154 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .swiper{
+    width inherit
+    height 122px
+    padding-top 1px
+    padding-bottom 1px
+    margin-top 10px
+    display flex
+    border-radius 6px
+    background-color #f7f7f7
+  }
 
-    #TextOrderContainer{
+  .swiper:translate3d{
+  }
+
+  .swiper:first-child {
+    margin-top 0
+  }
+
+  .order{
+    text-align left
+    display flex
+    background-color #FFFFFF
+    padding-top 10px
+    padding-left 8px
+    border-radius 6px
+    margin-left 15px
+    margin-right 15px
+    flex-wrap wrap
+  }
+    .text-cost-container{
         width 100%
-        height 65%
+        height 70px
+        display flex
+        flex-wrap wrap
     }
-    #Order:first-child{
-      margin-top 0
-    }
-    #Order{
-        text-align left
-        position relative
-        background-color #FFFFFF
-        height 120px
-        padding-right 0
-        padding-left 0
-        margin-top 10px
-        border-radius 6px
-    }
-    #Title{
-        width 70%
+      .text-container{
+        display flex
+        flex-wrap nowrap
+        flex 1 1 70%
         height 100%
         overflow hidden
         text-overflow ellipsis
         text-align left
-        word-break normal
+        word-break break-all
         white-space: normal
-        position relative
-        font-size: 16px
-        left  16px
-        top 11px
-    }
-    #cost{
-        height 36px
-        line-height 22px
-        font-weight: bold;
-        font-family: Inter;
-        font-style: normal;
-        color #FE7664
-        padding-left 12px
-        padding-right 12px
-        padding-top 7px
-        padding-bottom 7px
-        position absolute
-
-        background-color #FEF5EE
-        border none
-        border-radius 5px 0px 0px 5px
-        font-size: 18px
-        right 0
-        top 14px
-    }
-
-    #Toolbar{
-        background-color: #56D68B
-    }
-    .write{
-        color #FFA967
-        position fixed
-        bottom: 0;
-        right 0;
-        left 0;
-        margin-right 15px;
-    }
-    #You{
-        text-align right
-        margin 15px
-        align-items flex-start
-    }
-    #YouBtn{
-        position relative
-        background-color #C9F0D9
-        width 70%
-        height 70px
-        border none
-        border-radius 15px 0px 15px 15px
-        right: 0;
-    }
-    #Friend{
-        display block
-        text-align left
-        margin 15px
-    }
-    #FriendImg{
-        display inline-block
-        position relative
-        margin  7px
-        background-color #d9d9d9
-        height 40px
-        width 40px
-        border none
-        border-radius 50%
-        left 0
-    }
-    #FriendBtn{
-        display inline-block
-        display flex
-        height 40px
-        width 70%
-        border none
-        border-radius 0px 15px 15px 15px
-        background-color #d9d9d9
-        margin-top 7px
-    }
-    .container{
-        justify-content center
-        position relative
-        width 100%;
-        height 100%;
+      }
+        .text{
+          width 100%
+          height 100%
+          overflow hidden
+          text-overflow ellipsis
+          text-align left
+          word-break break-all
+          white-space: normal
+          font-size: 15px
+          padding-bottom 5px
+          padding-right 5px
+        }
+      .cost-container{
+        flex-wrap nowrap
+        flex 1 1 30%
+        height 70px;
         padding 0px;
+        justify-content center
         text-align: center;
         vertical-align middle
-    }
+      }
+        .cost{
+          display block
+          height 30px
+          line-height 20px
+          font-weight: bold;
+          font-family: Inter;
+          font-style: normal;
+          color #FE7664
+          padding-left 12px
+          padding-right 12px
+          padding-top 5px
+          padding-bottom 5px
+          background-color #FEF5EE
+          border none
+          border-radius 5px 0px 0px 5px
+          font-size: 17px
+        }
+        .lowcost{
+          display flex
+          height 30px
+          padding-top 5px
+          padding-bottom 5px
+          padding-left 12px
+          padding-right 12px
+          text-align: center;
+          vertical-align middle
+          justify-content center
+        }
+          .lowcost-icon{
+            flex-wrap nowrap
+            line-height 13px
+            justify-content center
+            text-align center
+            vertical-align middle
+          }
+          .lowcost-cost{
+            flex-wrap nowrap
+            height 20px
+            line-height 20px
+            font-weight: bold;
+            font-family: Inter;
+            font-style: normal;
+            color #FE7664
 
+            border none
+            border-radius 5px 0px 0px 5px
+            font-size: 13px
+          }
+    .icon-container{
+      margin-top 4px
+      height 26px
+      display flex
+      flex-wrap wrap
+      width 100%
+      align-items center
+    }
+      .icon-first{
+        display flex
+        flex-wrap nowrap
+        margin-right 25px
+      }
+        .icon{
+          flex 1 1 auto
+        }
+        .icon-text{
+          flex 1 1 auto
+          margin-left 7px
+          line-height 13px
+          font-size 13 px
+        }
+      .icon-second{
+        display flex
+        flex-wrap nowrap
+      }
+        .icon{
+          flex 1 1 auto
+        }
+        .icon-text{
+          flex 1 1 auto
+        }
+  .Order:first-child{
+    margin-top 0
+  }
 </style>
