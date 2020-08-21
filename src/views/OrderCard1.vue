@@ -36,7 +36,7 @@ export default {
     route() {
       // eslint-disable-next-line no-underscore-dangle
       this.$store.dispatch('setMyOrder', this.item);
-      this.$router.push('executorMoreInfo');
+      this.$router.push('customerMoreInfo');
     },
   },
   computed: {
@@ -51,7 +51,6 @@ export default {
 
 <style lang="stylus" scoped>
   .swiper{
-    width inherit
     height 122px
     padding-top 1px
     padding-bottom 1px

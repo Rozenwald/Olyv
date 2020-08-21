@@ -1,9 +1,8 @@
 <template lang="pug">
-            v-card#Order(max-width
-                        @click="this.route")
-                #TextOrderContainer
-                    #Title {{item.description}}
-                    #cost {{item.cost}}
+  v-card#Order(max-width @click="this.route")
+    #TextOrderContainer
+      #Title {{item.description}}
+      #cost {{item.cost}}
 </template>
 
 <script>
@@ -16,7 +15,7 @@ export default {
     route() {
       // eslint-disable-next-line no-underscore-dangle
       this.$store.dispatch('setMyOrder', this.item);
-      this.$router.push('customerMoreInfo');
+      this.$router.push('executorMoreInfo');
     },
   },
   computed: {
