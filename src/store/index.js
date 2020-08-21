@@ -10,6 +10,7 @@ import userDataDialog from './modules/userDataDialog';
 import user from './modules/user';
 import myOrder from './modules/myOrder';
 import repeatLoginDialog from './modules/repeatLoginDialog';
+import bottomShit from './modules/bottomShit';
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -30,5 +31,6 @@ export default new Vuex.Store({
     myOrder,
     comment,
     repeatLoginDialog,
+    bottomShit,
   },
 });

@@ -51,7 +51,6 @@ export default {
 
 <style lang="stylus" scoped>
   .swiper{
-    width inherit
     height 122px
     padding-top 1px
     padding-bottom 1px

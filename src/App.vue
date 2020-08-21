@@ -6,6 +6,7 @@
       bottom-navigation
       login-dialog
       repeat-login-dialog
+      bottom-sheet
 </template>
 
 <script>

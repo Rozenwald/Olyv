@@ -1,9 +1,6 @@
 <template lang="pug">
   swipeable-bottom-sheet(v-model="statusShit"
                         ref="swipeableBottomSheet")
-    <button @click="open">Open</button>
-    <button @click="half">Half</button>
-    <button @click="close">Close</button>
     v-container.createdOrder
       .customer-more-info
         v-textarea.description(
@@ -62,7 +59,7 @@
 import { SwipeableBottomSheet } from 'vue-swipeable-bottom-sheet';
 
 export default {
-  name: 'bottomsheet',
+  name: 'bottom-sheet',
   components: {
     SwipeableBottomSheet,
   },
@@ -78,21 +75,17 @@ export default {
     },
   },
   computed: {
-    statusShit: {
-      get() {
-        return this.$store.getters.statusShit;
-      },
+    statusShit() {
+      return this.$store.getters.statusBottomShit;
     },
   },
   watch: {
-    check() {
-      if (this.statusShit === true) {
-        this.$refs.swipeableBottomSheet.setState('open');
-      }
+    statusShit() {
+      this.$refs.swipeableBottomSheet.setState(this.statusShit);
     },
   },
-  beforeCreated() {
-    this.$refs.swipeableBottomSheet.setState('close');
+  mounted() {
+    this.$refs.swipeableBottomSheet.setState(this.statusShit);
   },
 };
 </script>

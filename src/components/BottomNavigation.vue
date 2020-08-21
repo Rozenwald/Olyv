@@ -49,7 +49,7 @@ export default {
         this.showLoginDialog();
       } else if (index === 2) {
         // this.$store.dispatch('showBottomNavigation', false);
-        this.$store.dispatch('showBottomShit', true);
+        this.$store.dispatch('setBottomShitStatus', 'open');
       } else {
         this.route(routeName);
       }

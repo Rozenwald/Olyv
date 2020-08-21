@@ -1,21 +1,21 @@
 const mutations = {
-  showBottomShit(state, flag) {
-    state.show = flag;
+  setBottomShitStatus(state, status) {
+    state.status = status;
   },
 };
 
 const actions = {
-  showBottomShit({ commit }, show) {
-    commit('showBottomShit', show);
+  setBottomShitStatus({ commit }, status) {
+    commit('setBottomShitStatus', status);
   },
 };
 
 const getters = {
-  statusShit: (state) => state.show,
+  statusBottomShit: (state) => state.status,
 };
 
 const state = {
-  show: false,
+  status: 'close',
 };
 
 export default {
