@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import bottomshit from './modules/bottomshit';
 import bottomNavigation from './modules/bottomNavigaion';
 import appbar from './modules/appbar';
 import setting from './modules/setting';
@@ -19,6 +20,7 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
+    bottomshit,
     bottomNavigation,
     appbar,
     setting,
