@@ -6,11 +6,10 @@ import MoiZakazi from '../views/MoiZakazi.vue';
 import SpisokZakazov from '../views/SpisokZakazov.vue';
 import Registration from '../views/Registration.vue';
 import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
-import Create from '../views/Create.vue';
 import EditOrder from '../views/EditOrder.vue';
 import Auth from '../views/Authorization.vue';
 import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
-import BottomShit from '../views/BottomShit.vue';
+import BottomShit from '../components/BottomShit.vue';
 import Verification from '../views/Verification.vue';
 import ExecutorProfile from '../views/ExecutorProfile.vue';
 import CustomerProfile from '../views/CustomerProfile.vue';
@@ -53,11 +52,6 @@ const routes = [
     name: 'setting',
     path: '/setting',
     component: Setting,
-  },
-  {
-    name: 'create',
-    path: '/create',
-    component: Create,
   },
   {
     name: 'chat',

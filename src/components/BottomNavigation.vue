@@ -47,6 +47,9 @@ export default {
     clickBtn(index, routeName) {
       if ((index === 2 || index === 3) && !this.isAuth) {
         this.showLoginDialog();
+      } else if (index === 2) {
+        // this.$store.dispatch('showBottomNavigation', false);
+        this.$store.dispatch('showBottomShit', true);
       } else {
         this.route(routeName);
       }
