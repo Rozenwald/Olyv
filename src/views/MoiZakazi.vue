@@ -1,8 +1,7 @@
 <template lang="pug">
     v-container
-      .order-list
+      .order-list(v-for='item in items')
         OrderCard1(
-          v-for='item in items'
           :key='item.id'
           :item='item'
         )

@@ -1,41 +1,33 @@
 <template lang="pug">
-  swipe-list(
-    ref="list"
-    class="card"
-    :disabled="!enabled"
-    :items="mockSwipeList"
-    item-key="id"
-    @swipeout:click="itemClick"
-    :id="id")
-      <template v-slot="{ item, index, revealLeft, revealRight, close }">
-        <div class="card-content">
-          <h2>{{ item.title }}</h2>
-          <p>{{ item.description }}</p>
-          <span>{{ index }}</span>
-        </div>
-      </template>
-      <template v-slot:left="{ item, close }">
-        <div class="swipeout-action red" title="remove" @click="remove(item)">
-          svg-icon.icon(name='VK')
-        </div>
-        <div class="swipeout-action purple" @click="close">
-          svg-icon.icon(name='Google')
-        </div>
-      </template>
-      <template v-slot:right="{ item }">
-        <div class="swipeout-action blue">
-          svg-icon.icon(name='Facebook')
-        </div>
-        <div class="swipeout-action green">
-          svg-icon.icon(name='Instagram')
-        </div>
-      </template>
-      <template v-slot:empty>
-        <div>
+  swipe-list.usercard(
+                      ref="list"
+                      class="card"
+                      :disabled="!enabled"
+                      :items="mockSwipeList"
+                      item-key="id"
+                      @swipeout:click="itemClick"
+                      :id="id"
+                    )
+      template(v-slot="{ item, index, revealLeft, revealRight, close }")
+        .card-content
+          v-avatar()
+          .name()
+          .cost()
+
+      template(v-slot:left="{ item, close }")
+        .swipeout-action.delete.red(@click="remove(item)")
+          svg-icon.icon(name='Delete')
+
+      template(v-slot:right="{ item}")
+        .swipeout-action.chat(@click="route('chat')")
+          svg-icon.icon(name='Chat')
+        .swipeout-action.agree()
+          svg-icon.icon(name='Agree')
+
+      template(v-slot:empty)
+        .divclass
           list is empty ( filtered or just empty )
-        </div>
-      </template>
-  </swipe-list>
+
 </template>
 
 <script>
@@ -106,7 +98,20 @@ export default {
 </script>
 
 <style lang="stylus">
-
+.chat{
+    background-color: #f5f5f5 !important;
+    border-color: #56d68b !important;
+    border: 1px solid #d3d3d3}
+.delete{
+    background-color: #F44336 !important;
+    border-color: #F44336 !important;
+}
+.agree{
+    background-color: #56d68b !important;
+    border-color: #56d68b !important;}
+.usercard{
+  height 65px
+}
 .icon{
   display: inline-block;
     font: normal normal normal 14px/1 FontAwesome;
@@ -146,7 +151,7 @@ export default {
   display: flex;
     display: flex;
     align-items: center;
-    padding: 0 3rem;
+    padding: 0 1.5rem;
     cursor: pointer;
 
   &.action-panel-right {

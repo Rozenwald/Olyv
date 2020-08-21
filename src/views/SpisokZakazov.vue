@@ -2,10 +2,17 @@
     v-container
       v-row.switch-await(v-show="user.verification == 'completed'")
         v-switch(label="В ожидании" v-model="awaitFlag")
+      .order-list
       .free-list(v-for='item in items' v-show="!awaitFlag")
-        OrderCard2(:key='item.id' :item='item')
+        OrderCard2(
+                  :key='item.id'
+                  :item='item'
+                  )
       .await-list(v-for='item in myOrders' v-show="awaitFlag")
-        OrderCard2(:key='item.id' :item='item')
+        OrderCard2(
+                  :key='item.id'
+                  :item='item'
+                  )
 </template>
 
 <script>
@@ -131,6 +138,13 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .await-list:first-child, .free-list:first-child {
+    margin-top 0
+  }
+  .container{
+   padding-left 0.01px
+   padding-right 0.01px
+  }
   .setting{
     padding 0 15px
     background-color white
@@ -151,6 +165,7 @@ export default {
   }
   .switch-await {
     margin 0
+    margin-left 15px
   }
 
 </style>
