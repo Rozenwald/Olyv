@@ -1,9 +1,16 @@
 <template lang="pug">
     v-container
-      .order-list(v-for='item in items')
+      v-row.switch-await
+        v-switch(label="В процессе" v-model="processFlag")
+      .await-order-list(v-for='order in awaitOrders' v-show="!processFlag")
         OrderCard1(
-          :key='item.id'
-          :item='item'
+          :key='order.id'
+          :item='order'
+        )
+      .process-order-list(v-for="order in processOrders" v-show="processFlag")
+        OrderCard1(
+          :key='order.id'
+          :item='order'
         )
 </template>
 
@@ -14,8 +21,10 @@ import OrderCard1 from './OrderCard1.vue';
 export default {
   name: 'moiZakazi',
   data: () => ({
-    items: null,
+    awaitOrders: null,
+    processOrders: null,
     error: '',
+    processFlag: false,
   }),
   components: {
     OrderCard1,
@@ -38,7 +47,33 @@ export default {
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.items = response.data.data.reverse();
+          this.awaitOrders = response.data.data.reverse();
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+    getProcessOrders() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/private/order`, {
+          token: this.token,
+          method: 'receive',
+          submethod: 'customer',
+          status: 'process',
+        })
+        .then((response) => (this.checkProcessOrdersResponse(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+    checkProcessOrdersResponse(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.processOrders = response.data.data.reverse();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -57,6 +92,7 @@ export default {
   created() {
     this.$store.commit('setTitle', 'Мои заказы');
     this.getData();
+    this.getProcessOrders();
   },
 };
 </script>
@@ -66,7 +102,12 @@ export default {
    padding-left 0.01px
    padding-right 0.01px
  }
- .order-list:first-child {
+
+ .switch-await {
+   margin 0 12px
+ }
+
+ .await-order-list:first-child {
    margin-top 0
  }
 </style>

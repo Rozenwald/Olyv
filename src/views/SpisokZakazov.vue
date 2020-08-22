@@ -1,14 +1,23 @@
 <template lang="pug">
     v-container
       v-row.switch-await(v-show="user.verification == 'completed'")
-        v-switch(label="В ожидании" v-model="awaitFlag")
+        v-radio-group(v-model="orderType" row)
+          v-radio(label="Свободны" value="free")
+          v-radio(label="В ожидании" value="await")
+          v-radio(label="В процессе" value="process")
+
       .order-list
-      .free-list(v-for='item in items' v-show="!awaitFlag")
+      .free-list(v-for='item in items' v-show="orderType=='free'")
         OrderCard2(
                   :key='item.id'
                   :item='item'
                   )
-      .await-list(v-for='item in myOrders' v-show="awaitFlag")
+      .await-list(v-for='item in myOrders' v-show="orderType=='await'")
+        OrderCard2(
+                  :key='item.id'
+                  :item='item'
+                  )
+      .await-list(v-for='item in processOrders' v-show="orderType=='process'")
         OrderCard2(
                   :key='item.id'
                   :item='item'
@@ -24,8 +33,9 @@ export default {
   data: () => ({
     items: null,
     myOrders: [],
+    processOrders: null,
     error: '',
-    awaitFlag: false,
+    orderType: 'free',
   }),
   components: {
     OrderCard2,
@@ -120,6 +130,34 @@ export default {
           break;
       }
     },
+    getProcessOrders() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/private/response`, {
+          token: this.token,
+          method: 'receive',
+          submethod: 'executor',
+          status: 'process',
+        })
+        .then((response) => (this.checkProcessOrdersResponse(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+
+    checkProcessOrdersResponse(response) {
+      console.log(response);
+      switch (response.data.status) {
+        case 'success':
+          this.processOrders = response.data.data.reverse();
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
   },
   computed: {
     token() {
@@ -133,6 +171,7 @@ export default {
     this.$store.commit('setTitle', 'Список заказов');
     this.getData();
     this.getMyResponseOrder();
+    this.getProcessOrders();
   },
 };
 </script>
