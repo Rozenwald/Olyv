@@ -8,6 +8,7 @@ import Registration from '../views/Registration.vue';
 import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 import EditOrder from '../views/EditOrder.vue';
 import Auth from '../views/Authorization.vue';
+import Create from '../views/Create.vue';
 import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
 import BottomShit from '../components/BottomShit.vue';
 import Verification from '../views/Verification.vue';
@@ -57,6 +58,11 @@ const routes = [
     name: 'chat',
     path: '/chat',
     component: Chat,
+  },
+  {
+    name: 'create',
+    path: '/create',
+    component: Create,
   },
   {
     name: 'customerMoreInfo',

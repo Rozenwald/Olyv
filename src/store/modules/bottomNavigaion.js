@@ -19,7 +19,7 @@ const state = {
   items: [
     { title: 'Мои заказы', icon: 'MyOrder', routeName: 'moiZakazi' },
     { title: 'Список заказов', icon: 'OrdersList', routeName: 'spisokZakazov' },
-    { title: '', icon: 'Plus' },
+    { title: '', icon: 'Plus', routeName: 'create' },
     { title: 'Профиль', icon: 'User', routeName: 'customerProfile' },
     { title: 'Настройки', icon: 'Setting', routeName: 'setting' },
   ],
