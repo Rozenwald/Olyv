@@ -13,9 +13,10 @@
         v-row.avatar-name-container(align='center')
           .avatar
             v-avatar(size='60' color='#fff' border-color='#000')
-              svg-icon(name='User' width='45' height='45')
+              svg-icon(name='User'  width='60' height='15'  v-if="!photo")
+              v-img(:src="photo" v-if="photo")
           .name
-            span Имя
+            span {{executorData.name}} {{executorData.lastname}}
         v-row.cost(align='center')
           span {{cost}}
 
@@ -45,7 +46,7 @@ export default {
   props: {
     title: String,
     cost: String,
-    idUser: String,
+    idUserResponse: String,
     idResponse: String,
   },
   components: {
@@ -56,6 +57,7 @@ export default {
   },
   data() {
     return {
+      executorData: {},
       enabled: true,
       mockSwipeList: [
         {
@@ -103,14 +105,40 @@ export default {
           token: this.token,
           idResponse: this.idResponse,
         })
-        .then((response) => (this.checkResponse(response)))
+        .then((response) => (this.checkAgreeResponse(response)))
         // eslint-disable-next-line no-return-assign
         .catch((error) => (console.log(error)));
     },
-    checkResponse(response) {
+    checkAgreeResponse(response) {
       switch (response.data.status) {
         case 'success':
           this.$router.back();
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+    getExecutorData() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/user`, {
+          method: 'receive',
+          submethod: 'id',
+          token: this.token,
+          id: this.idUserResponse,
+        })
+        .then((response) => (this.checkExecutorData(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch((error) => (console.log(error)));
+    },
+
+    checkExecutorData(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.executorData = response.data.data;
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -125,11 +153,22 @@ export default {
     token() {
       return this.$store.getters.getToken;
     },
+
+    photo() {
+      if (!this.executorData.photo) {
+        return null;
+      }
+      if (!this.executorData.photo.length) {
+        return null;
+      }
+      return this.executorData.photo[this.executorData.photo.length - 1].urlMin;
+    },
   },
   mounted() {
   },
   created() {
     this.id = this.getRandomId();
+    this.getExecutorData();
   },
 };
 </script>

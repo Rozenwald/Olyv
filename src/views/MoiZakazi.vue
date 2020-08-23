@@ -1,14 +1,18 @@
 <template lang="pug">
     v-container
-      v-row.switch-await
-        v-switch(label="В процессе" v-model="processFlag")
-      .await-order-list(v-for='order in awaitOrders' v-show="!processFlag")
+      v-row.chips
+        v-chip-group(v-model="type" mandatory active-class="active-chip")
+          v-chip(value="all") В ожидании
+          v-chip(value="process") В процессе
+      .await-order-list(v-for='order in awaitOrders' v-show="type=='all'")
         OrderCard1(
+          type="await"
           :key='order.id'
           :item='order'
         )
-      .process-order-list(v-for="order in processOrders" v-show="processFlag")
+      .process-order-list(v-for="order in processOrders" v-show="type=='process'")
         OrderCard1(
+          type="process"
           :key='order.id'
           :item='order'
         )
@@ -24,7 +28,7 @@ export default {
     awaitOrders: null,
     processOrders: null,
     error: '',
-    processFlag: false,
+    type: 'all',
   }),
   components: {
     OrderCard1,
@@ -38,7 +42,7 @@ export default {
           token: this.token,
           method: 'receive',
           submethod: 'customer',
-          step: 0,
+          status: 'await',
         })
         .then((response) => (this.checkResponse(response)))
         .catch(() => (this.error = 'Ошибка'));
@@ -103,11 +107,16 @@ export default {
    padding-right 0.01px
  }
 
- .switch-await {
+ .chips {
    margin 0 12px
  }
 
  .await-order-list:first-child {
    margin-top 0
+ }
+
+ .active-chip {
+   background-color #56d68b
+   color #FFFFFF !important
  }
 </style>

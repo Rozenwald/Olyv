@@ -21,15 +21,17 @@
           v-col( v-for="n in 2" :key="n" align='center')
             v-btn.edit-btn(rounded v-if="n == 1" @click="editOrder") Редактировать
             v-btn.delete-btn(rounded v-else @click="delOrder") Удалить
-        .responded-title Отозвались
-        .responded-list(v-for="item in responseList" :key="item._id")
+        .responded-title(v-show="orderType=='await'") Отозвались
+        .responded-list(v-for="item in responseList" :key="item._id" v-show="orderType=='await'")
           MoreInfoUserCard(
             v-for="item in responseList"
             :key='item._id'
             :idResponse='item._id'
-            :idUser='item.idUserResponse'
+            :idUserResponse='item.idUserResponse'
             :cost='item.comment'
           )
+        v-row.process-title(v-show="orderType=='process'" align='center', justify='center')
+          span Заказ выполняет {{executorData.name}} {{executorData.lastname}}
 </template>
 
 <script>
@@ -52,9 +54,37 @@ export default {
       respondedCount: 12,
       distantion: 3,
       responseList: null,
+      executorData: {},
     };
   },
   methods: {
+    getExecutorData() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/user`, {
+          method: 'receive',
+          submethod: 'id',
+          token: this.token,
+          id: this.order.idUserExecutor,
+        })
+        .then((response) => (this.checkExecutorData(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'Ошибка'));
+    },
+
+    checkExecutorData(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.executorData = response.data.data;
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+
     delOrder() {
       /* eslint-disable no-return-assign */
       axios
@@ -124,12 +154,19 @@ export default {
     token() {
       return this.$store.getters.getToken;
     },
+    orderType() {
+      return this.$store.getters.getOrderType;
+    },
     order() {
       return this.$store.getters.getMyOrder;
     },
   },
   created() {
     this.getOrderResponse();
+
+    if (this.orderType === 'process') {
+      this.getExecutorData();
+    }
   },
 };
 </script>
@@ -246,5 +283,9 @@ export default {
     margin -12px
     margin-bottom 12px
     border-radius 0 !important
+  }
+
+  .process-title {
+    margin-top 15px !important
   }
 </style>

@@ -53,9 +53,24 @@
                             )
           v-btn.plus-btn(@click='setPrice(changeValue)') +
         v-row.btns(no-gutters  align='center')
-          v-col( v-for="n in 2" :key="n" align='center')
-            v-btn.accept-btn(rounded v-if="n == 1" @click="acceptOrder") Согласиться
-            v-btn.chat-btn(rounded v-else @click="route('chat')") Чат
+          v-col(align='center')
+            v-btn.accept-btn(
+              rounded
+              @click="acceptOrder"
+              v-show="orderType == 'free'"
+            ) Согласиться
+            v-btn.cancel-btn(
+              rounded
+              @click="cancelOrder"
+              v-show="orderType == 'await'"
+            ) Отменить
+            v-btn.completed-btn(
+              rounded
+              @click="completeOrder"
+              v-show="orderType == 'process'"
+            ) Завершить
+          v-col(align='center')
+            v-btn.chat-btn(rounded @click="route('chat')") Чат
 </template>
 
 <script>
@@ -142,6 +157,37 @@ export default {
       /* eslint-enable no-underscore-dangle */
       /* eslint-enable no-return-assign */
     },
+
+    cancelOrder() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/private/response`, {
+          token: this.token,
+          method: 'del',
+          submethod: 'executor',
+          id: this.order.idResponse,
+        })
+        .then((response) => (this.checkOrderResponse(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+
+    completeOrder() {
+      /* eslint-disable no-underscore-dangle */
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/private/process`, {
+          token: this.token,
+          method: 'completed',
+          submethod: 'executor',
+          idResponse: this.order.idResponse,
+        })
+        .then((response) => (this.checkOrderResponse(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-underscore-dangle */
+      /* eslint-enable no-return-assign */
+    },
+
     checkOrderResponse(response) {
       // eslint-disable-next-line no-underscore-dangle
       switch (response.data.status) {
@@ -161,6 +207,11 @@ export default {
     order() {
       return this.$store.getters.getMyOrder;
     },
+
+    orderType() {
+      return this.$store.getters.getOrderType;
+    },
+
     token() {
       return this.$store.getters.getToken;
     },
@@ -309,7 +360,7 @@ export default {
     margin-top 3px
   }
 
-  .accept-btn{
+  .accept-btn, .cancel-btn, .completed-btn{
     width 90%
     margin-right 5%
     background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)

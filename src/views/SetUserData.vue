@@ -202,7 +202,10 @@ export default {
       if (this.content) {
         return this.content;
       }
-      return this.user.photo[this.user.photo.length - 1].urlMin;
+      if (this.user.photo.length) {
+        return this.user.photo[this.user.photo.length - 1].urlMin;
+      }
+      return null;
     },
     user() {
       return this.$store.getters.getUser;

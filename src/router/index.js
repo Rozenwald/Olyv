@@ -14,6 +14,7 @@ import Verification from '../views/Verification.vue';
 import ExecutorProfile from '../views/ExecutorProfile.vue';
 import CustomerProfile from '../views/CustomerProfile.vue';
 import Chat from '../views/Chat.vue';
+import Create from '../views/Create.vue';
 
 Vue.use(VueRouter);
 
@@ -22,6 +23,11 @@ const routes = [
     name: 'bottomshit',
     path: '/bottomshit',
     component: BottomShit,
+  },
+  {
+    name: 'create',
+    path: '/create',
+    component: Create,
   },
   {
     name: 'registration',

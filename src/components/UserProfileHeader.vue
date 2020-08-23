@@ -19,7 +19,7 @@
           background-color="#FFCA10"
           size="14"
         )
-    user-profile-subheader
+    user-profile-subheader(v-show="false")
     v-row.actions(align='center' justify='center')
       v-btn.edit-data(
         text

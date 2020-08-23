@@ -27,12 +27,14 @@ export default {
     SwiperSlide,
   },
   props: {
+    type: String,
     item: Object,
   },
   methods: {
     route() {
       // eslint-disable-next-line no-underscore-dangle
-      this.$store.dispatch('setMyOrder', this.item);
+      console.log(this.type);
+      this.$store.dispatch('setMyOrder', { order: this.item, type: this.type });
       this.$router.push('executorMoreInfo');
     },
   },

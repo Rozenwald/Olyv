@@ -1,25 +1,28 @@
 <template lang="pug">
     v-container
-      v-row.switch-await(v-show="user.verification == 'completed'")
-        v-radio-group(v-model="orderType" row)
-          v-radio(label="Свободны" value="free")
-          v-radio(label="В ожидании" value="await")
-          v-radio(label="В процессе" value="process")
+      v-row.chips(v-show="user.verification == 'completed'")
+        v-chip-group(v-model="type" mandatory active-class="active-chip")
+          v-chip(value="free") Все заказы
+          v-chip(value="await") В ожидании
+          v-chip(value="process") В процессе
 
       .order-list
-      .free-list(v-for='item in items' v-show="orderType=='free'")
+      .free-list(v-for='item in items' v-show="type=='free'")
         OrderCard2(
-                  :key='item.id'
+                  type='free'
+                  :key='item._id'
                   :item='item'
                   )
-      .await-list(v-for='item in myOrders' v-show="orderType=='await'")
+      .await-list(v-for='item in myOrders' v-show="type=='await'")
         OrderCard2(
-                  :key='item.id'
+                  type='await'
+                  :key='item._id'
                   :item='item'
                   )
-      .await-list(v-for='item in processOrders' v-show="orderType=='process'")
+      .process-list(v-for='item in processOrders' v-show="type=='process'")
         OrderCard2(
-                  :key='item.id'
+                  type='process'
+                  :key='item._id'
                   :item='item'
                   )
 </template>
@@ -35,7 +38,7 @@ export default {
     myOrders: [],
     processOrders: null,
     error: '',
-    orderType: 'free',
+    type: 'free',
   }),
   components: {
     OrderCard2,
@@ -50,7 +53,6 @@ export default {
           method: 'receive',
           submethod: 'executor',
           status: 'await',
-          step: 0,
         })
         .then((response) => (this.checkResponse(response)))
         .catch(() => (this.error = 'Ошибка'));
@@ -76,17 +78,18 @@ export default {
           token: this.token,
           method: 'receive',
           submethod: 'executor',
-          status: 'await',
+          status: 'process',
         })
         .then((response) => (this.checkMyResponseOrder(response)))
         .catch(() => (this.error = 'Ошибка'));
       /* eslint-enable no-return-assign */
     },
     checkMyResponseOrder(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           response.data.data.forEach((element) => {
-            this.getOrder(element.idOrder);
+            this.getOrder(element);
           });
           break;
         case 'notAuthenticate':
@@ -101,7 +104,7 @@ export default {
           break;
       }
     },
-    getOrder(id) {
+    getOrder(element) {
       /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
@@ -109,16 +112,18 @@ export default {
           method: 'receive',
           submethod: 'executor',
           status: 'await',
-          id,
+          id: element.idOrder,
         })
-        .then((response) => (this.checkOrder(response)))
+        .then((response) => (this.checkOrder(response, element)))
         .catch(() => (this.error = 'Ошибка'));
       /* eslint-enable no-return-assign */
     },
-    checkOrder(response) {
+    checkOrder(response, element) {
       switch (response.data.status) {
         case 'success':
           this.myOrders.push(response.data.data[0]);
+          // eslint-disable-next-line no-underscore-dangle
+          this.myOrders[this.myOrders.length - 1].idResponse = element._id;
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -133,7 +138,7 @@ export default {
     getProcessOrders() {
       /* eslint-disable no-return-assign */
       axios
-        .post(`${this.$baseUrl}api/v1/private/response`, {
+        .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
           method: 'receive',
           submethod: 'executor',
@@ -145,10 +150,9 @@ export default {
     },
 
     checkProcessOrdersResponse(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
-          this.processOrders = response.data.data.reverse();
+          this.processOrders = response.data.data;
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -177,7 +181,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .await-list:first-child, .free-list:first-child {
+  .await-list:first-child, .free-list:first-child, .free-process:first-child {
     margin-top 0
   }
   .container{
@@ -202,9 +206,12 @@ export default {
   .v-list-item:last-child {
     border-bottom none
   }
-  .switch-await {
-    margin 0
-    margin-left 15px
+  .chips {
+    margin 0 12px
   }
 
+  .active-chip {
+    background-color #56d68b
+    color #FFFFFF !important
+  }
 </style>
