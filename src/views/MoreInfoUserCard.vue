@@ -1,42 +1,43 @@
 <template lang="pug">
-  swipe-list.usercard(
-                      ref="list"
-                      class="card"
-                      :disabled="!enabled"
-                      :items="mockSwipeList"
-                      item-key="id"
-                      @swipeout:click="itemClick"
-                      :id="id"
-                    )
-      template(v-slot="{ item, index, revealLeft, revealRight, close }")
-        .card-content
-          v-row.avatar-name-container(align='center')
-            .avatar
-              v-avatar(size='60' color='#fff' border-color='#000')
-                svg-icon(name='User' width='45' height='45')
-            .name
-              span Имя
-          v-row.cost(align='center')
-            span 1000Р
+  swipe-list.usercar(
+    ref="list"
+    class="card"
+    :disabled="!enabled"
+    :items="mockSwipeList"
+    item-key="id"
+    @swipeout:click="itemClick"
+    :id="id"
+  )
+    template(v-slot="{ item, index, revealLeft, revealRight, close }")
+      .card-content
+        v-row.avatar-name-container(align='center')
+          .avatar
+            v-avatar(size='60' color='#fff' border-color='#000')
+              svg-icon(name='User' width='45' height='45')
+          .name
+            span Имя
+        v-row.cost(align='center')
+          span {{cost}}
 
-      template(v-slot:left="{ item, close }")
-        .swipeout-action.delete.red(@click="remove(item)")
-          svg-icon.icon(name='Delete')
+    template(v-slot:left="{ item, close }")
+      .swipeout-action.delete.red(@click="remove(item)")
+        svg-icon.icon(name='Delete')
 
-      template(v-slot:right="{ item}")
-        .swipeout-action.chat(@click="route('chat')")
-          svg-icon.icon(name='Chat')
-        .swipeout-action.agree()
-          svg-icon.icon(name='Agree')
+    template(v-slot:right="{ item}")
+      .swipeout-action.chat(@click="route('chat')")
+        svg-icon.icon(name='Chat')
+      .swipeout-action.agree(@click="agreeResponse")
+        svg-icon.icon(name='Agree')
 
-      template(v-slot:empty)
-        .divclass
-          list is empty ( filtered or just empty )
+    template(v-slot:empty)
+      .divclass
+        list is empty ( filtered or just empty )
 
 </template>
 
 <script>
 import { SwipeList, SwipeOut } from 'vue-swipe-actions';
+import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
@@ -44,13 +45,14 @@ export default {
   props: {
     title: String,
     cost: String,
-    distation: String,
     idUser: String,
+    idResponse: String,
   },
   components: {
     SwipeOut,
     SwipeList,
     SvgIcon,
+    axios,
   },
   data() {
     return {
@@ -92,6 +94,36 @@ export default {
     },
     sbClick(e) {
       console.log(e, 'Second Button Click');
+    },
+    agreeResponse() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/process`, {
+          method: 'add',
+          submethod: 'customer',
+          token: this.token,
+          idResponse: this.idResponse,
+        })
+        .then((response) => (this.checkResponse(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch((error) => (console.log(error)));
+    },
+    checkResponse(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.$router.back();
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+  },
+  computed: {
+    token() {
+      return this.$store.getters.getToken;
     },
   },
   mounted() {

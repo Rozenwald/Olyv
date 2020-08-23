@@ -24,7 +24,9 @@
         .responded-title Отозвались
         .responded-list(v-for="item in responseList" :key="item._id")
           MoreInfoUserCard(
+            v-for="item in responseList"
             :key='item._id'
+            :idResponse='item._id'
             :idUser='item.idUserResponse'
             :cost='item.comment'
           )
