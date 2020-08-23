@@ -3,6 +3,7 @@
     v-app
       appbar
       router-view.router
+      bottom-sheet
       bottom-navigation
       login-dialog
       repeat-login-dialog
