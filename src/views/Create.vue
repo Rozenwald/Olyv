@@ -1,20 +1,17 @@
 <template lang="pug">
   v-container.createdOrder
-    v-row.createLogo(v-show="!isFocus" align='center' justify='center')
-          v-avatar(size='162' color='#56D68B')
-            svg-icon(name='Plus'  width='110' height='110')
     .customer-more-info
       v-textarea.description(
           hide-details
           label="Описание"
           outlined
           v-model="description"
-          rows="4"
-          row-height="20")
+          rows="2"
+          row-height="14")
       v-row.add-cost-addres(align='center' justify='center')
         v-textarea.add-cost(
                     rows="1"
-                    row-height="20"
+                    row-height="14"
                     outlined
                     label='Цена'
                     hide-details
@@ -23,7 +20,7 @@
                     required)
         v-textarea.add-addres(
                     rows="1"
-                    row-height="20"
+                    row-height="14"
                     outlined
                     label='Адрес'
                     hide-details

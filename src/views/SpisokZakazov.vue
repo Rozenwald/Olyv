@@ -78,14 +78,13 @@ export default {
           token: this.token,
           method: 'receive',
           submethod: 'executor',
-          status: 'process',
+          status: 'await',
         })
         .then((response) => (this.checkMyResponseOrder(response)))
         .catch(() => (this.error = 'Ошибка'));
       /* eslint-enable no-return-assign */
     },
     checkMyResponseOrder(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           response.data.data.forEach((element) => {
