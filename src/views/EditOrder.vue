@@ -40,7 +40,8 @@
                                class='add-img-padding'
                                hide-details
                                dense
-                               label="Прикрепить файл")
+                               label="Прикрепить файл"
+                               v-show="false")
       v-row.btns(no-gutters  align='center' justify='center')
           v-btn.accept-btn(align-content='center'
                            @click="checkForm"

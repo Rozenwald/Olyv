@@ -18,7 +18,9 @@
                     v-row.fill-height.ma-0(align='center', justify='center')
                       v-progress-circular(indeterminate, color='grey lighten-5')
         v-row.btns(no-gutters  align='center')
-          v-col( v-for="n in 2" :key="n" align='center')
+          v-col( v-show="orderType == 'process'" align='center')
+            v-btn.chat-btn(rounded) Чат
+          v-col( v-show="orderType == 'await'" v-for="n in 2" :key="n" align='center')
             v-btn.edit-btn(rounded v-if="n == 1" @click="editOrder") Редактировать
             v-btn.delete-btn(rounded v-else @click="delOrder") Удалить
         .responded-title(v-show="orderType=='await'") Отозвались
@@ -239,6 +241,18 @@ export default {
     min-width 0 !important
     padding 0 !important
   }
+
+  .chat-btn{
+    width 100%
+    background none !important
+    font-style normal
+    font-weight 600
+    font-size 13px
+    color #56D68B
+    border 1px solid #56D68B
+    box-shadow none !important
+  }
+
   .currentPrice{
     padding 0 12px
     text-align center

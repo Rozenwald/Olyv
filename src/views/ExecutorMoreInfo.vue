@@ -2,7 +2,7 @@
   v-container
     .customer-more-info
       v-row.customer-more-info-header(align='center' justify='space-between')
-        .name {{customerUser.name}} {{customerUser.lastName}}
+        .name {{customerUser.name}} {{customerUser.lastname}}
         v-rating(
           :length="5"
           :half-increments="true"
@@ -10,11 +10,8 @@
           color="#FFCA10"
           background-color="#FFCA10"
           size="14"
+          v-show="false"
           )
-      .parallax(
-        height="150"
-        src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg"
-      )
       .information-wrp
         v-row.more-info-wrp-first(align='center' justify='space-between')
           v-row.save-deal(align='center')
@@ -27,12 +24,12 @@
             svg-icon(name="Responded")
             .responded-text
               span Откликнулось <br/>
-              span.black-text {{respondedCount}} человек
+              span.black-text ??? человек
           v-row.distantion(align='center')
             svg-icon(name="Distantion")
             .distantion-text
               span Расстояние <br/>
-              span.black-text {{distantion}} км
+              span.black-text ??? км
         .description {{order.description}}
         .media-files
           v-row
@@ -119,8 +116,9 @@ export default {
       axios
         .post(`${this.$baseUrl}api/v1/private/user`, {
           method: 'receive',
+          submethod: 'id',
           token: this.token,
-          id: this.order.idUser,
+          id: this.order.idUserCustomer,
         })
         .then((response) => (this.checkCustomerUserData(response)))
         // eslint-disable-next-line no-return-assign
@@ -128,6 +126,7 @@ export default {
     },
 
     checkCustomerUserData(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.customerUser = response.data.data;

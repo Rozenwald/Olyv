@@ -21,12 +21,10 @@
           span {{cost}}
 
     template(v-slot:left="{ item, close }")
-      .swipeout-action.delete.red(@click="remove(item)")
-        svg-icon.icon(name='Delete')
-
-    template(v-slot:right="{ item}")
       .swipeout-action.chat(@click="route('chat')")
         svg-icon.icon(name='Chat')
+
+    template(v-slot:right="{ item}")
       .swipeout-action.agree(@click="agreeResponse")
         svg-icon.icon(name='Agree')
 

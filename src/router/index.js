@@ -20,6 +20,11 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    name: 'main',
+    path: '/',
+    redirect: '/moiZakazi',
+  },
+  {
     name: 'bottomshit',
     path: '/bottomshit',
     component: BottomShit,
