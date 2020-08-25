@@ -24,7 +24,7 @@
             v-btn.edit-btn(rounded v-if="n == 1" @click="editOrder") Редактировать
             v-btn.delete-btn(rounded v-else @click="delOrder") Удалить
         .responded-title(v-show="orderType=='await'") Отозвались
-        .responded-list( :key="item._id" v-show="orderType=='await'")
+        .responded-list(v-show="orderType=='await'")
           MoreInfoUserCard(
             v-for="item in responseList"
             :key='item._id'
@@ -164,7 +164,9 @@ export default {
     },
   },
   created() {
-    this.getOrderResponse();
+    if (this.orderType === 'await') {
+      this.getOrderResponse();
+    }
 
     if (this.orderType === 'process') {
       this.getExecutorData();
