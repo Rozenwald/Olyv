@@ -48,8 +48,8 @@ export default {
       if ((index === 2 || index === 3) && !this.isAuth) {
         this.showLoginDialog();
       } else if (index === 2) {
-        // this.$store.dispatch('showBottomNavigation', false);
-        this.route(routeName);
+        this.$store.dispatch('setBottomSheetStatus', 'open');
+        this.$store.dispatch('showBottomNavigation', false);
       } else {
         this.route(routeName);
       }

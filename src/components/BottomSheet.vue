@@ -1,6 +1,5 @@
 <template lang="pug">
-  swipeable-bottom-sheet(v-model="statusShit"
-                        ref="swipeableBottomSheet")
+  SwipeableBottomSheet(ref="bottomSheet")
     v-container.createdOrder
       .customer-more-info
         v-textarea.description(
@@ -52,11 +51,11 @@
         v-row.error-message( align='center' justify='center')
           .dialog_title {{error}}
           v-btn.circle-btn(@click="error = ''") ок
-  </swipeable-bottom-sheet>
+  </SwipeableBottomSheet>
 </template>
 
 <script>
-import { SwipeableBottomSheet } from 'vue-swipeable-bottom-sheet';
+import SwipeableBottomSheet from './SwipeableBottomSheet.vue';
 
 export default {
   name: 'bottom-sheet',
@@ -64,28 +63,6 @@ export default {
     SwipeableBottomSheet,
   },
   methods: {
-    half() {
-      this.$refs.swipeableBottomSheet.setState('half');
-    },
-    open() {
-      this.$refs.swipeableBottomSheet.setState('open');
-    },
-    close() {
-      this.$refs.swipeableBottomSheet.setState('close');
-    },
-  },
-  computed: {
-    statusShit() {
-      return this.$store.getters.statusBottomShit;
-    },
-  },
-  watch: {
-    statusShit() {
-      this.$refs.swipeableBottomSheet.setState(this.statusShit);
-    },
-  },
-  mounted() {
-    this.$refs.swipeableBottomSheet.setState(this.statusShit);
   },
 };
 </script>

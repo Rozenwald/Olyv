@@ -10,7 +10,6 @@ import EditOrder from '../views/EditOrder.vue';
 import Auth from '../views/Authorization.vue';
 import Create from '../views/Create.vue';
 import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
-import BottomShit from '../components/BottomShit.vue';
 import Verification from '../views/Verification.vue';
 import ExecutorProfile from '../views/ExecutorProfile.vue';
 import CustomerProfile from '../views/CustomerProfile.vue';
@@ -23,11 +22,6 @@ const routes = [
     name: 'main',
     path: '/',
     redirect: '/moiZakazi',
-  },
-  {
-    name: 'bottomshit',
-    path: '/bottomshit',
-    component: BottomShit,
   },
   {
     name: 'create',

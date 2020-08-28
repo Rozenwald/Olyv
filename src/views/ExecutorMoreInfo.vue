@@ -126,7 +126,6 @@ export default {
     },
 
     checkCustomerUserData(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.customerUser = response.data.data;

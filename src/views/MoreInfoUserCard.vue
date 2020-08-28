@@ -24,7 +24,7 @@
       .swipeout-action.chat(@click="route('chat')")
         svg-icon.icon(name='Chat')
 
-    template(v-slot:right="{ item}")
+    template(v-slot:right="{item}")
       .swipeout-action.agree(@click="agreeResponse")
         svg-icon.icon(name='Agree')
 

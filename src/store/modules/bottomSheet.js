@@ -1,17 +1,17 @@
 const mutations = {
-  setBottomShitStatus(state, status) {
+  setBottomSheetStatus(state, status) {
     state.status = status;
   },
 };
 
 const actions = {
-  setBottomShitStatus({ commit }, status) {
-    commit('setBottomShitStatus', status);
+  setBottomSheetStatus({ commit }, status) {
+    commit('setBottomSheetStatus', status);
   },
 };
 
 const getters = {
-  statusBottomShit: (state) => state.status,
+  getBottomSheetStatus: (state) => state.status,
 };
 
 const state = {

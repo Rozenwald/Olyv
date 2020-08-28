@@ -122,8 +122,6 @@ export default {
     },
 
     checkResonse(response) {
-      console.log(this.id);
-      console.log(response);
       switch (response.data.status) {
         case 'invalidCost':
           this.error = 'Неверный формат цены';
