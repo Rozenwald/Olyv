@@ -117,7 +117,9 @@ export default {
   },
   watch: {
     isMove() {
-      this.focused = false;
+      if (this.isMove) {
+        this.focused = false;
+      }
     },
     focused() {
       if (this.focused) {
