@@ -181,7 +181,7 @@ export default {
 
     window.addEventListener('resize', () => {
       if (window.innerHeight < this.windowHeight) {
-        if ((this.addressFocus || this.descriptionFocus || this.costFocus) && this.state === 'half') {
+        if (this.state === 'half') {
           this.focused = true;
         }
       } else {
