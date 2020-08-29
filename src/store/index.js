@@ -6,6 +6,7 @@ import appbar from './modules/appbar';
 import setting from './modules/setting';
 import comment from './modules/comment';
 import loginDialog from './modules/loginDialog';
+import errorDialog from './modules/errorDialog';
 import userDataDialog from './modules/userDataDialog';
 import user from './modules/user';
 import myOrder from './modules/myOrder';
@@ -30,5 +31,6 @@ export default new Vuex.Store({
     myOrder,
     comment,
     repeatLoginDialog,
+    errorDialog,
   },
 });

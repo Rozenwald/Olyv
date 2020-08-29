@@ -64,11 +64,6 @@ const routes = [
     component: Chat,
   },
   {
-    name: 'create',
-    path: '/create',
-    component: Create,
-  },
-  {
     name: 'customerMoreInfo',
     path: '/customerMoreInfo',
     component: CustomerMoreInfo,

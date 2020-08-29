@@ -6,6 +6,7 @@
       bottom-sheet
       bottom-navigation
       login-dialog
+      error-dialog
       repeat-login-dialog
 </template>
 
@@ -16,6 +17,7 @@ import BottomSheet from './components/BottomSheet.vue';
 import BottomNavigation from './components/BottomNavigation.vue';
 import store from './store/index';
 import LoginDialog from './components/LoginDialog.vue';
+import ErrorDialog from './components/ErrorDialog.vue';
 import RepeatLoginDialog from './components/RepeatLoginDialog.vue';
 
 export default {
@@ -27,6 +29,7 @@ export default {
     BottomSheet,
     BottomNavigation,
     LoginDialog,
+    ErrorDialog,
     RepeatLoginDialog,
   },
 

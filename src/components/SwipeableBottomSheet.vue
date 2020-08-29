@@ -37,12 +37,14 @@ export default {
       startY: 0,
       isMove: false,
       rect: {},
+      windowHeight: null,
     };
   },
   mounted() {
     window.onresize = () => {
       this.rect = this.$refs.card.getBoundingClientRect();
     };
+
     this.rect = this.$refs.card.getBoundingClientRect();
 
     this.mc = new Hammer(this.$refs.pan);
@@ -97,15 +99,37 @@ export default {
       }
     },
     setState(state) {
-      if (state === 'close') {
-        this.$store.dispatch('showBottomNavigation', true);
-      }
       this.$store.dispatch('setBottomSheetStatus', state);
     },
   },
   computed: {
     state() {
       return this.$store.getters.getBottomSheetStatus;
+    },
+    focused: {
+      get() {
+        return this.$store.getters.getElFocus;
+      },
+      set(val) {
+        this.$store.dispatch('setElFocus', val);
+      },
+    },
+  },
+  watch: {
+    isMove() {
+      this.focused = false;
+    },
+    focused() {
+      if (this.focused) {
+        this.setState('open');
+      } else if (this.state !== 'close' && !this.isMove) {
+        this.setState('half');
+      }
+    },
+    state() {
+      if (this.state === 'close') {
+        this.$store.dispatch('showBottomNavigation', true);
+      }
     },
   },
 };
@@ -128,7 +152,8 @@ export default {
     background rgba(0, 0, 0, .3)
   }
   .card {
-    width 100%
+    width 94%
+    margin 0 3%
     height 100vh
     position fixed
     background white
@@ -141,6 +166,10 @@ export default {
   }
   .card[data-state="close"] {
     box-shadow none
+  }
+  .card[data-state="open"] {
+    margin 0
+    width 100%
   }
   .bar {
     width 45px

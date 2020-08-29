@@ -10,7 +10,7 @@
         svg-icon.bottom-navigation-icon(:name="item.icon" height="19")
       v-row#create-order-btn(v-else align='center'
                              justify='center'
-                             @click.stop="clickBtn(index, item.routeName)"
+                             @click.stop="clickBtn(index)"
                             )
         svg-icon(:name="item.icon")
 </template>
@@ -48,7 +48,7 @@ export default {
       if ((index === 2 || index === 3) && !this.isAuth) {
         this.showLoginDialog();
       } else if (index === 2) {
-        this.$store.dispatch('setBottomSheetStatus', 'open');
+        this.$store.dispatch('setBottomSheetStatus', 'half');
         this.$store.dispatch('showBottomNavigation', false);
       } else {
         this.route(routeName);
