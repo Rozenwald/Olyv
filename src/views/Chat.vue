@@ -7,7 +7,8 @@
       v-text-field.send-message.ma-0(solo
                                     flat
                                     hide-details
-                                    label='Сообщение'
+                                    placeholder='Сообщение'
+                                    v-model="msg"
                                     required
                                     @keydown.enter="sendMessage"
                                     )
@@ -36,6 +37,7 @@ export default {
     return {
       messages: [],
       error: '',
+      msg: null,
     };
   },
   methods: {
@@ -44,7 +46,7 @@ export default {
         .post(`${this.$baseChatUrl}api/v1/private/message`, {
           token: this.chatToken,
           method: 'add',
-          text: 'витя умер от голода',
+          text: this.msg,
           idUserRequest: this.idUserRequest,
         })
         .then((response) => (this.checkAddMessage(response)))
@@ -75,21 +77,34 @@ export default {
     },
 
     handlerCheck(response) {
+      console.log(response);
       this.messages.push(response.data);
       this.handler(this.url);
     },
 
-    errorCheck(error) {
-      console.log(error);
+    errorCheck() {
       this.handler(this.url);
     },
 
     checkAddMessage(response) {
-      console.log(response);
+      switch (response.data.status) {
+        case 'success':
+          this.messages.push({
+            text: this.msg,
+            // eslint-disable-next-line no-underscore-dangle
+            idUserResponse: this.user._id,
+          });
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
     },
 
     checkGetMessages(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.messages = response.data.data;
