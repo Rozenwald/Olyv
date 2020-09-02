@@ -1,40 +1,22 @@
 <template lang="pug">
-  v-container.container
-    MessageCard(v-for='newMessage in messages'
-                :message= 'newMessage' )
-
-    v-row.container-message(align='center' justify='space-between')
-      v-text-field.send-message.ma-0(solo
-                                    flat
-                                    hide-details
-                                    label='Сообщение'
-                                    v-model="newMessage"
-                                    required
-                                    @keydown.enter="sendMessage"
-                                    )
-      v-row.iconContainer(align='center' justify='center')
-        svg-icon.send-icon(name='SendMsg'
-                          height='30'
-                          width='30'
-                          @click="sendMessage")
-
-    v-dialog
-      v-row(align='center' justify='center')
-        .dialog_title
-      v-btn(@click="error = ''") ок
+  v-container
+    left-msg
+    right-msg
 </template>
 
 <script>
 import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
-import MessageCard from './MessageCard.vue';
+import LeftMsg from '../components/LeftMsg.vue';
+import RightMsg from '../components/RightMsg.vue';
 
 export default {
   name: 'Chat',
   components: {
     SvgIcon,
     axios,
-    MessageCard,
+    LeftMsg,
+    RightMsg,
   },
   data() {
     return {
@@ -135,8 +117,5 @@ export default {
 
   .customer-more-info-header{
     padding 0 !important
-  }
-  .row{
-    margin 0
   }
 </style>

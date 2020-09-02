@@ -1,37 +1,46 @@
 <template lang="pug">
-    swiper.swiper
-      v-card.order(max-width @click='this.route')
-        .text-cost-container
-          .text-container
-            .text {{item.description}}
-          .cost-container
-            .cost {{item.cost}} ₽
-            .lowcost
-              svg-icon.lowcost-icon(name='Lowcost'  width='13' height='13')
-              .lowcost-cost {{item.cost}} ₽
-        .icon-container
-          .icon-first
-            svg-icon.icon(name='Responded'  width='25' height='25')
-            .icon-text Откликнулось
-          .icon-second
-            svg-icon.icon(name='Time'  width='25' height='25')
-            .icon-text Время создания
+  v-card.card
+
+    v-row.main-part(no-gutters)
+
+        v-col(cols="8").description-wrp
+          .description {{item.description}}
+
+        v-col(cols="4" align='right')
+          v-row.cost-wrp(align='center' justify='center')
+            .cost {{item.cost}} Р
+
+    v-row.more-info-wrp(align='center' justify='start' no-gutters)
+
+      v-row.response-wrp(align='center' justify='start')
+        svg-icon(name="Responded")
+        .response-text
+          span Откликнулось <br/>
+          span.black-text ??? человек
+
+      v-row.date-time-wrp(align='center' justify='start')
+        svg-icon(name="Time")
+        .distantion-text
+          span Время создания <br/>
+          span.black-text ???
 </template>
 
 <script>
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
   name: 'OrderCard1',
   components: {
     SvgIcon,
-    Swiper,
-    SwiperSlide,
   },
   props: {
     type: String,
     item: Object,
+  },
+  data() {
+    return {
+      text: 'Я еблан помогите мне пожалуйста прошу я хочу домои спать аааа блять сука помогите мне кто-нибудь хочу очень сильно секса. Люблю',
+    };
   },
   methods: {
     route() {
@@ -45,159 +54,65 @@ export default {
       return this.$store.getters.getToken;
     },
   },
-  mounted() {
-  },
 };
 </script>
 
 <style lang="stylus" scoped>
-  .swiper{
-    height 122px
-    padding-top 1px
-    padding-bottom 1px
+  .card {
+    padding 10px 0 10px 10px
+    border 0
     margin-top 10px
-    display flex
-    border-radius 6px
-    background-color #f7f7f7
   }
 
-  .swiper:translate3d{
-  }
-
-  .swiper:first-child {
+  .card:first-child {
     margin-top 0
   }
 
-  .order{
-    text-align left
-    display flex
-    background-color #FFFFFF
-    padding-top 10px
-    padding-left 8px
-    border-radius 6px
-    margin-left 15px
-    margin-right 15px
-    flex-wrap wrap
+  .row{
+    margin 0
   }
-    .text-cost-container{
-        width 100%
-        height 70px
-        display flex
-        flex-wrap wrap
-    }
-      .text-container{
-        display flex
-        flex-wrap nowrap
-        flex 1 1 70%
-        height 100%
-        overflow hidden
-        text-overflow ellipsis
-        text-align left
-        word-break break-all
-        white-space: normal
-      }
-        .text{
-          width 100%
-          height 100%
-          overflow hidden
-          text-overflow ellipsis
-          text-align left
-          word-break break-all
-          white-space: normal
-          font-size: 15px
-          padding-bottom 5px
-          padding-right 5px
-        }
-      .cost-container{
-        flex-wrap nowrap
-        flex 1 1 30%
-        height 70px;
-        padding 0px;
-        justify-content center
-        text-align: center;
-        vertical-align middle
-      }
-        .cost{
-          display block
-          height 30px
-          line-height 20px
-          font-weight: bold;
-          font-family: Inter;
-          font-style: normal;
-          color #FE7664
-          padding-left 12px
-          padding-right 12px
-          padding-top 5px
-          padding-bottom 5px
-          background-color #FEF5EE
-          border none
-          border-radius 5px 0px 0px 5px
-          font-size: 17px
-        }
-        .lowcost{
-          display flex
-          height 30px
-          padding-top 5px
-          padding-bottom 5px
-          padding-left 12px
-          padding-right 12px
-          text-align: center;
-          vertical-align middle
-          justify-content center
-        }
-          .lowcost-icon{
-            flex-wrap nowrap
-            line-height 13px
-            justify-content center
-            text-align center
-            vertical-align middle
-          }
-          .lowcost-cost{
-            flex-wrap nowrap
-            height 20px
-            line-height 20px
-            font-weight: bold;
-            font-family: Inter;
-            font-style: normal;
-            color #FE7664
 
-            border none
-            border-radius 5px 0px 0px 5px
-            font-size: 13px
-          }
-    .icon-container{
-      margin-top 4px
-      height 26px
-      display flex
-      flex-wrap wrap
-      width 100%
-      align-items center
-    }
-      .icon-first{
-        display flex
-        flex-wrap nowrap
-        margin-right 25px
-      }
-        .icon{
-          flex 1 1 auto
-        }
-        .icon-text{
-          flex 1 1 auto
-          margin-left 7px
-          line-height 13px
-          font-size 13 px
-        }
-      .icon-second{
-        display flex
-        flex-wrap nowrap
-      }
-        .icon{
-          flex 1 1 auto
-        }
-        .icon-text{
-          flex 1 1 auto
-        }
-  .Order:first-child{
-    margin-top 0
+  .main-part{
+    margin-bottom 10px
+  }
+
+  .description {
+    overflow hidden
+    text-overflow ellipsis
+    line-height 1.2
+    height 57.6px
+    display -webkit-box
+    -webkit-line-clamp 3
+    -webkit-box-orient vertical
+    margin-right 5px
+  }
+
+  .cost-wrp {
+    margin 0
+    height 36px
+    max-width 100px
+    background #FEF5EE
+    border-radius 0px 10px 10px 0px
+    transform rotate(180deg)
+  }
+
+  .cost {
+    font-style normal
+    font-weight bold
+    font-size 18px
+    color #FE7664
+    transform rotate(180deg)
+  }
+
+  .more-info-wrp {
+    text-align center
+    font-style normal
+    font-size 10px
+    line-height 1.4
+    color #65686C
+  }
+
+  .more-info-wrp svg {
+    margin-right 5px
   }
 </style>

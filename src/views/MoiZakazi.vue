@@ -4,14 +4,16 @@
         v-chip-group(v-model="type" mandatory active-class="active-chip")
           v-chip(value="all") В ожидании
           v-chip(value="process") В процессе
-      .await-order-list(v-for='order in awaitOrders' v-show="type=='all'")
+      .await-order-list(v-show="type=='all'")
         OrderCard1(
+          v-for='order in awaitOrders'
           type="await"
           :key='order.id'
           :item='order'
         )
-      .process-order-list(v-for="order in processOrders" v-show="type=='process'")
+      .process-order-list(v-show="type=='process'")
         OrderCard1(
+          v-for="order in processOrders"
           type="process"
           :key='order.id'
           :item='order'
@@ -102,13 +104,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
- .container{
-   padding-left 0.01px
-   padding-right 0.01px
- }
 
  .chips {
-   margin 0 12px
+   margin 0
  }
 
  .await-order-list:first-child {

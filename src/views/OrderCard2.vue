@@ -33,7 +33,6 @@ export default {
   methods: {
     route() {
       // eslint-disable-next-line no-underscore-dangle
-      console.log(this.type);
       this.$store.dispatch('setMyOrder', { order: this.item, type: this.type });
       this.$router.push('executorMoreInfo');
     },
