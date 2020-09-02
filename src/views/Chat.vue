@@ -18,9 +18,9 @@
                           width='30'
                           @click="sendMessage")
 
-    v-dialog
+    v-dialog()
       v-row(align='center' justify='center')
-        .dialog_title
+        .dialog_title {{error}}
       v-btn(@click="error = ''") ок
 </template>
 
@@ -40,17 +40,66 @@ export default {
     return {
       newMessage: '',
       messages: [],
+      error: '',
     };
   },
   methods: {
+
     sendMessage() {
-      this.messages.push(this.newMessage);
-      // this.$store.dispatch(this.message, 'myMsg');
+      axios
+        .post(`${this.baseChatUrl}api/v1/private/message`, {
+          token: this.chatToken(),
+          method: 'add',
+          text: 'витя умер от голода',
+          idUserRequest: 'витя умер от голода',
+        })
+        .then((response) => (this.checkAddMessage(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'ошибка, Витя выжил'));
+    },
+    getMessage() {
+      axios
+        .post(`${this.baseChatUrl}api/v1/private/message`, {
+          token: this.chatToken(),
+          method: 'add',
+          submethod: 'chat',
+          idUserRequest: 'витя умер от голода',
+          step: 0,
+          status: 'completed',
+        })
+        .then((response) => (this.checkGetMessage(response)))
+      // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'ошибка, Витя выжил'));
+    },
+
+    handler() {
+      axios
+        .get(this.url)
+        .then((response) => (this.handlerCheck(response)))
+        .catch((error) => (this.errorCheck(error)));
+    },
+    handlerCheck(response) {
+      console.log(response.data);
+      this.handler(this.url);
+    },
+    errorCheck(error) {
+      console.log(error);
+      this.handler(this.url);
     },
   },
+
   computed: {
     token() {
       return this.$store.getters.getToken;
+    },
+    idChanal() {
+      return this.$store.getters.getIdChanal;
+    },
+    chatToken() {
+      return this.$store.getters.getChatToken;
+    },
+    url() {
+      return `${this.$baseChatUrl}api/v1/private/chat/e2e${this.idChanal}/?token=${this.chatToken}`;
     },
   },
 
@@ -64,30 +113,7 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Чат');
-  },
-  createOrder() {
-    /* eslint-disable no-return-assign */
-    axios
-      .post('http://test.cabinet.olyv.services:8888/api/v1/private/order', {
-        token: this.token,
-        method: 'add',
-        message: this.message,
-      })
-      .then((response) => (this.checkResonse(response)))
-      .catch(() => (this.error = 'Ошибка'));
-    /* eslint-enable no-return-assign */
-  },
-  checkResonse(response) {
-    switch (response.data.status) {
-      case 'invalidCost':
-        this.error = 'Неверный формат цены';
-        break;
-      case 'success':
-        this.$router.back();
-        break;
-      default:
-        this.error = 'Неизвестная ошибка';
-    }
+    this.handler();
   },
 };
 </script>

@@ -69,6 +69,8 @@ export default {
   },
   created() {
     this.$store.dispatch('setToken', window.localStorage.getItem('token'));
+    this.$store.dispatch('setChatToken', window.localStorage.getItem('chatToken'));
+    this.$store.dispatch('setIdChanal', window.localStorage.getItem('idChanal'));
 
     if (window.localStorage.getItem('token')) {
       this.getUserData();

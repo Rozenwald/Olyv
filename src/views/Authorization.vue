@@ -136,10 +136,43 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
-          this.$router.back();
+          this.getChatAuth(response.data.data.currentAuthToken);
           break;
         default:
           this.error = 'Ошибка';
+          break;
+      }
+    },
+
+    getChatAuth(token) {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseChatUrl}api/v1/public/signin`, {
+          method: 'token',
+          token,
+        })
+        .then((response) => (this.checkChatAuth(response)))
+        .catch(() => (this.error = 'Ошибка авторизации в чате'));
+      /* eslint-disable no-return-assign */
+    },
+
+    checkChatAuth(response) {
+      switch (response.data.status) {
+        case 'success':
+          window.localStorage.setItem('chatToken', response.data.data.token);
+          window.localStorage.setItem('idChanal', response.data.data.idChanal);
+          this.$store.dispatch('setChatToken', response.data.data.token);
+          this.$store.dispatch('setIdChanal', response.data.data.idChanal);
+          this.$router.back();
+          break;
+        case 'notSuccess':
+          this.error = 'что-то наебнулось, ошибка с бд и т.д';
+          break;
+        case 'notExist':
+          this.error = 'видимо косяк в токе не либо он прогорел и следовательно такого юзера найти не может (вдруг кто-то спиздил токен и пытается авторизироваться)';
+          break;
+        default:
+          this.error = 'Ошибка чата';
           break;
       }
     },

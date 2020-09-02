@@ -8,12 +8,27 @@ const mutations = {
     }
   },
   setUser(state, user) {
+    console.log(user);
     state.user = user;
     state.hasData = true;
+  },
+  setChatToken(state, chattoken) {
+    console.log(chattoken);
+    state.chattoken = chattoken;
+  },
+  setIdChanal(state, idChanal) {
+    console.log(idChanal);
+    state.idChanal = idChanal;
   },
 };
 
 const actions = {
+  setChatToken({ commit }, chattoken) {
+    commit('setChatToken', chattoken);
+  },
+  setIdChanal({ commit }, idChanal) {
+    commit('setIdChanal', idChanal);
+  },
   setToken({ commit }, token) {
     commit('setToken', token);
   },
@@ -23,6 +38,8 @@ const actions = {
 };
 
 const getters = {
+  getChatToken: (state) => state.chattoken,
+  getIdChanal: (state) => state.idChanal,
   getToken: (state) => state.token,
   isAuth: (state) => state.isAuth,
   getUser: (state) => state.user,
@@ -30,6 +47,8 @@ const getters = {
 };
 
 const state = {
+  chattoken: null,
+  idChanal: null,
   token: null,
   isAuth: null,
   user: {},

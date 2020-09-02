@@ -13,6 +13,9 @@ Vue.prototype.$baseUrl = process.env.NODE_ENV === 'production'
 window.$baseUrl = process.env.NODE_ENV === 'production'
   ? 'http://cabinet.olyv.services:8888/'
   : 'http://test.cabinet.olyv.services:8888/';
+Vue.prototype.$baseChatUrl = process.env.NODE_ENV === 'production'
+  ? 'http://chat.olyv.services:8888/'
+  : 'http://test.chat.olyv.services:8888/';
 
 new Vue({
   router,
