@@ -67,7 +67,7 @@
               v-show="orderType == 'process'"
             ) Завершить
           v-col(align='center')
-            v-btn.chat-btn(rounded @click="route('chat')") Чат
+            v-btn.chat-btn(rounded @click="goChat") Чат
 </template>
 
 <script>
@@ -95,6 +95,11 @@ export default {
   methods: {
     route(routeName) {
       this.$router.push(routeName);
+    },
+
+    goChat() {
+      this.$store.dispatch('setIdUserRequest', this.order.idUserCustomer);
+      this.$router.push('chat');
     },
 
     setPrice(val) {
@@ -227,6 +232,7 @@ export default {
   },
   created() {
     this.getCustomerUserData();
+    console.log(this.order.idUserCustomer);
     if (this.order) {
       this.currentPrice = this.order.cost;
     }

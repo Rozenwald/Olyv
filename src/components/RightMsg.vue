@@ -2,26 +2,21 @@
   v-row.card-wrp(align='center' justify='end')
     .msg-card
       .text-wrp(align='center', justify='left')
-        .text Да
-      .time-wrp
+        .text {{msg.text}}
+      .time-wrp(v-show="false")
         .time 12:23
 </template>
 
 <script>
 export default {
   name: 'right-msg',
+  props: {
+    msg: Object,
+  },
 };
 </script>
 
 <style lang="stylus" scoped>
-  .card-wrp {
-    margin 5px 0
-  }
-
-  .card-wrp:first-child {
-    margin-top 0
-  }
-
   .msg-card {
     padding 5px
     background-color #FFFFFF

@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-card.card
+  v-card.card(@click='this.route')
 
     v-row.main-part(no-gutters)
 

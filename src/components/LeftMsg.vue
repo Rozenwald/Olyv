@@ -2,26 +2,21 @@
   v-row.card-wrp
     .msg-card
       .text-wrp(align='center', justify='left')
-        .text Бля CERF TMFDNJ FDMSD NCSJCN
-      .time-wrp
+        .text {{msg.text}}
+      .time-wrp(v-show="false")
         .time 12:23
 </template>
 
 <script>
 export default {
   name: 'left-msg',
+  props: {
+    msg: Object,
+  },
 };
 </script>
 
 <style lang="stylus" scoped>
-  .card-wrp {
-    margin 5px 0
-  }
-
-  .card-wrp:first-child {
-    margin-top 0
-  }
-
   .msg-card {
     padding 5px
     background-color #e7e7e7
