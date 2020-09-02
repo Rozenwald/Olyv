@@ -94,6 +94,7 @@ export default {
             // eslint-disable-next-line no-underscore-dangle
             idUserResponse: this.user._id,
           });
+          this.msg = null;
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
