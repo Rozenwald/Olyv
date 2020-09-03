@@ -3,8 +3,8 @@
     .msg-card
       .text-wrp(align='center', justify='left')
         .text {{msg.text}}
-      .time-wrp(v-show="false")
-        .time 12:23
+      .time-wrp
+        .time {{hours}}:{{minutes}}
 </template>
 
 <script>
@@ -12,6 +12,17 @@ export default {
   name: 'right-msg',
   props: {
     msg: Object,
+  },
+  computed: {
+    time() {
+      return new Date(this.msg.ofCreateDate);
+    },
+    hours() {
+      return this.time.getHours() === '0' ? '00' : this.time.getHours();
+    },
+    minutes() {
+      return this.time.getMinutes() < 0 ? `0${this.time.getMinutes()}` : this.time.getMinutes();
+    },
   },
 };
 </script>
@@ -23,7 +34,7 @@ export default {
     border-radius 10px 10px 0px 10px
     font-size 12px
     max-width 50%
-    text-align left
+    text-align right
   }
 
   .text-wrp {

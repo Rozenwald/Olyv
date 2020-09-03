@@ -54,46 +54,10 @@ export default {
         .catch((error) => (console.log(error)));
     },
 
-    getMessages() {
-      axios
-        .post(`${this.$baseChatUrl}api/v1/private/message`, {
-          token: this.chatToken,
-          method: 'receive',
-          submethod: 'chat',
-          idUserRequest: this.idUserRequest,
-          step: 1,
-          status: 'process',
-        })
-        .then((response) => (this.checkGetMessages(response)))
-      // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'ошибка, Витя выжил'));
-    },
-
-    handler() {
-      axios
-        .get(this.url)
-        .then((response) => (this.handlerCheck(response)))
-        .catch((error) => (this.errorCheck(error)));
-    },
-
-    handlerCheck(response) {
-      console.log(response);
-      this.messages.push(response.data);
-      this.handler(this.url);
-    },
-
-    errorCheck() {
-      this.handler(this.url);
-    },
-
     checkAddMessage(response) {
       switch (response.data.status) {
         case 'success':
-          this.messages.push({
-            text: this.msg,
-            // eslint-disable-next-line no-underscore-dangle
-            idUserResponse: this.user._id,
-          });
+          this.messages.push(response.data.data);
           this.msg = null;
           break;
         case 'notAuthenticate':
@@ -103,6 +67,21 @@ export default {
           this.error = 'Ошибка';
           break;
       }
+    },
+
+    getMessages() {
+      axios
+        .post(`${this.$baseChatUrl}api/v1/private/message`, {
+          token: this.chatToken,
+          method: 'receive',
+          submethod: 'chat',
+          idUserRequest: this.idUserRequest,
+          step: 0,
+          status: 'completed',
+        })
+        .then((response) => (this.checkGetMessages(response)))
+      // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'ошибка, Витя выжил'));
     },
 
     checkGetMessages(response) {
@@ -117,6 +96,22 @@ export default {
           this.error = 'Ошибка';
           break;
       }
+    },
+
+    handler() {
+      axios
+        .get(this.url)
+        .then((response) => (this.handlerCheck(response)))
+        .catch((error) => (this.errorCheck(error)));
+    },
+
+    handlerCheck(response) {
+      this.messages.push(response.data);
+      this.handler(this.url);
+    },
+
+    errorCheck() {
+      this.handler(this.url);
     },
   },
 
