@@ -61,6 +61,21 @@ export default {
         .catch((error) => (console.log(error)));
     },
 
+    checkAddMessage(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.messages.push(response.data.data);
+          this.msg = null;
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+
     getMessages() {
       axios
         .post(`${this.$baseChatUrl}api/v1/private/message`, {
@@ -68,12 +83,26 @@ export default {
           method: 'receive',
           submethod: 'chat',
           idUserRequest: this.idUserRequest,
-          step: 1,
-          status: 'process',
+          step: 0,
+          status: 'completed',
         })
         .then((response) => (this.checkGetMessages(response)))
       // eslint-disable-next-line no-return-assign
         .catch(() => (this.error = 'ошибка, Витя выжил'));
+    },
+
+    checkGetMessages(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.messages = response.data.data;
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
     },
 
     handler() {
@@ -84,7 +113,6 @@ export default {
     },
 
     handlerCheck(response) {
-      console.log(response);
       this.messages.push(response.data);
       this.handler(this.url);
     },
@@ -104,7 +132,7 @@ export default {
           this.msg = null;
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepea  tLoginDialog', true);
+          this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
           this.error = 'Ошибка';
