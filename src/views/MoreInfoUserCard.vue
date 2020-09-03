@@ -21,7 +21,7 @@
           span {{cost}}
 
     template(v-slot:left="{ item, close }")
-      .swipeout-action.chat(@click="route('chat')")
+      .swipeout-action.chat(@click="goChat")
         svg-icon.icon(name='Chat')
 
     template(v-slot:right="{item}")
@@ -70,6 +70,10 @@ export default {
   methods: {
     route(routeName) {
       this.$router.push(routeName);
+    },
+    goChat() {
+      this.$store.dispatch('setIdUserRequest', this.idUserResponse);
+      this.$router.push('chat');
     },
     getRandomId() {
       return `id${Math.floor(Math.random * Math.floor(100))}`;

@@ -1,69 +1,77 @@
 <template lang="pug">
-  v-container.container
-    MessageCard(v-for='newMessage in messages'
-                :message= 'newMessage' )
-
+  v-container
+    .message(v-for="item in messages" :key="item._id")
+      right-msg(v-if="item.idUserResponse == user._id" :msg="item")
+      left-msg(v-else :msg="item")
     v-row.container-message(align='center' justify='space-between')
       v-text-field.send-message.ma-0(solo
                                     flat
                                     hide-details
-                                    label='Сообщение'
-                                    v-model="newMessage"
-                                    required
-                                    background-color="light-blue"
+                                    placeholder='Сообщение'
+                                    v-model="msg"
+                                    prepend-inner-icon="$vuetify.icons.rubl"
                                     append-icon="$vuetify.icons.sendMsg"
-                                    @click:append="sendMessage"
+                                    @click:append="checkNullMsg"
                                     )
-    v-dialog()
-      v-row(align='center' justify='center')
-        .dialog_title {{error}}
-      v-btn(@click="error = ''") ок
 </template>
 
 <script>
 import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
-import MessageCard from './MessageCard.vue';
+import LeftMsg from '../components/LeftMsg.vue';
+import RightMsg from '../components/RightMsg.vue';
 
 export default {
   name: 'Chat',
   components: {
     SvgIcon,
     axios,
-    MessageCard,
+    LeftMsg,
+    RightMsg,
   },
   data() {
     return {
-      newMessage: '',
       messages: [],
       error: '',
+      msg: null,
     };
   },
   methods: {
+    checkNullMsg() {
+      if (this.msg == null) {
+        return undefined;
+      }
 
+      if (this.msg.trim().length !== 0) {
+        this.sendMessage();
+      }
+
+      return undefined;
+    },
     sendMessage() {
       axios
-        .post(`${this.baseChatUrl}api/v1/private/message`, {
-          token: this.chatToken(),
+        .post(`${this.$baseChatUrl}api/v1/private/message`, {
+          token: this.chatToken,
           method: 'add',
-          text: 'витя умер от голода',
-          idUserRequest: 'витя умер от голода',
+          text: this.msg,
+          idUserRequest: this.idUserRequest,
         })
         .then((response) => (this.checkAddMessage(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'ошибка, Витя выжил'));
+        .catch((error) => (console.log(error)));
     },
-    getMessage() {
+
+    getMessages() {
       axios
-        .post(`${this.baseChatUrl}api/v1/private/message`, {
-          token: this.chatToken(),
-          method: 'add',
+        .post(`${this.$baseChatUrl}api/v1/private/message`, {
+          token: this.chatToken,
+          method: 'receive',
           submethod: 'chat',
-          idUserRequest: 'витя умер от голода',
-          step: 0,
-          status: 'completed',
+          idUserRequest: this.idUserRequest,
+          step: 1,
+          status: 'process',
         })
-        .then((response) => (this.checkGetMessage(response)))
+        .then((response) => (this.checkGetMessages(response)))
       // eslint-disable-next-line no-return-assign
         .catch(() => (this.error = 'ошибка, Витя выжил'));
     },
@@ -74,13 +82,48 @@ export default {
         .then((response) => (this.handlerCheck(response)))
         .catch((error) => (this.errorCheck(error)));
     },
+
     handlerCheck(response) {
-      console.log(response.data);
+      console.log(response);
+      this.messages.push(response.data);
       this.handler(this.url);
     },
-    errorCheck(error) {
-      console.log(error);
+
+    errorCheck() {
       this.handler(this.url);
+    },
+
+    checkAddMessage(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.messages.push({
+            text: this.msg,
+            // eslint-disable-next-line no-underscore-dangle
+            idUserResponse: this.user._id,
+          });
+          this.msg = null;
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepea  tLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+
+    checkGetMessages(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.messages = response.data.data;
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
     },
   },
 
@@ -97,6 +140,12 @@ export default {
     url() {
       return `${this.$baseChatUrl}api/v1/private/chat/e2e${this.idChanal}/?token=${this.chatToken}`;
     },
+    idUserRequest() {
+      return this.$store.getters.getIdUserRequest;
+    },
+    user() {
+      return this.$store.getters.getUser;
+    },
   },
 
   mounted() {
@@ -110,6 +159,7 @@ export default {
   created() {
     this.$store.commit('setTitle', 'Чат');
     this.handler();
+    this.getMessages();
   },
 };
 </script>
@@ -118,9 +168,15 @@ export default {
   .v-input__control.v-text-field__details{
     display: none !important;
   }
+  .message {
+    margin 5px 0
+  }
+
+  .message:first-child {
+    margin-top 0
+  }
   .iconContainer{
     width 10%
-    height 38px
     background-color #FFF
   }
   .send-icon{
@@ -158,7 +214,8 @@ export default {
   .customer-more-info-header{
     padding 0 !important
   }
-  .row{
+
+  .row {
     margin 0
   }
 </style>

@@ -9,6 +9,7 @@ import loginDialog from './modules/loginDialog';
 import errorDialog from './modules/errorDialog';
 import userDataDialog from './modules/userDataDialog';
 import user from './modules/user';
+import chat from './modules/chat';
 import myOrder from './modules/myOrder';
 import repeatLoginDialog from './modules/repeatLoginDialog';
 
@@ -32,5 +33,6 @@ export default new Vuex.Store({
     comment,
     repeatLoginDialog,
     errorDialog,
+    chat,
   },
 });
