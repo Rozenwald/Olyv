@@ -37,6 +37,23 @@ export default {
     };
   },
   methods: {
+
+    handler() {
+      axios
+        .get(this.url)
+        .then((response) => (this.handlerCheck(response)))
+        .catch((error) => (this.errorCheck(error)));
+    },
+
+    handlerCheck(response) {
+      this.messages.push(response.data);
+      this.handler(this.url);
+    },
+
+    errorCheck() {
+      this.handler(this.url);
+    },
+
     checkNullMsg() {
       if (this.msg == null) {
         return undefined;
@@ -48,6 +65,7 @@ export default {
 
       return undefined;
     },
+
     sendMessage() {
       axios
         .post(`${this.$baseChatUrl}api/v1/private/message`, {
@@ -64,7 +82,11 @@ export default {
     checkAddMessage(response) {
       switch (response.data.status) {
         case 'success':
-          this.messages.push(response.data.data);
+          this.messages.push({
+            text: this.msg,
+            // eslint-disable-next-line no-underscore-dangle
+            idUserResponse: this.user._id,
+          });
           this.msg = null;
           break;
         case 'notAuthenticate':
@@ -89,55 +111,6 @@ export default {
         .then((response) => (this.checkGetMessages(response)))
       // eslint-disable-next-line no-return-assign
         .catch(() => (this.error = 'ошибка, Витя выжил'));
-    },
-
-    checkGetMessages(response) {
-      switch (response.data.status) {
-        case 'success':
-          this.messages = response.data.data;
-          break;
-        case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
-          break;
-        default:
-          this.error = 'Ошибка';
-          break;
-      }
-    },
-
-    handler() {
-      axios
-        .get(this.url)
-        .then((response) => (this.handlerCheck(response)))
-        .catch((error) => (this.errorCheck(error)));
-    },
-
-    handlerCheck(response) {
-      this.messages.push(response.data);
-      this.handler(this.url);
-    },
-
-    errorCheck() {
-      this.handler(this.url);
-    },
-
-    checkAddMessage(response) {
-      switch (response.data.status) {
-        case 'success':
-          this.messages.push({
-            text: this.msg,
-            // eslint-disable-next-line no-underscore-dangle
-            idUserResponse: this.user._id,
-          });
-          this.msg = null;
-          break;
-        case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
-          break;
-        default:
-          this.error = 'Ошибка';
-          break;
-      }
     },
 
     checkGetMessages(response) {
