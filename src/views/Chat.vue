@@ -10,14 +10,10 @@
                                     label='Сообщение'
                                     v-model="newMessage"
                                     required
-                                    @keydown.enter="sendMessage"
+                                    background-color="light-blue"
+                                    append-icon="$vuetify.icons.sendMsg"
+                                    @click:append="sendMessage"
                                     )
-      v-row.iconContainer(align='center' justify='center')
-        svg-icon.send-icon(name='SendMsg'
-                          height='30'
-                          width='30'
-                          @click="sendMessage")
-
     v-dialog()
       v-row(align='center' justify='center')
         .dialog_title {{error}}
