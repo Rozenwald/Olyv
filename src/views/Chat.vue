@@ -4,15 +4,19 @@
       right-msg(v-if="item.idUserResponse == user._id" :msg="item")
       left-msg(v-else :msg="item")
     v-row.container-message(align='center' justify='space-between')
-      v-text-field.send-message.ma-0(solo
-                                    flat
-                                    hide-details
-                                    placeholder='Сообщение'
-                                    v-model="msg"
-                                    prepend-inner-icon="$vuetify.icons.rubl"
-                                    append-icon="$vuetify.icons.sendMsg"
-                                    @click:append="checkNullMsg"
-                                    )
+      v-text-field.send-message.ma-0(
+            v-model="msg"
+            solo
+            flat
+            hide-details
+            placeholder='Сообщение'
+            :append="msg ? '$vuetify.icons.sendMsg' : '$vuetify.icons.rubl'"
+            @click:append="checkNullMsg")
+        template(slot="append")
+          v-icon(v-show="msgNull")="$vuetify.icons.sendMsg"
+          v-icon(v-show="!MsgNull" @click="checkNullMsg")="$vuetify.icons.sendMsg"
+        template(slot="prepend-inner")
+          v-icon="$vuetify.icons.rubl"
 </template>
 
 <script>
@@ -82,11 +86,7 @@ export default {
     checkAddMessage(response) {
       switch (response.data.status) {
         case 'success':
-          this.messages.push({
-            text: this.msg,
-            // eslint-disable-next-line no-underscore-dangle
-            idUserResponse: this.user._id,
-          });
+          this.messages.push(response.data.data);
           this.msg = null;
           break;
         case 'notAuthenticate':
