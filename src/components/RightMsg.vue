@@ -30,7 +30,7 @@ export default {
 <style lang="stylus" scoped>
   .msg-card {
     padding 5px
-    background-color #FFFFFF
+    background-color #C9F0D9
     border-radius 10px 10px 0px 10px
     font-size 12px
     max-width 50%

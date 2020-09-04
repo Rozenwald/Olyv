@@ -4,19 +4,19 @@
       right-msg(v-if="item.idUserResponse == user._id" :msg="item")
       left-msg(v-else :msg="item")
     v-row.container-message(align='center' justify='space-between')
-      v-text-field.send-message.ma-0(solo
-                                    flat
-                                    hide-details
-                                    placeholder='Сообщение'
-                                    v-model="msg"
-                                    required
-                                    @keydown.enter="sendMessage"
-                                    )
-      v-row.iconContainer(align='center' justify='center')
-        svg-icon.send-icon(name='SendMsg'
-                          height='30'
-                          width='30'
-                          @click="sendMessage")
+      v-text-field.send-message.ma-0(
+            v-model="msg"
+            solo
+            flat
+            hide-details
+            placeholder='Сообщение'
+            :append="msg ? '$vuetify.icons.sendMsg' : '$vuetify.icons.rubl'"
+            @click:append="checkNullMsg")
+        template(slot="append")
+          v-icon(v-show="msgNull")="$vuetify.icons.sendMsg"
+          v-icon(v-show="!MsgNull" @click="checkNullMsg")="$vuetify.icons.sendMsg"
+        template(slot="prepend-inner")
+          v-icon="$vuetify.icons.rubl"
 </template>
 
 <script>
@@ -41,6 +41,35 @@ export default {
     };
   },
   methods: {
+
+    handler() {
+      axios
+        .get(this.url)
+        .then((response) => (this.handlerCheck(response)))
+        .catch((error) => (this.errorCheck(error)));
+    },
+
+    handlerCheck(response) {
+      this.messages.push(response.data);
+      this.handler(this.url);
+    },
+
+    errorCheck() {
+      this.handler(this.url);
+    },
+
+    checkNullMsg() {
+      if (this.msg == null) {
+        return undefined;
+      }
+
+      if (this.msg.trim().length !== 0) {
+        this.sendMessage();
+      }
+
+      return undefined;
+    },
+
     sendMessage() {
       axios
         .post(`${this.$baseChatUrl}api/v1/private/message`, {
@@ -97,22 +126,6 @@ export default {
           this.error = 'Ошибка';
           break;
       }
-    },
-
-    handler() {
-      axios
-        .get(this.url)
-        .then((response) => (this.handlerCheck(response)))
-        .catch((error) => (this.errorCheck(error)));
-    },
-
-    handlerCheck(response) {
-      this.messages.push(response.data);
-      this.handler(this.url);
-    },
-
-    errorCheck() {
-      this.handler(this.url);
     },
   },
 

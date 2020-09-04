@@ -14,12 +14,20 @@ import Plus from '../components/icons/Plus.vue';
 import SaveDeal from '../components/icons/SaveDeal.vue';
 import Responded from '../components/icons/Responded.vue';
 import Distantion from '../components/icons/Distantion.vue';
+import SendMsg from '../components/icons/SendMsg.vue';
+import Rubl from '../components/icons/Rubl.vue';
 
 Vue.use(Vuetify);
 
 export default new Vuetify({
   icons: {
     values: {
+      rubl: {
+        component: Rubl,
+      },
+      sendMsg: {
+        component: SendMsg,
+      },
       notification: {
         component: Notification,
       },
