@@ -85,6 +85,7 @@ export default {
     },
 
     checkGetMessages(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.messages = response.data.data;
