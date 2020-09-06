@@ -3,18 +3,19 @@
     .message(v-for="item in messages" :key="item._id")
       right-msg(v-if="item.idUserResponse == user._id" :msg="item")
       left-msg(v-else :msg="item")
-    v-row.container-message(align='center' justify='space-between')
-      v-text-field.send-message.ma-0(
-            v-model="msg"
-            solo
-            flat
-            hide-details
-            placeholder='Сообщение'
-            :append="msg ? '$vuetify.icons.sendMsg' : '$vuetify.icons.rubl'"
-            @click:append="checkNullMsg")
-        template(slot="append")
-          v-icon(v-show="msgNull")="$vuetify.icons.sendMsg"
-          v-icon(v-show="!MsgNull" @click="checkNullMsg")="$vuetify.icons.sendMsg"
+
+    .message-wrp(align='center')
+      v-textarea.text-message.ma-0(
+        v-model="msg"
+        solo
+        flat
+        hide-details
+        placeholder='Сообщение'
+        @click:append="checkNullMsg"
+        rows="1"
+        auto-grow)
+        template(slot="append" class="text-input-icon")
+          v-icon(@click="checkNullMsg")="$vuetify.icons.sendMsg"
         template(slot="prepend-inner")
           v-icon="$vuetify.icons.rubl"
 </template>
@@ -63,7 +64,9 @@ export default {
         return undefined;
       }
 
-      if (this.msg.trim().length !== 0) {
+      this.msg = this.msg.trim();
+
+      if (this.msg.length !== 0) {
         this.sendMessage();
       }
 
@@ -84,6 +87,7 @@ export default {
     },
 
     checkAddMessage(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.messages.push(response.data.data);
@@ -121,6 +125,8 @@ export default {
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        case 'notExist':
           break;
         default:
           this.error = 'Ошибка';
@@ -167,9 +173,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .v-input__control.v-text-field__details{
-    display: none !important;
-  }
   .message {
     margin 5px 0
   }
@@ -177,47 +180,25 @@ export default {
   .message:first-child {
     margin-top 0
   }
-  .iconContainer{
-    width 10%
-    background-color #FFF
-  }
-  .send-icon{
-    background-color #FFF
-  }
-  .text-field-details{
-    min-height 0px
-    height 0px
-  }
-  .container-message{
+
+  .message-wrp {
     width 100%
     position: fixed;
     bottom 0;
     left 0;
   }
-  .send-message{
-  }
-  .RegNumber{
-    margin-top 10px
-    padding-right 10px
-    padding-left 10px
-  }
-  .container {
-    width 100%
-    height auto
-  }
-  .name {
-    font-style normal
-    font-weight 500
-    font-size 15px
-    line-height 18px
-    color #000000
-  }
 
-  .customer-more-info-header{
-    padding 0 !important
+  .text-message {
+    max-height 168px + 10px
+    overflow scroll
   }
 
   .row {
     margin 0
+  }
+
+  .text-input-icon {
+    position fixed
+    bottom 0
   }
 </style>

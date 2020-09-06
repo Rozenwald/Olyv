@@ -232,7 +232,6 @@ export default {
   },
   created() {
     this.getCustomerUserData();
-    console.log(this.order.idUserCustomer);
     if (this.order) {
       this.currentPrice = this.order.cost;
     }

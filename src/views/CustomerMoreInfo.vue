@@ -19,7 +19,7 @@
                       v-progress-circular(indeterminate, color='grey lighten-5')
         v-row.btns(no-gutters  align='center')
           v-col( v-show="orderType == 'process'" align='center')
-            v-btn.chat-btn(rounded) Чат
+            v-btn.chat-btn(rounded @click="goChat") Чат
           v-col( v-show="orderType == 'await'" v-for="n in 2" :key="n" align='center')
             v-btn.edit-btn(rounded v-if="n == 1" @click="editOrder") Редактировать
             v-btn.delete-btn(rounded v-else @click="delOrder") Удалить
@@ -60,6 +60,12 @@ export default {
     };
   },
   methods: {
+    goChat() {
+      // eslint-disable-next-line no-underscore-dangle
+      this.$store.dispatch('setIdUserRequest', this.executorData._id);
+      this.$router.push('chat');
+    },
+
     getExecutorData() {
       axios
         .post(`${this.$baseUrl}api/v1/private/user`, {

@@ -21,7 +21,8 @@ export default {
       return this.time.getHours() === '0' ? '00' : this.time.getHours();
     },
     minutes() {
-      return this.time.getMinutes() < 0 ? `0${this.time.getMinutes()}` : this.time.getMinutes();
+      // eslint-disable-next-line radix
+      return this.time.getMinutes() <= 9 ? `0${this.time.getMinutes()}` : this.time.getMinutes();
     },
   },
 };
