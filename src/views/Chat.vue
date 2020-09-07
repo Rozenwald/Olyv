@@ -17,7 +17,7 @@
         template(slot="append" class="text-input-icon")
           v-icon(@click="checkNullMsg")="$vuetify.icons.sendMsg"
         template(slot="prepend-inner")
-          v-icon="$vuetify.icons.rubl"
+          v-file-input(hide-details)
 </template>
 
 <script>

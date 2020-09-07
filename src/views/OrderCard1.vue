@@ -1,37 +1,41 @@
 <template lang="pug">
-  v-card.card(@click='this.route')
+  swiper.swiper
+    v-card.card(@click='this.route')
 
-    v-row.main-part(no-gutters)
+      v-row.main-part(no-gutters)
 
-        v-col(cols="8").description-wrp
-          .description {{item.description}}
+          v-col(cols="8").description-wrp
+            .description {{item.description}}
 
-        v-col(cols="4" align='right')
-          v-row.cost-wrp(align='center' justify='center')
-            .cost {{item.cost}} Р
+          v-col(cols="4" align='right')
+            v-row.cost-wrp(align='center' justify='center')
+              .cost {{item.cost}} Р
 
-    v-row.more-info-wrp(align='center' justify='start' no-gutters)
+      v-row.more-info-wrp(align='center' justify='start' no-gutters)
 
-      v-row.response-wrp(align='center' justify='start')
-        svg-icon(name="Responded")
-        .response-text
-          span Откликнулось <br/>
-          span.black-text ??? человек
+        v-row.response-wrp(align='center' justify='start')
+          svg-icon(name="Responded")
+          .response-text
+            span Откликнулось <br/>
+            span.black-text ??? человек
 
-      v-row.date-time-wrp(align='center' justify='start')
-        svg-icon(name="Time")
-        .distantion-text
-          span Время создания <br/>
-          span.black-text ???
+        v-row.date-time-wrp(align='center' justify='start')
+          svg-icon(name="Time")
+          .distantion-text
+            span Время создания <br/>
+            span.black-text ???
 </template>
 
 <script>
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
   name: 'OrderCard1',
   components: {
     SvgIcon,
+    Swiper,
+    SwiperSlide,
   },
   props: {
     type: String,
@@ -58,13 +62,16 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .card {
-    padding 10px 0 10px 10px
+  .swiper{
     border 0
     margin-top 10px
   }
 
-  .card:first-child {
+  .card {
+    padding 10px 0 10px 10px
+  }
+
+  .swiper:first-child {
     margin-top 0
   }
 

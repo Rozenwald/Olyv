@@ -2,7 +2,7 @@
   v-container
     user-profile-header
     verification-status
-    review
+    //review
 </template>
 
 <script>

@@ -2,7 +2,7 @@
   .header
     v-row.avatar(align='center' justify='center')
       v-skeleton-loader(type="avatar" :loading="!hasData")
-        v-avatar(size='62' color='#56D68B')
+        v-avatar(size='125' color='#56D68B')
           svg-icon(name='PhotoCamera'  width='60' height='15'  v-if="!this.photo")
           v-img(:src="this.photo" v-if="this.photo")
     v-row.name(align='center' justify='center')

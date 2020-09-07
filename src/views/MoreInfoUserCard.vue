@@ -1,5 +1,5 @@
 <template lang="pug">
-  swipe-list.usercar(
+  swipe-list.usercard(
     ref="list"
     class="card"
     :disabled="!enabled"
@@ -89,15 +89,6 @@ export default {
     },
     closeAll() {
       this.$refs.list.closeActions();
-    },
-    itemClick(e) {
-      console.log(e, 'item click');
-    },
-    fbClick(e) {
-      console.log(e, 'First Button Click');
-    },
-    sbClick(e) {
-      console.log(e, 'Second Button Click');
     },
     agreeResponse() {
       axios
@@ -215,6 +206,8 @@ export default {
         border-color: #56d68b !important;}
 .usercard{
   height 70px
+  margin-top 10px
+  margin-top 10px
 }
 .icon{
   display: inline-block;

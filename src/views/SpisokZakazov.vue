@@ -6,21 +6,23 @@
           v-chip(value="await") В ожидании
           v-chip(value="process") В процессе
 
-      .order-list
-      .free-list(v-for='item in items' v-show="type=='free'")
+      .free-list(v-show="type=='free'")
         OrderCard2(
+                  v-for='item in freeOrders'
                   type='free'
                   :key='item._id'
                   :item='item'
                   )
-      .await-list(v-for='item in myOrders' v-show="type=='await'")
+      .await-list(v-show="type=='await'")
         OrderCard2(
+                  v-for='item in awaitOrders'
                   type='await'
                   :key='item._id'
                   :item='item'
                   )
-      .process-list(v-for='item in processOrders' v-show="type=='process'")
+      .process-list(v-show="type=='process'")
         OrderCard2(
+                  v-for='item in processOrder'
                   type='process'
                   :key='item._id'
                   :item='item'
@@ -34,8 +36,8 @@ import OrderCard2 from './OrderCard2.vue';
 export default {
   name: 'spisokZakazov',
   data: () => ({
-    items: null,
-    myOrders: [],
+    freeOrders: null,
+    awaitOrders: null,
     processOrders: null,
     error: '',
     type: 'free',
@@ -61,7 +63,7 @@ export default {
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.items = response.data.data.reverse();
+          this.freeOrders = response.data.data.reverse();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -120,9 +122,9 @@ export default {
     checkOrder(response, element) {
       switch (response.data.status) {
         case 'success':
-          this.myOrders.push(response.data.data[0]);
+          this.freeOrders.push(response.data.data[0]);
           // eslint-disable-next-line no-underscore-dangle
-          this.myOrders[this.myOrders.length - 1].idResponse = element._id;
+          this.freeOrders[this.freeOrders.length - 1].idResponse = element._id;
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -182,10 +184,6 @@ export default {
 <style lang="stylus" scoped>
   .await-list:first-child, .free-list:first-child, .free-process:first-child {
     margin-top 0
-  }
-  .container{
-   padding-left 0.01px
-   padding-right 0.01px
   }
   .setting{
     padding 0 15px
