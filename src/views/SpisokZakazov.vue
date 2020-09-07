@@ -6,16 +6,17 @@
           v-chip(value="await") В ожидании
           v-chip(value="process") В процессе
 
+      .order-list
       .free-list(v-show="type=='free'")
         OrderCard2(
-                  v-for='item in freeOrders'
+                  v-for='item in items'
                   type='free'
                   :key='item._id'
                   :item='item'
                   )
       .await-list(v-show="type=='await'")
         OrderCard2(
-                  v-for='item in awaitOrders'
+                  v-for='item in myOrders'
                   type='await'
                   :key='item._id'
                   :item='item'
@@ -36,8 +37,8 @@ import OrderCard2 from './OrderCard2.vue';
 export default {
   name: 'spisokZakazov',
   data: () => ({
-    freeOrders: null,
-    awaitOrders: null,
+    items: null,
+    myOrders: [],
     processOrders: null,
     error: '',
     type: 'free',
@@ -63,7 +64,7 @@ export default {
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.freeOrders = response.data.data;
+          this.items = response.data.data.reverse();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -122,9 +123,9 @@ export default {
     checkOrder(response, element) {
       switch (response.data.status) {
         case 'success':
-          this.awaitOrders.push(response.data.data[0]);
+          this.myOrders.push(response.data.data[0]);
           // eslint-disable-next-line no-underscore-dangle
-          this.awaitOrders[this.awaitOrders.length - 1].idResponse = element._id;
+          this.myOrders[this.myOrders.length - 1].idResponse = element._id;
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -153,7 +154,7 @@ export default {
     checkProcessOrdersResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.processOrders = response.data.data.reverse();
+          this.processOrders = response.data.data;
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
