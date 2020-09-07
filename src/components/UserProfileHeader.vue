@@ -2,9 +2,7 @@
   .header
     v-row.avatar(align='center' justify='center')
       v-skeleton-loader(type="avatar" :loading="!hasData")
-        v-avatar(size='125' color='#56D68B')
-          svg-icon(name='PhotoCamera'  width='95' height='95'  v-if="!this.photo")
-          v-img(:src="this.photo" v-if="this.photo")
+        avatar(size="100" :src="photo" isChange)
     v-row.name(align='center' justify='center')
       v-skeleton-loader(type="text" :loading="!hasData" width="90")
         span {{name}} {{lastname}}
@@ -37,6 +35,7 @@
 
 <script>
 import SvgIcon from './SvgIcon.vue';
+import Avatar from './Avatar.vue';
 import PopupMenuProfile from './PopupMenuProfile.vue';
 import UserProfileSubheader from './UserProfileSubheader.vue';
 
@@ -44,6 +43,7 @@ export default {
   name: 'user-profile-header',
   components: {
     SvgIcon,
+    Avatar,
     PopupMenuProfile,
     UserProfileSubheader,
   },
