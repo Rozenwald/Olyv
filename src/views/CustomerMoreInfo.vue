@@ -170,6 +170,8 @@ export default {
     },
   },
   created() {
+    this.$store.commit('setTitle', 'Мои заказы');
+
     if (this.orderType === 'await') {
       this.getOrderResponse();
     }

@@ -231,6 +231,8 @@ export default {
     this.setInputWidth();
   },
   created() {
+    this.$store.commit('setTitle', 'Все заказы');
+
     this.getCustomerUserData();
     if (this.order) {
       this.currentPrice = this.order.cost;

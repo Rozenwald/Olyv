@@ -2,7 +2,7 @@
   v-row.card-wrp
     .msg-card
       .text-wrp(align='center', justify='left')
-        .text {{msg.text}}
+        .text(lang="ru") {{msg.text}}
       .time-wrp
         .time {{hours}}:{{minutes}}
 </template>
@@ -39,6 +39,9 @@ export default {
 
   .text-wrp, .text {
     text-align left
+    word-wrap break-word
+    word-break break-all
+    hyphens auto
   }
 
   .time-wrp {
