@@ -3,7 +3,7 @@
     .set-user-data
       v-row(align='center' justify='center')
         v-skeleton-loader(type="avatar" :loading="!hasData")
-          avatar(:src="src" isChange)
+          avatar(:src="src" size="100" isChange)
       v-skeleton-loader(type="text" :loading="!hasData")
         v-text-field.edit-data(
           label="Имя"
@@ -48,17 +48,18 @@ export default {
   },
   methods: {
     checkForm() {
-      if (this.firstName !== null) {
-        if (this.firstName.length === 0) {
-          this.error = 'Введите имя';
-        }
-      } else {
+      if (this.firstName == null) {
         this.error = 'Введите имя';
+        return undefined;
       }
 
-      if (this.error.length === 0) {
-        this.sendData();
+      if (this.firstName.length === 0) {
+        this.error = 'Введите имя';
+        return undefined;
       }
+
+      this.sendData();
+      return undefined;
     },
 
     sendData() {

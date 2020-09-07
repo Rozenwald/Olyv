@@ -87,7 +87,7 @@ export default {
     overflow hidden
     text-overflow ellipsis
     line-height 1.2
-    height 57.6px
+    min-height 57.6px
     display -webkit-box
     -webkit-line-clamp 3
     -webkit-box-orient vertical
