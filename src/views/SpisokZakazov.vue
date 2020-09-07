@@ -22,7 +22,7 @@
                   )
       .process-list(v-show="type=='process'")
         OrderCard2(
-                  v-for='item in processOrder'
+                  v-for='item in processOrders'
                   type='process'
                   :key='item._id'
                   :item='item'
@@ -63,7 +63,7 @@ export default {
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.freeOrders = response.data.data.reverse();
+          this.freeOrders = response.data.data;
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -122,9 +122,9 @@ export default {
     checkOrder(response, element) {
       switch (response.data.status) {
         case 'success':
-          this.freeOrders.push(response.data.data[0]);
+          this.awaitOrders.push(response.data.data[0]);
           // eslint-disable-next-line no-underscore-dangle
-          this.freeOrders[this.freeOrders.length - 1].idResponse = element._id;
+          this.awaitOrders[this.awaitOrders.length - 1].idResponse = element._id;
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -153,7 +153,7 @@ export default {
     checkProcessOrdersResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.processOrders = response.data.data;
+          this.processOrders = response.data.data.reverse();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
