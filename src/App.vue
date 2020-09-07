@@ -88,4 +88,10 @@ export default {
     padding-bottom 63px+12px
     padding-top 56px+12px
   }
+
+  .text-message .v-input__append-inner {
+    align-self flex-end !important
+    margin-top 0
+    margin-bottom 10px
+  }
 </style>

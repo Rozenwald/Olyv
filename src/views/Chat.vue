@@ -4,7 +4,7 @@
       right-msg(v-if="item.idUserResponse == user._id" :msg="item")
       left-msg(v-else :msg="item")
 
-    .message-wrp(align='center')
+    .text-message-wrp(align='center')
       v-textarea.text-message.ma-0(
         v-model="msg"
         solo
@@ -14,10 +14,9 @@
         @click:append="checkNullMsg"
         rows="1"
         auto-grow)
-        template(slot="append" class="text-input-icon")
-          v-icon(@click="checkNullMsg")="$vuetify.icons.sendMsg"
-        template(slot="prepend-inner")
-          v-file-input(hide-details)
+        template(slot="append" class="t-input-icon")
+          .text-input-icon
+            svg-icon(name="SendMsg")
 </template>
 
 <script>
@@ -87,10 +86,12 @@ export default {
     },
 
     checkAddMessage(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
-          this.messages.push(response.data.data);
+          // eslint-disable-next-line no-underscore-dangle
+          if (response.data.data.idUserResponse !== this.user._id) {
+            this.messages.push(response.data.data);
+          }
           this.msg = null;
           break;
         case 'notAuthenticate':
@@ -118,7 +119,6 @@ export default {
     },
 
     checkGetMessages(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.messages = response.data.data;
@@ -127,6 +127,38 @@ export default {
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         case 'notExist':
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+
+    getUserData() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/user`, {
+          method: 'receive',
+          submethod: 'id',
+          token: this.token,
+          id: this.idUserRequest,
+        })
+        .then((response) => (this.checkUserData(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'Ошибка'));
+    },
+
+    checkUserData(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.$store.commit('setUserRequest', response.data.data);
+          if (response.data.data.name) {
+            this.$store.commit('setTitle', `${response.data.data.name} ${response.data.data.lastname}`);
+          } else {
+            this.$store.commit('setTitle', response.data.data.email);
+          }
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
           this.error = 'Ошибка';
@@ -165,7 +197,7 @@ export default {
     this.$store.dispatch('showBottomNavigation', true);
   },
   created() {
-    this.$store.commit('setTitle', 'Чат');
+    this.getUserData();
     this.handler();
     this.getMessages();
   },
@@ -181,7 +213,7 @@ export default {
     margin-top 0
   }
 
-  .message-wrp {
+  .text-message-wrp {
     width 100%
     position: fixed;
     bottom 0;
@@ -197,8 +229,4 @@ export default {
     margin 0
   }
 
-  .text-input-icon {
-    position fixed
-    bottom 0
-  }
 </style>

@@ -1,8 +1,8 @@
 <template lang="pug">
   v-row.card-wrp(align='center' justify='end')
     .msg-card
-      .text-wrp(align='center', justify='left')
-        .text {{msg.text}}
+      .text-wrp(align='center' justify='left')
+        .text(lang="ru") {{msg.text}}
       .time-wrp
         .time {{hours}}:{{minutes}}
 </template>
@@ -38,8 +38,11 @@ export default {
     text-align right
   }
 
-  .text-wrp {
+  .text-wrp, .text {
     text-align left
+    word-wrap break-word
+    word-break break-all
+    hyphens auto
   }
 
   .time-wrp {
