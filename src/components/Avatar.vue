@@ -41,7 +41,6 @@ export default {
   },
   data() {
     return {
-      error: '',
       content: '',
       file: null,
     };
@@ -145,6 +144,14 @@ export default {
       }
 
       return this.src;
+    },
+    error: {
+      get() {
+        return this.$store.getters.getError;
+      },
+      set(val) {
+        this.$store.dispatch('setError', val);
+      },
     },
   },
 };

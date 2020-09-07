@@ -44,7 +44,6 @@ export default {
       windowHeight: null,
       firstName: null,
       lastName: null,
-      error: '',
     };
   },
   methods: {
@@ -151,6 +150,15 @@ export default {
     },
     hasData() {
       return this.$store.getters.hasData;
+    },
+
+    error: {
+      get() {
+        return this.$store.getters.getError;
+      },
+      set(val) {
+        this.$store.dispatch('setError', val);
+      },
     },
   },
   watch: {
