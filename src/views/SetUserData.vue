@@ -3,9 +3,7 @@
     .set-user-data
       v-row(align='center' justify='center')
         v-skeleton-loader(type="avatar" :loading="!hasData")
-          v-avatar(size='100' color='#56D68B' @click="choosePhoto")
-            svg-icon(name='PhotoCamera'  width='100' height='25' v-show="!src")
-            v-img(:src="src" v-show="src")
+          avatar(:src="src" isChange)
       v-skeleton-loader(type="text" :loading="!hasData")
         v-text-field.edit-data(
           label="Имя"
@@ -24,14 +22,13 @@
         )
       v-row.btn-wrapper(align='center' justify='center')
         v-btn.btn-save(rounded @click="checkForm") Сохранить
-
-    input(type="file" @change="handleFileUpload" ref="input")
 </template>
 
 <script>
 import axios from 'axios';
 import store from '../store';
 import SvgIcon from '../components/SvgIcon.vue';
+import Avatar from '../components/Avatar.vue';
 
 export default {
   name: 'SetUserData',
@@ -39,6 +36,7 @@ export default {
     axios,
     store,
     SvgIcon,
+    Avatar,
   },
   data() {
     return {
@@ -47,36 +45,9 @@ export default {
       firstName: null,
       lastName: null,
       error: '',
-      content: '',
-      file: null,
     };
   },
   methods: {
-    choosePhoto(event) {
-      event.preventDefault();
-      this.$refs.input.click();
-    },
-
-    handleFileUpload(event) {
-      event.preventDefault();
-      this.selectImage(event.target.files[0]);
-    },
-
-    selectImage(file) {
-      this.file = file;
-      this.sendPhoto();
-      const reader = new FileReader();
-      reader.onload = this.onImageLoad;
-      reader.readAsDataURL(file);
-    },
-
-    onImageLoad(e) {
-      this.content = e.target.result;
-      const filename = this.file instanceof File ? this.file.name : '';
-      this.$emit('input', filename);
-      this.$emit('image-changed', this.content);
-    },
-
     checkForm() {
       if (this.firstName !== null) {
         if (this.firstName.length === 0) {
@@ -119,37 +90,6 @@ export default {
       }
     },
 
-    sendPhoto() {
-      // eslint-disable-next-line prefer-const
-      let data = new FormData();
-      data.append('token', this.token);
-      data.append('method', 'update');
-      data.append('photo', this.file);
-      data.append('submethod', 'photo');
-      axios
-        .post(`${this.$baseUrl}api/v1/private/user`, data)
-        .then((response) => (this.checkPhoto(response)))
-        // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка загрузки фото'));
-    },
-
-    checkPhoto(response) {
-      switch (response.data.status) {
-        case 'success':
-          this.getUserData();
-          break;
-        case 'invalidPhoto':
-          this.error = 'Неверный формат фото';
-          break;
-        case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
-          break;
-        default:
-          this.error = 'Ошибка загрузки фото';
-          break;
-      }
-    },
-
     getUserData() {
       axios
         .post(`${this.$baseUrl}api/v1/private/user`, {
@@ -166,10 +106,7 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
-          if (!this.file) {
-            this.$router.back();
-          }
-          this.file = null;
+          this.$router.back();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -199,12 +136,14 @@ export default {
       return this.$store.getters.getToken;
     },
     src() {
-      if (this.content) {
-        return this.content;
+      if (!this.user.photo) {
+        return null;
       }
+
       if (this.user.photo.length) {
         return this.user.photo[this.user.photo.length - 1].urlMin;
       }
+
       return null;
     },
     user() {

@@ -17,6 +17,7 @@
         template(slot="append")
           .text-input-icon(@click="checkNullMsg")
             svg-icon(name="SendMsg")
+
 </template>
 
 <script>
