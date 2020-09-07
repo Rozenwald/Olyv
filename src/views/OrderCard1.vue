@@ -9,7 +9,7 @@
 
           v-col(cols="4" align='right')
             v-row.cost-wrp(align='center' justify='center')
-              .cost {{item.cost}} Р
+              .cost {{cost}}
 
       v-row.more-info-wrp(align='center' justify='start' no-gutters)
 
@@ -56,6 +56,16 @@ export default {
   computed: {
     token() {
       return this.$store.getters.getToken;
+    },
+    cost() {
+      const costStr = String(this.item.cost);
+      if (costStr.length > 6) {
+        return `${costStr.substr(0, 1)}М`;
+      }
+      if (costStr.length > 5) {
+        return `${costStr.substr(0, 3)}K`;
+      }
+      return `${this.item.cost} P`;
     },
   },
 };
