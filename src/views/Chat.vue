@@ -14,8 +14,8 @@
         @click:append="checkNullMsg"
         rows="1"
         auto-grow)
-        template(slot="append" class="t-input-icon")
-          .text-input-icon
+        template(slot="append")
+          .text-input-icon(@click="checkNullMsg")
             svg-icon(name="SendMsg")
 </template>
 
@@ -119,6 +119,7 @@ export default {
     },
 
     checkGetMessages(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.messages = response.data.data;
