@@ -1,12 +1,13 @@
 <template lang="pug">
     v-container
-      v-row.chips(v-show="user.verification == 'completed'")
+      v-row.chips(v-show="user.verification == 'completed'"
+                        align='center'
+                        justify='space-around')
         v-chip-group(v-model="type" mandatory active-class="active-chip")
           v-chip(value="free") Все заказы
           v-chip(value="await") В ожидании
           v-chip(value="process") В процессе
 
-      .order-list
       .free-list(v-show="type=='free'")
         OrderCard2(
                   v-for='item in items'
@@ -205,7 +206,14 @@ export default {
     border-bottom none
   }
   .chips {
-    margin 0 12px
+    background-color #FFFFFF
+    padding 12px
+    box-shadow 0 1px 3px rgba(0,0,0,0.12),
+               0 1px 2px rgba(0,0,0,0.12)
+    border-radius 2px
+    margin-bottom 12px
+    margin-right 0
+    margin-left 0
   }
 
   .active-chip {
