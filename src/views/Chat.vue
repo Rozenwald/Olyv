@@ -52,8 +52,8 @@ export default {
 
     handlerCheck(response) {
       console.log(response);
-      console.log(this.messages);
       this.messages.push(response.data);
+      console.log(this.messages);
       this.handler(this.url);
     },
 
@@ -89,6 +89,7 @@ export default {
     },
 
     checkAddMessage(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           // eslint-disable-next-line no-underscore-dangle

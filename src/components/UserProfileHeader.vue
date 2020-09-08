@@ -5,7 +5,7 @@
         avatar(size="100" :src="photo" isChange)
     v-row.name(align='center' justify='center')
       v-skeleton-loader(type="text" :loading="!hasData" width="90")
-        span {{name}} {{lastname}}
+        span {{user._id}} {{lastname}}
     v-row.ratting(align='center' justify='center')
       v-skeleton-loader(type="text" :loading="!hasData" width="70")
         v-rating(
