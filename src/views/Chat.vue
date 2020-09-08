@@ -1,8 +1,8 @@
 <template lang="pug">
   v-container
     .message(v-for="item in messages" :key="item._id")
-      right-msg(v-if="item.from == 'response'" :msg="item")
-      left-msg(v-else :msg="item")
+      right-msg(v-show="item.from == 'response'" :msg="item")
+      left-msg(v-show="item.from == 'request'" :msg="item")
 
     .text-message-wrp(align='center')
       v-textarea.text-message.ma-0(
@@ -51,6 +51,8 @@ export default {
     },
 
     handlerCheck(response) {
+      console.log(response);
+      console.log(this.messages);
       this.messages.push(response.data);
       this.handler(this.url);
     },
@@ -118,10 +120,10 @@ export default {
     },
 
     checkGetMessages(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.messages = response.data.data;
+          console.log(this.messages);
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
