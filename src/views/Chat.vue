@@ -1,8 +1,8 @@
 <template lang="pug">
   v-container
     .message(v-for="item in messages" :key="item._id")
-      right-msg(v-show="item.from == 'response'" :msg="item")
-      left-msg(v-show="item.from == 'request'" :msg="item")
+      right-msg(v-if="item.from == 'response'" :msg="item")
+      left-msg(v-else :msg="item")
 
     .text-message-wrp(align='center')
       v-textarea.text-message.ma-0(
@@ -58,6 +58,7 @@ export default {
     },
 
     errorCheck() {
+      console.log('dfsdfs');
       this.handler(this.url);
     },
 
@@ -203,6 +204,7 @@ export default {
     this.getUserData();
     this.handler();
     this.getMessages();
+    console.log(this.idUserRequest);
   },
 };
 </script>

@@ -2,7 +2,7 @@
   v-container
     .customer-more-info
       v-row.customer-more-info-header(align='center' justify='space-between')
-        .name {{customerUser._id}} {{customerUser.lastname}}
+        .name {{customerUser.name}} {{customerUser.lastname}}
         v-rating(
           :length="5"
           :half-increments="true"
