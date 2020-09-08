@@ -90,9 +90,7 @@ export default {
       switch (response.data.status) {
         case 'success':
           // eslint-disable-next-line no-underscore-dangle
-          if (response.data.data.idUserResponse !== this.user._id) {
-            this.messages.push(response.data.data);
-          }
+          this.messages.push(response.data.data);
           this.msg = null;
           break;
         case 'notAuthenticate':
