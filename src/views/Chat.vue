@@ -1,7 +1,7 @@
 <template lang="pug">
   v-container
     .message(v-for="item in messages" :key="item._id")
-      right-msg(v-if="item.idUserResponse == user._id" :msg="item")
+      right-msg(v-if="item.from == 'response'" :msg="item")
       left-msg(v-else :msg="item")
 
     .text-message-wrp(align='center')
