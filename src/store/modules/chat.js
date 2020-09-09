@@ -5,12 +5,12 @@ const mutations = {
   setUserRequest(state, data) {
     state.userRequest = data;
   },
-  setAllMessages(state, messages) {
-    state.messages[state.idUserRequest] = messages;
+  setAllMessages(state, data) {
+    state.messages[data.id] = data.messages;
   },
-  setMessage(state, message) {
-    state.messages[state.idUserRequest].push(message);
-    window.localStorage.setItem(state.idUserRequest, message.step);
+  setMessage(state, data) {
+    state.messages[data.id].push(data.message);
+    window.localStorage.setItem(state.idUserRequest, data.message.step);
   },
 };
 
@@ -21,11 +21,11 @@ const actions = {
   setUserRequest({ commit }, data) {
     commit('setUserRequest', data);
   },
-  setAllMessages({ commit }, messages) {
-    commit('setAllMessages', messages);
+  setAllMessages({ commit }, data) {
+    commit('setAllMessages', data);
   },
-  setMessage({ commit }, message) {
-    commit('setMessage', message);
+  setMessage({ commit }, data) {
+    commit('setMessage', data);
   },
 };
 

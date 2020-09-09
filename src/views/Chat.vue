@@ -52,7 +52,10 @@ export default {
     },
 
     handlerCheck(response) {
-      this.$store.dispatch('setMessage', response.data);
+      this.$store.dispatch('setMessage', {
+        id: response.data.idUserRequest,
+        message: response.data,
+      });
       this.getMessagesFromVuex();
       this.handler(this.url);
     },
@@ -93,7 +96,10 @@ export default {
       switch (response.data.status) {
         case 'success':
           // eslint-disable-next-line no-underscore-dangle
-          this.$store.dispatch('setMessage', response.data.data);
+          this.$store.dispatch('setMessage', {
+            id: this.idUserRequest,
+            message: response.data.data,
+          });
           this.msg = null;
           this.getMessagesFromVuex();
           break;
@@ -125,7 +131,10 @@ export default {
     checkGetMessages(response) {
       switch (response.data.status) {
         case 'success':
-          this.$store.dispatch('setAllMessages', response.data.data);
+          this.$store.dispatch('setAllMessages', {
+            id: this.idUserRequest,
+            messages: response.data.data,
+          });
           this.getMessagesFromVuex();
           break;
         case 'notAuthenticate':
