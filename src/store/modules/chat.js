@@ -6,11 +6,7 @@ const mutations = {
     state.userRequest = data;
   },
   setAllMessages(state, messages) {
-    if (state.messages[state.idUserRequest]) {
-      state.messages[state.idUserRequest] = messages.concat(state.messages[state.idUserRequest]);
-    } else {
-      state.messages[state.idUserRequest] = messages;
-    }
+    state.messages[state.idUserRequest] = messages;
   },
   setMessage(state, message) {
     state.messages[state.idUserRequest].push(message);

@@ -209,7 +209,6 @@ export default {
   mounted() {
     this.$store.dispatch('showAppbar', true);
     this.$store.dispatch('showBottomNavigation', false);
-    this.handler();
   },
   beforeDestroy() {
     this.$store.dispatch('showAppbar', true);
@@ -218,10 +217,9 @@ export default {
   created() {
     this.getUserData();
     this.getMessagesFromVuex();
-    if (!this.messages) {
-      this.step = window.localStorage.getItem(this.idUserRequest) || 0;
-      this.getMessages();
-    }
+    this.step = window.localStorage.getItem(this.idUserRequest) || 0;
+    this.getMessages();
+    this.handler();
   },
 };
 </script>
