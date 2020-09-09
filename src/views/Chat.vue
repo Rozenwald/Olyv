@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container
+  v-container(ref="container")
     .message(v-for="item in messages" :key="item._id")
       right-msg(v-if="item.from == 'response'" :msg="item")
       left-msg(v-else :msg="item")
@@ -36,9 +36,10 @@ export default {
   },
   data() {
     return {
-      messages: [],
+      messages: null,
       error: '',
       msg: null,
+      step: null,
     };
   },
   methods: {
@@ -51,15 +52,14 @@ export default {
     },
 
     handlerCheck(response) {
-      console.log(response);
-      this.messages.push(response.data);
-      console.log(this.messages);
+      this.$store.dispatch('setMessage', response.data);
+      this.getMessagesFromVuex();
       this.handler(this.url);
     },
 
-    errorCheck() {
-      console.log('dfsdfs');
-      this.handler(this.url);
+    errorCheck(error) {
+      console.log(error);
+      setTimeout(this.handler(this.url), 5000);
     },
 
     checkNullMsg() {
@@ -90,12 +90,12 @@ export default {
     },
 
     checkAddMessage(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           // eslint-disable-next-line no-underscore-dangle
-          this.messages.push(response.data.data);
+          this.$store.dispatch('setMessage', response.data.data);
           this.msg = null;
+          this.getMessagesFromVuex();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -107,30 +107,32 @@ export default {
     },
 
     getMessages() {
-      axios
-        .post(`${this.$baseChatUrl}api/v1/private/message`, {
-          token: this.chatToken,
-          method: 'receive',
-          submethod: 'chat',
-          idUserRequest: this.idUserRequest,
-          step: 0,
-          status: 'completed',
-        })
-        .then((response) => (this.checkGetMessages(response)))
-      // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'ошибка, Витя выжил'));
+      if (this.step >= 0) {
+        axios
+          .post(`${this.$baseChatUrl}api/v1/private/message`, {
+            token: this.chatToken,
+            method: 'receive',
+            submethod: 'chat',
+            idUserRequest: this.idUserRequest,
+            status: 'completed',
+          })
+          .then((response) => (this.checkGetMessages(response)))
+        // eslint-disable-next-line no-return-assign
+          .catch(() => (this.error = 'ошибка, Витя выжил'));
+      }
     },
 
     checkGetMessages(response) {
       switch (response.data.status) {
         case 'success':
-          this.messages = response.data.data;
-          console.log(this.messages);
+          this.$store.dispatch('setAllMessages', response.data.data);
+          this.getMessagesFromVuex();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         case 'notExist':
+          this.$store.dispatch('setAllMessages', []);
           break;
         default:
           this.error = 'Ошибка';
@@ -165,9 +167,21 @@ export default {
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
+          this.$store.commit('setTitle', 'Чат');
           this.error = 'Ошибка';
           break;
       }
+    },
+
+    getMessagesFromVuex() {
+      this.messages = this.$store.state.chat.messages[this.idUserRequest];
+      this.scrollMsgDown();
+    },
+
+    scrollMsgDown() {
+      this.$nextTick(() => {
+        window.scrollTo(0, document.body.scrollHeight);
+      });
     },
   },
 
@@ -195,6 +209,7 @@ export default {
   mounted() {
     this.$store.dispatch('showAppbar', true);
     this.$store.dispatch('showBottomNavigation', false);
+    this.handler();
   },
   beforeDestroy() {
     this.$store.dispatch('showAppbar', true);
@@ -202,9 +217,11 @@ export default {
   },
   created() {
     this.getUserData();
-    this.handler();
-    this.getMessages();
-    console.log(this.idUserRequest);
+    this.getMessagesFromVuex();
+    if (!this.messages) {
+      this.step = window.localStorage.getItem(this.idUserRequest) || 0;
+      this.getMessages();
+    }
   },
 };
 </script>
