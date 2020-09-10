@@ -131,6 +131,7 @@ export default {
     state() {
       if (this.state === 'close') {
         this.$store.dispatch('showBottomNavigation', true);
+        this.$store.dispatch('setBottomSheetShowStatus', false);
       }
     },
   },

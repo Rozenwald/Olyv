@@ -1,6 +1,6 @@
 <template lang="pug">
-  swipeable-bottom-sheet(:halfY="0.5")
-    v-container
+  swipeable-bottom-sheet(:halfY="0.5" ref="swipeableBottomSheet")
+    v-container(v-show="show")
       v-text-field.adress-field(
         solo
         placeholder="Адрес"
@@ -45,7 +45,7 @@
 
 <script>
 import axios from 'axios';
-import SwipeableBottomSheet from './SwipeableBottomSheet.vue';
+import { SwipeableBottomSheet } from 'vue-swipeable-bottom-sheet';
 import SvgIcon from './SvgIcon.vue';
 
 export default {
@@ -150,6 +150,10 @@ export default {
 
     state() {
       return this.$store.getters.getBottomSheetStatus;
+    },
+
+    show() {
+      return this.$store.getters.showBottomSheet;
     },
 
     error: {

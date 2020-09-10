@@ -5,6 +5,9 @@ const mutations = {
   setElFocus(state, flag) {
     state.elFocus = flag;
   },
+  setBottomSheetShowStatus(state, flag) {
+    state.show = flag;
+  },
 };
 
 const actions = {
@@ -14,16 +17,21 @@ const actions = {
   setElFocus({ commit }, flag) {
     commit('setElFocus', flag);
   },
+  setBottomSheetShowStatus({ commit }, flag) {
+    commit('setBottomSheetShowStatus', flag);
+  },
 };
 
 const getters = {
   getBottomSheetStatus: (state) => state.status,
   getElFocus: (state) => state.elFocus,
+  showBottomSheet: (state) => state.show,
 };
 
 const state = {
   status: 'close',
   elFocus: false,
+  show: false,
 };
 
 export default {
