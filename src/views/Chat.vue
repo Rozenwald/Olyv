@@ -52,10 +52,17 @@ export default {
     },
 
     handlerCheck(response) {
-      this.$store.dispatch('setMessage', {
-        id: response.data.idUserRequest,
-        message: response.data,
-      });
+      if (this.messages) {
+        this.$store.dispatch('setMessage', {
+          id: response.data.idUserRequest,
+          message: response.data,
+        });
+      } else {
+        this.$store.dispatch('setAllMessages', {
+          id: response.data.idUserRequest,
+          message: [response.data],
+        });
+      }
       this.getMessagesFromVuex();
       this.handler(this.url);
     },
@@ -95,11 +102,17 @@ export default {
     checkAddMessage(response) {
       switch (response.data.status) {
         case 'success':
-          // eslint-disable-next-line no-underscore-dangle
-          this.$store.dispatch('setMessage', {
-            id: this.idUserRequest,
-            message: response.data.data,
-          });
+          if (this.messages) {
+            this.$store.dispatch('setMessage', {
+              id: this.idUserRequest,
+              message: response.data.data,
+            });
+          } else {
+            this.$store.dispatch('setAllMessages', {
+              id: this.idUserRequest,
+              message: [response.data.data],
+            });
+          }
           this.msg = null;
           this.getMessagesFromVuex();
           break;
