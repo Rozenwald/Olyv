@@ -115,7 +115,7 @@ export default {
  }
 
  .active-chip {
-   background-color #56d68b
+   background-color #56d67b
    color #FFFFFF !important
  }
 </style>
