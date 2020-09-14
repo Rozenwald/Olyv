@@ -55,7 +55,6 @@
               rounded
               @click="acceptOrder"
               v-show="orderType == 'free'"
-              value="await"
             ) Согласиться
             v-btn.cancel-btn(
               rounded
@@ -162,21 +161,6 @@ export default {
       /* eslint-enable no-return-assign */
     },
 
-    checkOrderResponse(response) {
-      // eslint-disable-next-line no-underscore-dangle
-      switch (response.data.status) {
-        case 'success':
-
-          break;
-        case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
-          break;
-        default:
-          this.error = 'Ошибка';
-          break;
-      }
-    },
-
     cancelOrder() {
       /* eslint-disable no-return-assign */
       axios
@@ -205,6 +189,21 @@ export default {
         .catch(() => (this.error = 'Ошибка'));
       /* eslint-enable no-underscore-dangle */
       /* eslint-enable no-return-assign */
+    },
+
+    checkOrderResponse(response) {
+      // eslint-disable-next-line no-underscore-dangle
+      switch (response.data.status) {
+        case 'success':
+          this.$store.dispatch('setMyOrder', 'await');
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
     },
 
   },
