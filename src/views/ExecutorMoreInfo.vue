@@ -66,7 +66,7 @@
               @click="completeOrder"
               v-show="orderType == 'process'"
             ) Завершить
-          v-col(align='center' v-show=" accept != 'free'")
+          v-col(align='center' v-show="orderType != 'free'")
             v-btn.chat-btn(rounded @click="goChat") Чат
 </template>
 
