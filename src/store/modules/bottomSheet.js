@@ -10,6 +10,11 @@ const mutations = {
 const actions = {
   setBottomSheetStatus({ commit }, status) {
     commit('setBottomSheetStatus', status);
+    if (status === 'close') {
+      commit('showBottomNavigation', true);
+    } else {
+      commit('showBottomNavigation', false);
+    }
   },
   setElFocus({ commit }, flag) {
     commit('setElFocus', flag);
