@@ -106,34 +106,6 @@ export default {
     state() {
       return this.$store.getters.getBottomSheetStatus;
     },
-    focused: {
-      get() {
-        return this.$store.getters.getElFocus;
-      },
-      set(val) {
-        this.$store.dispatch('setElFocus', val);
-      },
-    },
-  },
-  watch: {
-    isMove() {
-      if (this.isMove) {
-        this.focused = false;
-      }
-    },
-    focused() {
-      if (this.focused) {
-        this.setState('open');
-      } else if (this.state !== 'close' && !this.isMove) {
-        this.setState('half');
-      }
-    },
-    state() {
-      if (this.state === 'close') {
-        this.$store.dispatch('showBottomNavigation', true);
-        this.$store.dispatch('setBottomSheetShowStatus', false);
-      }
-    },
   },
 };
 </script>

@@ -1,14 +1,13 @@
 <template lang="pug">
   swipeable-bottom-sheet(:halfY="0.5")
-    v-container(v-show="show")
+    v-container
       v-text-field.adress-field(
         solo
         placeholder="Адрес"
         hide-details
         v-model="address"
         ref="adressInput"
-        @focus="addressFocus = true"
-        @blur="addressFocus = false")
+        @focus="openSheet")
 
       v-textarea.description-field(
         solo
@@ -18,8 +17,6 @@
         hide-details
         v-model="description"
         ref="descriptionInput"
-        @focus="descriptionFocus = true"
-        @blur="descriptionFocus = false"
       )
 
       v-text-field.cost-field(
@@ -30,8 +27,6 @@
         type="number"
         v-model="cost"
         ref="costInput"
-        @focus="costFocus = true"
-        @blur="costFocus = false"
       )
 
       v-row(align='center' justify='center')
@@ -57,10 +52,6 @@ export default {
   },
   data() {
     return {
-      addressFocus: false,
-      descriptionFocus: false,
-      costFocus: false,
-      windowHeight: null,
       description: null,
       cost: null,
       address: null,
@@ -70,6 +61,11 @@ export default {
   methods: {
     clickBtn() {
       this.error = this.checkForm();
+    },
+
+    openSheet() {
+      this.$store.dispatch('setActiveType', 'address');
+      this.$store.dispatch('setBottomSheetStatus', 'open');
     },
 
     checkForm() {
@@ -139,21 +135,8 @@ export default {
   },
 
   computed: {
-    focused: {
-      get() {
-        return this.$store.getters.getElFocus;
-      },
-      set(val) {
-        this.$store.dispatch('setElFocus', val);
-      },
-    },
-
     state() {
       return this.$store.getters.getBottomSheetStatus;
-    },
-
-    show() {
-      return this.$store.getters.showBottomSheet;
     },
 
     error: {
@@ -168,30 +151,6 @@ export default {
     token() {
       return this.$store.getters.getToken;
     },
-  },
-
-  watch: {
-    focused() {
-      if (!this.focused) {
-        this.$refs.adressInput.blur();
-        this.$refs.descriptionInput.blur();
-        this.$refs.costInput.blur();
-      }
-    },
-  },
-
-  created() {
-    this.windowHeight = window.innerHeight;
-
-    window.addEventListener('resize', () => {
-      if (window.innerHeight < this.windowHeight) {
-        if ((this.addressFocus || this.descriptionFocus || this.costFocus) && this.state === 'half') {
-          this.focused = true;
-        }
-      } else {
-        this.focused = false;
-      }
-    });
   },
 };
 </script>

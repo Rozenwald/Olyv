@@ -1,37 +1,66 @@
 const mutations = {
   setBottomSheetStatus(state, status) {
-    state.status = status;
+    switch (state.activeType) {
+      case 'main':
+        state.statusMain = status;
+        break;
+      case 'address':
+        state.statusAddress = status;
+        break;
+      case 'description':
+        state.statusDescription = status;
+        break;
+      case 'cost':
+        state.statusCost = status;
+        break;
+      default:
+        break;
+    }
   },
-  setElFocus(state, flag) {
-    state.elFocus = flag;
-  },
-  setBottomSheetShowStatus(state, flag) {
-    state.show = flag;
+  setActiveType(state, type) {
+    state.activeType = type;
   },
 };
 
 const actions = {
-  setBottomSheetStatus({ commit }, status) {
+  setBottomSheetStatus({ commit, state }, status) {
     commit('setBottomSheetStatus', status);
+    if (state.activeType === 'main') {
+      if (status === 'close') {
+        commit('showBottomNavigation', true);
+      } else {
+        commit('showBottomNavigation', false);
+      }
+    }
   },
-  setElFocus({ commit }, flag) {
-    commit('setElFocus', flag);
-  },
-  setBottomSheetShowStatus({ commit }, flag) {
-    commit('setBottomSheetShowStatus', flag);
+  setActiveType({ commit }, type) {
+    commit('setActiveType', type);
   },
 };
 
 const getters = {
-  getBottomSheetStatus: (state) => state.status,
-  getElFocus: (state) => state.elFocus,
-  showBottomSheet: (state) => state.show,
+  getBottomSheetStatus: (state) => {
+    switch (state.activeType) {
+      case 'main':
+        return state.statusMain;
+      case 'address':
+        return state.statusAddress;
+      case 'description':
+        return state.statusDescription;
+      case 'cost':
+        return state.statusCost;
+      default:
+        return null;
+    }
+  },
 };
 
 const state = {
-  status: 'close',
-  elFocus: false,
-  show: false,
+  statusMain: 'close',
+  statusAddress: 'close',
+  statusCost: 'close',
+  statusDescription: 'close',
+  activeType: 'main',
 };
 
 export default {

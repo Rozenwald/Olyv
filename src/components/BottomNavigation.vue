@@ -44,16 +44,18 @@ export default {
     showLoginDialog() {
       this.$store.dispatch('showLoginDialog', true);
     },
-    clickBtn(index, routeName) {
+    /* clickBtn(index, routeName) {
       if ((index === 2 || index === 3) && !this.isAuth) {
         this.showLoginDialog();
       } else if (index === 2) {
-        this.$store.dispatch('setBottomSheetShowStatus', true);
         this.$store.dispatch('setBottomSheetStatus', 'half');
-        this.$store.dispatch('showBottomNavigation', false);
       } else {
         this.route(routeName);
       }
+    }, */
+    clickBtn() {
+      this.$store.dispatch('setActiveType', 'main');
+      this.$store.dispatch('setBottomSheetStatus', 'half');
     },
   },
 };
