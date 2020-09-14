@@ -1,6 +1,6 @@
 <template lang="pug">
     v-container
-      v-row.chips
+      v-row.chips(align='center' justify='space-around' )
         v-chip-group(v-model="type" mandatory active-class="active-chip")
           v-chip(value="all") В ожидании
           v-chip(value="process") В процессе
@@ -106,8 +106,10 @@ export default {
 <style lang="stylus" scoped>
 
  .chips {
-   margin 0
-   background-color: #FFA967 0%
+   margin-bottom 12px
+   background: #e3e3e3 50%
+   padding-left 15px
+   padding-right 15px
  }
 
  .await-order-list:first-child {
