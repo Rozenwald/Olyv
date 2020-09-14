@@ -193,9 +193,10 @@ export default {
 
     checkOrderResponse(response) {
       // eslint-disable-next-line no-underscore-dangle
+      console.log(response)
       switch (response.data.status) {
         case 'success':
-          this.$store.dispatch('setMyOrder', 'await');
+          this.$store.dispatch('setMyOrder', await);
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
