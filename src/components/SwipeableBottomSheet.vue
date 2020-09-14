@@ -44,24 +44,18 @@ export default {
     window.onresize = () => {
       this.rect = this.$refs.card.getBoundingClientRect();
     };
-
     this.rect = this.$refs.card.getBoundingClientRect();
-
     this.mc = new Hammer(this.$refs.pan);
     this.mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-
     this.mc.on('panup pandown', (evt) => {
       this.y = evt.center.y - 16;
     });
-
     this.mc.on('panstart', (evt) => {
       this.startY = evt.center.y;
       this.isMove = true;
     });
-
     this.mc.on('panend', (evt) => {
       this.isMove = false;
-
       switch (this.state) {
         case 'half':
           if (this.startY - evt.center.y > 120) {
@@ -131,7 +125,6 @@ export default {
     state() {
       if (this.state === 'close') {
         this.$store.dispatch('showBottomNavigation', true);
-        this.$store.dispatch('setBottomSheetShowStatus', false);
       }
     },
   },

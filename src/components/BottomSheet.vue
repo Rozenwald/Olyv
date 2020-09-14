@@ -1,6 +1,6 @@
 <template lang="pug">
-  swipeable-bottom-sheet(:halfY="0.5" ref="swipeableBottomSheet")
-    v-container(v-show="show")
+  swipeable-bottom-sheet(:halfY="0.5")
+    v-container
       v-text-field.adress-field(
         solo
         placeholder="Адрес"
@@ -45,7 +45,7 @@
 
 <script>
 import axios from 'axios';
-import { SwipeableBottomSheet } from 'vue-swipeable-bottom-sheet';
+import SwipeableBottomSheet from './SwipeableBottomSheet.vue';
 import SvgIcon from './SvgIcon.vue';
 
 export default {
@@ -66,37 +66,29 @@ export default {
       address: null,
     };
   },
-
   methods: {
     clickBtn() {
       this.error = this.checkForm();
     },
-
     checkForm() {
       if (this.address == null) {
         return 'Укажите адрес';
       }
-
       if (this.cost == null) {
         return 'Укажите цену';
       }
-
       if (!this.validCost(this.cost)) {
         return 'Неверный формат цены';
       }
-
       if (this.description == null) {
         return 'Описание должно быть больше 10 символов';
       }
-
       if (this.description.length < 10) {
         return 'Описание должно быть больше 10 символов';
       }
-
       this.createOrder();
       return null;
     },
-
     createOrder() {
       /* eslint-disable no-return-assign */
       axios
@@ -111,7 +103,6 @@ export default {
         .catch(() => (this.error = 'Ошибка'));
       /* eslint-enable no-return-assign */
     },
-
     checkResonse(response) {
       switch (response.data.status) {
         case 'invalidCost':
@@ -131,13 +122,11 @@ export default {
           this.error = 'Ошибка';
       }
     },
-
     validCost(cost) {
       const regex = /\d+/;
       return regex.test(cost);
     },
   },
-
   computed: {
     focused: {
       get() {
@@ -147,15 +136,9 @@ export default {
         this.$store.dispatch('setElFocus', val);
       },
     },
-
     state() {
       return this.$store.getters.getBottomSheetStatus;
     },
-
-    show() {
-      return this.$store.getters.showBottomSheet;
-    },
-
     error: {
       get() {
         return this.$store.getters.getError;
@@ -164,12 +147,10 @@ export default {
         this.$store.dispatch('setError', val);
       },
     },
-
     token() {
       return this.$store.getters.getToken;
     },
   },
-
   watch: {
     focused() {
       if (!this.focused) {
@@ -179,10 +160,8 @@ export default {
       }
     },
   },
-
   created() {
     this.windowHeight = window.innerHeight;
-
     window.addEventListener('resize', () => {
       if (window.innerHeight < this.windowHeight) {
         if ((this.addressFocus || this.descriptionFocus || this.costFocus) && this.state === 'half') {
@@ -200,16 +179,13 @@ export default {
   .adress-field {
     margin-bottom 12px !important
   }
-
   .description-field {
     margin-bottom 12px !important
   }
-
   .cost-field {
     max-width 40%
     margin-bottom 30px !important
   }
-
   .create-btn{
     width 80%
     background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
