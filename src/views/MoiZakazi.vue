@@ -107,6 +107,7 @@ export default {
 
  .chips {
    margin 0
+   background-color: #FFA967 0%
  }
 
  .await-order-list:first-child {
@@ -114,7 +115,7 @@ export default {
  }
 
  .active-chip {
-   background-color #56d68b
+   background-color #56d67b
    color #FFFFFF !important
  }
 </style>
