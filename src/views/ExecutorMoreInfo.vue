@@ -66,7 +66,7 @@
               @click="completeOrder"
               v-show="orderType == 'process'"
             ) Завершить
-          v-col(align='center')
+          v-col(align='center' v-show=" accept != 'free'")
             v-btn.chat-btn(rounded @click="goChat") Чат
 </template>
 
@@ -161,6 +161,21 @@ export default {
       /* eslint-enable no-return-assign */
     },
 
+    checkOrderResponse(response) {
+      // eslint-disable-next-line no-underscore-dangle
+      switch (response.data.status) {
+        case 'success':
+
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+
     cancelOrder() {
       /* eslint-disable no-return-assign */
       axios
@@ -191,20 +206,6 @@ export default {
       /* eslint-enable no-return-assign */
     },
 
-    checkOrderResponse(response) {
-      // eslint-disable-next-line no-underscore-dangle
-      switch (response.data.status) {
-        case 'success':
-          this.$router.back();
-          break;
-        case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
-          break;
-        default:
-          this.error = 'Ошибка';
-          break;
-      }
-    },
   },
   computed: {
     order() {
