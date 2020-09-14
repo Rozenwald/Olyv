@@ -55,6 +55,7 @@
               rounded
               @click="acceptOrder"
               v-show="orderType == 'free'"
+              value="await"
             ) Согласиться
             v-btn.cancel-btn(
               rounded
@@ -365,10 +366,11 @@ export default {
   .edit-price{
     margin-top 3px
   }
-
+  .cancel-btn, .completed-btn{
+    margin-right 5%
+  }
   .accept-btn, .cancel-btn, .completed-btn{
     width 90%
-    margin-right 5%
     background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
     font-style normal
     font-weight 600
