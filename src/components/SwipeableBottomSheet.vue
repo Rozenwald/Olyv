@@ -44,24 +44,18 @@ export default {
     window.onresize = () => {
       this.rect = this.$refs.card.getBoundingClientRect();
     };
-
     this.rect = this.$refs.card.getBoundingClientRect();
-
     this.mc = new Hammer(this.$refs.pan);
     this.mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-
     this.mc.on('panup pandown', (evt) => {
       this.y = evt.center.y - 16;
     });
-
     this.mc.on('panstart', (evt) => {
       this.startY = evt.center.y;
       this.isMove = true;
     });
-
     this.mc.on('panend', (evt) => {
       this.isMove = false;
-
       switch (this.state) {
         case 'half':
           if (this.startY - evt.center.y > 120) {
@@ -105,6 +99,33 @@ export default {
   computed: {
     state() {
       return this.$store.getters.getBottomSheetStatus;
+    },
+    focused: {
+      get() {
+        return this.$store.getters.getElFocus;
+      },
+      set(val) {
+        this.$store.dispatch('setElFocus', val);
+      },
+    },
+  },
+  watch: {
+    isMove() {
+      if (this.isMove) {
+        this.focused = false;
+      }
+    },
+    focused() {
+      if (this.focused) {
+        this.setState('open');
+      } else if (this.state !== 'close' && !this.isMove) {
+        this.setState('half');
+      }
+    },
+    state() {
+      if (this.state === 'close') {
+        this.$store.dispatch('showBottomNavigation', true);
+      }
     },
   },
 };

@@ -4,7 +4,6 @@
       appbar
       router-view.router
       bottom-sheet
-      address-sheet
       bottom-navigation
       login-dialog
       error-dialog
@@ -15,7 +14,6 @@
 import axios from 'axios';
 import Appbar from './components/Appbar.vue';
 import BottomSheet from './components/BottomSheet.vue';
-import AddressSheet from './components/AddressSheet.vue';
 import BottomNavigation from './components/BottomNavigation.vue';
 import store from './store/index';
 import LoginDialog from './components/LoginDialog.vue';
@@ -33,7 +31,6 @@ export default {
     LoginDialog,
     ErrorDialog,
     RepeatLoginDialog,
-    AddressSheet,
   },
 
   data: () => ({
