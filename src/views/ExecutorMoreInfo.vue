@@ -66,7 +66,8 @@
               @click="completeOrder"
               v-show="orderType == 'process'"
             ) Завершить
-          v-col(align='center' v-show="orderType != 'free'")
+          // v-col(align='center' v-show="orderType != 'free'")
+          v-col(align='center')
             v-btn.chat-btn(rounded @click="goChat") Чат
 </template>
 
@@ -193,10 +194,9 @@ export default {
 
     checkOrderResponse(response) {
       // eslint-disable-next-line no-underscore-dangle
-      console.log(response)
       switch (response.data.status) {
         case 'success':
-          this.$store.dispatch('setMyOrder', await);
+          this.$store.dispatch('setType', 'await');
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -366,9 +366,11 @@ export default {
   .edit-price{
     margin-top 3px
   }
+
   .cancel-btn, .completed-btn{
     margin-right 5%
   }
+
   .accept-btn, .cancel-btn, .completed-btn{
     width 90%
     background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
