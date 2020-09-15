@@ -6,14 +6,14 @@
 
     .text-message-wrp(align='center')
       v-textarea.text-message.ma-0(
-        v-model="msg"
-        solo
-        flat
-        hide-details
-        placeholder='Сообщение'
-        @click:append="checkNullMsg"
-        rows="1"
-        auto-grow)
+          v-model="msg"
+          solo
+          flat
+          hide-details
+          placeholder='Сообщение'
+          @click:append="checkNullMsg"
+          rows="1"
+          auto-grow)
         template(slot="append")
           .text-input-icon(@click="checkNullMsg")
             svg-icon(name="SendMsg")
@@ -80,10 +80,16 @@ export default {
       this.msg = this.msg.trim();
 
       if (this.msg.length !== 0) {
-        this.sendMessage();
+        this.sendBeforeMessage();
       }
 
       return undefined;
+    },
+
+    sendBeforeMessage() {
+      this.messages = this.msg;
+      this.scrollMsgDown();
+      this.sendMessage();
     },
 
     sendMessage() {
@@ -113,8 +119,6 @@ export default {
               message: [response.data.data],
             });
           }
-          this.msg = null;
-          this.getMessagesFromVuex();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -148,7 +152,6 @@ export default {
             id: this.idUserRequest,
             messages: response.data.data,
           });
-          this.getMessagesFromVuex();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -193,11 +196,6 @@ export default {
           this.error = 'Ошибка';
           break;
       }
-    },
-
-    getMessagesFromVuex() {
-      this.messages = this.$store.state.chat.messages[this.idUserRequest];
-      this.scrollMsgDown();
     },
 
     scrollMsgDown() {
