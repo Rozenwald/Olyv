@@ -4,6 +4,7 @@
       appbar
       router-view.router
       bottom-sheet
+      back-step
       bottom-navigation
       login-dialog
       error-dialog
@@ -19,6 +20,7 @@ import store from './store/index';
 import LoginDialog from './components/LoginDialog.vue';
 import ErrorDialog from './components/ErrorDialog.vue';
 import RepeatLoginDialog from './components/RepeatLoginDialog.vue';
+import BackStep from './components/BackStep.vue';
 
 export default {
   name: 'App',
@@ -27,6 +29,7 @@ export default {
   components: {
     Appbar,
     BottomSheet,
+    BackStep,
     BottomNavigation,
     LoginDialog,
     ErrorDialog,

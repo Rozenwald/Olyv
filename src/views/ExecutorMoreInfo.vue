@@ -100,7 +100,7 @@ export default {
 
     goChat() {
       this.$store.dispatch('setIdUserRequest', this.order.idUserCustomer);
-      this.$router.push('chat');
+      this.$router.push('Closed');
     },
 
     setPrice(val) {
@@ -196,7 +196,7 @@ export default {
       // eslint-disable-next-line no-underscore-dangle
       switch (response.data.status) {
         case 'success':
-          this.$store.dispatch('setType', 'await');
+          // this.$store.dispatch('setType', 'await');
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);

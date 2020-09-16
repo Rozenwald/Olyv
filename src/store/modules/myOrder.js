@@ -23,7 +23,7 @@ const getters = {
 
 const state = {
   order: null,
-  type: 'free',
+  type: null,
 };
 
 export default {
