@@ -22,7 +22,6 @@
 
 <script>
 import axios from 'axios';
-import { Swipe, SwipeItem } from 'vue-swipe';
 import SvgIcon from '../components/SvgIcon.vue';
 import LeftMsg from '../components/LeftMsg.vue';
 import RightMsg from '../components/RightMsg.vue';
@@ -34,8 +33,6 @@ export default {
     axios,
     LeftMsg,
     RightMsg,
-    Swipe,
-    SwipeItem,
   },
   data() {
     return {
