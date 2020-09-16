@@ -22,6 +22,7 @@
 
 <script>
 import axios from 'axios';
+import { Swipe, SwipeItem } from 'vue-swipe';
 import SvgIcon from '../components/SvgIcon.vue';
 import LeftMsg from '../components/LeftMsg.vue';
 import RightMsg from '../components/RightMsg.vue';
@@ -33,6 +34,8 @@ export default {
     axios,
     LeftMsg,
     RightMsg,
+    Swipe,
+    SwipeItem,
   },
   data() {
     return {
@@ -44,89 +47,42 @@ export default {
   },
   methods: {
 
-    handler() {
+    getUserData() {
       axios
-        .get(this.url)
-        .then((response) => (this.handlerCheck(response)))
-        .catch((error) => (this.errorCheck(error)));
-    },
-
-    handlerCheck(response) {
-      if (this.messages) {
-        this.$store.dispatch('setMessage', {
-          id: response.data.idUserRequest,
-          message: response.data,
-        });
-      } else {
-        this.$store.dispatch('setAllMessages', {
-          id: response.data.idUserRequest,
-          message: [response.data],
-        });
-      }
-      this.getMessagesFromVuex();
-      this.handler(this.url);
-    },
-
-    errorCheck(error) {
-      console.log(error);
-      setTimeout(this.handler(this.url), 5000);
-    },
-
-    checkNullMsg() {
-      if (this.msg == null) {
-        return undefined;
-      }
-
-      this.msg = this.msg.trim();
-
-      if (this.msg.length !== 0) {
-        this.sendBeforeMessage();
-      }
-
-      return undefined;
-    },
-
-    sendBeforeMessage() {
-      this.messages = this.msg;
-      this.scrollMsgDown();
-      this.sendMessage();
-    },
-
-    sendMessage() {
-      axios
-        .post(`${this.$baseChatUrl}api/v1/private/message`, {
-          token: this.chatToken,
-          method: 'add',
-          text: this.msg,
-          idUserRequest: this.idUserRequest,
+        .post(`${this.$baseUrl}api/v1/private/user`, {
+          method: 'receive',
+          submethod: 'id',
+          token: this.token,
+          id: this.idUserRequest,
         })
-        .then((response) => (this.checkAddMessage(response)))
+        .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
-        .catch((error) => (console.log(error)));
+        .catch(() => (this.error = 'Ошибка'));
     },
 
-    checkAddMessage(response) {
+    checkUserData(response) {
       switch (response.data.status) {
         case 'success':
-          if (this.messages) {
-            this.$store.dispatch('setMessage', {
-              id: this.idUserRequest,
-              message: response.data.data,
-            });
+          this.$store.commit('setUserRequest', response.data.data);
+          if (response.data.data.name) {
+            this.$store.commit('setTitle', `${response.data.data.name} ${response.data.data.lastname}`);
           } else {
-            this.$store.dispatch('setAllMessages', {
-              id: this.idUserRequest,
-              message: [response.data.data],
-            });
+            this.$store.commit('setTitle', response.data.data.email);
           }
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
+          this.$store.commit('setTitle', 'Чат');
           this.error = 'Ошибка';
           break;
       }
+    },
+
+    getMessagesFromVuex() {
+      this.messages = this.$store.state.chat.messages[this.idUserRequest];
+      this.scrollMsgDown();
     },
 
     getMessages() {
@@ -165,43 +121,96 @@ export default {
       }
     },
 
-    getUserData() {
+    handler() {
       axios
-        .post(`${this.$baseUrl}api/v1/private/user`, {
-          method: 'receive',
-          submethod: 'id',
-          token: this.token,
-          id: this.idUserRequest,
-        })
-        .then((response) => (this.checkUserData(response)))
-        // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .get(this.url)
+        .then((response) => (this.handlerCheck(response)))
+        .catch((error) => (this.errorCheck(error)));
     },
 
-    checkUserData(response) {
-      switch (response.data.status) {
-        case 'success':
-          this.$store.commit('setUserRequest', response.data.data);
-          if (response.data.data.name) {
-            this.$store.commit('setTitle', `${response.data.data.name} ${response.data.data.lastname}`);
-          } else {
-            this.$store.commit('setTitle', response.data.data.email);
-          }
-          break;
-        case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
-          break;
-        default:
-          this.$store.commit('setTitle', 'Чат');
-          this.error = 'Ошибка';
-          break;
+    handlerCheck(response) {
+      if (this.messages) {
+        this.$store.dispatch('setMessage', {
+          id: response.data.idUserRequest,
+          message: response.data,
+        });
+      } else {
+        this.$store.dispatch('setAllMessages', {
+          id: response.data.idUserRequest,
+          message: [response.data],
+        });
       }
+      this.getMessagesFromVuex();
+      this.handler(this.url);
+    },
+
+    errorCheck(error) {
+      console.log(error);
+      setTimeout(this.handler(this.url), 5000);
+    },
+
+    checkNullMsg() {
+      if (this.msg == null) {
+        return undefined;
+      }
+
+      this.msg = this.msg.trim();
+
+      if (this.msg.length !== 0) {
+        this.sendBeforeMessage();
+        console.log(this.sendBeforeMessage());
+      }
+
+      return undefined;
+    },
+
+    sendBeforeMessage() {
+      this.message = this.msg;
+      this.scrollMsgDown();
+      this.sendMessage();
+    },
+
+    sendMessage() {
+      axios
+        .post(`${this.$baseChatUrl}api/v1/private/message`, {
+          token: this.chatToken,
+          method: 'add',
+          text: this.msg,
+          idUserRequest: this.idUserRequest,
+        })
+        .then((response) => (this.checkAddMessage(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch((error) => (console.log(error)));
     },
 
     scrollMsgDown() {
       this.$nextTick(() => {
         window.scrollTo(0, document.body.scrollHeight);
       });
+    },
+
+    checkAddMessage(response) {
+      switch (response.data.status) {
+        case 'success':
+          if (this.messages) {
+            this.$store.dispatch('setMessage', {
+              id: this.idUserRequest,
+              message: response.data.data,
+            });
+          } else {
+            this.$store.dispatch('setAllMessages', {
+              id: this.idUserRequest,
+              message: [response.data.data],
+            });
+          }
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
     },
   },
 

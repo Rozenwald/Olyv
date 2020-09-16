@@ -14,10 +14,16 @@ import Verification from '../views/Verification.vue';
 import ExecutorProfile from '../views/ExecutorProfile.vue';
 import CustomerProfile from '../views/CustomerProfile.vue';
 import Chat from '../views/Chat.vue';
+import Liquid from '../views/closebutton.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    name: 'Closed',
+    path: '/Closed',
+    component: Liquid,
+  },
   {
     name: 'main',
     path: '/',
