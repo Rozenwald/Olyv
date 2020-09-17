@@ -1,7 +1,14 @@
 <template lang="pug">
-v-row.container-back(align='center')
-  Button.backbutton(@click="stepback()")
-    svg-icon(name="BackStep")
+v-row.container-back(
+    align='center'
+    @click="bubbleVisible()"
+    )
+  Button.backbutton(
+      :pose="isWidth ? '0' : '350'"
+      v-show="show"
+      v-on:drag-end="stepback()"
+      )
+    //svg-icon.icon(name="BackStep")
 </template>
 
 <script>
@@ -10,9 +17,16 @@ import SvgIcon from './SvgIcon.vue';
 
 export default {
   name: 'BackStep',
+  props: ['isWidth'],
+  data() {
+    return {
+      bubble: false,
+    };
+  },
   components: {
     Button: posed.div({
       draggable: true,
+      pressable: true,
       init: { scale: 1 },
       drag: { scale: 1.2 },
       dragEnd: {
@@ -24,10 +38,16 @@ export default {
     SvgIcon,
   },
   computed: {
+    show() {
+      return this.$store.getters.visibleBubble;
+    },
   },
   methods: {
     stepback() {
       this.$router.back();
+    },
+    bubbleVisible() {
+      this.$store.dispatch('showBubble', true);
     },
   },
 };
@@ -35,24 +55,28 @@ export default {
 
 <style lang="stylus" scoped>
   .container-back{
-    z-index: 1000
     position: fixed
-    left 0
+    left 12px
     top 0
     bottom 0
     background transparent !important
     height 100vh
-    width 100px
+    width 12px
   }
   .backbutton{
     top 0
     bottom 0
-    color #000
-    background #fef5ee !important
-    width 30px
-    min-width 25px !important
-    height 60px !important
+    background #fe7664 !important
+    width 31px
+    min-width 30px !important
+    height 30px !important
     border-radius 50%
     padding 0 !important
+  }
+  .icon{
+    left 0
+    top 0
+    right 0
+    bottom 0
   }
 </style>

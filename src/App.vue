@@ -2,12 +2,12 @@
   #app
     v-app
       appbar
-      back-step
       router-view.router
       bottom-sheet
       bottom-navigation
       login-dialog
       error-dialog
+      back-step
       repeat-login-dialog
 </template>
 
@@ -29,10 +29,10 @@ export default {
   components: {
     Appbar,
     BottomSheet,
-    BackStep,
     BottomNavigation,
     LoginDialog,
     ErrorDialog,
+    BackStep,
     RepeatLoginDialog,
   },
 
@@ -74,7 +74,7 @@ export default {
     this.$store.dispatch('setToken', window.localStorage.getItem('token'));
     this.$store.dispatch('setChatToken', window.localStorage.getItem('chatToken'));
     this.$store.dispatch('setIdChanal', window.localStorage.getItem('idChanal'));
-
+    this.$store.dispatch('showBubble', false);
     if (window.localStorage.getItem('token')) {
       this.getUserData();
     }
