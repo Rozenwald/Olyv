@@ -2,9 +2,9 @@
   #app
     v-app
       appbar
+      back-step
       router-view.router
       bottom-sheet
-      back-step
       bottom-navigation
       login-dialog
       error-dialog
