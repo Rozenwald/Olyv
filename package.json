@@ -36,6 +36,7 @@
     "swiper": "^6.1.1",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.1",
+    "vue-pose": "^0.5.1",
     "vue-router": "^3.2.0",
     "vue-scrollmagic": "^1.2.0",
     "vue-swipe-actions": "^2.0.0-beta.20",
