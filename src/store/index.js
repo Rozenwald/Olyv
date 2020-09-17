@@ -12,6 +12,7 @@ import user from './modules/user';
 import chat from './modules/chat';
 import myOrder from './modules/myOrder';
 import repeatLoginDialog from './modules/repeatLoginDialog';
+import backstep from './modules/backstep';
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -23,6 +24,7 @@ export default new Vuex.Store({
   },
   modules: {
     bottomSheet,
+    backstep,
     bottomNavigation,
     appbar,
     setting,
