@@ -6,14 +6,14 @@
 
     .text-message-wrp(align='center')
       v-textarea.text-message.ma-0(
-        v-model="msg"
-        solo
-        flat
-        hide-details
-        placeholder='Сообщение'
-        @click:append="checkNullMsg"
-        rows="1"
-        auto-grow)
+          v-model="msg"
+          solo
+          flat
+          hide-details
+          placeholder='Сообщение'
+          @click:append="checkNullMsg"
+          rows="1"
+          auto-grow)
         template(slot="append")
           .text-input-icon(@click="checkNullMsg")
             svg-icon(name="SendMsg")
@@ -43,124 +43,6 @@ export default {
     };
   },
   methods: {
-
-    handler() {
-      axios
-        .get(this.url)
-        .then((response) => (this.handlerCheck(response)))
-        .catch((error) => (this.errorCheck(error)));
-    },
-
-    handlerCheck(response) {
-      if (this.messages) {
-        this.$store.dispatch('setMessage', {
-          id: response.data.idUserRequest,
-          message: response.data,
-        });
-      } else {
-        this.$store.dispatch('setAllMessages', {
-          id: response.data.idUserRequest,
-          messages: [response.data],
-        });
-      }
-      this.getMessagesFromVuex();
-      this.handler(this.url);
-    },
-
-    errorCheck(error) {
-      console.log(error);
-      setTimeout(this.handler(this.url), 5000);
-    },
-
-    checkNullMsg() {
-      if (this.msg == null) {
-        return undefined;
-      }
-
-      this.msg = this.msg.trim();
-
-      if (this.msg.length !== 0) {
-        this.sendMessage();
-      }
-
-      return undefined;
-    },
-
-    sendMessage() {
-      axios
-        .post(`${this.$baseChatUrl}api/v1/private/message`, {
-          token: this.chatToken,
-          method: 'add',
-          text: this.msg,
-          idUserRequest: this.idUserRequest,
-        })
-        .then((response) => (this.checkAddMessage(response)))
-        // eslint-disable-next-line no-return-assign
-        .catch((error) => (console.log(error)));
-    },
-
-    checkAddMessage(response) {
-      switch (response.data.status) {
-        case 'success':
-          if (this.messages) {
-            this.$store.dispatch('setMessage', {
-              id: this.idUserRequest,
-              message: response.data.data,
-            });
-          } else {
-            this.$store.dispatch('setAllMessages', {
-              id: this.idUserRequest,
-              messages: [response.data.data],
-            });
-          }
-          this.msg = null;
-          this.getMessagesFromVuex();
-          break;
-        case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
-          break;
-        default:
-          this.error = 'Ошибка';
-          break;
-      }
-    },
-
-    getMessages() {
-      if (this.step >= 0) {
-        axios
-          .post(`${this.$baseChatUrl}api/v1/private/message`, {
-            token: this.chatToken,
-            method: 'receive',
-            submethod: 'chat',
-            idUserRequest: this.idUserRequest,
-            status: 'completed',
-          })
-          .then((response) => (this.checkGetMessages(response)))
-        // eslint-disable-next-line no-return-assign
-          .catch(() => (this.error = 'ошибка, Витя выжил'));
-      }
-    },
-
-    checkGetMessages(response) {
-      switch (response.data.status) {
-        case 'success':
-          this.$store.dispatch('setAllMessages', {
-            id: this.idUserRequest,
-            messages: response.data.data,
-          });
-          this.getMessagesFromVuex();
-          break;
-        case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
-          break;
-        case 'notExist':
-          this.$store.dispatch('setAllMessages', []);
-          break;
-        default:
-          this.error = 'Ошибка';
-          break;
-      }
-    },
 
     getUserData() {
       axios
@@ -200,10 +82,132 @@ export default {
       this.scrollMsgDown();
     },
 
+    getMessages() {
+      if (this.step >= 0) {
+        axios
+          .post(`${this.$baseChatUrl}api/v1/private/message`, {
+            token: this.chatToken,
+            method: 'receive',
+            submethod: 'chat',
+            idUserRequest: this.idUserRequest,
+            status: 'completed',
+          })
+          .then((response) => (this.checkGetMessages(response)))
+        // eslint-disable-next-line no-return-assign
+          .catch(() => (this.error = 'ошибка, Витя выжил'));
+      }
+    },
+
+    checkGetMessages(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.$store.dispatch('setAllMessages', {
+            id: this.idUserRequest,
+            messages: response.data.data,
+          });
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        case 'notExist':
+          this.$store.dispatch('setAllMessages', []);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+
+    handler() {
+      axios
+        .get(this.url)
+        .then((response) => (this.handlerCheck(response)))
+        .catch((error) => (this.errorCheck(error)));
+    },
+
+    handlerCheck(response) {
+      if (this.messages) {
+        this.$store.dispatch('setMessage', {
+          id: response.data.idUserRequest,
+          message: response.data,
+        });
+      } else {
+        this.$store.dispatch('setAllMessages', {
+          id: response.data.idUserRequest,
+          messages: [response.data],
+        });
+      }
+      this.getMessagesFromVuex();
+      this.handler(this.url);
+    },
+
+    errorCheck(error) {
+      console.log(error);
+      setTimeout(this.handler(this.url), 5000);
+    },
+
+    checkNullMsg() {
+      if (this.msg == null) {
+        return undefined;
+      }
+
+      this.msg = this.msg.trim();
+
+      if (this.msg.length !== 0) {
+        this.sendBeforeMessage();
+        console.log(this.sendBeforeMessage());
+      }
+
+      return undefined;
+    },
+
+    sendBeforeMessage() {
+      this.message = this.msg;
+      this.scrollMsgDown();
+      this.sendMessage();
+    },
+
+    sendMessage() {
+      axios
+        .post(`${this.$baseChatUrl}api/v1/private/message`, {
+          token: this.chatToken,
+          method: 'add',
+          text: this.msg,
+          idUserRequest: this.idUserRequest,
+        })
+        .then((response) => (this.checkAddMessage(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch((error) => (console.log(error)));
+    },
+
     scrollMsgDown() {
       this.$nextTick(() => {
         window.scrollTo(0, document.body.scrollHeight);
       });
+    },
+
+    checkAddMessage(response) {
+      switch (response.data.status) {
+        case 'success':
+          if (this.messages) {
+            this.$store.dispatch('setMessage', {
+              id: this.idUserRequest,
+              message: response.data.data,
+            });
+          } else {
+            this.$store.dispatch('setAllMessages', {
+              id: this.idUserRequest,
+              messages: [response.data.data],
+            });
+          }
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
     },
   },
 

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueAwesomeSwiper from 'vue-awesome-swiper';
+import { spring } from 'popmotion';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -21,6 +22,7 @@ new Vue({
   router,
   store,
   vuetify,
+  spring,
   VueAwesomeSwiper,
   VueScrollmagic,
   render: (h) => h(App),

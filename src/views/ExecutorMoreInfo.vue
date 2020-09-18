@@ -66,6 +66,7 @@
               @click="completeOrder"
               v-show="orderType == 'process'"
             ) Завершить
+          // v-col(align='center' v-show="orderType != 'free'")
           v-col(align='center')
             v-btn.chat-btn(rounded @click="goChat") Чат
 </template>
@@ -99,7 +100,7 @@ export default {
 
     goChat() {
       this.$store.dispatch('setIdUserRequest', this.order.idUserCustomer);
-      this.$router.push('chat');
+      this.$router.push('Closed');
     },
 
     setPrice(val) {
@@ -195,7 +196,7 @@ export default {
       // eslint-disable-next-line no-underscore-dangle
       switch (response.data.status) {
         case 'success':
-          this.$router.back();
+          // this.$store.dispatch('setType', 'await');
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -205,6 +206,7 @@ export default {
           break;
       }
     },
+
   },
   computed: {
     order() {
@@ -365,9 +367,12 @@ export default {
     margin-top 3px
   }
 
+  .cancel-btn, .completed-btn{
+    margin-right 5%
+  }
+
   .accept-btn, .cancel-btn, .completed-btn{
     width 90%
-    margin-right 5%
     background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
     font-style normal
     font-weight 600
