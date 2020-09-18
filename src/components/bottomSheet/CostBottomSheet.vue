@@ -1,25 +1,25 @@
 <template>
-<div class="wrapper" :data-open="state === 'open' ? 1 : 0">
-  <div class="bg" @click="() => setState('half')"></div>
-  <div
-    ref="card"
-    class="card"
-    :data-state="isMove ? 'move' : state"
-    :style="{ top: `${isMove ? y : calcY()}px` }"
-  >
-    <div class="pan-area" ref="pan"><div class="bar" ref="bar"></div></div>
-    <div class="contents">
-      <slot></slot>
+  <div class="wrapper" :data-open="state === 'open' ? 1 : 0">
+    <div class="bg" @click="() => setState('close')"></div>
+    <div
+      ref="card"
+      class="card"
+      :data-state="isMove ? 'move' : state"
+      :style="{ top: `${isMove ? y : calcY()}px` }"
+    >
+      <div class="pan-area" ref="pan"><div class="bar" ref="bar"></div></div>
+      <div class="contents">
+        <slot></slot>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
 import Hammer from 'hammerjs';
 
 export default {
-  name: 'swipeable-bottom-sheet',
+  name: 'address-bottom-sheet',
   props: {
     openY: {
       type: Number,
@@ -38,24 +38,31 @@ export default {
       isMove: false,
       rect: {},
       windowHeight: null,
+      type: 'address',
     };
   },
   mounted() {
     window.onresize = () => {
       this.rect = this.$refs.card.getBoundingClientRect();
     };
+
     this.rect = this.$refs.card.getBoundingClientRect();
+
     this.mc = new Hammer(this.$refs.pan);
     this.mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+
     this.mc.on('panup pandown', (evt) => {
       this.y = evt.center.y - 16;
     });
+
     this.mc.on('panstart', (evt) => {
       this.startY = evt.center.y;
       this.isMove = true;
     });
+
     this.mc.on('panend', (evt) => {
       this.isMove = false;
+
       switch (this.state) {
         case 'half':
           if (this.startY - evt.center.y > 120) {
@@ -68,6 +75,9 @@ export default {
         case 'open':
           if (this.startY - evt.center.y < -120) {
             this.setState('half');
+          }
+          if (this.startY - evt.center.y < -50) {
+            this.setState('close');
           }
           break;
         default:
@@ -93,39 +103,12 @@ export default {
       }
     },
     setState(state) {
-      this.$store.dispatch('setBottomSheetStatus', state);
+      this.$store.dispatch('setCostSheetStatus', state);
     },
   },
   computed: {
     state() {
-      return this.$store.getters.getBottomSheetStatus;
-    },
-    focused: {
-      get() {
-        return this.$store.getters.getElFocus;
-      },
-      set(val) {
-        this.$store.dispatch('setElFocus', val);
-      },
-    },
-  },
-  watch: {
-    isMove() {
-      if (this.isMove) {
-        this.focused = false;
-      }
-    },
-    focused() {
-      if (this.focused) {
-        this.setState('open');
-      } else if (this.state !== 'close' && !this.isMove) {
-        this.setState('half');
-      }
-    },
-    state() {
-      if (this.state === 'close') {
-        this.$store.dispatch('showBottomNavigation', true);
-      }
+      return this.$store.getters.getCostSheetStatus;
     },
   },
 };

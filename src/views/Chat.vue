@@ -134,7 +134,7 @@ export default {
       } else {
         this.$store.dispatch('setAllMessages', {
           id: response.data.idUserRequest,
-          message: [response.data],
+          messages: [response.data],
         });
       }
       this.getMessagesFromVuex();
@@ -197,7 +197,7 @@ export default {
           } else {
             this.$store.dispatch('setAllMessages', {
               id: this.idUserRequest,
-              message: [response.data.data],
+              messages: [response.data.data],
             });
           }
           break;

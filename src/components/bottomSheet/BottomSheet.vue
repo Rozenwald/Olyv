@@ -1,52 +1,52 @@
 <template lang="pug">
-  swipeable-bottom-sheet(:halfY="0.5")
-    v-container
-      v-text-field.adress-field(
-        solo
-        placeholder="Адрес"
-        hide-details
-        v-model="address"
-        ref="adressInput"
-        @focus="addressFocus = true"
-        @blur="addressFocus = false")
+    swipeable-bottom-sheet(:halfY="0.5" type='main')
+      v-container
+        v-text-field.adress-field(
+          solo
+          placeholder="Адрес"
+          hide-details
+          readonly
+          v-model="address"
+          ref="adressInput"
+          @click="openField('address')")
 
-      v-textarea.description-field(
-        solo
-        rows="4"
-        no-resize
-        placeholder="Описание"
-        hide-details
-        v-model="description"
-        ref="descriptionInput"
-        @focus="descriptionFocus = true"
-        @blur="descriptionFocus = false"
-      )
-
-      v-text-field.cost-field(
-        solo
-        placeholder="Цена"
-        hide-details
-        suffix="Руб"
-        type="number"
-        v-model="cost"
-        ref="costInput"
-        @focus="costFocus = true"
-        @blur="costFocus = false"
-      )
-
-      v-row(align='center' justify='center')
-        v-btn.create-btn(
-          align-content='center'
-          rounded
-          @click="clickBtn"
-          v-text="'Создать'"
+        v-textarea.description-field(
+          solo
+          rows="4"
+          no-resize
+          readonly
+          placeholder="Описание"
+          hide-details
+          v-model="description"
+          @click="openField('description')"
+          ref="descriptionInput"
         )
+
+        v-text-field.cost-field(
+          solo
+          placeholder="Цена"
+          hide-details
+          suffix="Руб"
+          type="number"
+          v-model="cost"
+          readonly
+          @click="openField('cost')"
+          ref="costInput"
+        )
+
+        v-row(align='center' justify='center')
+          v-btn.create-btn(
+            align-content='center'
+            rounded
+            @click="clickBtn"
+            v-text="'Создать'"
+          )
 </template>
 
 <script>
 import axios from 'axios';
 import SwipeableBottomSheet from './SwipeableBottomSheet.vue';
-import SvgIcon from './SvgIcon.vue';
+import SvgIcon from '../SvgIcon.vue';
 
 export default {
   name: 'bottom-sheet',
@@ -55,40 +55,52 @@ export default {
     SvgIcon,
     axios,
   },
-  data() {
-    return {
-      addressFocus: false,
-      descriptionFocus: false,
-      costFocus: false,
-      windowHeight: null,
-      description: null,
-      cost: null,
-      address: null,
-    };
-  },
   methods: {
     clickBtn() {
       this.error = this.checkForm();
     },
+
+    openField(field) {
+      switch (field) {
+        case 'address':
+          this.$store.dispatch('setAddressSheetStatus', 'open');
+          break;
+        case 'description':
+          this.$store.dispatch('setDescriptionSheetStatus', 'open');
+          break;
+        case 'cost':
+          this.$store.dispatch('setCostSheetStatus', 'open');
+          break;
+        default:
+          break;
+      }
+    },
+
     checkForm() {
       if (this.address == null) {
         return 'Укажите адрес';
       }
+
       if (this.cost == null) {
         return 'Укажите цену';
       }
+
       if (!this.validCost(this.cost)) {
         return 'Неверный формат цены';
       }
+
       if (this.description == null) {
         return 'Описание должно быть больше 10 символов';
       }
+
       if (this.description.length < 10) {
         return 'Описание должно быть больше 10 символов';
       }
+
       this.createOrder();
       return null;
     },
+
     createOrder() {
       /* eslint-disable no-return-assign */
       axios
@@ -103,6 +115,7 @@ export default {
         .catch(() => (this.error = 'Ошибка'));
       /* eslint-enable no-return-assign */
     },
+
     checkResonse(response) {
       switch (response.data.status) {
         case 'invalidCost':
@@ -112,7 +125,10 @@ export default {
           this.error = 'Описание должно быть больше 10 символов';
           break;
         case 'success':
-          this.$store.dispatch('setBottomSheetStatus', 'close');
+          this.$store.dispatch('setMainSheetStatus', 'close');
+          this.$store.dispatch('setAddress', null);
+          this.$store.dispatch('setDescription', null);
+          this.$store.dispatch('setCost', null);
           break;
         case 'notAuthenticate':
           this.$store.dispatch('setBottomSheetStatus', 'close');
@@ -122,23 +138,18 @@ export default {
           this.error = 'Ошибка';
       }
     },
+
     validCost(cost) {
       const regex = /\d+/;
       return regex.test(cost);
     },
   },
+
   computed: {
-    focused: {
-      get() {
-        return this.$store.getters.getElFocus;
-      },
-      set(val) {
-        this.$store.dispatch('setElFocus', val);
-      },
-    },
     state() {
       return this.$store.getters.getBottomSheetStatus;
     },
+
     error: {
       get() {
         return this.$store.getters.getError;
@@ -147,30 +158,22 @@ export default {
         this.$store.dispatch('setError', val);
       },
     },
+
     token() {
       return this.$store.getters.getToken;
     },
-  },
-  watch: {
-    focused() {
-      if (!this.focused) {
-        this.$refs.adressInput.blur();
-        this.$refs.descriptionInput.blur();
-        this.$refs.costInput.blur();
-      }
+
+    address() {
+      return this.$store.getters.getAddress;
     },
-  },
-  created() {
-    this.windowHeight = window.innerHeight;
-    window.addEventListener('resize', () => {
-      if (window.innerHeight < this.windowHeight) {
-        if ((this.addressFocus || this.descriptionFocus || this.costFocus) && this.state === 'half') {
-          this.focused = true;
-        }
-      } else {
-        this.focused = false;
-      }
-    });
+
+    description() {
+      return this.$store.getters.getDescription;
+    },
+
+    cost() {
+      return this.$store.getters.getCost;
+    },
   },
 };
 </script>
@@ -179,13 +182,16 @@ export default {
   .adress-field {
     margin-bottom 12px !important
   }
+
   .description-field {
     margin-bottom 12px !important
   }
+
   .cost-field {
     max-width 40%
     margin-bottom 30px !important
   }
+
   .create-btn{
     width 80%
     background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
