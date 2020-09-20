@@ -48,7 +48,7 @@ export default {
       if ((index === 2 || index === 3) && !this.isAuth) {
         this.showLoginDialog();
       } else if (index === 2) {
-        this.$store.dispatch('setBottomSheetStatus', 'half');
+        this.$store.dispatch('setMainSheetStatus', 'half');
       } else {
         this.route(routeName);
       }
