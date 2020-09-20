@@ -1,9 +1,17 @@
 <template lang="pug">
     v-container
       v-row.chips(align='center' justify='space-around' )
+
         v-chip-group(v-model="type" mandatory active-class="active-chip")
-          v-chip(value="all") В ожидании
-          v-chip(value="process") В процессе
+          v-chip(value="all"
+                outlined
+                color="#56d67b"
+                text-color="#000") В ожидании
+          v-chip(value="process"
+                outlined
+                color="#56d67b"
+                text-color="#000") В процессе
+
       .await-order-list(v-show="type=='all'")
         OrderCard1(
           v-for='order in awaitOrders'
@@ -118,6 +126,7 @@ export default {
 
  .active-chip {
    background-color #56d67b
-   color #FFFFFF !important
+   color #56d67b !important
+   text-color #56d67b
  }
 </style>

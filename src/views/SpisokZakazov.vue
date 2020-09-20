@@ -4,9 +4,18 @@
                         align='center'
                         justify='space-around')
         v-chip-group(v-model="type" mandatory active-class="active-chip")
-          v-chip(value="free") Все заказы
-          v-chip(value="await") В ожидании
-          v-chip(value="process") В процессе
+          v-chip(value="free"
+                outlined
+                color="#56d67b"
+                text-color="#000") Все заказы
+          v-chip(value="await"
+                outlined
+                color="#56d67b"
+                text-color="#000") В ожидании
+          v-chip(value="process"
+                outlined
+                color="#56d67b"
+                text-color="#000") В процессе
 
       .free-list(v-show="type=='free'")
         OrderCard2(
@@ -206,18 +215,14 @@ export default {
     border-bottom none
   }
   .chips {
-    background-color #FFFFFF
-    padding 12px
-    box-shadow 0 1px 3px rgba(0,0,0,0.12),
-               0 1px 2px rgba(0,0,0,0.12)
-    border-radius 2px
-    margin-bottom 12px
-    margin-right 0
-    margin-left 0
+   margin-bottom 12px
+   background: #e3e3e3 50%
+   padding-left 15px
+   padding-right 15px
   }
 
   .active-chip {
     background-color #56d68b
-    color #FFFFFF !important
+    color #56d68b !important
   }
 </style>
