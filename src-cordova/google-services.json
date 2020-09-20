@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "569864398627",
+    "firebase_url": "https://olyv-2020.firebaseio.com",
+    "project_id": "olyv-2020",
+    "storage_bucket": "olyv-2020.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569864398627:android:2bbaeb34a135c0c200ce96",
+        "android_client_info": {
+          "package_name": "com.sopki.olyv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "569864398627-2nehu4rii2f1v3g1ifpha4mnku9n8t3t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7J8EDQTqg3TAzaCma51waO_CvtakYi6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "569864398627-2nehu4rii2f1v3g1ifpha4mnku9n8t3t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

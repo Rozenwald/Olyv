@@ -83,7 +83,7 @@ export default {
           password: this.password,
         })
         .then((response) => (this.checkSignIn(response)))
-        .catch(() => (this.error = 'Ошибка авторизации'));
+        .catch((error) => (console.log(error)));
       /* eslint-enable no-return-assign */
     },
 
@@ -104,6 +104,7 @@ export default {
     },
 
     checkSignIn(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           window.localStorage.setItem('token', response.data.data);
@@ -117,7 +118,7 @@ export default {
           this.error = 'Неверный пароль';
           break;
         default:
-          this.error = 'Ошибка авторизации';
+          this.error = `${response.data.status} d`;
           break;
       }
     },
