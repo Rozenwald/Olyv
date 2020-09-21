@@ -1,18 +1,19 @@
 const mutations = {
-  setMyOrder(state, data) {
-    state.order = data.order;
+  setMyOrder(state, order) {
+    state.order = order;
   },
-  setType(state, data) {
-    state.type = data.type;
+  setType(state, type) {
+    console.log(type);
+    state.type = type;
   },
 };
 
 const actions = {
-  setMyOrder({ commit }, data) {
-    commit('setMyOrder', data);
+  setMyOrder({ commit }, order) {
+    commit('setMyOrder', order);
   },
-  setType({ commit }, data) {
-    commit('setType', data);
+  setType({ commit }, type) {
+    commit('setType', type);
   },
 };
 

@@ -9,6 +9,7 @@ const state = {
     { title: 'Редактирвание профиля', icon: 'EditProfile', route: 'setUserData' },
     { title: 'Связь с разработчиком', icon: 'ConnectDev' },
     { title: 'Информация', icon: 'Info' },
+    { title: 'Ключевые слова', icon: 'BlackList', route: 'keyWord' },
   ],
 };
 
