@@ -4,6 +4,8 @@
                         align='center'
                         justify='space-around')
         v-chip-group(v-model="type" mandatory active-class="active-chip")
+          v-chip.keyword-chip
+            svg-icon(name='KeyWord' width='30' height='30')
           v-chip(value="free"
                 outlined
                 color="#56d67b"
@@ -43,6 +45,7 @@
 <script>
 import axios from 'axios';
 import OrderCard2 from './OrderCard2.vue';
+import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
   name: 'spisokZakazov',
@@ -56,6 +59,7 @@ export default {
   components: {
     OrderCard2,
     axios,
+    SvgIcon,
   },
   methods: {
     getData() {
@@ -193,6 +197,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .keyword-chip{
+    padding 0
+  }
   .await-list:first-child, .free-list:first-child, .free-process:first-child {
     margin-top 0
   }
