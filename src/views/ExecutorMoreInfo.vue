@@ -54,11 +54,11 @@
             v-btn.accept-btn(
               rounded
               @click="acceptOrder"
-              v-show="orderType == 'free'"
+              v-show="orderType == 'free' "
             ) Согласиться
             v-btn.cancel-btn(
               rounded
-              @click="cancelOrder"
+              @click="getMyResponseOrder"
               v-show="orderType == 'await'"
             ) Отменить
             v-btn.completed-btn(
@@ -66,8 +66,7 @@
               @click="completeOrder"
               v-show="orderType == 'process'"
             ) Завершить
-          // v-col(align='center' v-show="orderType != 'free'")
-          v-col(align='center')
+          v-col(align='center' v-show="orderType != 'free'")
             v-btn.chat-btn(rounded @click="goChat") Чат
 </template>
 
@@ -129,6 +128,25 @@ export default {
         .then((response) => (this.checkCustomerUserData(response)))
         // eslint-disable-next-line no-return-assign
         .catch(() => (this.error = 'Ошибка загрузки данных'));
+    },
+
+    getMyResponseOrder() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/private/response`, {
+          token: this.token,
+          method: 'receive',
+          submethod: 'executor',
+          status: 'await',
+          // eslint-disable-next-line no-underscore-dangle
+          id: this.order._id,
+        })
+        .then((response) => (this.checkMyResponseOrder(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+    checkMyResponseOrder(response) {
+      console.log(response);
     },
 
     checkCustomerUserData(response) {
@@ -194,9 +212,17 @@ export default {
 
     checkOrderResponse(response) {
       // eslint-disable-next-line no-underscore-dangle
+      console.log(response);
+      console.log(this.orderType);
+      console.log(response.data.status);
+
       switch (response.data.status) {
         case 'success':
-          // this.$store.dispatch('setType', 'await');
+          if (this.orderType === 'free') {
+            this.$store.dispatch('setType', 'await');
+          } else if (this.orderType === 'await') {
+            this.$store.dispatch('setType', 'free');
+          }
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
