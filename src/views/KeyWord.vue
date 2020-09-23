@@ -1,12 +1,14 @@
 <template lang="pug">
   v-container
-    v-textarea.keyword-input(solo
-              rows="4"
-              no-resize
-              placeholder="Ключевые слова"
-              hide-details)
+    v-textarea.keyword-input(
+      v-model="keyWord"
+      solo
+      rows="3"
+      placeholder="Ключевые слова"
+      hide-details)
+
     v-row.btn-wrapper(align='center' justify='center')
-        v-btn.btn-save(rounded @click="checkForm") Сохранить
+        v-btn.btn-save(rounded @click="addKeyWord") Сохранить
 </template>
 
 <script>
@@ -14,16 +16,29 @@ import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
-  name: 'Chat',
+  name: 'keyWord',
   components: {
     SvgIcon,
     axios,
   },
   data() {
     return {
+      keyWord: null,
     };
   },
   methods: {
+    addKeyWord() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/keyword`, {
+          method: 'add',
+          text: this.keyWord,
+          submethod: 'id',
+          id: this.idUserRequest,
+        })
+        .then((response) => (this.checkUserData(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'Ошибка'));
+    },
   },
 
   computed: {
