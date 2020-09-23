@@ -99,7 +99,7 @@ export default {
 
     goChat() {
       this.$store.dispatch('setIdUserRequest', this.order.idUserCustomer);
-      this.$router.push('Closed');
+      this.$router.push('chat');
     },
 
     setPrice(val) {

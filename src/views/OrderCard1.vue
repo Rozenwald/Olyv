@@ -49,7 +49,8 @@ export default {
   methods: {
     route() {
       // eslint-disable-next-line no-underscore-dangle
-      this.$store.dispatch('setMyOrder', { order: this.item, type: this.type });
+      this.$store.dispatch('setMyOrder', this.item);
+      this.$store.dispatch('setType', this.type);
       this.$router.push('customerMoreInfo');
     },
   },
