@@ -5,7 +5,7 @@
                         justify='space-around')
         v-chip-group(v-model="type" mandatory active-class="active-chip")
           v-chip.keyword-chip
-            svg-icon(name='KeyWord' width='30' height='30')
+            svg-icon(name='KeyWord' width='30' height='32')
           v-chip(value="free"
                 outlined
                 color="#56d67b"
@@ -199,6 +199,7 @@ export default {
 <style lang="stylus" scoped>
   .keyword-chip{
     padding 0
+    height 30px
   }
   .await-list:first-child, .free-list:first-child, .free-process:first-child {
     margin-top 0
