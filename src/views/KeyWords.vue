@@ -16,7 +16,7 @@ import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
-  name: 'keyWord',
+  name: 'keyWords',
   components: {
     SvgIcon,
     axios,
@@ -30,14 +30,16 @@ export default {
     addKeyWord() {
       axios
         .post(`${this.$baseUrl}api/v1/private/keyword`, {
+          token: this.token,
           method: 'add',
           text: this.keyWord,
-          submethod: 'id',
-          id: this.idUserRequest,
         })
-        .then((response) => (this.checkUserData(response)))
+        .then((response) => (this.checkAddKeyWord(response)))
         // eslint-disable-next-line no-return-assign
         .catch(() => (this.error = 'Ошибка'));
+    },
+    checkAddKeyWord(response) {
+      console.log(response);
     },
   },
 
