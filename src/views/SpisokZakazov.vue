@@ -1,11 +1,14 @@
 <template lang="pug">
     v-container
       v-row.chips(v-show="user.verification == 'completed'"
-                        align='center'
-                        justify='space-around')
+                  align='center'
+                  justify='space-around')
+
         v-chip-group(v-model="type" mandatory active-class="active-chip")
-          v-chip.keyword-chip
-            svg-icon(name='KeyWord' width='30' height='32')
+
+          v-chip.keyword-chip(value="keyword")
+            svg-icon(name='KeyWord' width='30' height='30' color='#000')
+
           v-chip(value="free"
                 outlined
                 color="#56d67b"
@@ -18,7 +21,13 @@
                 outlined
                 color="#56d67b"
                 text-color="#000") В процессе
-
+      .free-list(v-show="type=='keyword'")
+        OrderCard2(
+                  v-for='item in keyOrder'
+                  type='keyword'
+                  :key='item._id'
+                  :item='item'
+                  )
       .free-list(v-show="type=='free'")
         OrderCard2(
                   v-for='item in items'
@@ -50,11 +59,14 @@ import SvgIcon from '../components/SvgIcon.vue';
 export default {
   name: 'spisokZakazov',
   data: () => ({
+    keyOrder: [],
+    keyword: [],
     items: null,
     myOrders: [],
     processOrders: null,
     error: '',
     type: 'free',
+    step: 0,
   }),
   components: {
     OrderCard2,
@@ -62,6 +74,64 @@ export default {
     SvgIcon,
   },
   methods: {
+
+    getKeyWord() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/private/keyword`, {
+          token: this.token,
+          method: 'receive',
+          step: this.step,
+        })
+        .then((response) => (this.checkKeyWord(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+
+    checkKeyWord(response) {
+      console.log(response);
+      switch (response.data.status) {
+        case 'success':
+          if (response.data.data.length <= 9) {
+            response.data.data.forEach((element) => {
+              (this.keyword.push(element.text));
+              console.log(this.keyword);
+              // this.addKeyOrder(element);
+            });
+          } else {
+            response.data.data.forEach((element) => {
+              (this.keyword.push(element.text));
+              console.log(this.keyword);
+            });
+            console.log(this.step += 1);
+            console.log(this.getKeyWord());
+          }
+          break;
+        case 'notExist':
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+    addKeyOrder(element) {
+      console.log(element);
+      axios
+        .post(`${this.$baseUrl}api/v1/private/order`, {
+          token: this.token,
+          method: 'receive',
+          submethod: 'executor',
+          status: 'await',
+        })
+        .then((response) => (this.checkKeyOrder(response, element)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'Ошибка'));
+    },
+
+    checkKeyOrder(response, element) {
+      console.log(element.text);
+    },
+
     getData() {
       /* eslint-disable no-return-assign */
       axios
@@ -75,6 +145,7 @@ export default {
         .catch(() => (this.error = 'Ошибка'));
       /* eslint-enable no-return-assign */
     },
+
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
@@ -192,6 +263,7 @@ export default {
     this.getData();
     this.getMyResponseOrder();
     this.getProcessOrders();
+    this.getKeyWord();
   },
 };
 </script>
@@ -199,8 +271,9 @@ export default {
 <style lang="stylus" scoped>
   .keyword-chip{
     padding 0
-    height 30px
+    height 30px !important
   }
+
   .await-list:first-child, .free-list:first-child, .free-process:first-child {
     margin-top 0
   }

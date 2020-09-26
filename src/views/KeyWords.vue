@@ -40,6 +40,10 @@ export default {
     },
     checkAddKeyWord(response) {
       console.log(response);
+      console.log(this.token);
+    },
+    tokenadd() {
+      console.log(this.token);
     },
   },
 

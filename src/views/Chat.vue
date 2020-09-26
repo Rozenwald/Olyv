@@ -16,7 +16,7 @@
           auto-grow)
         template(slot="append")
           .text-input-icon(@click="checkNullMsg")
-            svg-icon(name="SendBeforeMsg")
+            svg-icon(name="SendMsg")
 
 </template>
 
