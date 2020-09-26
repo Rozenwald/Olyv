@@ -39,6 +39,7 @@ export default {
         .catch(() => (this.error = 'Ошибка'));
     },
     checkAddKeyWord(response) {
+      this.keyWord = null;
       console.log(response);
       console.log(this.token);
     },
