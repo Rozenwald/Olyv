@@ -30,7 +30,7 @@
                   )
       .free-list(v-show="type=='free'")
         OrderCard2(
-                  v-for='item in items'
+                  v-for='item in all'
                   type='free'
                   :key='item._id'
                   :item='item'
@@ -59,9 +59,10 @@ import SvgIcon from '../components/SvgIcon.vue';
 export default {
   name: 'spisokZakazov',
   data: () => ({
+    keyword: '',
+    text: [],
     keyOrder: [],
-    keyword: [],
-    items: null,
+    all: null,
     myOrders: [],
     processOrders: null,
     error: '',
@@ -89,22 +90,19 @@ export default {
     },
 
     checkKeyWord(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
-          if (response.data.data.length <= 9) {
+          if (response.data.data.length <= 49) {
             response.data.data.forEach((element) => {
-              (this.keyword.push(element.text));
+              this.keyword = `${this.keyword + element.text}|`;
               console.log(this.keyword);
-              // this.addKeyOrder(element);
             });
           } else {
             response.data.data.forEach((element) => {
-              (this.keyword.push(element.text));
-              console.log(this.keyword);
+              this.keyword = `${this.keyword + element.text}|`;
             });
-            console.log(this.step += 1);
-            console.log(this.getKeyWord());
+            this.step += 1;
+            this.getKeyWord();
           }
           break;
         case 'notExist':
@@ -114,8 +112,7 @@ export default {
           break;
       }
     },
-    addKeyOrder(element) {
-      console.log(element);
+    addKeyOrder() {
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
@@ -123,13 +120,19 @@ export default {
           submethod: 'executor',
           status: 'await',
         })
-        .then((response) => (this.checkKeyOrder(response, element)))
+        .then((response) => (this.checkKeyOrder(response)))
         // eslint-disable-next-line no-return-assign
         .catch(() => (this.error = 'Ошибка'));
     },
 
-    checkKeyOrder(response, element) {
-      console.log(element.text);
+    checkKeyOrder(response) {
+      console.log(response);
+      console.log(response.data.data.length);
+      for (let j = 0; j < response.data.data.length; j += 1) {
+        this.keyOrder[j] = response.data.data[j].description.match(/"черти", "биба"/i);
+        console.log(this.keyOrder[j]);
+      }
+      console.log(this.keyOrder);
     },
 
     getData() {
@@ -149,7 +152,7 @@ export default {
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.items = response.data.data.reverse();
+          this.all = response.data.data.reverse();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -264,6 +267,7 @@ export default {
     this.getMyResponseOrder();
     this.getProcessOrders();
     this.getKeyWord();
+    this.addKeyOrder();
   },
 };
 </script>
