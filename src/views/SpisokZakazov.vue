@@ -67,7 +67,8 @@ export default {
     processOrders: null,
     error: '',
     type: 'free',
-    step: 0,
+    date: null,
+    regexp: null,
   }),
   components: {
     OrderCard2,
@@ -82,7 +83,7 @@ export default {
         .post(`${this.$baseUrl}api/v1/private/keyword`, {
           token: this.token,
           method: 'receive',
-          step: this.step,
+          date: this.date,
         })
         .then((response) => (this.checkKeyWord(response)))
         .catch(() => (this.error = 'Ошибка'));
@@ -91,25 +92,23 @@ export default {
 
     checkKeyWord(response) {
       console.log(response);
-      console.log(response.data.data.length);
       switch (response.data.status) {
         case 'success':
-          if (response.data.data.length <= 9) {
-            response.data.data.forEach((element) => {
-              this.keyword = `${this.keyword + element.text}|`;
-              console.log(this.keyword);
-            });
-          } else {
-            response.data.data.forEach((element) => {
-              this.keyword = `${this.keyword + element.text}|`;
-              console.log(this.keyword);
-            });
-            this.step += 1;
-            console.log(this.step);
-            this.getKeyWord();
-          }
+          this.date = new Date(response.data.data[response.data.data.length - 1].createDate);
+          this.date = this.date.getTime();
+          console.log(this.date);
+          response.data.data.forEach((element) => {
+            this.keyword = `${this.keyword + element.text}|`;
+            console.log(this.keyword);
+          });
+          this.getKeyWord();
           break;
         case 'notExist':
+          this.keyword = this.keyword.substring(0, this.keyword.length - 1);
+          console.log(this.keyword);
+          this.regexp = new RegExp(`${this.keyword}`);
+          console.log(this.regexp);
+          this.addKeyOrder();
           break;
         default:
           this.error = 'Ошибка';
@@ -132,9 +131,12 @@ export default {
     checkKeyOrder(response) {
       console.log(response);
       console.log(response.data.data.length);
+      console.log(this.regexp.test(response.data.data[17].description));
       for (let j = 0; j < response.data.data.length; j += 1) {
-        // this.keyOrder[j] = response.data.data[j].description.match(/"черти", "биба"/i);
-        console.log(this.keyOrder[j]);
+        if (this.regexp.test(response.data.data[j].description)) {
+          console.log(this.regexp.test(response.data.data[j].description));
+          console.log(this.keyOrder.push(response.data.data[j]));
+        }
       }
       console.log(this.keyOrder);
     },
@@ -266,12 +268,11 @@ export default {
     },
   },
   created() {
-    this.$store.commit('setTitle', 'Список заказов');
+    this.$store.commit('setTitle', 'Список за казов');
     this.getData();
     this.getMyResponseOrder();
     this.getProcessOrders();
     this.getKeyWord();
-    this.addKeyOrder();
   },
 };
 </script>
