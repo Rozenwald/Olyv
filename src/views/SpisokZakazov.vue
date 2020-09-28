@@ -90,9 +90,11 @@ export default {
     },
 
     checkKeyWord(response) {
+      console.log(response);
+      console.log(response.data.data.length);
       switch (response.data.status) {
         case 'success':
-          if (response.data.data.length <= 49) {
+          if (response.data.data.length <= 9) {
             response.data.data.forEach((element) => {
               this.keyword = `${this.keyword + element.text}|`;
               console.log(this.keyword);
@@ -100,8 +102,10 @@ export default {
           } else {
             response.data.data.forEach((element) => {
               this.keyword = `${this.keyword + element.text}|`;
+              console.log(this.keyword);
             });
             this.step += 1;
+            console.log(this.step);
             this.getKeyWord();
           }
           break;
@@ -129,7 +133,7 @@ export default {
       console.log(response);
       console.log(response.data.data.length);
       for (let j = 0; j < response.data.data.length; j += 1) {
-        this.keyOrder[j] = response.data.data[j].description.match(/"черти", "биба"/i);
+        // this.keyOrder[j] = response.data.data[j].description.match(/"черти", "биба"/i);
         console.log(this.keyOrder[j]);
       }
       console.log(this.keyOrder);
