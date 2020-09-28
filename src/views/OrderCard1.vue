@@ -80,6 +80,7 @@ export default {
 
   .card {
     padding 10px 0 10px 10px
+    border 0
   }
 
   .swiper:first-child {
