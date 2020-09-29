@@ -79,7 +79,6 @@ export default {
 
     getMessagesFromVuex() {
       this.messages = this.$store.state.chat.messages[this.idUserRequest];
-      this.scrollMsgDown();
     },
 
     getMessages() {
@@ -105,6 +104,8 @@ export default {
             id: this.idUserRequest,
             messages: response.data.data,
           });
+          this.getMessagesFromVuex();
+          this.scrollMsgDown();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -154,20 +155,27 @@ export default {
       this.msg = this.msg.trim();
 
       if (this.msg.length !== 0) {
-        this.sendBeforeMessage();
-        console.log(this.sendBeforeMessage());
+        this.sendMessage();
       }
 
       return undefined;
     },
 
     sendBeforeMessage() {
-      this.message = this.msg;
+      const date = new Date();
+
+      this.message = {
+        text: this.msg,
+        ofCreateDate: date,
+      };
+
       this.scrollMsgDown();
       this.sendMessage();
     },
 
     sendMessage() {
+      this.message = this.msg;
+      this.scrollMsgDown();
       axios
         .post(`${this.$baseChatUrl}api/v1/private/message`, {
           token: this.chatToken,
@@ -200,9 +208,54 @@ export default {
               messages: [response.data.data],
             });
           }
+          this.scrollMsgDown();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+    getMoreMessages() {
+      const lastDate = this.messages[0].ofCreateDate;
+      const date = new Date(lastDate).getTime() - 1000;
+
+      axios
+        .post(`${this.$baseChatUrl}api/v1/private/message`, {
+          token: this.chatToken,
+          method: 'receive',
+          submethod: 'chat',
+          idUserRequest: this.idUserRequest,
+          status: 'completed',
+          date,
+        })
+        .then((response) => (this.checkMoreMessages(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'ошибка, Витя выжил'));
+    },
+
+    checkMoreMessages(response) {
+      console.log(response);
+      switch (response.data.status) {
+        case 'success':
+          this.$store.dispatch('setMoreMessages', {
+            id: this.idUserRequest,
+            messages: response.data.data,
+          });
+          this.getMessagesFromVuex();
+          window.onscroll = () => {
+            if (window.pageYOffset <= 300) {
+              this.getMoreMessages();
+              window.onscroll = null;
+            }
+          };
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        case 'notExist':
           break;
         default:
           this.error = 'Ошибка';
@@ -230,11 +283,21 @@ export default {
     user() {
       return this.$store.getters.getUser;
     },
+    test() {
+      return this.$store.state.chat.messages;
+    },
   },
 
   mounted() {
     this.$store.dispatch('showAppbar', true);
     this.$store.dispatch('showBottomNavigation', false);
+
+    window.onscroll = () => {
+      if (window.pageYOffset <= 300) {
+        this.getMoreMessages();
+        window.onscroll = null;
+      }
+    };
   },
   beforeDestroy() {
     this.$store.dispatch('showAppbar', true);
@@ -252,7 +315,11 @@ export default {
 
 <style lang="stylus" scoped>
   .message {
-    margin 5px 0
+    margwin 5px 0
+  }
+
+  .container {
+    overflow scroll;
   }
 
   .message:first-child {

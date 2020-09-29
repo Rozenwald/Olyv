@@ -27,3 +27,22 @@ new Vue({
   VueScrollmagic,
   render: (h) => h(App),
 }).$mount('#app');
+
+// eslint-disable-next-line no-unused-vars
+let cordova;
+// eslint-disable-next-line no-unused-vars
+let FirebasePlugin;
+
+function onDeviceReady() {
+  console.log('deviceready');
+  FirebasePlugin = window.FirebasePlugin;
+  FirebasePlugin.getToken(
+    (token) => {
+      console.log(token);
+    },
+    (error) => console.error('Failed to get FCM token', error),
+  );
+  cordova = window.cordova;
+}
+
+document.addEventListener('deviceready', onDeviceReady);
