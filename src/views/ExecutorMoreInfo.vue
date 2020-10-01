@@ -54,6 +54,11 @@
             v-btn.accept-btn(
               rounded
               @click="acceptOrder"
+              v-show="orderType == 'keyword' "
+            ) Согласиться
+            v-btn.accept-btn(
+              rounded
+              @click="acceptOrder"
               v-show="orderType == 'free' "
             ) Согласиться
             v-btn.cancel-btn(
@@ -66,7 +71,7 @@
               @click="completeOrder"
               v-show="orderType == 'process'"
             ) Завершить
-          v-col(align='center' v-show="orderType != 'free'")
+          v-col(align='center' v-show="orderType != ('free' || 'keyword')")
             v-btn.chat-btn(rounded @click="goChat") Чат
 </template>
 
@@ -218,7 +223,7 @@ export default {
 
       switch (response.data.status) {
         case 'success':
-          if (this.orderType === 'free') {
+          if (this.orderType === ('free' || 'keyword')) {
             this.$store.dispatch('setType', 'await');
           } else if (this.orderType === 'await') {
             this.$store.dispatch('setType', 'free');

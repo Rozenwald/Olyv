@@ -106,7 +106,7 @@ export default {
         case 'notExist':
           this.keyword = this.keyword.substring(0, this.keyword.length - 1);
           console.log(this.keyword);
-          this.regexp = new RegExp(`${this.keyword}`);
+          this.regexp = new RegExp(`${this.keyword}`, 'im');
           console.log(this.regexp);
           this.addKeyOrder();
           break;
@@ -267,7 +267,7 @@ export default {
     },
   },
   created() {
-    this.$store.commit('setTitle', 'Список за казов');
+    this.$store.commit('setTitle', 'Список заказов');
     this.getData();
     this.getMyResponseOrder();
     this.getProcessOrders();
