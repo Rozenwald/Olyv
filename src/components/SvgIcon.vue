@@ -1,6 +1,6 @@
 <template>
   <svg class="svg-icon" :style="style" xmlns="http://www.w3.org/2000/svg">
-    <use :width="style.width" :height="style.height" :href="iconPath" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+    <use :width="style.width" :color="style.color" :height="style.height" :href="iconPath" xmlns:xlink="http://www.w3.org/1999/xlink"/>
   </svg>
 </template>
 

@@ -1,9 +1,14 @@
 <template lang="pug">
     v-container
       v-row.chips(v-show="user.verification == 'completed'"
-                        align='center'
-                        justify='space-around')
+                  align='center'
+                  justify='space-around')
+
         v-chip-group(v-model="type" mandatory active-class="active-chip")
+
+          v-chip.keyword-chip(value="keyword")
+            svg-icon(name='KeyWord' width='30' height='30' color='#000')
+
           v-chip(value="free"
                 outlined
                 color="#56d67b"
@@ -16,10 +21,16 @@
                 outlined
                 color="#56d67b"
                 text-color="#000") В процессе
-
+      .free-list(v-show="type=='keyword'")
+        OrderCard2(
+                  v-for='item in keyOrder'
+                  type='keyword'
+                  :key='item._id'
+                  :item='item'
+                  )
       .free-list(v-show="type=='free'")
         OrderCard2(
-                  v-for='item in items'
+                  v-for='item in all'
                   type='free'
                   :key='item._id'
                   :item='item'
@@ -43,21 +54,92 @@
 <script>
 import axios from 'axios';
 import OrderCard2 from './OrderCard2.vue';
+import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
   name: 'spisokZakazov',
   data: () => ({
-    items: null,
+    keyword: '',
+    text: [],
+    keyOrder: [],
+    all: null,
     myOrders: [],
     processOrders: null,
     error: '',
     type: 'free',
+    date: null,
+    regexp: null,
   }),
   components: {
     OrderCard2,
     axios,
+    SvgIcon,
   },
   methods: {
+
+    getKeyWord() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/private/keyword`, {
+          token: this.token,
+          method: 'receive',
+          date: this.date,
+        })
+        .then((response) => (this.checkKeyWord(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+
+    checkKeyWord(response) {
+      console.log(response);
+      switch (response.data.status) {
+        case 'success':
+          this.date = new Date(response.data.data[response.data.data.length - 1].createDate);
+          this.date = this.date.getTime();
+          console.log(this.date);
+          response.data.data.forEach((element) => {
+            this.keyword = `${this.keyword + element.text}|`;
+            console.log(this.keyword);
+          });
+          this.getKeyWord();
+          break;
+        case 'notExist':
+          this.keyword = this.keyword.substring(0, this.keyword.length - 1);
+          console.log(this.keyword);
+          this.regexp = new RegExp(`${this.keyword}`);
+          console.log(this.regexp);
+          this.addKeyOrder();
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+    addKeyOrder() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/order`, {
+          token: this.token,
+          method: 'receive',
+          submethod: 'executor',
+          status: 'await',
+        })
+        .then((response) => (this.checkKeyOrder(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'Ошибка'));
+    },
+
+    checkKeyOrder(response) {
+      console.log(response);
+      console.log(response.data.data.length);
+      for (let j = 0; j < response.data.data.length; j += 1) {
+        if (this.regexp.test(response.data.data[j].description)) {
+          console.log(this.regexp.test(response.data.data[j].description));
+          console.log(this.keyOrder.push(response.data.data[j]));
+        }
+      }
+      console.log(this.keyOrder);
+    },
+
     getData() {
       /* eslint-disable no-return-assign */
       axios
@@ -71,10 +153,11 @@ export default {
         .catch(() => (this.error = 'Ошибка'));
       /* eslint-enable no-return-assign */
     },
+
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.items = response.data.data.reverse();
+          this.all = response.data.data.reverse();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -184,15 +267,21 @@ export default {
     },
   },
   created() {
-    this.$store.commit('setTitle', 'Список заказов');
+    this.$store.commit('setTitle', 'Список за казов');
     this.getData();
     this.getMyResponseOrder();
     this.getProcessOrders();
+    this.getKeyWord();
   },
 };
 </script>
 
 <style lang="stylus" scoped>
+  .keyword-chip{
+    padding 0
+    height 30px !important
+  }
+
   .await-list:first-child, .free-list:first-child, .free-process:first-child {
     margin-top 0
   }

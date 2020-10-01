@@ -42,7 +42,7 @@
       svg-icon.regIcon(name='VK'  width='37' height='37')
       svg-icon.regIcon(name='Google'  width='37' height='37')
       svg-icon.regIcon(name='Facebook'  width='37' height='37')
-      //svg-icon.regIcon(name='Instagram'  width='37' height='37')
+      svg-icon.regIcon(name='Instagram'  width='37' height='37')
 
     #RegBottomBar(v-show="!isFocus")
 
