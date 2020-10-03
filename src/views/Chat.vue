@@ -39,7 +39,6 @@ export default {
       messages: null,
       error: '',
       msg: null,
-      step: null,
     };
   },
   methods: {
@@ -82,19 +81,17 @@ export default {
     },
 
     getMessages() {
-      if (this.step >= 0) {
-        axios
-          .post(`${this.$baseChatUrl}api/v1/private/message`, {
-            token: this.chatToken,
-            method: 'receive',
-            submethod: 'chat',
-            idUserRequest: this.idUserRequest,
-            status: 'completed',
-          })
-          .then((response) => (this.checkGetMessages(response)))
+      axios
+        .post(`${this.$baseChatUrl}api/v1/private/message`, {
+          token: this.chatToken,
+          method: 'receive',
+          submethod: 'chat',
+          idUserRequest: this.idUserRequest,
+          status: 'completed',
+        })
+        .then((response) => (this.checkGetMessages(response)))
         // eslint-disable-next-line no-return-assign
-          .catch(() => (this.error = 'ошибка, Витя выжил'));
-      }
+        .catch(() => (this.error = 'ошибка, Витя выжил'));
     },
 
     checkGetMessages(response) {
@@ -306,7 +303,6 @@ export default {
   created() {
     this.getUserData();
     this.getMessagesFromVuex();
-    this.step = window.localStorage.getItem(this.idUserRequest) || 0;
     this.getMessages();
     this.handler();
   },
