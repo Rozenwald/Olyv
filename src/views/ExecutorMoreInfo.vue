@@ -12,6 +12,19 @@
           size="14"
           v-show="false"
           )
+      .map-wrp
+        l-map(
+          :zoom="zoom"
+          :center="location"
+          :options="mapOptions"
+          style="height: 200px")
+          l-tile-layer(
+            :url="url"
+            :attribution="attribution")
+          l-circle-marker(
+            :lat-lng="location"
+            :radius="marker.radius"
+            :color="marker.color")
       .information-wrp
         v-row.more-info-wrp-first(align='center' justify='space-between')
           v-row.save-deal(align='center')
@@ -77,6 +90,14 @@
 
 <script>
 import axios from 'axios';
+import { latLng } from 'leaflet';
+import {
+  LMap,
+  LTileLayer,
+  LCircleMarker,
+  LPopup,
+  LTooltip,
+} from 'vue2-leaflet';
 import SvgIcon from '../components/SvgIcon.vue';
 import store from '../store';
 
@@ -86,6 +107,12 @@ export default {
     SvgIcon,
     axios,
     store,
+    latLng,
+    LMap,
+    LTileLayer,
+    LCircleMarker,
+    LPopup,
+    LTooltip,
   },
   data() {
     return {
@@ -95,6 +122,18 @@ export default {
       respondedCount: 12,
       distantion: 3,
       inputWidth: null,
+      zoom: 13,
+      location: null,
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution:
+        '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      mapOptions: {
+        zoomSnap: 0.5,
+      },
+      marker: {
+        radius: 6,
+        color: '#FD7363',
+      },
     };
   },
   methods: {
@@ -216,11 +255,6 @@ export default {
     },
 
     checkOrderResponse(response) {
-      // eslint-disable-next-line no-underscore-dangle
-      console.log(response);
-      console.log(this.orderType);
-      console.log(response.data.status);
-
       switch (response.data.status) {
         case 'success':
           if (this.orderType === ('free' || 'keyword')) {
@@ -265,11 +299,12 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Все заказы');
-
     this.getCustomerUserData();
     if (this.order) {
       this.currentPrice = this.order.cost;
+      this.location = latLng(this.order.latitude, this.order.longitude);
     }
+    console.log(this.order);
   },
 };
 </script>

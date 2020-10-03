@@ -55,11 +55,10 @@ export default {
           status: 'await',
         })
         .then((response) => (this.checkResponse(response)))
-        .catch((error) => (console.log(JSON.stringify(error))));
+        .catch(() => (this.error = 'Ошибка'));
       /* eslint-enable no-return-assign */
     },
     checkResponse(response) {
-      console.log(JSON.stringify(response));
       switch (response.data.status) {
         case 'success':
           this.awaitOrders = response.data.data.reverse();

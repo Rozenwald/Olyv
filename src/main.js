@@ -6,6 +6,7 @@ import router from './router';
 import store from './store';
 import vuetify from './plugins/vuetify';
 import VueScrollmagic from './plugins/vue-scrollmagic';
+import cordova from './plugins/cordova';
 
 Vue.config.productionTip = false;
 Vue.prototype.$baseUrl = process.env.NODE_ENV === 'production'
@@ -22,27 +23,9 @@ new Vue({
   router,
   store,
   vuetify,
+  cordova,
   spring,
   VueAwesomeSwiper,
   VueScrollmagic,
   render: (h) => h(App),
 }).$mount('#app');
-
-// eslint-disable-next-line no-unused-vars
-let cordova;
-// eslint-disable-next-line no-unused-vars
-let FirebasePlugin;
-
-function onDeviceReady() {
-  console.log('deviceready');
-  FirebasePlugin = window.FirebasePlugin;
-  FirebasePlugin.getToken(
-    (token) => {
-      console.log(token);
-    },
-    (error) => console.error('Failed to get FCM token', error),
-  );
-  cordova = window.cordova;
-}
-
-document.addEventListener('deviceready', onDeviceReady);
