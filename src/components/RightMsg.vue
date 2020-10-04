@@ -1,6 +1,6 @@
 <template lang="pug">
   v-row.card-wrp(align='start' justify='end')
-    v-icon(color="#FF0000" v-show="msg.success").error-icon error_outline
+    v-icon(color="#FF0000" v-show="show").error-icon error_outline
     .msg-card
       .text-wrp(align='center' justify='left')
         .text(lang="ru") {{msg.text}}
@@ -13,6 +13,7 @@ export default {
   name: 'right-msg',
   props: {
     msg: Object,
+    show: Boolean,
   },
   computed: {
     time() {

@@ -6,17 +6,16 @@ const mutations = {
     state.userRequest = data;
   },
   setAllMessages(state, data) {
+    console.log(data);
     state.messages[data.id] = data.messages.reverse();
     console.log(state.messages[data.id].length);
   },
   setMoreMessages(state, data) {
-    console.log('fddf');
     state.messages[data.id] = [...data.messages.reverse(), ...state.messages[data.id]];
     console.log(state.messages[data.id].length);
   },
   setMessage(state, data) {
     state.messages[data.id].push(data.message);
-    window.localStorage.setItem(state.idUserRequest, data.message.step);
   },
 };
 
