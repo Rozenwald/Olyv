@@ -39,11 +39,11 @@ export default {
       messages: null,
       error: '',
       msg: null,
-      step: null,
     };
   },
   methods: {
 
+    // получения данных о отозвавшемся пользователе
     getUserData() {
       axios
         .post(`${this.$baseUrl}api/v1/private/user`, {
@@ -54,9 +54,9 @@ export default {
         })
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => (console.log(error)));
     },
-
+    // установка имени в тулбар
     checkUserData(response) {
       switch (response.data.status) {
         case 'success':
@@ -77,27 +77,27 @@ export default {
       }
     },
 
+    // Сохранение сообщений в vuex
     getMessagesFromVuex() {
       this.messages = this.$store.state.chat.messages[this.idUserRequest];
-      this.scrollMsgDown();
     },
 
+    // получение сообщений
     getMessages() {
-      if (this.step >= 0) {
-        axios
-          .post(`${this.$baseChatUrl}api/v1/private/message`, {
-            token: this.chatToken,
-            method: 'receive',
-            submethod: 'chat',
-            idUserRequest: this.idUserRequest,
-            status: 'completed',
-          })
-          .then((response) => (this.checkGetMessages(response)))
+      axios
+        .post(`${this.$baseChatUrl}api/v1/private/message`, {
+          token: this.chatToken,
+          method: 'receive',
+          submethod: 'chat',
+          idUserRequest: this.idUserRequest,
+          status: 'completed',
+        })
+        .then((response) => (this.checkGetMessages(response)))
         // eslint-disable-next-line no-return-assign
-          .catch(() => (this.error = 'ошибка, Витя выжил'));
-      }
+        .catch(() => (this.error = 'ошибка, Витя выжил'));
     },
 
+    // Проверка получения сообщений
     checkGetMessages(response) {
       switch (response.data.status) {
         case 'success':
@@ -105,6 +105,8 @@ export default {
             id: this.idUserRequest,
             messages: response.data.data,
           });
+          this.getMessagesFromVuex();
+          this.scrollMsgDown();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -118,13 +120,13 @@ export default {
       }
     },
 
+    // подписка на лонгпул
     handler() {
       axios
         .get(this.url)
         .then((response) => (this.handlerCheck(response)))
         .catch((error) => (this.errorCheck(error)));
     },
-
     handlerCheck(response) {
       if (this.messages) {
         this.$store.dispatch('setMessage', {
@@ -140,61 +142,69 @@ export default {
       this.getMessagesFromVuex();
       this.handler(this.url);
     },
-
     errorCheck(error) {
       console.log(error);
       setTimeout(this.handler(this.url), 5000);
     },
-
+    // проверка на пустое сообщение
     checkNullMsg() {
       if (this.msg == null) {
         return undefined;
       }
-
       this.msg = this.msg.trim();
-
       if (this.msg.length !== 0) {
         this.sendBeforeMessage();
-        console.log(this.sendBeforeMessage());
       }
-
       return undefined;
     },
-
+    // отправка сообщения на клиент до отправки на сервер
     sendBeforeMessage() {
-      this.message = this.msg;
-      this.scrollMsgDown();
+      const date = new Date();
+      this.message = {
+        text: this.msg,
+        show: false,
+        ofCreateDate: date,
+        from: 'response',
+      };
+      this.msg = null;
       this.sendMessage();
+      this.$store.dispatch('setMessage', {
+        id: this.idUserRequest,
+        message: this.message,
+      });
+      this.scrollMsgDown();
     },
-
+    // отправка сообщения и скролл вниз экрана
     sendMessage() {
       axios
         .post(`${this.$baseChatUrl}api/v1/private/message`, {
           token: this.chatToken,
           method: 'add',
-          text: this.msg,
+          text: this.message.text,
           idUserRequest: this.idUserRequest,
         })
         .then((response) => (this.checkAddMessage(response)))
         // eslint-disable-next-line no-return-assign
-        .catch((error) => (console.log(error)));
+        .catch(() => (this.errorIcon()));
     },
 
+    errorIcon() {
+      this.message.show = true;
+      console.log();
+    },
+
+    // Скролл в самый низ экрана
     scrollMsgDown() {
       this.$nextTick(() => {
         window.scrollTo(0, document.body.scrollHeight);
       });
     },
-
+    // Проверка отправилось ли сообщение на сервер
     checkAddMessage(response) {
+      this.msg = null;
       switch (response.data.status) {
         case 'success':
-          if (this.messages) {
-            this.$store.dispatch('setMessage', {
-              id: this.idUserRequest,
-              message: response.data.data,
-            });
-          } else {
+          if (this.messages == null) {
             this.$store.dispatch('setAllMessages', {
               id: this.idUserRequest,
               messages: [response.data.data],
@@ -209,8 +219,51 @@ export default {
           break;
       }
     },
-  },
+    // Получение доп.отрезка сообщений
+    getMoreMessages() {
+      const lastDate = this.messages[0].ofCreateDate;
+      const date = new Date(lastDate).getTime() - 1000;
+      axios
+        .post(`${this.$baseChatUrl}api/v1/private/message`, {
+          token: this.chatToken,
+          method: 'receive',
+          submethod: 'chat',
+          idUserRequest: this.idUserRequest,
+          status: 'completed',
+          date,
+        })
+        .then((response) => (this.checkMoreMessages(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'ошибка, Витя выжил'));
+    },
 
+    // Проверка получения доп.сообщений
+    checkMoreMessages(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.$store.dispatch('setMoreMessages', {
+            id: this.idUserRequest,
+            messages: response.data.data,
+          });
+          this.getMessagesFromVuex();
+          window.onscroll = () => {
+            if (window.pageYOffset <= 300) {
+              this.getMoreMessages();
+              window.onscroll = null;
+            }
+          };
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        case 'notExist':
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+  },
   computed: {
     token() {
       return this.$store.getters.getToken;
@@ -230,11 +283,19 @@ export default {
     user() {
       return this.$store.getters.getUser;
     },
+    test() {
+      return this.$store.state.chat.messages;
+    },
   },
-
   mounted() {
     this.$store.dispatch('showAppbar', true);
     this.$store.dispatch('showBottomNavigation', false);
+    window.onscroll = () => {
+      if (window.pageYOffset <= 300) {
+        this.getMoreMessages();
+        window.onscroll = null;
+      }
+    };
   },
   beforeDestroy() {
     this.$store.dispatch('showAppbar', true);
@@ -243,7 +304,6 @@ export default {
   created() {
     this.getUserData();
     this.getMessagesFromVuex();
-    this.step = window.localStorage.getItem(this.idUserRequest) || 0;
     this.getMessages();
     this.handler();
   },
@@ -252,25 +312,24 @@ export default {
 
 <style lang="stylus" scoped>
   .message {
-    margin 5px 0
+    margwin 5px 0
   }
-
+  .container {
+    overflow scroll;
+  }
   .message:first-child {
     margin-top 0
   }
-
   .text-message-wrp {
     width 100%
     position: fixed;
     bottom 0;
     left 0;
   }
-
   .text-message {
     max-height 168px + 10px
     overflow scroll
   }
-
   .row {
     margin 0
   }

@@ -6,11 +6,16 @@ const mutations = {
     state.userRequest = data;
   },
   setAllMessages(state, data) {
-    state.messages[data.id] = data.messages;
+    console.log(data);
+    state.messages[data.id] = data.messages.reverse();
+    console.log(state.messages[data.id].length);
+  },
+  setMoreMessages(state, data) {
+    state.messages[data.id] = [...data.messages.reverse(), ...state.messages[data.id]];
+    console.log(state.messages[data.id].length);
   },
   setMessage(state, data) {
     state.messages[data.id].push(data.message);
-    window.localStorage.setItem(state.idUserRequest, data.message.step);
   },
 };
 
@@ -23,6 +28,9 @@ const actions = {
   },
   setAllMessages({ commit }, data) {
     commit('setAllMessages', data);
+  },
+  setMoreMessages({ commit }, data) {
+    commit('setMoreMessages', data);
   },
   setMessage({ commit }, data) {
     commit('setMessage', data);

@@ -21,6 +21,7 @@ import LoginDialog from './components/LoginDialog.vue';
 import ErrorDialog from './components/ErrorDialog.vue';
 import RepeatLoginDialog from './components/RepeatLoginDialog.vue';
 import BackStep from './components/BackStep.vue';
+import 'leaflet/dist/leaflet.css';
 
 export default {
   name: 'App',

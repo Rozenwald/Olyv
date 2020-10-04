@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'material-design-icons-iconfont/dist/material-design-icons.css';
 import Notification from '../components/icons/Notification.vue';
 import BlackList from '../components/icons/BlackList.vue';
 import RightArrow from '../components/icons/RightArrow.vue';
@@ -21,6 +23,7 @@ Vue.use(Vuetify);
 
 export default new Vuetify({
   icons: {
+    iconfont: 'md',
     values: {
       rubl: {
         component: Rubl,
