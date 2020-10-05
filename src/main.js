@@ -6,6 +6,7 @@ import router from './router';
 import store from './store';
 import vuetify from './plugins/vuetify';
 import VueScrollmagic from './plugins/vue-scrollmagic';
+import cordova from './plugins/cordova';
 
 Vue.config.productionTip = false;
 Vue.prototype.$baseUrl = process.env.NODE_ENV === 'production'
@@ -22,6 +23,7 @@ new Vue({
   router,
   store,
   vuetify,
+  cordova,
   spring,
   VueAwesomeSwiper,
   VueScrollmagic,

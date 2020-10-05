@@ -104,7 +104,6 @@ export default {
     },
 
     checkSignIn(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           window.localStorage.setItem('token', response.data.data);

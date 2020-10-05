@@ -55,6 +55,12 @@ export default {
     SvgIcon,
     axios,
   },
+  data() {
+    return {
+      latitude: null,
+      longitude: null,
+    };
+  },
   methods: {
     clickBtn() {
       this.error = this.checkForm();
@@ -110,6 +116,8 @@ export default {
           description: this.description,
           cost: this.cost,
           protect: 'no',
+          longitude: this.longitude,
+          latitude: this.latitude,
         })
         .then((response) => (this.checkResonse(response)))
         .catch(() => (this.error = 'Ошибка'));
@@ -174,6 +182,17 @@ export default {
     cost() {
       return this.$store.getters.getCost;
     },
+  },
+  created() {
+    const that = this;
+    function onSuccess(position) {
+      that.latitude = position.coords.latitude;
+      that.longitude = position.coords.longitude;
+    }
+    function onError(error) {
+      console.log(error);
+    }
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
   },
 };
 </script>

@@ -1,5 +1,6 @@
 <template lang="pug">
-  v-row.card-wrp(align='center' justify='end')
+  v-row.card-wrp(ref='errorIcon' align='start' justify='end')
+    v-icon(color="#FF0000" v-show="show").error-icon error_outline
     .msg-card
       .text-wrp(align='center' justify='left')
         .text(lang="ru") {{msg.text}}
@@ -12,6 +13,7 @@ export default {
   name: 'right-msg',
   props: {
     msg: Object,
+    show: Boolean,
   },
   computed: {
     time() {
@@ -53,5 +55,9 @@ export default {
   .msg-card, .time-wrp, .text-wrp  {
     display inline-block
     vertical-align bottom
+  }
+
+  .error-icon {
+    margin-right 5px
   }
 </style>
