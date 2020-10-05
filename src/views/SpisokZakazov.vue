@@ -12,15 +12,15 @@
           v-chip(value="free"
                 outlined
                 color="#56d67b"
-                text-color="#000") Все заказы
+                text-color="#000") Общие
           v-chip(value="await"
                 outlined
                 color="#56d67b"
-                text-color="#000") В ожидании
+                text-color="#000") Ожидание
           v-chip(value="process"
                 outlined
                 color="#56d67b"
-                text-color="#000") В процессе
+                text-color="#000") Сделка
       .free-list(v-show="type=='keyword'")
         OrderCard2(
                   v-for='item in keyOrder'
@@ -115,6 +115,7 @@ export default {
           break;
       }
     },
+
     addKeyOrder() {
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
@@ -137,6 +138,7 @@ export default {
           console.log(this.keyOrder.push(response.data.data[j]));
         }
       }
+      this.keyOrder.reverse();
       console.log(this.keyOrder);
     },
 
