@@ -1,7 +1,7 @@
 <template lang="pug">
   v-container(ref="container")
     .message(v-for="item in messages" :key="item._id")
-      right-msg(v-if="item.from == 'response'" :msg="item")
+      right-msg(v-if="item.from == 'response'" :msg="item" :show="item.show")
       left-msg(v-else :msg="item")
 
     .text-message-wrp(align='center')
@@ -36,6 +36,7 @@ export default {
   },
   data() {
     return {
+      show: false,
       messages: null,
       error: '',
       msg: null,
@@ -160,13 +161,15 @@ export default {
     // отправка сообщения на клиент до отправки на сервер
     sendBeforeMessage() {
       const date = new Date();
+      this.show = true;
       this.message = {
         text: this.msg,
-        show: false,
+        show: this.show,
         ofCreateDate: date,
         from: 'response',
       };
       this.msg = null;
+      console.log(this.message);
       this.sendMessage();
       this.$store.dispatch('setMessage', {
         id: this.idUserRequest,
@@ -190,7 +193,7 @@ export default {
 
     errorIcon() {
       this.message.show = true;
-      console.log();
+      console.log(this.message);
     },
 
     // Скролл в самый низ экрана
