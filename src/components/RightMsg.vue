@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-row.card-wrp(align='start' justify='end')
+  v-row.card-wrp(ref='errorIcon' align='start' justify='end')
     v-icon(color="#FF0000" v-show="show").error-icon error_outline
     .msg-card
       .text-wrp(align='center' justify='left')

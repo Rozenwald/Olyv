@@ -17,6 +17,14 @@ const mutations = {
   setMessage(state, data) {
     state.messages[data.id].push(data.message);
   },
+  setErrorShow(state, data) {
+    console.log(state.show);
+    console.log(data);
+    console.log(state.messages[data.id]);
+    console.log(state.messages[data.id].message);
+    state.messages[data.id].message.show = data.message.show;
+    console.log(state.show);
+  },
 };
 
 const actions = {
@@ -35,18 +43,23 @@ const actions = {
   setMessage({ commit }, data) {
     commit('setMessage', data);
   },
+  setErrorShow({ commit }, data) {
+    commit('setErrorShow', data);
+  },
 };
 
 const getters = {
   getIdUserRequest: (state) => state.idUserRequest,
   getUserRequest: (state) => state.userRequest,
   getMessages: (state) => state.messages,
+  getErrorShow: (state) => state.show,
 };
 
 const state = {
   idUserRequest: null,
   userRequest: null,
   messages: {},
+  show: false,
 };
 
 export default {
