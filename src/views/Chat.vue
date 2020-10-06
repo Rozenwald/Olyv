@@ -161,10 +161,10 @@ export default {
     // отправка сообщения на клиент до отправки на сервер
     sendBeforeMessage() {
       const date = new Date();
-      this.show = true;
+      // this.show = true;
       this.message = {
         text: this.msg,
-        show: this.show,
+        // show: this.show,
         ofCreateDate: date,
         from: 'response',
       };

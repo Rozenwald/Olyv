@@ -18,9 +18,7 @@
           :center="location"
           :options="mapOptions"
           style="height: 200px")
-          l-tile-layer(
-            :url="url"
-            :attribution="attribution")
+          l-tile-layer(:url="url")
           l-circle-marker(
             :lat-lng="location"
             :radius="marker.radius"
@@ -98,6 +96,8 @@ import {
   LPopup,
   LTooltip,
 } from 'vue2-leaflet';
+import VGeosearch from 'vue2-leaflet-geosearch';
+import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import SvgIcon from '../components/SvgIcon.vue';
 import store from '../store';
 
@@ -108,10 +108,12 @@ export default {
     axios,
     store,
     latLng,
+    VGeosearch,
     LMap,
     LTileLayer,
     LCircleMarker,
     LPopup,
+    OpenStreetMapProvider,
     LTooltip,
   },
   data() {
@@ -125,14 +127,15 @@ export default {
       zoom: 13,
       location: null,
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      attribution:
-        '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       mapOptions: {
         zoomSnap: 0.5,
       },
       marker: {
         radius: 6,
         color: '#FD7363',
+      },
+      geosearchOptions: { // Important part Here
+        provider: new OpenStreetMapProvider(),
       },
     };
   },

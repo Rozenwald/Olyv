@@ -6,7 +6,7 @@
           placeholder="Адрес"
           hide-details
           readonly
-          v-model="address"
+          v-model="addressData.value"
           ref="adressInput"
           @click="openField('address')")
 
@@ -83,7 +83,7 @@ export default {
     },
 
     checkForm() {
-      if (this.address == null) {
+      if (this.addressData.value == null) {
         return 'Укажите адрес';
       }
 
@@ -116,8 +116,8 @@ export default {
           description: this.description,
           cost: this.cost,
           protect: 'no',
-          longitude: this.longitude,
-          latitude: this.latitude,
+          longitude: this.addressData.lon,
+          latitude: this.addressData.lat,
         })
         .then((response) => (this.checkResonse(response)))
         .catch(() => (this.error = 'Ошибка'));
@@ -134,7 +134,7 @@ export default {
           break;
         case 'success':
           this.$store.dispatch('setMainSheetStatus', 'close');
-          this.$store.dispatch('setAddress', null);
+          this.$store.dispatch('setAddressData', {});
           this.$store.dispatch('setDescription', null);
           this.$store.dispatch('setCost', null);
           break;
@@ -171,8 +171,8 @@ export default {
       return this.$store.getters.getToken;
     },
 
-    address() {
-      return this.$store.getters.getAddress;
+    addressData() {
+      return this.$store.getters.getAddressData;
     },
 
     description() {
@@ -182,17 +182,6 @@ export default {
     cost() {
       return this.$store.getters.getCost;
     },
-  },
-  created() {
-    const that = this;
-    function onSuccess(position) {
-      that.latitude = position.coords.latitude;
-      that.longitude = position.coords.longitude;
-    }
-    function onError(error) {
-      console.log(error);
-    }
-    navigator.geolocation.getCurrentPosition(onSuccess, onError);
   },
 };
 </script>
