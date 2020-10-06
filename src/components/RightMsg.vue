@@ -1,6 +1,6 @@
 <template lang="pug">
   v-row.card-wrp(ref='errorIcon' align='start' justify='end')
-    v-icon(color="#FF0000" v-show="show").error-icon error_outline
+    v-icon(color="#FF0000" v-show="show" @click="errorChat").error-icon error_outline
     .msg-card
       .text-wrp(align='center' justify='left')
         .text(lang="ru") {{msg.text}}
@@ -9,11 +9,24 @@
 </template>
 
 <script>
+import ErrorChatDialog from './ErrorChatDialog.vue';
+
 export default {
   name: 'right-msg',
   props: {
     msg: Object,
-    show: Boolean,
+    // show: Boolean,
+  },
+  data: () => ({
+    show: true,
+  }),
+  components: {
+    ErrorChatDialog,
+  },
+  methods: {
+    errorChat() {
+      this.$store.dispatch('showChatDialog', true);
+    },
   },
   computed: {
     time() {
@@ -33,6 +46,8 @@ export default {
 <style lang="stylus" scoped>
   .msg-card {
     padding 5px
+    margin-top 2px
+    margin-bottom 2px
     background-color #C9F0D9
     border-radius 10px 10px 0px 10px
     font-size 12px

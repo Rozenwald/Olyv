@@ -17,7 +17,7 @@
         template(slot="append")
           .text-input-icon(@click="checkNullMsg")
             svg-icon(name="SendMsg")
-
+    ErrorChatDialog
 </template>
 
 <script>
@@ -25,6 +25,7 @@ import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
 import LeftMsg from '../components/LeftMsg.vue';
 import RightMsg from '../components/RightMsg.vue';
+import ErrorChatDialog from '../components/ErrorChatDialog.vue';
 
 export default {
   name: 'Chat',
@@ -33,6 +34,7 @@ export default {
     axios,
     LeftMsg,
     RightMsg,
+    ErrorChatDialog,
   },
   data() {
     return {

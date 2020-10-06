@@ -16,6 +16,12 @@ export default {
       text: 'Мы обнаружили вход в Ваш аккаунт с другого устройства. Пожалуйста пройдите повторную авторизацию',
     };
   },
+  methods: {
+    route() {
+      this.showDialog = false;
+      this.$router.push('auth');
+    },
+  },
   computed: {
     showDialog: {
       get() {
@@ -25,12 +31,6 @@ export default {
         this.$store.dispatch('setToken', null);
         this.$store.dispatch('showRepeatLoginDialog', val);
       },
-    },
-  },
-  methods: {
-    route() {
-      this.showDialog = false;
-      this.$router.push('auth');
     },
   },
 };
