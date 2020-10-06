@@ -161,7 +161,6 @@ export default {
     // отправка сообщения на клиент до отправки на сервер
     sendBeforeMessage() {
       const date = new Date();
-      this.show = true;
       this.message = {
         text: this.msg,
         show: this.show,
@@ -216,8 +215,13 @@ export default {
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
+          this.errorIcon();
+          break;
+        case 'notExist':
+          this.errorIcon();
           break;
         default:
+          this.errorIcon();
           this.error = 'Ошибка';
           break;
       }
