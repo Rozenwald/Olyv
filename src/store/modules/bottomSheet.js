@@ -11,8 +11,8 @@ const mutations = {
   setCostSheetStatus(state, status) {
     state.statusCost = status;
   },
-  setAddress(state, address) {
-    state.address = address;
+  setAddressData(state, addressData) {
+    state.addressData = addressData;
   },
   setDescription(state, description) {
     state.description = description;
@@ -40,8 +40,8 @@ const actions = {
   setCostSheetStatus({ commit }, status) {
     commit('setCostSheetStatus', status);
   },
-  setAddress({ commit }, address) {
-    commit('setAddress', address);
+  setAddressData({ commit }, addressData) {
+    commit('setAddressData', addressData);
   },
   setDescription({ commit }, description) {
     commit('setDescription', description);
@@ -56,7 +56,7 @@ const getters = {
   getAddressSheetStatus: (state) => state.statusAddress,
   getDescriptionSheetStatus: (state) => state.statusDescription,
   getCostSheetStatus: (state) => state.statusCost,
-  getAddress: (state) => state.address,
+  getAddressData: (state) => state.addressData,
   getDescription: (state) => state.description,
   getCost: (state) => state.cost,
 };
@@ -66,7 +66,7 @@ const state = {
   statusAddress: 'close',
   statusCost: 'close',
   statusDescription: 'close',
-  address: null,
+  addressData: {},
   description: null,
   cost: null,
 };

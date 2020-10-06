@@ -1,8 +1,14 @@
 <template lang="pug">
   address-bottom-sheet(:halfY="0.5")
     v-container
+      vue-dadata(
+        token="45f1d56a8f2e17cc4d84788a1fdab38c6d8468c7"
+        :onChange="getSuggestion"
+        :locationOptions="locationOptions"
+      )
       v-text-field.adress-field(
         solo
+        v-show="false"
         placeholder="Адрес"
         hide-details
         v-model="address"
@@ -15,30 +21,52 @@
 </template>
 
 <script>
+import VueDadata from 'vue-dadata';
 import AddressBottomSheet from './AddressBottomSheet.vue';
 
 export default {
   name: 'address-sheet',
   components: {
+    VueDadata,
     AddressBottomSheet,
   },
   data() {
     return {
       address: null,
+      addressData: {},
+      locationOptions: {
+        locations: [{
+          city: 'Владивосток',
+        }],
+      },
     };
   },
   methods: {
     cancel() {
+      this.addressData = {};
       this.$store.dispatch('setAddressSheetStatus', 'close');
     },
 
     accept() {
-      this.$store.dispatch('setAddress', this.address);
+      this.$store.dispatch('setAddressData', this.addressData);
       this.cancel();
+    },
+
+    getSuggestion(suggestion) {
+      if (suggestion) {
+        if (suggestion.data) {
+          this.addressData = {
+            value: suggestion.value,
+            lat: suggestion.data.geo_lat,
+            lon: suggestion.data.geo_lon,
+          };
+          this.accept();
+        }
+      }
     },
   },
   mounted() {
-    this.address = this.$store.getters.getAddress;
+    this.addressData = this.$store.getters.getAddressData;
     this.$refs.adressInput.focus();
   },
   beforeDestroy() {
