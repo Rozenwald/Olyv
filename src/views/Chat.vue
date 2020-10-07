@@ -17,7 +17,7 @@
         template(slot="append")
           .text-input-icon(@click="checkNullMsg")
             svg-icon(name="SendMsg")
-
+    ErrorChatDialog
 </template>
 
 <script>
@@ -25,6 +25,7 @@ import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
 import LeftMsg from '../components/LeftMsg.vue';
 import RightMsg from '../components/RightMsg.vue';
+import ErrorChatDialog from '../components/ErrorChatDialog.vue';
 
 export default {
   name: 'Chat',
@@ -33,10 +34,12 @@ export default {
     axios,
     LeftMsg,
     RightMsg,
+    ErrorChatDialog,
   },
   data() {
     return {
       show: false,
+      errorMsg: null,
       messages: null,
       error: '',
       msg: null,
@@ -161,19 +164,21 @@ export default {
     // отправка сообщения на клиент до отправки на сервер
     sendBeforeMessage() {
       const date = new Date();
+      console.log(this.messages.length);
       this.message = {
+        element: this.messages.length,
         text: this.msg,
         show: this.show,
         ofCreateDate: date,
         from: 'response',
       };
+      console.log(this.message.element);
       this.msg = null;
-      console.log(this.message);
-      this.sendMessage();
       this.$store.dispatch('setMessage', {
         id: this.idUserRequest,
         message: this.message,
       });
+      this.sendMessage();
       this.scrollMsgDown();
     },
     // отправка сообщения и скролл вниз экрана
@@ -192,7 +197,7 @@ export default {
 
     errorIcon() {
       this.message.show = true;
-      console.log(this.message);
+      this.$store.dispatch('setErrorShow', this.message);
     },
 
     // Скролл в самый низ экрана
@@ -214,7 +219,6 @@ export default {
           }
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
           this.errorIcon();
           break;
         case 'notExist':
