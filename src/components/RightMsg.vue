@@ -9,8 +9,6 @@
 </template>
 
 <script>
-import ErrorChatDialog from './ErrorChatDialog.vue';
-
 export default {
   name: 'right-msg',
   data() {
@@ -21,18 +19,22 @@ export default {
   props: {
     msg: Object,
     show: Boolean,
-  },
-  components: {
-    ErrorChatDialog,
+    element: Number,
   },
   methods: {
     errorChat() {
-      this.message = this.msg.text;
-      this.$store.dispatch('showChatDialog', true);
-      this.$store.dispatch('textForChatDialog', this.message);
+      this.errorMsg = {
+        element: this.msg.element,
+        show: true,
+      };
+      this.$store.dispatch('showChatDialog', this.errorMsg);
+      this.$store.dispatch('textForChatDialog', this.msg.text);
     },
   },
   computed: {
+    errorShow() {
+      return this.$store.getters.getErrorShow;
+    },
     time() {
       return new Date(this.msg.ofCreateDate);
     },

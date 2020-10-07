@@ -39,6 +39,7 @@ export default {
   data() {
     return {
       show: false,
+      errorMsg: null,
       messages: null,
       error: '',
       msg: null,
@@ -163,14 +164,16 @@ export default {
     // отправка сообщения на клиент до отправки на сервер
     sendBeforeMessage() {
       const date = new Date();
+      console.log(this.messages.length);
       this.message = {
+        element: this.messages.length,
         text: this.msg,
         show: this.show,
         ofCreateDate: date,
         from: 'response',
       };
+      console.log(this.message.element);
       this.msg = null;
-      console.log(this.message);
       this.$store.dispatch('setMessage', {
         id: this.idUserRequest,
         message: this.message,
@@ -193,7 +196,8 @@ export default {
     },
 
     errorIcon() {
-      this.$store.dispatch('setErrorShow', true);
+      this.message.show = true;
+      this.$store.dispatch('setErrorShow', this.message);
     },
 
     // Скролл в самый низ экрана

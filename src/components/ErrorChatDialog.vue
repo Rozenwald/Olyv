@@ -14,15 +14,15 @@ import axios from 'axios';
 
 export default {
   name: 'error-chat-dialog',
-  data() {
-    return {
-    };
-  },
   methods: {
     repeatSendMessage() {
       console.log(this.msg);
-      this.message = this.msg;
-      this.$store.dispatch('showChatDialog', false);
+      console.log(this.errorNumber);
+      this.errorMsg = {
+        element: this.errorNumber,
+        show: false,
+      };
+      this.$store.dispatch('showChatDialog', this.errorMsg);
       axios
         .post(`${this.$baseChatUrl}api/v1/private/message`, {
           token: this.chatToken,
@@ -38,7 +38,7 @@ export default {
       console.log(response);
       switch (response.data.status) {
         case 'success':
-          this.$store.dispatch('setErrorShow', false);
+          this.$store.dispatch('setErrorShow', this.errorMsg);
           break;
         case 'notAuthenticate':
           break;
@@ -57,15 +57,18 @@ export default {
     },
     deleteMessage() {
       this.$store.dispatch('showChatDialog', false);
-      this.$store.dispatch('deleteMessage');
+      this.$store.dispatch('deleteMessage', this.errorMsg);
     },
   },
   computed: {
     showDialog() {
       return this.$store.getters.isVisibleChatDialog;
     },
+    errorNumber() {
+      return this.$store.getters.getElement;
+    },
     msg() {
-      return this.$store.getters.getTextMessage;
+      return this.$store.getters.textForErrorDialog;
     },
     chatToken() {
       return this.$store.getters.getChatToken;
