@@ -13,19 +13,23 @@ import ErrorChatDialog from './ErrorChatDialog.vue';
 
 export default {
   name: 'right-msg',
+  data() {
+    return {
+      message: null,
+    };
+  },
   props: {
     msg: Object,
-    // show: Boolean,
+    show: Boolean,
   },
-  data: () => ({
-    show: true,
-  }),
   components: {
     ErrorChatDialog,
   },
   methods: {
     errorChat() {
+      this.message = this.msg.text;
       this.$store.dispatch('showChatDialog', true);
+      this.$store.dispatch('textForChatDialog', this.message);
     },
   },
   computed: {

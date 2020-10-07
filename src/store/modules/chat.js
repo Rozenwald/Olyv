@@ -18,12 +18,13 @@ const mutations = {
     state.messages[data.id].push(data.message);
   },
   setErrorShow(state, data) {
-    console.log(state.show);
-    console.log(data);
-    console.log(state.messages[data.id]);
-    console.log(state.messages[data.id].message);
-    state.messages[data.id].message.show = data.message.show;
-    console.log(state.show);
+    const arr = state.messages[state.idUserRequest];
+    arr[state.messages[state.idUserRequest].length - 1].show = data;
+    console.log(arr[state.messages[state.idUserRequest].length - 1]);
+  },
+  deleteMessage(state) {
+    const arr = state.messages[state.idUserRequest];
+    state.messages[state.idUserRequest].splice([arr.length - 1], 1);
   },
 };
 
@@ -46,12 +47,16 @@ const actions = {
   setErrorShow({ commit }, data) {
     commit('setErrorShow', data);
   },
+  deleteMessage({ commit }, data) {
+    commit('deleteMessage', data);
+  },
 };
 
 const getters = {
   getIdUserRequest: (state) => state.idUserRequest,
   getUserRequest: (state) => state.userRequest,
   getMessages: (state) => state.messages,
+  getLastMessage: (state) => state.messages[state.messages.length - 1],
   getErrorShow: (state) => state.show,
 };
 

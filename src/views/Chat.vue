@@ -171,11 +171,11 @@ export default {
       };
       this.msg = null;
       console.log(this.message);
-      this.sendMessage();
       this.$store.dispatch('setMessage', {
         id: this.idUserRequest,
         message: this.message,
       });
+      this.sendMessage();
       this.scrollMsgDown();
     },
     // отправка сообщения и скролл вниз экрана
@@ -193,8 +193,7 @@ export default {
     },
 
     errorIcon() {
-      this.message.show = true;
-      console.log(this.message);
+      this.$store.dispatch('setErrorShow', true);
     },
 
     // Скролл в самый низ экрана
@@ -216,7 +215,6 @@ export default {
           }
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
           this.errorIcon();
           break;
         case 'notExist':
