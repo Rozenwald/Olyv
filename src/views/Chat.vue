@@ -81,7 +81,7 @@ export default {
       }
     },
 
-    // Сохранение сообщений в vuex
+    // Получение сообщений из vuex (костыль)
     getMessagesFromVuex() {
       this.messages = this.$store.state.chat.messages[this.idUserRequest];
     },
@@ -103,6 +103,7 @@ export default {
 
     // Проверка получения сообщений
     checkGetMessages(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setAllMessages', {
@@ -116,7 +117,12 @@ export default {
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         case 'notExist':
-          this.$store.dispatch('setAllMessages', []);
+          this.$store.dispatch('setAllMessages', {
+            messages: [],
+            id: this.idUserRequest,
+          });
+          this.getMessagesFromVuex();
+          console.log(this.messages);
           break;
         default:
           this.error = 'Ошибка';
