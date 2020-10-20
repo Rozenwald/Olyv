@@ -150,7 +150,7 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Исполнитель');
-    // this.getData();
+    this.getData();
   },
 };
 </script>
