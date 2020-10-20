@@ -31,6 +31,9 @@ export default {
     items() {
       return this.$store.getters.getItemsSetting;
     },
+    token() {
+      return this.$store.getters.getToken;
+    },
   },
   created() {
     this.$store.commit('setTitle', 'Настройки');

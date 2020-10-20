@@ -8,17 +8,24 @@ const mutations = {
     }
   },
   setUser(state, user) {
-    console.log(user);
     state.user = user;
     state.hasData = true;
+    console.log(user);
   },
   setChatToken(state, chattoken) {
-    console.log(chattoken);
     state.chattoken = chattoken;
   },
   setIdChanal(state, idChanal) {
-    console.log(idChanal);
     state.idChanal = idChanal;
+  },
+  setAppToken(state, appToken) {
+    state.appToken = appToken;
+  },
+  setNotificationToken(state, notificationToken) {
+    state.notificationToken = notificationToken;
+  },
+  setNotificationIdChanal(state, notificationIdChanal) {
+    state.notificationIdChanal = notificationIdChanal;
   },
 };
 
@@ -28,6 +35,15 @@ const actions = {
   },
   setIdChanal({ commit }, idChanal) {
     commit('setIdChanal', idChanal);
+  },
+  setAppToken({ commit }, appToken) {
+    commit('setAppToken', appToken);
+  },
+  setNotificationToken({ commit }, notificationToken) {
+    commit('setNotificationToken', notificationToken);
+  },
+  setNotificationIdChanal({ commit }, notificationIdChanal) {
+    commit('setNotificationIdChanal', notificationIdChanal);
   },
   setToken({ commit }, token) {
     commit('setToken', token);
@@ -39,8 +55,10 @@ const actions = {
 
 const getters = {
   getChatToken: (state) => state.chattoken,
+  getNotificationToken: (state) => state.notificationToken,
   getIdChanal: (state) => state.idChanal,
   getToken: (state) => state.token,
+  getAppToken: (state) => state.appToken,
   isAuth: (state) => state.isAuth,
   getUser: (state) => state.user,
   hasData: (state) => state.hasData,
@@ -48,6 +66,9 @@ const getters = {
 
 const state = {
   chattoken: null,
+  notificationIdChanal: null,
+  appToken: null,
+  notificationToken: null,
   idChanal: null,
   token: null,
   isAuth: null,

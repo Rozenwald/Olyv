@@ -52,6 +52,7 @@ export default {
       error: '',
       isFocus: false,
       windowHeight: null,
+      currentAuthToken: null,
     };
   },
   created() {
@@ -136,7 +137,8 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
-          this.getChatAuth(response.data.data.currentAuthToken);
+          this.currentAuthToken = response.data.data.currentAuthToken;
+          this.getChatAuth();
           break;
         default:
           this.error = 'Ошибка';
@@ -144,12 +146,12 @@ export default {
       }
     },
 
-    getChatAuth(token) {
+    getChatAuth() {
       /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseChatUrl}api/v1/public/signin`, {
           method: 'token',
-          token,
+          token: this.currentAuthToken,
         })
         .then((response) => (this.checkChatAuth(response)))
         .catch(() => (this.error = 'Ошибка авторизации в чате'));
@@ -163,7 +165,7 @@ export default {
           window.localStorage.setItem('idChanal', response.data.data.idChanal);
           this.$store.dispatch('setChatToken', response.data.data.token);
           this.$store.dispatch('setIdChanal', response.data.data.idChanal);
-          this.$router.back();
+          this.getNotificationAuth();
           break;
         case 'notSuccess':
           this.error = 'что-то наебнулось, ошибка с бд и т.д';
@@ -174,6 +176,67 @@ export default {
         default:
           this.error = 'Ошибка чата';
           break;
+      }
+    },
+
+    getNotificationAuth() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseNotificationUrl}api/v1/public/signin`, {
+          method: 'token',
+          token: this.currentAuthToken,
+        })
+        .then((response) => (this.checkNotificationAuth(response)))
+        .catch((error) => (console.log(error)));
+      /* eslint-disable no-return-assign */
+    },
+
+    checkNotificationAuth(response) {
+      switch (response.data.status) {
+        case 'success':
+          window.localStorage.setItem('notificationToken', response.data.data.token);
+          window.localStorage.setItem('idNotificationChanal', response.data.data.idChanal);
+          this.$store.dispatch('setNotificationToken', response.data.data.token);
+          this.$store.dispatch('setNotificationIdChanal', response.data.data.idChanal);
+
+          if (this.appToken) {
+            this.addAppToken(this.appToken);
+          } else {
+            this.error = 'Token app error. Повторите попытку позже';
+          }
+
+          break;
+        case 'notSuccess':
+          this.error = 'Ошибка авторизации в уведомлениях';
+          break;
+        case 'notExist':
+          this.error = 'Ошибка авторизации в уведомлениях';
+          break;
+        default:
+          this.error = 'Ошибка авторизации в уведомлениях';
+          break;
+      }
+    },
+
+    addAppToken(tokenApp) {
+      console.log(tokenApp);
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseNotificationUrl}api/v1/private/tokenApp`, {
+          token: this.notificationToken,
+          method: 'add',
+          tokenApp,
+        })
+        .then((response) => (this.checkAppToken(response)))
+        .catch((error) => (console.log(error)));
+      /* eslint-disable no-return-assign */
+    },
+
+    checkAppToken(response) {
+      if (response.data.status === 'success' || response.data.status === 'exist') {
+        this.$router.back();
+      } else {
+        this.error = 'Token app error. Повторите попытку позже';
       }
     },
 
@@ -192,6 +255,14 @@ export default {
     },
     token() {
       return this.$store.getters.getToken;
+    },
+
+    appToken() {
+      return this.$store.getters.getAppToken;
+    },
+
+    notificationToken() {
+      return this.$store.getters.getNotificationToken;
     },
   },
   mounted() {

@@ -307,7 +307,10 @@ export default {
       this.currentPrice = this.order.cost;
       this.location = latLng(this.order.latitude, this.order.longitude);
     }
+    console.log('Тут заказ');
     console.log(this.order);
+    // eslint-disable-next-line dot-notation
+    console.log(this.order['cost']);
   },
 };
 </script>
