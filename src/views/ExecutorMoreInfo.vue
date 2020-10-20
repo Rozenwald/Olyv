@@ -70,7 +70,7 @@
             v-btn.accept-btn(
               rounded
               @click="acceptOrder"
-              v-show="orderType == 'free' "
+              v-show="orderType == 'all' "
             ) Согласиться
             v-btn.cancel-btn(
               rounded
@@ -82,7 +82,7 @@
               @click="completeOrder"
               v-show="orderType == 'process'"
             ) Завершить
-          v-col(align='center' v-show="orderType != ('free' || 'keyword')")
+          v-col(align='center' v-show="orderType != ('all' || 'keyword')")
             v-btn.chat-btn(rounded @click="goChat") Чат
 </template>
 
@@ -260,10 +260,10 @@ export default {
     checkOrderResponse(response) {
       switch (response.data.status) {
         case 'success':
-          if (this.orderType === ('free' || 'keyword')) {
+          if (this.orderType === ('all' || 'keyword')) {
             this.$store.dispatch('setType', 'await');
           } else if (this.orderType === 'await') {
-            this.$store.dispatch('setType', 'free');
+            this.$store.dispatch('setType', 'all');
           }
           break;
         case 'notAuthenticate':
@@ -307,10 +307,6 @@ export default {
       this.currentPrice = this.order.cost;
       this.location = latLng(this.order.latitude, this.order.longitude);
     }
-    console.log('Тут заказ');
-    console.log(this.order);
-    // eslint-disable-next-line dot-notation
-    console.log(this.order['cost']);
   },
 };
 </script>

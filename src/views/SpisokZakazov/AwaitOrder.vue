@@ -1,0 +1,114 @@
+`<template lang="pug">
+  .orderContainer
+    OrderCard2(
+              v-for='item in awaitOrders'
+              type='await'
+              :key='item._id'
+              :item='item')
+</template>
+
+<script>
+import axios from 'axios';
+import OrderCard2 from '../OrderCard2.vue';
+
+export default {
+  name: 'allOrder',
+  data: () => ({
+    awaitOrders: [],
+    error: '',
+    type: 'load',
+  }),
+  components: {
+    OrderCard2,
+    axios,
+  },
+  methods: {
+    // Получение айдишников заказов которые в ожидании
+    getAwaitOrder() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/response`, {
+          token: this.token,
+          method: 'receive',
+          submethod: 'executor',
+          status: 'await',
+        })
+        .then((response) => (this.checkAwaitOrder(response)))
+      // eslint-disable-next-line no-return-assign
+        .catch(() => (this.error = 'Ошибка'));
+    },
+    // По полученным айдишникам обращаюсь на сервер по одному элементу
+    checkAwaitOrder(response) {
+      console.log(response);
+      switch (response.data.status) {
+        case 'success':
+          response.data.data.forEach((element) => {
+            this.getOrder(element);
+          });
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        case 'notExist':
+          break;
+        case 'invalidSubmethod':
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+    // Вытаскиваю один заказ по айдишнику
+    getOrder(element) {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/private/order`, {
+          token: this.token,
+          method: 'receive',
+          submethod: 'executor',
+          status: 'await',
+          id: element.idOrder,
+        })
+        .then((response) => (this.checkOrder(response, element)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+    // Добавляю этот элемент в массив заказов на которые я откликнулся
+    checkOrder(response, element) {
+      switch (response.data.status) {
+        case 'success':
+          this.awaitOrders.push(response.data.data[0]);
+          // eslint-disable-next-line no-underscore-dangle
+          this.awaitOrders[this.awaitOrders.length - 1].idResponse = element._id;
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        case 'notExist':
+          this.$store.dispatch('setAwaitOrder', this.awaitOrders);
+          console.log(this.awaitOrders);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+  },
+  computed: {
+    token() {
+      return this.$store.getters.getToken;
+    },
+    user() {
+      return this.$store.getters.getUser;
+    },
+  },
+  created() {
+    this.getAwaitOrder();
+  },
+};
+</script>
+
+<style lang="stylus" scoped>
+  .orderContainer{
+    padding 0
+  }
+</style>
