@@ -22,6 +22,7 @@ import ErrorDialog from './components/ErrorDialog.vue';
 import RepeatLoginDialog from './components/RepeatLoginDialog.vue';
 import BackStep from './components/BackStep.vue';
 import 'leaflet/dist/leaflet.css';
+import cordova from './plugins/cordova';
 
 export default {
   name: 'App',
@@ -79,6 +80,7 @@ export default {
     if (window.localStorage.getItem('token')) {
       this.getUserData();
     }
+    cordova.listen();
   },
 };
 </script>
