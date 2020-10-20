@@ -10,6 +10,7 @@ const mutations = {
   setUser(state, user) {
     state.user = user;
     state.hasData = true;
+    console.log(user);
   },
   setChatToken(state, chattoken) {
     state.chattoken = chattoken;

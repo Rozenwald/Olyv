@@ -86,9 +86,6 @@ export default {
         case 'notExist':
           this.getMyOrder();
           break;
-        case 'invalidSubmethod':
-          this.allClear = this.all;
-          break;
         default:
           this.error = 'Ошибка';
           break;
@@ -140,7 +137,7 @@ export default {
       } else {
         this.getClearAll.push(this.all);
       }
-      this.$store.dispatch('setAllOrder', this.getClearAll);
+      this.$store.dispatch('setAllOrder', this.allClear);
     },
   },
   computed: {
@@ -153,7 +150,7 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Исполнитель');
-    this.getData();
+    // this.getData();
   },
 };
 </script>
