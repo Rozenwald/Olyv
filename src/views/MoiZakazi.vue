@@ -104,7 +104,7 @@ export default {
     },
   },
   created() {
-    this.$store.commit('setTitle', 'Мои заказы');
+    this.$store.commit('setTitle', 'Заказчик');
     this.getData();
     this.getProcessOrders();
   },

@@ -17,8 +17,8 @@ const getters = {
 
 const state = {
   items: [
-    { title: 'Мои заказы', icon: 'MyOrder', routeName: 'moiZakazi' },
-    { title: 'Список заказов', icon: 'OrdersList', routeName: 'spisokZakazov' },
+    { title: 'Заказчик', icon: 'MyOrder', routeName: 'moiZakazi' },
+    { title: 'Исполнитель', icon: 'OrdersList', routeName: 'spisokZakazov' },
     { title: '', icon: 'Plus' },
     { title: 'Профиль', icon: 'User', routeName: 'customerProfile' },
     { title: 'Настройки', icon: 'Setting', routeName: 'setting' },

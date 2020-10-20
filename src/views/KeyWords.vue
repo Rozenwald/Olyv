@@ -2,10 +2,10 @@
   v-container
     v-combobox(v-model="chips"
               chips
-              clearable
-              label="Ключевые слова или фразы"
               multiple
-              solo)
+              outlined
+              readonly
+              rounded)
       template(v-slot:selection="{ attrs, item }")
         v-chip(
           v-bind="attrs"
@@ -19,7 +19,7 @@
           solo
           flat
           hide-details
-          placeholder='Сообщение'
+          placeholder='Ключевое слово и фраза'
           @click:append="addKeyWord"
           rows="1"
           auto-grow)
@@ -37,6 +37,7 @@ export default {
   data() {
     return {
       chips: [],
+      keywords: [],
       keyword: null,
       date: null,
     };
@@ -84,7 +85,6 @@ export default {
           break;
       }
     },
-
     addKeyWord() {
       axios
         .post(`${this.$baseUrl}api/v1/private/keyword`, {
@@ -100,6 +100,8 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.chips.unshift(this.keyword);
+          this.keywords.unshift(this.keyword);
+          console.log(this.keywords);
           this.keyword = null;
           break;
         case 'notExist':
@@ -110,8 +112,7 @@ export default {
           break;
       }
     },
-
-    tokenadd() {
+    tokenAdd() {
       console.log(this.token);
     },
   },
@@ -131,6 +132,7 @@ export default {
     this.$store.dispatch('showBottomNavigation', true);
   },
   created() {
+    this.$store.commit('setTitle', 'Ключевые слова');
     this.getKeyWord();
   },
 };
@@ -142,5 +144,12 @@ export default {
     position: fixed;
     bottom 0;
     left 0;
+  }
+  .chipKeyWord {
+    background-color #56d68b
+    color #56d68b !important
+  }
+  .v-input__slot{
+    padding-right 0 !important
   }
 </style>

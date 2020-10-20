@@ -65,6 +65,7 @@ export default {
     text-align left
     word-wrap break-word
     word-break break-all
+    white-space pre-line
     hyphens auto
   }
 
