@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import SetUserData from '../views/SetUserData.vue';
 import Setting from '../views/Setting.vue';
 import MoiZakazi from '../views/MoiZakazi.vue';
-import SpisokZakazov from '../views/SpisokZakazov.vue';
+import SpisokZakazov from '../views/SpisokZakazov/SpisokZakazov.vue';
 import Registration from '../views/Registration.vue';
 import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 import EditOrder from '../views/EditOrder.vue';

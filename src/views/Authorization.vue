@@ -11,7 +11,9 @@
 
             v-text-field.RegNumber(
                 v-model="password"
-                type='password'
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show1 ? 'text' : 'password'"
+                @click:append="show1 = !show1"
                 label='Пароль'
                 required)
 
@@ -47,6 +49,7 @@ export default {
   },
   data() {
     return {
+      show1: false,
       email: null,
       password: '',
       error: '',
@@ -152,11 +155,12 @@ export default {
           token,
         })
         .then((response) => (this.checkChatAuth(response)))
-        .catch(() => (this.error = 'Ошибка авторизации в чате'));
+        .catch((error) => console.log(error));
       /* eslint-disable no-return-assign */
     },
 
     checkChatAuth(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           window.localStorage.setItem('chatToken', response.data.data.token);

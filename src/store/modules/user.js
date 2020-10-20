@@ -8,16 +8,13 @@ const mutations = {
     }
   },
   setUser(state, user) {
-    console.log(user);
     state.user = user;
     state.hasData = true;
   },
   setChatToken(state, chattoken) {
-    console.log(chattoken);
     state.chattoken = chattoken;
   },
   setIdChanal(state, idChanal) {
-    console.log(idChanal);
     state.idChanal = idChanal;
   },
 };
