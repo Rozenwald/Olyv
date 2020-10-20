@@ -307,7 +307,6 @@ export default {
       this.currentPrice = this.order.cost;
       this.location = latLng(this.order.latitude, this.order.longitude);
     }
-    console.log(this.order);
   },
 };
 </script>
