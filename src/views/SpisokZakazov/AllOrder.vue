@@ -135,7 +135,8 @@ export default {
           }
         }
       } else {
-        this.getClearAll.push(this.all);
+        this.allClear = this.all;
+        console.log(this.allClear);
       }
       this.$store.dispatch('setAllOrder', this.allClear);
     },
