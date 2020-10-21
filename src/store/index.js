@@ -13,6 +13,7 @@ import chat from './modules/chat';
 import myOrder from './modules/myOrder';
 import repeatLoginDialog from './modules/repeatLoginDialog';
 import backstep from './modules/backstep';
+import allOrder from './modules/allOrders';
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -36,5 +37,6 @@ export default new Vuex.Store({
     repeatLoginDialog,
     errorDialog,
     chat,
+    allOrder,
   },
 });

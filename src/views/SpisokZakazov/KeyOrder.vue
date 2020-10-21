@@ -17,18 +17,50 @@ export default {
   name: 'allOrder',
   data: () => ({
     keyword: '',
-    textForRegular: [],
+    textForRegexp: '',
+    keyRegexp: null,
+    awaitMyRegexp: null,
+    all: [],
     keyOrder: [],
     date: null,
-    regexp: null,
     error: '',
-    type: 'free',
+    type: 'keyword',
   }),
   components: {
     OrderCard2,
     axios,
   },
   methods: {
+    // Получение заказов
+    getData() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/private/order`, {
+          token: this.token,
+          method: 'receive',
+          submethod: 'executor',
+          status: 'await',
+        })
+        .then((response) => (this.checkResponse(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+    // Формирование массива всех заказов
+    checkResponse(response) {
+      console.log(response.data);
+      switch (response.data.status) {
+        case 'success':
+          this.all = response.data.data;
+          this.getAwaitOrder();
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
     getAwaitOrder() {
       /* eslint-disable no-return-assign */
       axios
@@ -43,56 +75,82 @@ export default {
       /* eslint-enable no-return-assign */
     },
     checkAwaitOrder(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           response.data.data.forEach((element) => {
-            this.getOrder(element);
+            // eslint-disable-next-line no-underscore-dangle
+            this.textForRegexp = `${this.textForRegexp + element.idOrder}|`;
           });
+          this.getMyOrder();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         case 'notExist':
-          break;
-        case 'invalidSubmethod':
+          this.getMyOrder();
           break;
         default:
           this.error = 'Ошибка';
           break;
       }
     },
-    getOrder(element) {
+    getMyOrder() {
       /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
           method: 'receive',
-          submethod: 'executor',
+          submethod: 'customer',
           status: 'await',
-          id: element.idOrder,
         })
-        .then((response) => (this.checkOrder(response, element)))
+        .then((response) => (this.checkMyOrderResponse(response)))
         .catch(() => (this.error = 'Ошибка'));
       /* eslint-enable no-return-assign */
     },
-    checkOrder(response, element) {
+    checkMyOrderResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.myOrders.push(response.data.data[0]);
-          // eslint-disable-next-line no-underscore-dangle
-          this.myOrders[this.myOrders.length - 1].idResponse = element._id;
+          response.data.data.forEach((element) => {
+            // eslint-disable-next-line no-underscore-dangle
+            this.textForRegexp = `${this.textForRegexp + element._id}|`;
+          });
+          this.getClearAll();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         case 'notExist':
+          this.getClearAll();
           break;
         default:
           this.error = 'Ошибка';
           break;
       }
     },
-
+    getClearAll() {
+      console.log(this.textForRegexp);
+      console.log(this.keyRegexp);
+      console.log(this.keyword);
+      /* eslint-disable max-len */
+      if (this.textForRegexp !== '') {
+        this.textForRegexp = this.textForRegexp.substring(0, this.textForRegexp.length - 1);
+        this.awaitMyRegexp = new RegExp(`${this.textForRegexp}`);
+        for (let j = 0; j < this.all.length; j += 1) {
+          // eslint-disable-next-line no-underscore-dangle
+          if ((this.awaitMyRegexp.test(this.all[j]._id) !== true) && (this.keyRegexp.test(this.all[j].description))) {
+            this.allClear.push(this.all[j]);
+          }
+        }
+      } else {
+        for (let j = 0; j < this.all.length; j += 1) {
+          if (this.keyRegexp.test(this.all[j].description)) {
+            this.allClear.push(this.all[j]);
+          }
+        }
+      }
+      /* eslint-disable max-len */
+    },
     // Получение ключевых слов
     getKeyWord() {
       axios
@@ -120,37 +178,11 @@ export default {
         case 'notExist':
           this.keyword = this.keyword.substring(0, this.keyword.length - 1);
           console.log(this.keyword);
-          this.regexp = new RegExp(`${this.keyword}`, 'im');
-          console.log(this.regexp);
-          this.addKeyOrder();
+          console.log(new RegExp(`${this.keyword}`, 'im'));
           break;
         default:
           this.error = 'Ошибка';
           break;
-      }
-    },
-    // Массив заказов из ключевых слов
-    addKeyOrder() {
-      axios
-        .post(`${this.$baseUrl}api/v1/private/order`, {
-          token: this.token,
-          method: 'receive',
-          submethod: 'executor',
-          status: 'await',
-        })
-        .then((response) => (this.checkKeyOrder(response)))
-        // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
-    },
-
-    checkKeyOrder(response) {
-      console.log(response);
-      console.log(response.data.data.length);
-      for (let j = 0; j < response.data.data.length; j += 1) {
-        if (this.regexp.test(response.data.data[j].description)) {
-          console.log(this.regexp.test(response.data.data[j].description));
-          console.log(this.keyOrder.push(response.data.data[j]));
-        }
       }
     },
   },
@@ -164,9 +196,8 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Исполнитель');
-    // this.getData();
-    // this.getAwaitOrder();
-    // this.getKeyWord();
+    this.getKeyWord();
+    this.getData();
   },
 };
 </script>
