@@ -12,15 +12,16 @@ function getToken() {
 }
 
 function checkNotification(message) {
+  const data = JSON.parse(message.data);
   switch (message.type) {
     case 'order':
-      store.dispatch('setMyOrder', JSON.parse(message.data));
+      store.dispatch('setMyOrder', data);
       store.dispatch('setType', 'all');
-      router.push('executorMoreInfo');
+      router.replace('executorMoreInfo');
       break;
     case 'chat':
-      store.dispatch('setIdUserRequest', message.data.idUserResponse);
-      router.push('chat');
+      store.dispatch('setIdUserRequest', data.idUserRequest);
+      router.replace('chat');
       break;
     default:
       break;
