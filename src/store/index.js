@@ -14,6 +14,7 @@ import myOrder from './modules/myOrder';
 import repeatLoginDialog from './modules/repeatLoginDialog';
 import backstep from './modules/backstep';
 import allOrder from './modules/allOrders';
+import currentLocation from './modules/currentLocation';
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -38,5 +39,6 @@ export default new Vuex.Store({
     errorDialog,
     chat,
     allOrder,
+    currentLocation,
   },
 });

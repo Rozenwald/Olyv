@@ -13,16 +13,9 @@
           v-show="false"
           )
       .map-wrp
-        l-map(
-          :zoom="zoom"
-          :center="location"
-          :options="mapOptions"
-          style="height: 200px")
-          l-tile-layer(:url="url")
-          l-circle-marker(
-            :lat-lng="location"
-            :radius="marker.radius"
-            :color="marker.color")
+        map-view(
+          :lat='order.latitude'
+          :lon='order.longitude')
       .information-wrp
         v-row.more-info-wrp-first(align='center' justify='space-between')
           v-row.save-deal(align='center')
@@ -88,18 +81,9 @@
 
 <script>
 import axios from 'axios';
-import { latLng } from 'leaflet';
-import {
-  LMap,
-  LTileLayer,
-  LCircleMarker,
-  LPopup,
-  LTooltip,
-} from 'vue2-leaflet';
-import VGeosearch from 'vue2-leaflet-geosearch';
-import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import SvgIcon from '../components/SvgIcon.vue';
 import store from '../store';
+import MapView from '../components/MapView.vue';
 
 export default {
   name: 'moreInfoOrder',
@@ -107,14 +91,7 @@ export default {
     SvgIcon,
     axios,
     store,
-    latLng,
-    VGeosearch,
-    LMap,
-    LTileLayer,
-    LCircleMarker,
-    LPopup,
-    OpenStreetMapProvider,
-    LTooltip,
+    MapView,
   },
   data() {
     return {
@@ -124,19 +101,6 @@ export default {
       respondedCount: 12,
       distantion: 3,
       inputWidth: null,
-      zoom: 13,
-      location: null,
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      mapOptions: {
-        zoomSnap: 0.5,
-      },
-      marker: {
-        radius: 6,
-        color: '#FD7363',
-      },
-      geosearchOptions: { // Important part Here
-        provider: new OpenStreetMapProvider(),
-      },
     };
   },
   methods: {
@@ -305,7 +269,6 @@ export default {
     this.getCustomerUserData();
     if (this.order) {
       this.currentPrice = this.order.cost;
-      this.location = latLng(this.order.latitude, this.order.longitude);
     }
   },
 };
@@ -329,10 +292,8 @@ export default {
     padding 0 !important
   }
 
-  .parallax {
-    margin 15px -12px
-    height 150px
-    background-color red
+  .map-wrp {
+    height 200px
   }
 
   .row{
