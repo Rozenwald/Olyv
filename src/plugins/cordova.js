@@ -1,9 +1,15 @@
 import store from '../store/index';
 import router from '../router/index';
+import checkAuthorization from '../scripts/locationPermissions';
+import getCurrentPosition from '../scripts/location/currentLocation';
 
 const cordova = {};
 
 function getToken() {
+  if (!window.FirebasePlugin) {
+    return;
+  }
+
   window.FirebasePlugin.getToken((token) => {
     store.dispatch('setAppToken', token);
   }, (error) => {
@@ -29,6 +35,10 @@ function checkNotification(message) {
 }
 
 function notificationListener() {
+  if (!window.FirebasePlugin) {
+    return;
+  }
+
   window.FirebasePlugin.onMessageReceived((message) => {
     if (message.messageType === 'notification') {
       if (message.tap) {
@@ -43,9 +53,11 @@ function notificationListener() {
 
 function onDeviceReady() {
   console.log('onDeviceReady');
+  getCurrentPosition();
 
   getToken();
   notificationListener();
+  checkAuthorization();
 }
 
 cordova.listen = () => {

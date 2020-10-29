@@ -1,5 +1,5 @@
 <template lang="pug">
-  .orderContainer
+  .orderContainer(ref="scrollUpdate")
     OrderCard2(
               v-for='item in allClear'
               type='all'
@@ -21,6 +21,7 @@ export default {
     type: 'all',
     textForRegexp: '',
     regexp: null,
+    lastDate: null,
   }),
   components: {
     OrderCard2,
@@ -74,6 +75,7 @@ export default {
       console.log(response);
       switch (response.data.status) {
         case 'success':
+          console.log(this.textForRegexp);
           response.data.data.forEach((element) => {
             // eslint-disable-next-line no-underscore-dangle
             this.textForRegexp = `${this.textForRegexp + element.idOrder}|`;
@@ -105,40 +107,97 @@ export default {
       /* eslint-enable no-return-assign */
     },
     checkMyOrderResponse(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           response.data.data.forEach((element) => {
             // eslint-disable-next-line no-underscore-dangle
             this.textForRegexp = `${this.textForRegexp + element._id}|`;
           });
-          this.getClearAll();
+          this.createRegular();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         case 'notExist':
-          this.getClearAll();
+          this.createRegular();
           break;
         default:
           this.error = 'Ошибка';
           break;
       }
     },
-    getClearAll() {
+    createRegular() {
       if (this.textForRegexp !== '') {
         this.textForRegexp = this.textForRegexp.substring(0, this.textForRegexp.length - 1);
         this.regexp = new RegExp(`${this.textForRegexp}`);
+        this.getClearAll();
+      } else {
+        this.getClearAll();
+      }
+    },
+    getClearAll() {
+      console.log(this.textForRegexp);
+      if (this.textForRegexp === '') {
+        this.allClear = [...this.allClear, ...this.all];
+        console.log(this.allClear);
+      } else {
         for (let j = 0; j < this.all.length; j += 1) {
           // eslint-disable-next-line no-underscore-dangle
           if (this.regexp.test(this.all[j]._id) !== true) {
             this.allClear.push(this.all[j]);
           }
         }
-      } else {
-        this.allClear = this.all;
-        console.log(this.allClear);
       }
-      this.$store.dispatch('setAllOrder', this.allClear);
+      this.watchScroll();
+    },
+    watchScroll() {
+      console.log(this.allClear);
+      console.log(this.allClear[this.allClear.length - 1].ofCreateDate);
+      this.lastDate = this.allClear[this.allClear.length - 1].ofCreateDate;
+      const date = new Date(this.lastDate).getTime() + 1000;
+      window.onscroll = () => {
+        console.log(this.$refs.scrollUpdate.clientHeight);
+        console.log(this.$refs.scrollUpdate.clientHeight - window.scrollY);
+        if ((this.$refs.scrollUpdate.clientHeight - window.scrollY) <= 1000) {
+          this.getMoreOrder(date);
+        }
+      };
+    },
+    getMoreOrder(date) {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/private/order`, {
+          token: this.token,
+          method: 'receive',
+          submethod: 'executor',
+          status: 'await',
+          date,
+        })
+        .then((response) => (this.checkMoreOrderResponse(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+    checkMoreOrderResponse(response) {
+      console.log(response);
+      switch (response.data.status) {
+        case 'success':
+          if (response.data.data[0].ofCreateDate !== this.lastDate) {
+            this.all = response.data.data;
+            console.log(this.all);
+            this.getClearAll();
+          }
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        case 'notExist':
+          this.error = 'Ошибка';
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
     },
   },
   computed: {
@@ -152,6 +211,8 @@ export default {
   created() {
     this.$store.commit('setTitle', 'Исполнитель');
     this.getData();
+  },
+  mounted() {
   },
 };
 </script>

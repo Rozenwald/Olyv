@@ -84,8 +84,7 @@ export default {
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         case 'notExist':
-          this.$store.dispatch('setAwaitOrder', this.awaitOrders);
-          console.log(this.awaitOrders);
+          // console.log(this.awaitOrders);
           break;
         default:
           this.error = 'Ошибка';

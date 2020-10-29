@@ -1,9 +1,7 @@
 <template lang="pug">
   swiper.swiper
     v-card.card(@click='this.route')
-
       v-row.main-part(no-gutters)
-
           v-col(cols="8").description-wrp
             .description {{item.description}}
 
@@ -17,13 +15,13 @@
           svg-icon(name="Responded")
           .response-text
             span Откликнулось <br/>
-            span.black-text ??? человек
+            span.black-text(ref="spanUserCount") {{userCount}} человек
 
         v-row.date-time-wrp(align='center' justify='start')
           svg-icon(name="Time")
           .distantion-text
             span Время создания <br/>
-            span.black-text ???
+            span.black-text {{hours}}:{{minutes}}
 </template>
 
 <script>
@@ -43,7 +41,7 @@ export default {
   },
   data() {
     return {
-      text: 'Я еблан помогите мне пожалуйста прошу я хочу домои спать аааа блять сука помогите мне кто-нибудь хочу очень сильно секса. Люблю',
+      text: 'Ошибка: текст не опознан',
     };
   },
   methods: {
@@ -55,6 +53,9 @@ export default {
     },
   },
   computed: {
+    userCount() {
+      return 0;
+    },
     token() {
       return this.$store.getters.getToken;
     },
@@ -67,6 +68,15 @@ export default {
         return `${costStr.substr(0, 3)}K`;
       }
       return `${this.item.cost} P`;
+    },
+    time() {
+      return new Date(this.item.createDate);
+    },
+    hours() {
+      return this.time.getHours() <= 9 ? `0${this.time.getHours()}` : this.time.getHours();
+    },
+    minutes() {
+      return this.time.getMinutes() <= 9 ? `0${this.time.getMinutes()}` : this.time.getMinutes();
     },
   },
 };

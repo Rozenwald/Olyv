@@ -18,6 +18,7 @@
               outlined
               color="#56d67b"
               text-color="#000") Сделка
+
     AllOrder.list-item(v-show="type=='all'")
     AwaitOrder.list-item(v-show="type=='await'")
     ProcessOrder.list-item(v-show="type=='process'")
@@ -55,6 +56,7 @@ export default {
     user() {
       return this.$store.getters.getUser;
     },
+
   },
   created() {
     this.$store.commit('setTitle', 'Исполнитель');
