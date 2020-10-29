@@ -144,6 +144,8 @@ export default {
         case 'success':
           this.date = new Date(response.data.data[response.data.data.length - 1].createDate);
           this.date = this.date.getTime();
+          console.log(this.date);
+          console.log(this.date.getTime());
           response.data.data.forEach((element) => {
             this.keyword = `${this.keyword + element.text}|`;
           });

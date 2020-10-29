@@ -20,11 +20,10 @@
           flat
           hide-details
           placeholder='Ключевое слово и фраза'
-          @click:append="addKeyWord"
           rows="1"
           auto-grow)
         template(slot="append")
-          .text-input-icon(@click="addKeyWord")
+          .text-input-icon(@click="checkNullKeyword")
             svg-icon(name="SendMsg")
 </template>
 
@@ -40,6 +39,7 @@ export default {
       keywords: [],
       keyword: null,
       date: null,
+      id: null,
     };
   },
   components: {
@@ -47,13 +47,6 @@ export default {
     axios,
   },
   methods: {
-
-    remove(item) {
-      console.log(item);
-      this.chips.splice(this.chips.indexOf(item), 1);
-      this.chips = [...this.chips];
-    },
-
     getKeyWord() {
       /* eslint-disable no-return-assign */
       axios
@@ -74,46 +67,97 @@ export default {
           this.date = this.date.getTime();
           response.data.data.forEach((element) => {
             this.chips.push(`${element.text}`);
+            this.keywords.push(element);
           });
+          console.log(this.keywords);
           this.getKeyWord();
           break;
         case 'notExist':
-          console.log(this.chips);
+          console.log('notExist');
           break;
         default:
           this.error = 'Ошибка';
           break;
       }
     },
-    addKeyWord() {
+    checkNullKeyword() {
+      if (this.keyword == null) {
+        return undefined;
+      }
+      this.keyword = this.keyword.trim();
+      if (this.keyword.length !== 0) {
+        this.sendKeyWord();
+      }
+      return undefined;
+    },
+    sendKeyWord() {
+      const word = this.keyword;
+      this.keyword = null;
       axios
         .post(`${this.$baseUrl}api/v1/private/keyword`, {
           token: this.token,
           method: 'add',
-          text: this.keyword,
+          text: word,
         })
-        .then((response) => (this.checkAddKeyWord(response)))
+        .then((response) => (this.checkSendKeyWord(response)))
         // eslint-disable-next-line no-return-assign
         .catch(() => (this.error = 'Ошибка'));
     },
-    checkAddKeyWord(response) {
+    checkSendKeyWord(response) {
+      console.log(response.data);
       switch (response.data.status) {
         case 'success':
-          this.chips.unshift(this.keyword);
-          this.keywords.unshift(this.keyword);
-          console.log(this.keywords);
-          this.keyword = null;
+          this.chips.unshift(response.data.data.text);
+          this.keywords.unshift(response.data.data);
+          break;
+        case 'notSuccess':
+          this.error = 'Ошибка notSuccess';
           break;
         case 'notExist':
-          console.log(this.chips);
+          this.error = 'Ошибка notExist';
           break;
         default:
           this.error = 'Ошибка';
           break;
       }
     },
-    tokenAdd() {
-      console.log(this.token);
+    remove(item) {
+      /* eslint-disable no-underscore-dangle */
+      const id = this.keywords[this.chips.indexOf(item)]._id;
+      console.log(id);
+      if (id !== undefined) {
+        /* eslint-disable no-return-assign */
+        axios
+          .post(`${this.$baseUrl}api/v1/private/keyword`, {
+            token: this.token,
+            method: 'del',
+            id,
+          })
+          .then((response) => (this.checkRemove(response, item)))
+          .catch(() => (this.error = 'Ошибка'));
+        /* eslint-enable no-return-assign */
+      } else {
+        this.chips.splice(this.chips.indexOf(item), 1);
+        this.chips = [...this.chips];
+      }
+    },
+    checkRemove(response, item) {
+      switch (response.data.status) {
+        case 'success':
+          this.keywords.splice(this.chips.indexOf(item), 1);
+          this.chips.splice(this.chips.indexOf(item), 1);
+          this.chips = [...this.chips];
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        case 'notExist':
+          this.error = 'Ошибка notExist';
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
     },
   },
 

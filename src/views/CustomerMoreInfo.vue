@@ -23,7 +23,8 @@
           v-col( v-show="orderType == 'await'" v-for="n in 2" :key="n" align='center')
             v-btn.edit-btn(rounded v-if="n == 1" @click="editOrder") Редактировать
             v-btn.delete-btn(rounded v-else @click="delOrder") Удалить
-        .responded-title(v-show="orderType=='await'") Отозвались
+
+        .responded-title(v-show="orderType=='await'") Отозвались: {{userCount}}
         .responded-list(v-show="orderType=='await'")
           MoreInfoUserCard(
             v-for="item in responseList"
@@ -53,13 +54,46 @@ export default {
   data() {
     return {
       currentPrice: 5000, // Number
-      respondedCount: 12,
+      userCount: null,
       distantion: 3,
       responseList: null,
       executorData: {},
     };
   },
   methods: {
+    getOrderResponse() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/private/response`, {
+          token: this.token,
+          method: 'receive',
+          submethod: 'customer',
+          // eslint-disable-next-line no-underscore-dangle
+          idOrder: this.order._id,
+        })
+        .then((response) => (this.checkOrderResponse(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+
+    checkOrderResponse(response) {
+      console.log(response.data);
+      console.log(response.data.data.length);
+      switch (response.data.status) {
+        case 'success':
+          this.responseList = response.data.data;
+          this.userCount = response.data.data.length;
+          console.log(this.$refs.spanUserCount = response.data.data.length);
+          console.log(this.$refs.spanUserCount);
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
     goChat() {
       // eslint-disable-next-line no-underscore-dangle
       this.$store.dispatch('setIdUserRequest', this.executorData._id);
@@ -80,6 +114,7 @@ export default {
     },
 
     checkExecutorData(response) {
+      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.executorData = response.data.data;
@@ -119,35 +154,6 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.$router.back();
-          break;
-        case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
-          break;
-        default:
-          this.error = 'Ошибка';
-          break;
-      }
-    },
-
-    getOrderResponse() {
-      /* eslint-disable no-return-assign */
-      axios
-        .post(`${this.$baseUrl}api/v1/private/response`, {
-          token: this.token,
-          method: 'receive',
-          submethod: 'customer',
-          // eslint-disable-next-line no-underscore-dangle
-          idOrder: this.order._id,
-        })
-        .then((response) => (this.checkOrderResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
-      /* eslint-enable no-return-assign */
-    },
-
-    checkOrderResponse(response) {
-      switch (response.data.status) {
-        case 'success':
-          this.responseList = response.data.data;
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);

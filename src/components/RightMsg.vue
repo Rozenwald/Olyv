@@ -39,10 +39,9 @@ export default {
       return new Date(this.msg.ofCreateDate);
     },
     hours() {
-      return this.time.getHours() === '0' ? '00' : this.time.getHours();
+      return this.time.getHours() <= 9 ? `0${this.time.getHours()}` : this.time.getHours();
     },
     minutes() {
-      // eslint-disable-next-line radix
       return this.time.getMinutes() <= 9 ? `0${this.time.getMinutes()}` : this.time.getMinutes();
     },
   },
