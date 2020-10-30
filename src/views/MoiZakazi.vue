@@ -59,9 +59,10 @@ export default {
       /* eslint-enable no-return-assign */
     },
     checkResponse(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
-          this.awaitOrders = response.data.data.reverse();
+          this.awaitOrders = response.data.data;
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
