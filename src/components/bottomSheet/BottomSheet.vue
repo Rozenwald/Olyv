@@ -1,65 +1,55 @@
 <template lang="pug">
-    swipeable-bottom-sheet(:halfY="0.5" type='main')
-      v-container
+    v-bottom-sheet(v-model="open")
+      v-sheet
         v-text-field.adress-field(
-          solo
-          placeholder="Адрес"
-          hide-details
-          readonly
-          v-model="addressData.value"
-          ref="adressInput"
-          @click="openField('address')")
+              solo
+              placeholder="Адрес"
+              hide-details
+              readonly
+              v-model="addressData.value"
+              ref="adressInput"
+              @click="openField('address')")
 
         v-textarea.description-field(
-          solo
-          rows="4"
-          no-resize
-          readonly
-          placeholder="Описание"
-          hide-details
-          v-model="description"
-          @click="openField('description')"
-          ref="descriptionInput"
-        )
+            solo
+            rows="4"
+            no-resize
+            readonly
+            placeholder="Описание"
+            hide-details
+            v-model="description"
+            @click="openField('description')"
+            ref="descriptionInput"
+          )
 
         v-text-field.cost-field(
-          solo
-          placeholder="Цена"
-          hide-details
-          suffix="Руб"
-          type="number"
-          v-model="cost"
-          readonly
-          @click="openField('cost')"
-          ref="costInput"
-        )
+            solo
+            placeholder="Цена"
+            hide-details
+            suffix="Руб"
+            type="number"
+            v-model="cost"
+            readonly
+            @click="openField('cost')"
+            ref="costInput"
+          )
 
         v-row(align='center' justify='center')
-          v-btn.create-btn(
-            align-content='center'
-            rounded
-            @click="clickBtn"
-            v-text="'Создать'"
-          )
+            v-btn.create-btn(
+              align-content='center'
+              rounded
+              @click="clickBtn"
+              v-text="'Создать'"
+            )
 </template>
 
 <script>
 import axios from 'axios';
-import SwipeableBottomSheet from './SwipeableBottomSheet.vue';
-import SvgIcon from '../SvgIcon.vue';
 
 export default {
   name: 'bottom-sheet',
   components: {
-    SwipeableBottomSheet,
-    SvgIcon,
     axios,
-  },
-  data() {
-    return {
-      latitude: null,
-      longitude: null,
-    };
   },
   methods: {
     clickBtn() {
@@ -69,13 +59,13 @@ export default {
     openField(field) {
       switch (field) {
         case 'address':
-          this.$store.dispatch('setAddressSheetStatus', 'open');
+          this.$store.dispatch('setAddressSheetStatus', true);
           break;
         case 'description':
-          this.$store.dispatch('setDescriptionSheetStatus', 'open');
+          this.$store.dispatch('setDescriptionSheetStatus', true);
           break;
         case 'cost':
-          this.$store.dispatch('setCostSheetStatus', 'open');
+          this.$store.dispatch('setCostSheetStatus', true);
           break;
         default:
           break;
@@ -154,8 +144,13 @@ export default {
   },
 
   computed: {
-    state() {
-      return this.$store.getters.getBottomSheetStatus;
+    open: {
+      get() {
+        return this.$store.getters.getMainSheetStatus;
+      },
+      set(status) {
+        this.$store.dispatch('setMainSheetStatus', status);
+      },
     },
 
     error: {
@@ -187,6 +182,11 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .v-sheet {
+    padding 15px 12px
+    border-radius 10px 10px 0 0
+  }
+
   .adress-field {
     margin-bottom 12px !important
   }
@@ -196,7 +196,6 @@ export default {
   }
 
   .cost-field {
-    max-width 40%
     margin-bottom 30px !important
   }
 

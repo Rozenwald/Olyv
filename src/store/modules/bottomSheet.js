@@ -25,11 +25,6 @@ const mutations = {
 const actions = {
   setMainSheetStatus({ commit }, status) {
     commit('setMainSheetStatus', status);
-    if (status === 'close') {
-      commit('showBottomNavigation', true);
-    } else {
-      commit('showBottomNavigation', false);
-    }
   },
   setAddressSheetStatus({ commit }, status) {
     commit('setAddressSheetStatus', status);
@@ -62,10 +57,10 @@ const getters = {
 };
 
 const state = {
-  statusMain: 'close',
-  statusAddress: 'close',
-  statusCost: 'close',
-  statusDescription: 'close',
+  statusMain: false,
+  statusAddress: false,
+  statusCost: false,
+  statusDescription: false,
   addressData: {},
   description: null,
   cost: null,

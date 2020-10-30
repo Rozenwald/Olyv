@@ -1,12 +1,10 @@
 import axios from 'axios';
 import dadata from './dadata';
-import store from '../../store/index';
-import getSuggestions from './dadataSuggestion';
 
 const token = dadata.getToken();
 const url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address';
 
-async function getInfoAboutLocation({
+function getData({
   lat,
   lon,
   radiusMeters,
@@ -26,14 +24,13 @@ async function getInfoAboutLocation({
   };
 
   try {
-    const response = await axios.post(url, payload, config);
-    store.dispatch('setCurrentPosition', response.data.suggestions[0] || {});
-    getSuggestions({
-      query: 'проспект',
-    });
+    return axios.post(url, payload, config);
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    return null;
   }
 }
 
-export default getInfoAboutLocation;
+export default {
+  getData,
+};
