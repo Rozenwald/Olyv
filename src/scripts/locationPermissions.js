@@ -3,6 +3,8 @@ import store from '../store/index';
 import positionInfo from './dadata/positionInfo';
 import dataParse from './dadata/dataParse';
 
+let requestCount = 0;
+
 async function getPositionData(lat, lon) {
   const response = await positionInfo.getData({ lat, lon });
   const data = response.data.suggestions[0] || null;
@@ -17,7 +19,9 @@ function requestAuthorization() {
   window.cordova.plugins.diagnostic.requestLocationAuthorization(evaluateAuthorization, onError);
 }
 
-function checkLocationAuthorization() {
+function checkLocationAuthorization(count) {
+  requestCount = count;
+
   if (window.cordova.platformId === 'browser') {
     currentPosition.getCurrentPosition()
       .then((position) => {
@@ -48,10 +52,16 @@ function evaluateAuthorization(status) {
       requestAuthorization();
       break;
     case window.cordova.plugins.diagnostic.permissionStatus.DENIED_ONCE:
-      requestAuthorization();
+      if (!requestCount) {
+        requestAuthorization();
+        requestCount += 1;
+      }
       break;
     case window.cordova.plugins.diagnostic.permissionStatus.DENIED:
-      requestAuthorization();
+      if (!requestCount) {
+        requestAuthorization();
+        requestCount += 1;
+      }
       break;
     case window.cordova.plugins.diagnostic.permissionStatus.DENIED_ALWAYS:
       navigator.notification.confirm(
@@ -64,6 +74,15 @@ function evaluateAuthorization(status) {
       );
       break;
     case window.cordova.plugins.diagnostic.permissionStatus.GRANTED:
+      currentPosition.getCurrentPosition()
+        .then((position) => {
+          getPositionData(position.coords.latitude, position.coords.longitude);
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
+      break;
+    case window.cordova.plugins.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
       currentPosition.getCurrentPosition()
         .then((position) => {
           getPositionData(position.coords.latitude, position.coords.longitude);

@@ -7,7 +7,7 @@
           justify='center'
           v-if="currentPosition.lat") Адрес
 
-        v-list-item(dense v-else)
+        v-list-item.header(dense @click="checkLocationAuthorization(0)" v-else)
           v-list-item-content
             v-list-item-title Разрешите доступ к геолокации
             v-list-item-subtitle Сервис поиска станет удобнее
@@ -89,7 +89,7 @@ export default {
 
     getCurrentPosition() {
       if (!this.currentPosition.lat) {
-        locationPermissions.checkLocationAuthorization();
+        this.checkLocationAuthorization(0);
         return null;
       }
 
@@ -100,6 +100,10 @@ export default {
       }
 
       return this.currentPosition.value;
+    },
+
+    checkLocationAuthorization(count) {
+      locationPermissions.checkLocationAuthorization(count);
     },
   },
   computed: {
@@ -139,10 +143,10 @@ export default {
     });
 
     if (!this.locationPermissionCount) {
-      locationPermissions.checkLocationAuthorization();
+      this.checkLocationAuthorization(this.locationPermissionCount);
       this.$store.dispatch('setLocationPermissionCount', this.locationPermissionCount + 1);
     } else if (this.currentPosition.lat) {
-      locationPermissions.checkLocationAuthorization();
+      this.checkLocationAuthorization(0);
     }
   },
   mounted() {
@@ -168,7 +172,7 @@ export default {
     }
   }
 
-  .v-list-item {
+  .header {
     max-height 48px
     .v-list-item__content {
       max-height 48px
