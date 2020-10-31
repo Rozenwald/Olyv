@@ -1,14 +1,19 @@
 <template lang="pug">
-  .orderContainer(ref="scrollUpdate")
-    OrderCard2(
-              v-for='item in allClear'
-              type='all'
-              :key='item._id'
-              :item='item')
+  .order-container(ref="scrollUpdate")
+    v-row.icon-container(justify='center' align='center' v-if='loadType')
+      semipolar-spinner(:animation-duration="1500"
+                        :size="75"
+                        :color="'#fd7363'")
+    OrderCard2(v-else
+               v-for='item in allClear'
+               type='all'
+               :key='item._id'
+               :item='item')
 </template>
 
 <script>
 import axios from 'axios';
+import { SemipolarSpinner } from 'epic-spinners';
 import OrderCard2 from '../OrderCard2.vue';
 
 export default {
@@ -17,15 +22,17 @@ export default {
     all: null,
     allClear: [],
     awaitOrders: [],
-    error: '',
-    type: 'all',
     textForRegexp: '',
     regexp: null,
     lastDate: null,
+    error: '',
+    type: 'all',
+    loadType: true,
   }),
   components: {
     OrderCard2,
     axios,
+    SemipolarSpinner,
   },
   methods: {
     // Получение заказов
@@ -149,16 +156,15 @@ export default {
           }
         }
       }
+      this.loadType = false;
       this.watchScroll();
     },
     watchScroll() {
-      console.log(this.allClear);
-      console.log(this.allClear[this.allClear.length - 1].ofCreateDate);
-      this.lastDate = this.allClear[this.allClear.length - 1].ofCreateDate;
-      const date = new Date(this.lastDate).getTime() + 1000;
+      this.lastDate = this.all[this.all.length - 1].ofCreateDate;
+      const date = new Date(this.lastDate).getTime() - 1000;
       window.onscroll = () => {
         console.log(this.$refs.scrollUpdate.clientHeight);
-        console.log(this.$refs.scrollUpdate.clientHeight - window.scrollY);
+        console.log(window.scrollY);
         if ((this.$refs.scrollUpdate.clientHeight - window.scrollY) <= 1000) {
           this.getMoreOrder(date);
         }
@@ -182,7 +188,7 @@ export default {
       console.log(response);
       switch (response.data.status) {
         case 'success':
-          if (response.data.data[0].ofCreateDate !== this.lastDate) {
+          if (response.data.data[response.data.data.length - 1].ofCreateDate !== this.lastDate) {
             this.all = response.data.data;
             console.log(this.all);
             this.getClearAll();
@@ -218,15 +224,18 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .orderContainer{
+  .order-container{
     padding 0
+    height 100%
   }
-
+  .icon-container{
+    padding-bottom: 75px
+    height 100%
+  }
   .v-list-item{
     border-bottom 0.5px solid #65686C
     padding 0 !important
   }
-
   .v-list-item:last-child {
     border-bottom none
   }
