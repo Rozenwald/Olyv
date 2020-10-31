@@ -1,14 +1,19 @@
 `<template lang="pug">
-  .orderContainer
-    OrderCard2(
-              v-for='item in awaitOrders'
-              type='await'
-              :key='item._id'
-              :item='item')
+  .order-container
+    v-row.icon-container(justify='center' align='center' v-if='loadType')
+      semipolar-spinner(:animation-duration="1500"
+                        :size="75"
+                        :color="'#fd7363'")
+    OrderCard2(v-else
+               v-for='item in awaitOrders'
+               type='await'
+               :key='item._id'
+               :item='item')
 </template>
 
 <script>
 import axios from 'axios';
+import { SemipolarSpinner } from 'epic-spinners';
 import OrderCard2 from '../OrderCard2.vue';
 
 export default {
@@ -17,10 +22,12 @@ export default {
     awaitOrders: [],
     error: '',
     type: 'load',
+    loadType: true,
   }),
   components: {
     OrderCard2,
     axios,
+    SemipolarSpinner,
   },
   methods: {
     // Получение айдишников заказов которые в ожидании
@@ -38,12 +45,12 @@ export default {
     },
     // По полученным айдишникам обращаюсь на сервер по одному элементу
     checkAwaitOrder(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           response.data.data.forEach((element) => {
             this.getOrder(element);
           });
+          this.loadType = false;
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -107,7 +114,19 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .orderContainer{
+  .order-container{
     padding 0
+    height 100%
+  }
+  .icon-container{
+    padding-bottom: 75px
+    height 100%
+  }
+  .v-list-item{
+    border-bottom 0.5px solid #65686C
+    padding 0 !important
+  }
+  .v-list-item:last-child {
+    border-bottom none
   }
 </style>
