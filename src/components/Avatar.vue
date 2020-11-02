@@ -41,7 +41,7 @@ export default {
   },
   data() {
     return {
-      content: '',
+      content: null,
       file: null,
     };
   },
@@ -128,6 +128,10 @@ export default {
           break;
       }
     },
+  },
+
+  created() {
+    console.log(this.picture);
   },
 
   computed: {

@@ -134,7 +134,7 @@ export default {
           this.error = 'Описание должно быть больше 10 символов';
           break;
         case 'success':
-          this.$store.dispatch('setMainSheetStatus', false);
+          this.open = false;
           if (this.isEdit) this.$store.dispatch('isEdit', false);
           break;
         case 'notAuthenticate':
@@ -149,6 +149,11 @@ export default {
     validCost(cost) {
       const regex = /\d+/;
       return regex.test(cost);
+    },
+
+    buttonBack(e) {
+      e.preventDefault();
+      this.open = false;
     },
   },
 
@@ -198,11 +203,12 @@ export default {
   watch: {
     open() {
       if (!this.open) {
+        if (this.isEdit) this.$store.dispatch('isEdit', false);
         this.$store.dispatch('setAddressData', {});
         this.$store.dispatch('setDescription', null);
         this.$store.dispatch('setCost', null);
-        if (this.isEdit) this.$store.dispatch('isEdit', false);
-      }
+        document.removeEventListener('backbutton', this.buttonBack, false);
+      } else document.addEventListener('backbutton', this.buttonBack, false);
     },
   },
 };
