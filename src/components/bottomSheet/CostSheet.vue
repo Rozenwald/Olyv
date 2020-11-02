@@ -1,9 +1,15 @@
 <template lang="pug">
   v-bottom-sheet(v-model="open")
     v-sheet
+      .title-sheet
+        v-row(
+          align='center'
+          justify='center') Цена
+
+      v-divider
+
       v-text-field.cost-field(
         solo
-        placeholder="Цена"
         hide-details
         suffix="Руб"
         type="number"
@@ -65,7 +71,7 @@ export default {
 
 <style lang="stylus" scoped>
   .v-sheet {
-    border-radius 0
+    border-radius 10px 10px 0 0
   }
 
   .title-sheet {
@@ -75,12 +81,17 @@ export default {
     }
   }
 
+  .cost-field {
+    margin-top 15px
+  }
+
   .v-card {
     height 60px
     margin 12px 12px 62px 12px
     background-color none
     box-shadow none !important
     border 2px solid #a0a0a4
+    border-radius 4px
   }
 
   .active-card {

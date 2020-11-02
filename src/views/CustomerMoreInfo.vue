@@ -143,7 +143,9 @@ export default {
     },
 
     editOrder() {
-      this.$router.push({ name: 'editOrder', params: { order: this.order } });
+      this.$store.dispatch('setAll', this.order);
+      this.$store.dispatch('isEdit', true);
+      this.$store.dispatch('setMainSheetStatus', true);
     },
 
     route(routeName) {

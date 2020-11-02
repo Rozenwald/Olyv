@@ -20,6 +20,16 @@ const mutations = {
   setCost(state, cost) {
     state.cost = cost;
   },
+  setAll(state, data) {
+    state.cost = data.cost;
+    state.addressData.value = '';
+    state.description = data.description;
+    // eslint-disable-next-line no-underscore-dangle
+    state.orderId = data._id;
+  },
+  isEdit(state, isEdit) {
+    state.isEdit = isEdit;
+  },
 };
 
 const actions = {
@@ -44,6 +54,12 @@ const actions = {
   setCost({ commit }, cost) {
     commit('setCost', cost);
   },
+  setAll({ commit }, data) {
+    commit('setAll', data);
+  },
+  isEdit({ commit }, isEdit) {
+    commit('isEdit', isEdit);
+  },
 };
 
 const getters = {
@@ -54,6 +70,8 @@ const getters = {
   getAddressData: (state) => state.addressData,
   getDescription: (state) => state.description,
   getCost: (state) => state.cost,
+  getOrderId: (state) => state.orderId,
+  isEdit: (state) => state.isEdit,
 };
 
 const state = {
@@ -64,6 +82,8 @@ const state = {
   addressData: {},
   description: null,
   cost: null,
+  isEdit: false,
+  orderId: null,
 };
 
 export default {

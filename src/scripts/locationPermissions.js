@@ -2,6 +2,7 @@ import currentPosition from './location/currentPosition';
 import store from '../store/index';
 import positionInfo from './dadata/positionInfo';
 import dataParse from './dadata/dataParse';
+import location from './device-modules/location';
 
 let requestCount = 0;
 
@@ -46,10 +47,38 @@ function checkLocationAuthorization(count) {
   window.cordova.plugins.diagnostic.getLocationAuthorizationStatus(evaluateAuthorization, onError);
 }
 
+function grantedPermissions() {
+  location.isLocationEnabled()
+    .then((enabled) => {
+      if (!enabled) {
+        navigator.notification.confirm(
+          'Для корректной работы сервиса поиска адресов и использования собственного местоположения мы рекомендуем включить доступ к геоданным',
+          (i) => {
+            if (i === 1) {
+              window.cordova.plugins.diagnostic.switchToLocationSettings();
+            }
+          }, 'Доступ к геоданным', ['Ок', 'Отмена'],
+        );
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+  currentPosition.getCurrentPosition()
+    .then((position) => {
+      getPositionData(position.coords.latitude, position.coords.longitude);
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+}
+
 function evaluateAuthorization(status) {
   switch (status) {
     case window.cordova.plugins.diagnostic.permissionStatus.NOT_REQUESTED:
       requestAuthorization();
+      requestCount += 1;
       break;
     case window.cordova.plugins.diagnostic.permissionStatus.DENIED_ONCE:
       if (!requestCount) {
@@ -64,32 +93,24 @@ function evaluateAuthorization(status) {
       }
       break;
     case window.cordova.plugins.diagnostic.permissionStatus.DENIED_ALWAYS:
-      navigator.notification.confirm(
-        'This app has been denied access to your location and it really needs it function properly. Would you like to switch to the app settings page to allow access?',
-        (i) => {
-          if (i === 1) {
-            window.cordova.plugins.diagnostic.switchToSettings();
-          }
-        }, 'Location access denied', ['Yes', 'No'],
-      );
+      if (!requestCount) {
+        navigator.notification.confirm(
+          'Для корректной работы сервиса поиска адресов и использования собственного местоположения мы рекомендуем включить доступ к геоданным',
+          (i) => {
+            if (i === 1) {
+              window.cordova.plugins.diagnostic.switchToSettings();
+            }
+          }, 'Доступ к геоданным', ['Ок', 'Отмена'],
+        );
+
+        requestCount += 1;
+      }
       break;
     case window.cordova.plugins.diagnostic.permissionStatus.GRANTED:
-      currentPosition.getCurrentPosition()
-        .then((position) => {
-          getPositionData(position.coords.latitude, position.coords.longitude);
-        })
-        .catch((error) => {
-          console.error(error.message);
-        });
+      grantedPermissions();
       break;
     case window.cordova.plugins.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
-      currentPosition.getCurrentPosition()
-        .then((position) => {
-          getPositionData(position.coords.latitude, position.coords.longitude);
-        })
-        .catch((error) => {
-          console.error(error.message);
-        });
+      grantedPermissions();
       break;
     default:
       console.log(status);

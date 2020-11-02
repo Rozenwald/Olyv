@@ -23,6 +23,7 @@
     "cordova-plugin-androidx-adapter": "^1.1.1",
     "cordova-plugin-badge": "^0.8.8",
     "cordova-plugin-device": "^2.0.3",
+    "cordova-plugin-dialogs": "^2.0.2",
     "cordova-plugin-firebasex": "^11.0.3",
     "cordova-plugin-local-notification": "^0.9.0-beta.2",
     "cordova-plugin-local-notifications": "^1.0.0",
@@ -60,7 +61,8 @@
       "cordova-plugin-local-notification": {},
       "cordova.plugins.diagnostic": {
         "ANDROIDX_VERSION": "1.+"
-      }
+      },
+      "cordova-plugin-dialogs": {}
     },
     "platforms": [
       "browser",

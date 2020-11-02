@@ -36,10 +36,11 @@
 
         v-row(align='center' justify='center')
             v-btn.create-btn(
+              :loading="loading"
               align-content='center'
               rounded
               @click="clickBtn"
-              v-text="'Создать'"
+              v-text="loading ? null : isEdit ? 'Редактировать': 'Создать'"
             )
 </template>
 
@@ -50,6 +51,11 @@ export default {
   name: 'bottom-sheet',
   components: {
     axios,
+  },
+  data() {
+    return {
+      loading: null,
+    };
   },
   methods: {
     clickBtn() {
@@ -93,19 +99,23 @@ export default {
         return 'Описание должно быть больше 10 символов';
       }
 
-      this.createOrder();
+      this.sendOrder();
+
       return null;
     },
 
-    createOrder() {
+    sendOrder() {
+      this.loading = true;
+
       /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
-          method: 'add',
+          method: this.isEdit ? 'update' : 'add',
           description: this.description,
           cost: this.cost,
           protect: 'no',
+          id: this.id,
           longitude: this.addressData.lon,
           latitude: this.addressData.lat,
         })
@@ -115,6 +125,7 @@ export default {
     },
 
     checkResonse(response) {
+      this.loading = false;
       switch (response.data.status) {
         case 'invalidCost':
           this.error = 'Неверный формат цены';
@@ -123,13 +134,11 @@ export default {
           this.error = 'Описание должно быть больше 10 символов';
           break;
         case 'success':
-          this.$store.dispatch('setMainSheetStatus', 'close');
-          this.$store.dispatch('setAddressData', {});
-          this.$store.dispatch('setDescription', null);
-          this.$store.dispatch('setCost', null);
+          this.$store.dispatch('setMainSheetStatus', false);
+          if (this.isEdit) this.$store.dispatch('isEdit', false);
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('setBottomSheetStatus', 'close');
+          this.$store.dispatch('setBottomSheetStatus', false);
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
@@ -176,6 +185,24 @@ export default {
 
     cost() {
       return this.$store.getters.getCost;
+    },
+
+    isEdit() {
+      return this.$store.getters.isEdit;
+    },
+
+    id() {
+      return this.$store.getters.getOrderId;
+    },
+  },
+  watch: {
+    open() {
+      if (!this.open) {
+        this.$store.dispatch('setAddressData', {});
+        this.$store.dispatch('setDescription', null);
+        this.$store.dispatch('setCost', null);
+        if (this.isEdit) this.$store.dispatch('isEdit', false);
+      }
     },
   },
 };
