@@ -46,15 +46,13 @@ export default {
     },
     // eslint-disable-next-line no-unused-vars
     clickBtn(index, routeName) {
-      /*
       if ((index === 2 || index === 3) && !this.isAuth) {
         this.showLoginDialog();
       } else if (index === 2) {
         this.$store.dispatch('setMainSheetStatus', 'half');
       } else {
         this.route(routeName);
-      } */
-      this.$store.dispatch('setMainSheetStatus', true);
+      }
     },
   },
 };
