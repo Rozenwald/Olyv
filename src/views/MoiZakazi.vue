@@ -105,8 +105,18 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Заказчик');
-    this.getData();
-    this.getProcessOrders();
+    if (this.token) {
+      this.getData();
+      this.getProcessOrders();
+    }
+  },
+  watch: {
+    token() {
+      if (this.token) {
+        this.getData();
+        this.getProcessOrders();
+      }
+    },
   },
 };
 </script>

@@ -1,7 +1,26 @@
 import store from '../store/index';
 import router from '../router/index';
+import nativeStorage from '../scripts/nativeStorage';
 
 const cordova = {};
+
+function getStorageItem(key, action) {
+  nativeStorage.getItem(key)
+    .then((item) => {
+      store.dispatch(action, item);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+function getStorage() {
+  getStorageItem('token', 'setToken');
+  getStorageItem('chatToken', 'setChatToken');
+  getStorageItem('idChanal', 'setIdChanal');
+  getStorageItem('notificationToken', 'setNotificationToken');
+  getStorageItem('idNotificationChanal', 'setNotificationIdChanal');
+}
 
 function getToken() {
   if (!window.FirebasePlugin) {
@@ -52,6 +71,7 @@ function notificationListener() {
 function onDeviceReady() {
   console.log('onDeviceReady');
 
+  getStorage();
   getToken();
   notificationListener();
 }

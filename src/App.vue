@@ -47,7 +47,7 @@ export default {
         .post(`${this.$baseUrl}api/v1/private/user`, {
           method: 'receive',
           submethod: 'my',
-          token: window.localStorage.getItem('token'),
+          token: this.token,
         })
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
@@ -72,15 +72,24 @@ export default {
       }
     },
   },
+  computed: {
+    token() {
+      return this.$store.getters.getToken;
+    },
+  },
   created() {
-    this.$store.dispatch('setToken', window.localStorage.getItem('token'));
-    this.$store.dispatch('setChatToken', window.localStorage.getItem('chatToken'));
-    this.$store.dispatch('setIdChanal', window.localStorage.getItem('idChanal'));
     this.$store.dispatch('showBubble', false);
-    if (window.localStorage.getItem('token')) {
+    cordova.listen();
+    if (this.token) {
       this.getUserData();
     }
-    cordova.listen();
+  },
+  watch: {
+    token() {
+      if (this.token) {
+        this.getUserData();
+      }
+    },
   },
 };
 </script>

@@ -260,13 +260,23 @@ export default {
         this.currentPrice = this.changeValue;
       }
     },
+
+    token() {
+      if (this.token) {
+        this.getCustomerUserData();
+      }
+    },
   },
   mounted() {
     this.setInputWidth();
   },
   created() {
     this.$store.commit('setTitle', 'Все заказы');
-    this.getCustomerUserData();
+
+    if (this.token) {
+      this.getCustomerUserData();
+    }
+
     if (this.order) {
       this.currentPrice = this.order.cost;
     }

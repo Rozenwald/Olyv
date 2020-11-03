@@ -27,6 +27,7 @@
     "cordova-plugin-firebasex": "^11.0.3",
     "cordova-plugin-local-notification": "^0.9.0-beta.2",
     "cordova-plugin-local-notifications": "^1.0.0",
+    "cordova-plugin-nativestorage": "^2.3.2",
     "cordova-plugin-whitelist": "~1.3.4",
     "cordova.plugins.diagnostic": "^6.0.2",
     "local-notifications": "0.0.2",
@@ -62,7 +63,8 @@
       "cordova.plugins.diagnostic": {
         "ANDROIDX_VERSION": "1.+"
       },
-      "cordova-plugin-dialogs": {}
+      "cordova-plugin-dialogs": {},
+      "cordova-plugin-nativestorage": {}
     },
     "platforms": [
       "browser",

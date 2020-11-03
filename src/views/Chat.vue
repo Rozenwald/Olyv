@@ -303,11 +303,21 @@ export default {
       return this.$store.state.chat.messages;
     },
   },
+  watch: {
+    token() {
+      if (this.token) {
+        this.getUserData();
+        this.getMessagesFromVuex();
+        this.getMessages();
+        this.handler();
+      }
+    },
+  },
   mounted() {
     this.$store.dispatch('showAppbar', true);
     this.$store.dispatch('showBottomNavigation', false);
     window.onscroll = () => {
-      if (window.pageYOffset <= 300) {
+      if (window.pageYOffset <= 300 && this.token) {
         this.getMoreMessages();
         window.onscroll = null;
       }
@@ -318,10 +328,12 @@ export default {
     this.$store.dispatch('showBottomNavigation', true);
   },
   created() {
-    this.getUserData();
-    this.getMessagesFromVuex();
-    this.getMessages();
-    this.handler();
+    if (this.token) {
+      this.getUserData();
+      this.getMessagesFromVuex();
+      this.getMessages();
+      this.handler();
+    }
   },
 };
 </script>

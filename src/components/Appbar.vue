@@ -50,7 +50,7 @@ export default {
       }
 
       if (this.user.name) {
-        return `${this.user.name} ${this.user.lastname}`;
+        return `${this.user.name} ${this.user.lastname || ''}`;
       }
 
       return this.user.email;

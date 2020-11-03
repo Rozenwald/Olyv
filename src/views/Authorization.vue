@@ -40,6 +40,7 @@
 <script>
 import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
+import nativeStorage from '../scripts/nativeStorage';
 
 export default {
   name: 'Authorization',
@@ -111,6 +112,7 @@ export default {
       switch (response.data.status) {
         case 'success':
           window.localStorage.setItem('token', response.data.data);
+          nativeStorage.setItem('token', response.data.data);
           this.$store.dispatch('setToken', response.data.data);
           this.getData();
           break;
@@ -167,6 +169,8 @@ export default {
         case 'success':
           window.localStorage.setItem('chatToken', response.data.data.token);
           window.localStorage.setItem('idChanal', response.data.data.idChanal);
+          nativeStorage.setItem('chatToken', response.data.data.token);
+          nativeStorage.setItem('idChanal', response.data.data.idChanal);
           this.$store.dispatch('setChatToken', response.data.data.token);
           this.$store.dispatch('setIdChanal', response.data.data.idChanal);
           this.getNotificationAuth();
@@ -198,8 +202,12 @@ export default {
     checkNotificationAuth(response) {
       switch (response.data.status) {
         case 'success':
+          // ! Оставил для обрабной совместимости
           window.localStorage.setItem('notificationToken', response.data.data.token);
           window.localStorage.setItem('idNotificationChanal', response.data.data.idChanal);
+          // ! новая технология
+          nativeStorage.setItem('notificationToken', response.data.data.token);
+          nativeStorage.setItem('idNotificationChanal', response.data.data.idChanal);
           this.$store.dispatch('setNotificationToken', response.data.data.token);
           this.$store.dispatch('setNotificationIdChanal', response.data.data.idChanal);
 
