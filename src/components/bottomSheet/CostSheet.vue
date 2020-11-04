@@ -49,6 +49,11 @@ export default {
       this.$store.dispatch('setCost', this.cost);
       this.cancel();
     },
+
+    buttonBack(e) {
+      e.preventDefault();
+      this.open = false;
+    },
   },
   computed: {
     open: {
@@ -60,11 +65,15 @@ export default {
       },
     },
   },
+  created() {
+    document.addEventListener('backbutton', this.buttonBack, false);
+  },
   mounted() {
     this.cost = this.$store.getters.getCost;
   },
   beforeDestroy() {
     this.$refs.costInput.blur();
+    document.removeEventListener('backbutton', this.buttonBack, false);
   },
 };
 </script>

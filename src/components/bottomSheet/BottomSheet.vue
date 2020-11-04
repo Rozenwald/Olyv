@@ -63,6 +63,7 @@ export default {
     },
 
     openField(field) {
+      document.removeEventListener('backbutton', this.buttonBack, false);
       switch (field) {
         case 'address':
           this.$store.dispatch('setAddressSheetStatus', true);
@@ -167,6 +168,18 @@ export default {
       },
     },
 
+    openAddress() {
+      return this.$store.getters.getAddressSheetStatus;
+    },
+
+    openDescription() {
+      return this.$store.getters.getDescriptionSheetStatus;
+    },
+
+    openCost() {
+      return this.$store.getters.getCostSheetStatus;
+    },
+
     error: {
       get() {
         return this.$store.getters.getError;
@@ -209,6 +222,24 @@ export default {
         this.$store.dispatch('setCost', null);
         document.removeEventListener('backbutton', this.buttonBack, false);
       } else document.addEventListener('backbutton', this.buttonBack, false);
+    },
+
+    openAddress() {
+      if (!this.openAddress) {
+        document.addEventListener('backbutton', this.buttonBack, false);
+      }
+    },
+
+    openDescription() {
+      if (!this.openDescription) {
+        document.addEventListener('backbutton', this.buttonBack, false);
+      }
+    },
+
+    openCost() {
+      if (!this.openCost) {
+        document.addEventListener('backbutton', this.buttonBack, false);
+      }
     },
   },
 };

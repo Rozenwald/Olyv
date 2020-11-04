@@ -39,6 +39,11 @@ export default {
       this.$store.dispatch('setDescription', this.description);
       this.cancel();
     },
+
+    buttonBack(e) {
+      e.preventDefault();
+      this.open = false;
+    },
   },
   computed: {
     open: {
@@ -56,12 +61,15 @@ export default {
     window.addEventListener('resize', () => {
       this.height = window.innerHeight;
     });
+
+    document.addEventListener('backbutton', this.buttonBack, false);
   },
   mounted() {
     this.description = this.$store.getters.getDescription;
   },
   beforeDestroy() {
     this.$refs.descriptionInput.blur();
+    document.removeEventListener('backbutton', this.buttonBack, false);
   },
 };
 </script>

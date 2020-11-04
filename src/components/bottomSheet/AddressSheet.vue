@@ -105,6 +105,11 @@ export default {
     checkLocationAuthorization(count) {
       locationPermissions.checkLocationAuthorization(count);
     },
+
+    buttonBack(e) {
+      e.preventDefault();
+      this.open = false;
+    },
   },
   computed: {
     open: {
@@ -148,6 +153,8 @@ export default {
     } else if (this.currentPosition.lat) {
       this.checkLocationAuthorization(0);
     }
+
+    document.addEventListener('backbutton', this.buttonBack, false);
   },
   mounted() {
     this.addressData = this.$store.getters.getAddressData;
@@ -156,6 +163,7 @@ export default {
   },
   beforeDestroy() {
     this.$refs.adressInput.blur();
+    document.removeEventListener('backbutton', this.buttonBack, false);
   },
 };
 </script>

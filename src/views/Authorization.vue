@@ -248,7 +248,7 @@ export default {
       if (response.data.status === 'success' || response.data.status === 'exist') {
         this.$router.back();
       } else {
-        this.error = 'Token app error. Повторите попытку позже';
+        this.error = 'Token app error (server). Повторите попытку позже';
       }
     },
 

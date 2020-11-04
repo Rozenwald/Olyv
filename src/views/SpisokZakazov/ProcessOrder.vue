@@ -69,8 +69,17 @@ export default {
       return this.$store.getters.getUser;
     },
   },
+  watch: {
+    token() {
+      if (this.token) {
+        this.getProcessOrders();
+      }
+    },
+  },
   created() {
-    this.getProcessOrders();
+    if (this.token) {
+      this.getProcessOrders();
+    }
   },
 };
 </script>
