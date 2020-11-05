@@ -107,6 +107,7 @@ export default {
     },
 
     checkResponse(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.getUserData();

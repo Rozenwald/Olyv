@@ -61,9 +61,15 @@ export default {
     user() {
       return this.$store.getters.getUser;
     },
+
+    token() {
+      return this.$store.getters.getToken;
+    },
+
     hasData() {
       return this.$store.getters.hasData;
     },
+
     photo() {
       if (!this.hasData) {
         return null;
@@ -71,17 +77,21 @@ export default {
       if (!this.user.photo.length) {
         return null;
       }
-      return this.user.photo[this.user.photo.length - 1].urlMin;
+      const url = this.user.photo[this.user.photo.length - 1].urlMin.substr(1);
+      return `${this.$baseUrl + url}?token=${this.token}`;
     },
+
     name() {
       if (this.user.name == null) {
         return this.user.email;
       }
       return this.user.name;
     },
+
     lastname() {
       return this.user.lastname;
     },
+
     comment() {
       if (this.$store.getters.getComment == null) {
         return '';

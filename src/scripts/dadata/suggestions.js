@@ -1,11 +1,10 @@
 import axios from 'axios';
 import dadata from './dadata';
-import store from '../../store/index';
 
 const token = dadata.getToken();
 const url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address';
 
-async function getSuggestions({
+function getSuggestions({
   query,
   count,
   toBound,
@@ -14,8 +13,6 @@ async function getSuggestions({
   locations,
   locationsBoost,
 }) {
-  const kladrId = store.getters.getCurrentPosition.data.kladr_id;
-
   const payload = {
     query,
     count: count || 10,
@@ -23,9 +20,7 @@ async function getSuggestions({
     from_bound: { value: fromBound },
     language,
     locations,
-    locations_boost: locationsBoost || {
-      kladr_id: kladrId,
-    },
+    locations_boost: locationsBoost,
   };
 
   const config = {
@@ -37,11 +32,13 @@ async function getSuggestions({
   };
 
   try {
-    const response = await axios.post(url, payload, config);
-    console.log(response);
+    return axios.post(url, payload, config);
   } catch (error) {
     console.error(error);
+    return null;
   }
 }
 
-export default getSuggestions;
+export default {
+  getSuggestions,
+};

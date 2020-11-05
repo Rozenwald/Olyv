@@ -269,10 +269,20 @@ export default {
       return this.$store.getters.getUser;
     },
   },
+  watch: {
+    token() {
+      if (this.token) {
+        this.getKeyWord();
+        this.getData();
+      }
+    },
+  },
   created() {
     this.$store.commit('setTitle', 'Исполнитель');
-    this.getKeyWord();
-    this.getData();
+    if (this.token) {
+      this.getKeyWord();
+      this.getData();
+    }
   },
 };
 </script>

@@ -1,64 +1,60 @@
 <template lang="pug">
-    swipeable-bottom-sheet(:halfY="0.5" type='main')
-      v-container
+    v-bottom-sheet(v-model="open")
+      v-sheet
         v-text-field.adress-field(
-          solo
-          placeholder="Адрес"
-          hide-details
-          readonly
-          v-model="addressData.value"
-          ref="adressInput"
-          @click="openField('address')")
+              solo
+              placeholder="Адрес"
+              hide-details
+              readonly
+              v-model="addressData.value"
+              ref="adressInput"
+              @click="openField('address')")
 
         v-textarea.description-field(
-          solo
-          rows="4"
-          no-resize
-          readonly
-          placeholder="Описание"
-          hide-details
-          v-model="description"
-          @click="openField('description')"
-          ref="descriptionInput"
-        )
+            solo
+            rows="4"
+            no-resize
+            readonly
+            placeholder="Описание"
+            hide-details
+            v-model="description"
+            @click="openField('description')"
+            ref="descriptionInput"
+          )
 
         v-text-field.cost-field(
-          solo
-          placeholder="Цена"
-          hide-details
-          suffix="Руб"
-          type="number"
-          v-model="cost"
-          readonly
-          @click="openField('cost')"
-          ref="costInput"
-        )
+            solo
+            placeholder="Цена"
+            hide-details
+            suffix="Руб"
+            type="number"
+            v-model="cost"
+            readonly
+            @click="openField('cost')"
+            ref="costInput"
+          )
 
         v-row(align='center' justify='center')
-          v-btn.create-btn(
-            align-content='center'
-            rounded
-            @click="clickBtn"
-            v-text="'Создать'"
-          )
+            v-btn.create-btn(
+              :loading="loading"
+              align-content='center'
+              rounded
+              @click="clickBtn"
+              v-text="loading ? null : isEdit ? 'Редактировать': 'Создать'"
+            )
 </template>
 
 <script>
 import axios from 'axios';
-import SwipeableBottomSheet from './SwipeableBottomSheet.vue';
-import SvgIcon from '../SvgIcon.vue';
 
 export default {
   name: 'bottom-sheet',
   components: {
-    SwipeableBottomSheet,
-    SvgIcon,
     axios,
   },
   data() {
     return {
-      latitude: null,
-      longitude: null,
+      loading: null,
     };
   },
   methods: {
@@ -67,15 +63,16 @@ export default {
     },
 
     openField(field) {
+      document.removeEventListener('backbutton', this.buttonBack, false);
       switch (field) {
         case 'address':
-          this.$store.dispatch('setAddressSheetStatus', 'open');
+          this.$store.dispatch('setAddressSheetStatus', true);
           break;
         case 'description':
-          this.$store.dispatch('setDescriptionSheetStatus', 'open');
+          this.$store.dispatch('setDescriptionSheetStatus', true);
           break;
         case 'cost':
-          this.$store.dispatch('setCostSheetStatus', 'open');
+          this.$store.dispatch('setCostSheetStatus', true);
           break;
         default:
           break;
@@ -103,19 +100,23 @@ export default {
         return 'Описание должно быть больше 10 символов';
       }
 
-      this.createOrder();
+      this.sendOrder();
+
       return null;
     },
 
-    createOrder() {
+    sendOrder() {
+      this.loading = true;
+
       /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
-          method: 'add',
+          method: this.isEdit ? 'update' : 'add',
           description: this.description,
           cost: this.cost,
           protect: 'no',
+          id: this.id,
           longitude: this.addressData.lon,
           latitude: this.addressData.lat,
         })
@@ -125,6 +126,7 @@ export default {
     },
 
     checkResonse(response) {
+      this.loading = false;
       switch (response.data.status) {
         case 'invalidCost':
           this.error = 'Неверный формат цены';
@@ -133,13 +135,11 @@ export default {
           this.error = 'Описание должно быть больше 10 символов';
           break;
         case 'success':
-          this.$store.dispatch('setMainSheetStatus', 'close');
-          this.$store.dispatch('setAddressData', {});
-          this.$store.dispatch('setDescription', null);
-          this.$store.dispatch('setCost', null);
+          this.open = false;
+          if (this.isEdit) this.$store.dispatch('isEdit', false);
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('setBottomSheetStatus', 'close');
+          this.$store.dispatch('setBottomSheetStatus', false);
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
@@ -151,11 +151,33 @@ export default {
       const regex = /\d+/;
       return regex.test(cost);
     },
+
+    buttonBack(e) {
+      e.preventDefault();
+      this.open = false;
+    },
   },
 
   computed: {
-    state() {
-      return this.$store.getters.getBottomSheetStatus;
+    open: {
+      get() {
+        return this.$store.getters.getMainSheetStatus;
+      },
+      set(status) {
+        this.$store.dispatch('setMainSheetStatus', status);
+      },
+    },
+
+    openAddress() {
+      return this.$store.getters.getAddressSheetStatus;
+    },
+
+    openDescription() {
+      return this.$store.getters.getDescriptionSheetStatus;
+    },
+
+    openCost() {
+      return this.$store.getters.getCostSheetStatus;
     },
 
     error: {
@@ -182,11 +204,53 @@ export default {
     cost() {
       return this.$store.getters.getCost;
     },
+
+    isEdit() {
+      return this.$store.getters.isEdit;
+    },
+
+    id() {
+      return this.$store.getters.getOrderId;
+    },
+  },
+  watch: {
+    open() {
+      if (!this.open) {
+        if (this.isEdit) this.$store.dispatch('isEdit', false);
+        this.$store.dispatch('setAddressData', {});
+        this.$store.dispatch('setDescription', null);
+        this.$store.dispatch('setCost', null);
+        document.removeEventListener('backbutton', this.buttonBack, false);
+      } else document.addEventListener('backbutton', this.buttonBack, false);
+    },
+
+    openAddress() {
+      if (!this.openAddress) {
+        document.addEventListener('backbutton', this.buttonBack, false);
+      }
+    },
+
+    openDescription() {
+      if (!this.openDescription) {
+        document.addEventListener('backbutton', this.buttonBack, false);
+      }
+    },
+
+    openCost() {
+      if (!this.openCost) {
+        document.addEventListener('backbutton', this.buttonBack, false);
+      }
+    },
   },
 };
 </script>
 
 <style lang="stylus" scoped>
+  .v-sheet {
+    padding 15px 12px
+    border-radius 10px 10px 0 0
+  }
+
   .adress-field {
     margin-bottom 12px !important
   }
@@ -196,7 +260,6 @@ export default {
   }
 
   .cost-field {
-    max-width 40%
     margin-bottom 30px !important
   }
 

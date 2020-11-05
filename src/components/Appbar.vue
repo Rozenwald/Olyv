@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-app-bar#toolbar(app v-show="show" fixed)
+  v-app-bar#toolbar(app v-show="show" fixed dense)
     v-row(align='center', justify='center')
       .toolbar-avatar-wrp(v-show="currentRouteName == 'chat'")
         avatar(size="36" color="#AEAEAE" :src="src")
@@ -50,7 +50,7 @@ export default {
       }
 
       if (this.user.name) {
-        return `${this.user.name} ${this.user.lastname}`;
+        return `${this.user.name} ${this.user.lastname || ''}`;
       }
 
       return this.user.email;
@@ -64,7 +64,6 @@ export default {
   #toolbar{
     background-color #56D68B
     box-shadow 0px 2px 2px rgba(0, 0, 0, 0.05)
-    max-height 56px
   }
 
   .toolbar-title-wrapper{

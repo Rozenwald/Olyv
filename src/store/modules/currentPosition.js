@@ -1,6 +1,6 @@
 const mutations = {
   setCurrentPosition(state, position) {
-    state.currentPosition = { ...state.currentLocation, ...position };
+    state.currentPosition = position;
   },
 };
 

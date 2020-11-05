@@ -214,9 +214,18 @@ export default {
       return this.$store.getters.getUser;
     },
   },
+  watch: {
+    token() {
+      if (this.token) {
+        this.getData();
+      }
+    },
+  },
   created() {
     this.$store.commit('setTitle', 'Исполнитель');
-    this.getData();
+    if (this.token) {
+      this.getData();
+    }
   },
   mounted() {
   },

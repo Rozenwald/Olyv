@@ -22,26 +22,17 @@ export default {
     CostSheet,
   },
   computed: {
+    stateMain() {
+      return this.$store.getters.getMainSheetStatus;
+    },
     stateAddress() {
-      if (this.$store.getters.getAddressSheetStatus === 'open'
-          || this.$store.getters.getAddressSheetStatus === 'half') {
-        return true;
-      }
-      return false;
+      return this.$store.getters.getAddressSheetStatus;
     },
     stateDescription() {
-      if (this.$store.getters.getDescriptionSheetStatus === 'open'
-          || this.$store.getters.getDescriptionSheetStatus === 'half') {
-        return true;
-      }
-      return false;
+      return this.$store.getters.getDescriptionSheetStatus;
     },
     stateCost() {
-      if (this.$store.getters.getCostSheetStatus === 'open'
-          || this.$store.getters.getCostSheetStatus === 'half') {
-        return true;
-      }
-      return false;
+      return this.$store.getters.getCostSheetStatus;
     },
   },
 };

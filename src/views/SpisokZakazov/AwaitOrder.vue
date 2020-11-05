@@ -107,8 +107,17 @@ export default {
       return this.$store.getters.getUser;
     },
   },
+  watch: {
+    token() {
+      if (this.token) {
+        this.getAwaitOrder();
+      }
+    },
+  },
   created() {
-    this.getAwaitOrder();
+    if (this.token) {
+      this.getAwaitOrder();
+    }
   },
 };
 </script>

@@ -4,7 +4,7 @@ import dadata from './dadata';
 const token = dadata.getToken();
 const url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address?ip=';
 
-async function getLocationIP() {
+async function getCurrentPositionIP() {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -21,4 +21,6 @@ async function getLocationIP() {
   }
 }
 
-export default getLocationIP;
+export default {
+  getCurrentPositionIP,
+};

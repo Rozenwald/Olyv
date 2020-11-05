@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '../../store/index';
-import getLocationIP from '../dadata/dadataGeolocateIP';
+import currentPositionIP from '../dadata/currentPositionIP';
 
 async function getCurrentPositionIP() {
   const response = await axios.get('https://json.geoiplookup.io/api?callback');
@@ -8,7 +8,9 @@ async function getCurrentPositionIP() {
   data = JSON.parse(data);
   store.dispatch('setCurrentPosition', { ip: data.ip } || {});
   console.log(store.getters.getCurrentPosition);
-  getLocationIP(data.ip);
+  currentPositionIP.getCurrentPositionIP(data.ip);
 }
 
-export default getCurrentPositionIP;
+export default {
+  getCurrentPositionIP,
+};
