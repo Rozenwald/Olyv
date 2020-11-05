@@ -70,6 +70,7 @@ function notificationListener() {
 
 function onDeviceReady() {
   console.log('onDeviceReady');
+  navigator.splashscreen.hide();
 
   getStorage();
   getToken();
