@@ -57,6 +57,8 @@
 <script>
 import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
+// eslint-disable-next-line import/no-cycle
+import cordova from '../plugins/cordova';
 
 export default {
   name: 'Registration',
@@ -73,6 +75,7 @@ export default {
       dialog: false,
       isFocus: false,
       windowHeight: null,
+      currentAuthToken: null,
     };
   },
   created() {
@@ -182,7 +185,8 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
-          this.getChatAuth(response.data.data.currentAuthToken);
+          this.currentAuthToken = response.data.data.currentAuthToken;
+          this.getChatAuth();
           break;
         default:
           this.error = 'Ошибка';
@@ -190,12 +194,12 @@ export default {
       }
     },
 
-    getChatAuth(token) {
+    getChatAuth() {
       /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseChatUrl}api/v1/public/signin`, {
           method: 'token',
-          token,
+          token: this.currentAuthToken,
         })
         .then((response) => (this.checkChatAuth(response)))
         .catch(() => (this.error = 'Ошибка авторизации в чате'));
@@ -246,7 +250,14 @@ export default {
           if (this.appToken) {
             this.addAppToken(this.appToken);
           } else {
-            this.error = 'Token app error. Повторите попытку позже';
+            cordova.getToken()
+              .then((token) => {
+                this.$store.dispatch('setAppToken', token);
+                this.addAppToken(token);
+              })
+              .catch(() => {
+                this.error = '(client)';
+              });
           }
 
           break;
@@ -302,6 +313,10 @@ export default {
 
     appToken() {
       return this.$store.getters.getAppToken;
+    },
+
+    notificationToken() {
+      return this.$store.getters.getNotificationToken;
     },
   },
   mounted() {

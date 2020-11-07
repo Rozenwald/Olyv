@@ -10,6 +10,7 @@
           v-col(cols="4" align='right')
             v-row.cost-wrp(align='center' justify='center')
               .cost {{cost}}
+              svg-icon(name="RubDefault" color="#FE7664" height="15" width="15")
 
       v-row.more-info-wrp(align='center' justify='start' no-gutters)
 
@@ -61,7 +62,7 @@ export default {
       if (costStr.length > 5) {
         return `${costStr.substr(0, 3)}K`;
       }
-      return `${this.item.cost} P`;
+      return `${this.item.cost}`;
     },
   },
 };
@@ -106,8 +107,7 @@ export default {
     height 36px
     max-width 100px
     background #FEF5EE
-    border-radius 0px 10px 10px 0px
-    transform rotate(180deg)
+    border-radius  10px 0px 0px 10px
   }
 
   .cost {
@@ -115,7 +115,7 @@ export default {
     font-weight bold
     font-size 18px
     color #FE7664
-    transform rotate(180deg)
+    margin-right 5px
   }
 
   .more-info-wrp {

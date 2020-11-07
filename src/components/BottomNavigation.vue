@@ -76,6 +76,7 @@ export default {
   span{
     font-family Golos
     font-style normal
+    letter-spacing 0.084em
     font-weight 500
     font-size 8px
     line-height 8px

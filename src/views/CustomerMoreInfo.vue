@@ -8,6 +8,7 @@
             span( v-show="order.protect == 'yes'") Защищенная сделка
           v-row.cost-wrp(align='center' justify='center')
             .cost {{order.cost}}
+            svg-icon(name="RubDefault" color="#FE7664" height="15" width="15")
         .description {{order.description}}
         .media-files
           v-row
@@ -224,6 +225,7 @@ export default {
     font-weight 600
     font-size 18px
     color: #FE7664
+    margin-right 5px
   }
   .save-deal span {
     font-style normal
