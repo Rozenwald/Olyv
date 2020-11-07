@@ -90,7 +90,7 @@ export default {
           password: this.password,
         })
         .then((response) => (this.checkSignIn(response)))
-        .catch(() => (this.error = 'Ошибка авторизации'));
+        .catch((error) => (console.log(error)));
       /* eslint-enable no-return-assign */
     },
 
@@ -111,6 +111,7 @@ export default {
     },
 
     checkSignIn(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           window.localStorage.setItem('token', response.data.data);

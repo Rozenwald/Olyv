@@ -37,7 +37,7 @@ export default {
       axios
         .post(`${this.$baseUrl}api/v1/private/passport`, {
           method: 'receive',
-          submethod: 'comment',
+          submethod: 'verification',
           token: this.token,
         })
         .then((response) => (this.checkResponse(response)))
@@ -45,6 +45,7 @@ export default {
         .catch(() => (this.error = 'Ошибка'));
     },
     checkResponse(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -71,6 +72,7 @@ export default {
     if (this.user.verification === 'notCompleted') {
       this.getData();
     }
+    this.getData();
   },
   beforeRouteEnter(to, from, next) {
     if (!store.getters.isAuth) {

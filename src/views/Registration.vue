@@ -9,32 +9,16 @@
                           required)
 
     v-text-field.RegNumber(v-model="password"
-                          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                          :type="show1 ? 'text' : 'password'"
-                          @click:append="show1 = !show1"
+                          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                          :type="showPassword ? 'text' : 'password'"
+                          @click:append="showPassword = !showPassword"
                           label='Пароль'
                           required)
 
-    span#SpanRulesNM(v-show="!isFocus") Нажимая кнопку зарегестрироваться вы принимаете:
-
-    v-row#modalContainer(v-show="!isFocus" justify="center")
-      v-dialog(v-model='dialog')
-        template(v-slot:activator="{ on, attrs }")
-          v-btn#ModalRules(text
-              color="normal"
-              v-bind="attrs"
-              v-on="on") Правила и условия политики конфеденциальности
-        v-card
-          v-card-title#V-card-title-rules
-            span#SpanRulesM
-            |Правила и условия политики конфеденциальности
-          v-card-text#ModalRulesText
-          |Текст о правилах и политике конфеденциальности
-          |бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла-бла
-          v-card-actions
-            v-btn(color="green darken-1"
-            @click="dialog = false") OK
-
+    span#SpanRulesNM() Нажимая кнопку зарегестрироваться вы принимаете:
+      v-btn#ModalRules(text
+                color="normal"
+                @click='open()') Правила и условия политики конфеденциальности
     v-btn#RegButton(v-on:click="checkForm") Зарегестрироваться
     v-btn#SmallAuthButton(@click="route('auth')") Уже есть аккаунт
 
@@ -59,6 +43,7 @@ import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
 // eslint-disable-next-line import/no-cycle
 import cordova from '../plugins/cordova';
+import dialogWindow from '../scripts/openDialog';
 
 export default {
   name: 'Registration',
@@ -68,7 +53,7 @@ export default {
   },
   data() {
     return {
-      show1: false,
+      showPassword: false,
       email: null,
       password: null,
       error: '',
@@ -89,6 +74,9 @@ export default {
     });
   },
   methods: {
+    open() {
+      dialogWindow.open('ВРЕМЯ АТРЕЗАТЬ ПИПИСЬКИ', 'сэекс каблучки мокияж', 'ok', 'жопа', this.ff);
+    },
     route(routeName) {
       this.$router.push(routeName);
     },
@@ -331,6 +319,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+          .dialog-window{
+            margin 5px
+          }
           #modalContainer{
             margin 0
           }
