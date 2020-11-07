@@ -1,6 +1,7 @@
 <template lang="pug">
   #app
     v-app
+      window-dialog
       appbar
       router-view.router
       bottom-sheet-group
@@ -13,6 +14,7 @@
 
 <script>
 import axios from 'axios';
+import WindowDialog from './components/WindowDialog.vue';
 import Appbar from './components/Appbar.vue';
 import BottomSheetGroup from './components/BottomSheetGroup.vue';
 import BottomNavigation from './components/BottomNavigation.vue';
@@ -29,6 +31,7 @@ export default {
   store,
   axios,
   components: {
+    WindowDialog,
     Appbar,
     BottomNavigation,
     LoginDialog,

@@ -16,6 +16,7 @@ import backstep from './modules/backstep';
 import allOrder from './modules/allOrders';
 import currentPosition from './modules/currentPosition';
 import permissions from './modules/permissions';
+import openDialog from './modules/dialog';
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -42,5 +43,6 @@ export default new Vuex.Store({
     allOrder,
     currentPosition,
     permissions,
+    openDialog,
   },
 });
