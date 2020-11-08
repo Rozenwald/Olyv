@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     open() {
-      dialogWindow.open('ВРЕМЯ АТРЕЗАТЬ ПИПИСЬКИ', 'сэекс каблучки мокияж', 'ok', 'жопа');
+      dialogWindow.open('ВРЕМЯ АТРЕЗАТЬ ПИПИСЬКИ', ' сэекс каблучки мокияжсэекс каблучки мокияжсэекс каблучки мокияжсэекс каблучки мокияж', 'ok', '');
     },
     route(routeName) {
       this.$router.push(routeName);
@@ -324,9 +324,6 @@ export default {
           }
           #ModalRulesText{
             font-size: 16px
-          }
-          #V-card-title-rules{
-            word-break normal
           }
           #SpanRulesNM{
             display block
