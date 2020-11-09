@@ -41,9 +41,10 @@
 <script>
 import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
+import dialogWindow from '../scripts/openDialog';
+import nativeStorage from '../scripts/nativeStorage';
 // eslint-disable-next-line import/no-cycle
 import cordova from '../plugins/cordova';
-import dialogWindow from '../scripts/openDialog';
 
 export default {
   name: 'Registration',
@@ -149,7 +150,7 @@ export default {
     checkSignIn(response) {
       switch (response.data.status) {
         case 'success':
-          window.localStorage.setItem('token', response.data.data);
+          nativeStorage.setItem('token', response.data.data);
           this.$store.dispatch('setToken', response.data.data);
           this.getData();
           break;
@@ -163,7 +164,7 @@ export default {
         .post(`${this.$baseUrl}api/v1/private/user`, {
           method: 'receive',
           submethod: 'my',
-          token: window.localStorage.getItem('token'),
+          token: this.token,
         })
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
@@ -197,8 +198,8 @@ export default {
     checkChatAuth(response) {
       switch (response.data.status) {
         case 'success':
-          window.localStorage.setItem('chatToken', response.data.data.token);
-          window.localStorage.setItem('idChanal', response.data.data.idChanal);
+          nativeStorage.setItem('chatToken', response.data.data.token);
+          nativeStorage.setItem('setIdChanal', response.data.data.idChanal);
           this.$store.dispatch('setChatToken', response.data.data.token);
           this.$store.dispatch('setIdChanal', response.data.data.idChanal);
           this.getNotificationAuth();
@@ -230,8 +231,8 @@ export default {
     checkNotificationAuth(response) {
       switch (response.data.status) {
         case 'success':
-          window.localStorage.setItem('notificationToken', response.data.data.token);
-          window.localStorage.setItem('idNotificationChanal', response.data.data.idChanal);
+          nativeStorage.setItem('notificationToken', response.data.data.token);
+          nativeStorage.setItem('setNotificationIdChanal', response.data.data.idChanal);
           this.$store.dispatch('setNotificationToken', response.data.data.token);
           this.$store.dispatch('setNotificationIdChanal', response.data.data.idChanal);
 
@@ -305,6 +306,10 @@ export default {
 
     notificationToken() {
       return this.$store.getters.getNotificationToken;
+    },
+
+    token() {
+      return this.$store.getters.getToken;
     },
   },
   mounted() {

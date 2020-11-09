@@ -5,6 +5,7 @@ import nativeStorage from '../scripts/nativeStorage';
 function getStorageItem(key, action) {
   nativeStorage.getItem(key)
     .then((item) => {
+      console.log(item);
       store.dispatch(action, item);
     })
     .catch((error) => {

@@ -114,7 +114,6 @@ export default {
       console.log(response);
       switch (response.data.status) {
         case 'success':
-          window.localStorage.setItem('token', response.data.data);
           nativeStorage.setItem('token', response.data.data);
           this.$store.dispatch('setToken', response.data.data);
           this.getData();
@@ -170,8 +169,6 @@ export default {
       console.log(response);
       switch (response.data.status) {
         case 'success':
-          window.localStorage.setItem('chatToken', response.data.data.token);
-          window.localStorage.setItem('idChanal', response.data.data.idChanal);
           nativeStorage.setItem('chatToken', response.data.data.token);
           nativeStorage.setItem('idChanal', response.data.data.idChanal);
           this.$store.dispatch('setChatToken', response.data.data.token);
@@ -205,14 +202,12 @@ export default {
     checkNotificationAuth(response) {
       switch (response.data.status) {
         case 'success':
-          // ! Оставил для обрабной совместимости
-          window.localStorage.setItem('notificationToken', response.data.data.token);
-          window.localStorage.setItem('idNotificationChanal', response.data.data.idChanal);
-          // ! новая технология
           nativeStorage.setItem('notificationToken', response.data.data.token);
           nativeStorage.setItem('idNotificationChanal', response.data.data.idChanal);
           this.$store.dispatch('setNotificationToken', response.data.data.token);
           this.$store.dispatch('setNotificationIdChanal', response.data.data.idChanal);
+
+          console.log(this.appToken);
 
           if (this.appToken) {
             this.addAppToken(this.appToken);
@@ -255,6 +250,7 @@ export default {
     },
 
     checkAppToken(response) {
+      console.log(JSON.stringify(response));
       if (response.data.status === 'success' || response.data.status === 'exist') {
         this.$router.back();
       } else {
@@ -275,6 +271,7 @@ export default {
         this.error = '';
       },
     },
+
     token() {
       return this.$store.getters.getToken;
     },
@@ -288,6 +285,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.appToken);
     this.$store.dispatch('showAppbar', false);
     this.$store.dispatch('showBottomNavigation', false);
   },
