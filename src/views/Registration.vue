@@ -1,41 +1,41 @@
 <template lang="pug">
   .container
     v-row#RegBigToolBar(align='center' justify='center')
-      img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
+      img#regLogo(src="../assets/main-logo.png", alt="alt")
 
-    v-text-field.RegNumber(v-model="email"
-                          label='E-mail'
-                          type='email'
-                          required)
+    v-text-field.RegNumber(
+      v-model="email"
+      solo
+      hide-details
+      label='E-mail'
+      type='email'
+      required)
 
-    v-text-field.RegNumber(v-model="password"
-                          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                          :type="showPassword ? 'text' : 'password'"
-                          @click:append="showPassword = !showPassword"
-                          label='Пароль'
-                          required)
+    v-text-field.RegNumber(
+      v-model="password"
+      solo
+      hide-details
+      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+      :type="showPassword ? 'text' : 'password'"
+      @click:append="showPassword = !showPassword"
+      label='Пароль'
+      required)
 
-    span#SpanRulesNM() Нажимая кнопку зарегестрироваться вы принимаете:
-      v-btn#ModalRules(text
-                color="normal"
-                @click='open()') Правила и условия политики конфеденциальности
-    v-btn#RegButton(v-on:click="checkForm") Зарегестрироваться
-    v-btn#SmallAuthButton(@click="route('auth')") Уже есть аккаунт
+    v-btn#ModalRules(text color="normal"
+      @click='open()')
+      |Правила и условия
+      |Политики конфеденциальности
+    .btnContainer
+      v-btn#RegButton(v-on:click="checkForm") Зарегестрироваться
+      v-btn#SmallAuthButton(@click="route('auth')") Уже есть аккаунт
 
-    span#SpanRulesNM(v-show="!isFocus") Регистрация с помощью:
-
-    .iconContainer(v-show="!isFocus")
+    // span#SpanRulesNM(v-show="!isFocus") Регистрация с помощью:
+    // .iconContainer(v-show="!isFocus")
       svg-icon.regIcon(name='VK'  width='37' height='37')
       svg-icon.regIcon(name='Google'  width='37' height='37')
       svg-icon.regIcon(name='Facebook'  width='37' height='37')
       svg-icon.regIcon(name='Instagram'  width='37' height='37')
-
-    #RegBottomBar(v-show="!isFocus")
-
-    v-dialog(v-model="isError")
-      v-row(align='center' justify='center')
-      .dialog_title {{error}}
-          v-btn(@click="error = ''") ок
+      // *добавить диалоги к ошибкам
 </template>
 
 <script>
@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     open() {
-      dialogWindow.open('ВРЕМЯ АТРЕЗАТЬ ПИПИСЬКИ', 'сэекс каблучки мокияж', 'ok', 'жопа', this.ff);
+      dialogWindow.open('ВРЕМЯ АТРЕЗАТЬ ПИПИСЬКИ', ' сэекс каблучки мокияжсэекс каблучки мокияжсэекс каблучки мокияжсэекс каблучки мокияж', true, false);
     },
     route(routeName) {
       this.$router.push(routeName);
@@ -324,6 +324,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .btnContainer {
+    position relative
+    bottom -30px
+  }
           .dialog-window{
             margin 5px
           }
@@ -345,9 +349,6 @@ export default {
           #ModalRulesText{
             font-size: 16px
           }
-          #V-card-title-rules{
-            word-break normal
-          }
           #SpanRulesNM{
             display block
             font-size: 13px
@@ -360,25 +361,28 @@ export default {
           #ModalRules{
             font-size: 10px
             text-decoration:underline
+            word-break: normal
+            margin-top 20px
+            margin-bottom 20px
           }
           #SmallAuthButton{
             margin-top 10px
             margin-bottom 10px
             color #56D68B
-            font-size: 10px
+            font-size: 13px
             background: transparent
             border 1px solid #56D68B
             border-radius 30px
-            height 30px
-            width 50%
+            height 56px
+            width 72%
           }
           #RegButton{
             margin-top 10px
             margin-bottom 10px
-            color #FFF
+            color #FFA967
             font-size: 13px
-            background: linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
-            border none
+            background: transparent
+            border 1px solid #FFA967
             border-radius 30px
             height 56px
             width 72%
@@ -398,7 +402,6 @@ export default {
             }
           #RegBigToolBar{
             position relative;
-            background-color: #2AB06A;
             margin-bottom 50px
             margin-right 0
             margin-left 0
@@ -425,7 +428,7 @@ export default {
             position relative
             vertical-align middle
             width:auto;
-            height:50%;
+            height:100%;
           }
 
 </style>
