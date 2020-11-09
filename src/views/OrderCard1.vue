@@ -7,25 +7,23 @@
 
           v-col(cols="4" align='right')
             v-row.cost-wrp(align='center' justify='center')
-              .cost {{cost}}
+                .cost {{cost}}
+                svg-icon(name="RubDefault" color="#FE7664" height="15" width="15")
 
       v-row.more-info-wrp(align='center' justify='start' no-gutters)
 
         v-row.response-wrp(align='center' justify='start')
           svg-icon(name="Responded")
-          .response-text
-            span Откликнулось <br/>
-            span.black-text(ref="spanUserCount") {{userCount}} человек
+          .response-text {{userCount}} ответов
 
         v-row.date-time-wrp(align='center' justify='start')
           svg-icon(name="Time")
-          .distantion-text
-            span Время создания <br/>
-            span.black-text {{hours}}:{{minutes}}
+          .distantion-text {{formatedTime}}
 </template>
 
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+import moment from 'moment';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
@@ -67,17 +65,20 @@ export default {
       if (costStr.length > 5) {
         return `${costStr.substr(0, 3)}K`;
       }
-      return `${this.item.cost} P`;
+      return `${this.item.cost}`;
     },
     time() {
-      return new Date(this.item.createDate);
+      return moment(this.item.createDate);
     },
-    hours() {
-      return this.time.getHours() <= 9 ? `0${this.time.getHours()}` : this.time.getHours();
+    formatedTime() {
+      if (this.time.isAfter(moment().subtract(1, 'days'))) {
+        return this.time.calendar();
+      }
+      return this.time.format('D MMMM, HH:mm');
     },
-    minutes() {
-      return this.time.getMinutes() <= 9 ? `0${this.time.getMinutes()}` : this.time.getMinutes();
-    },
+  },
+  created() {
+    moment.locale('RU');
   },
 };
 </script>
@@ -121,8 +122,7 @@ export default {
     height 36px
     max-width 100px
     background #FEF5EE
-    border-radius 0px 10px 10px 0px
-    transform rotate(180deg)
+    border-radius 10px 0px 0px 10px
   }
 
   .cost {
@@ -130,7 +130,7 @@ export default {
     font-weight bold
     font-size 18px
     color #FE7664
-    transform rotate(180deg)
+    margin-right 5px
   }
 
   .more-info-wrp {

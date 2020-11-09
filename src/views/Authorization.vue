@@ -41,6 +41,8 @@
 import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
 import nativeStorage from '../scripts/nativeStorage';
+// eslint-disable-next-line import/no-cycle
+import cordova from '../plugins/cordova';
 
 export default {
   name: 'Authorization',
@@ -215,7 +217,14 @@ export default {
           if (this.appToken) {
             this.addAppToken(this.appToken);
           } else {
-            this.error = 'Token app error. Повторите попытку позже';
+            cordova.getToken()
+              .then((token) => {
+                this.$store.dispatch('setAppToken', token);
+                this.addAppToken(token);
+              })
+              .catch(() => {
+                this.error = 'Token app error (client). Повторите попытку позже';
+              });
           }
 
           break;

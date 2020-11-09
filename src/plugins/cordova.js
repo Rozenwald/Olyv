@@ -2,8 +2,6 @@ import store from '../store/index';
 import router from '../router/index';
 import nativeStorage from '../scripts/nativeStorage';
 
-const cordova = {};
-
 function getStorageItem(key, action) {
   nativeStorage.getItem(key)
     .then((item) => {
@@ -23,15 +21,9 @@ function getStorage() {
 }
 
 function getToken() {
-  if (!window.FirebasePlugin) {
-    return;
-  }
-
-  window.FirebasePlugin.getToken((token) => {
-    store.dispatch('setAppToken', token);
-  }, (error) => {
-    console.log(JSON.stringify(error));
-  });
+  return new Promise(((onSuccess, onError) => {
+    window.FirebasePlugin.getToken(onSuccess, onError);
+  }));
 }
 
 function checkNotification(message) {
@@ -72,12 +64,25 @@ function onDeviceReady() {
   console.log('onDeviceReady');
 
   getStorage();
-  getToken();
+  getToken()
+    .then((token) => {
+      console.log(token);
+      store.dispatch('setAppToken', token);
+      console.log(token);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   notificationListener();
+
+  navigator.splashscreen.hide();
 }
 
-cordova.listen = () => {
+function listen() {
   document.addEventListener('deviceready', onDeviceReady);
-};
+}
 
-export default cordova;
+export default {
+  listen,
+  getToken,
+};
