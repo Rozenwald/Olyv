@@ -3,12 +3,14 @@
     user-profile-header
     verification-status
     //review
+    exit-button
 </template>
 
 <script>
 import axios from 'axios';
 import store from '../store';
 import Review from '../components/Review.vue';
+import ExitButton from '../components/ExitButton.vue';
 import UserProfileHeader from '../components/UserProfileHeader.vue';
 import VerificationStatus from '../components/VerificationStatus.vue';
 
@@ -17,6 +19,7 @@ export default {
   components: {
     UserProfileHeader,
     VerificationStatus,
+    ExitButton,
     Review,
     store,
     axios,

@@ -23,6 +23,11 @@ export default {
       required: false,
       default: '24',
     },
+    color: {
+      type: String,
+      required: false,
+      default: '#000000',
+    },
   },
   /* eslint-disable global-require */
   computed: {
@@ -39,7 +44,7 @@ export default {
       return `${this.height}px`;
     },
     style() {
-      return { width: `${this.width}px`, height: `${this.height}px` };
+      return { width: `${this.width}px`, height: `${this.height}px`, color: this.color };
     },
   },
 };

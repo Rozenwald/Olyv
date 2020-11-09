@@ -19,6 +19,7 @@
             span {{executorData.name}} {{executorData.lastname}}
         v-row.cost(align='center')
           span {{cost}}
+          svg-icon(name="RubDefault" height="15" width="15")
 
     template(v-slot:left="{ item, close }")
       .swipeout-action.chat(@click="goChat")

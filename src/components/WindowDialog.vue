@@ -1,17 +1,24 @@
 <template lang="pug">
-    v-dialog(v-model="visible")
+    v-dialog.dialogstyle(v-model="visible")
       .mainDialog
         v-row(align='center' justify="center")
           v-card-title.titleDialog {{dialogTitle}}
           v-card-text#ModalRulesText {{dialogText}}
       .btnContainer
         v-row.dialogWindow(align='center' justify="space-around")
-          v-btn.buttonColor(v-show="textFirstBtn" fab x-large) {{textFirstBtn}}
-          v-btn.buttonColor(v-show="textSecondBtn" fab x-large) {{textSecondBtn}}
-
+          v-btn.buttonColor(v-show="firstBtn"
+                            fab x-large
+                            outlined
+                            @click='actionFirstBtn')
+            v-icon done
+          v-btn.buttonColor(v-show="secondBtn"
+                            fab x-large
+                            @click='actionSecondBtn')
+            v-icon close
 </template>
 
 <script>
+
 export default {
   name: 'window-dialog',
   data() {
@@ -21,15 +28,32 @@ export default {
   props: {
     show: Boolean,
   },
+  methods: {
+    route() {
+      this.showDialog = false;
+      this.$router.push('auth');
+    },
+  },
   computed: {
-    visible() {
-      return this.$store.getters.getVisibleDialog;
+    visible: {
+      get() {
+        return this.$store.getters.getVisibleDialog;
+      },
+      set(val) {
+        this.$store.dispatch('setVisibleDialog', val);
+      },
     },
-    textFirstBtn() {
-      return this.$store.getters.getFirstButtonText;
+    firstBtn() {
+      return this.$store.getters.getFirstButton;
     },
-    textSecondBtn() {
-      return this.$store.getters.getSecondButtonText;
+    secondBtn() {
+      return this.$store.getters.getSecondButton;
+    },
+    actionFirstBtn() {
+      return this.$store.getters.getFirstBtnFunction;
+    },
+    actionSecondBtn() {
+      return this.$store.getters.getSecondBtnFunction;
     },
     dialogTitle() {
       return this.$store.getters.getDialogTitle;
@@ -38,16 +62,16 @@ export default {
       return this.$store.getters.getDialogText;
     },
   },
-  methods: {
-    route() {
-      this.showDialog = false;
-      this.$router.push('auth');
-    },
-  },
 };
 </script>
 
 <style lang="stylus" scoped>
+  .dialogstyle{
+        transition none !important
+  }
+  .v-dialog {
+    transition none !important
+  }
   .mainDialog {
     position relative
     background-color #fFf
@@ -59,9 +83,9 @@ export default {
     background-color #fff !important;
   }
   .buttonColor{
-    background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
-    font-size: 12px !important
-    color #FFF !important
+    background #fff
+    font-size: 20px !important
+    color #FFA967 !important
   }
   .dialogWindow{
     background-color transparent !important

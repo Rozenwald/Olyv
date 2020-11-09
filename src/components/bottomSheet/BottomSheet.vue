@@ -119,6 +119,7 @@ export default {
           id: this.id,
           longitude: this.addressData.lon,
           latitude: this.addressData.lat,
+          address: 'sasa',
         })
         .then((response) => (this.checkResonse(response)))
         .catch(() => (this.error = 'Ошибка'));

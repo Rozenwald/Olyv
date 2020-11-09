@@ -1,31 +1,33 @@
 import store from '../store/index';
 
-function firstBtnFunction(funсtionFirstBtn) {
-  if (funсtionFirstBtn instanceof Function) {
-    funсtionFirstBtn();
-  }
-  // store.dispatch('setVisibleDialog', false);
+function close() {
+  store.dispatch('setVisibleDialog', false);
 }
-function secondBtnFunction(funсtionSecondBtn) {
-  if (funсtionSecondBtn instanceof Function) {
-    funсtionSecondBtn();
-  }
-  // store.dispatch('setVisibleDialog', false);
+
+function buttonsFunction(action) {
+  return () => {
+    if (action instanceof Function) action();
+    close();
+  };
 }
-function open(title, text, button1text, button2text, funсtionFirstBtn, funсtionSecondBtn) {
+
+function open(title, text, button1, button2, funсtionFirstBtn, funсtionSecondBtn) {
+  const firstBtnFunction = buttonsFunction(funсtionFirstBtn);
+  const secondBtnFunction = buttonsFunction(funсtionSecondBtn);
+
   const data = {
     title,
     text,
-    button1text,
-    button2text,
-    funсtionFirstBtn,
-    funсtionSecondBtn,
+    button1,
+    button2,
+    firstBtnFunction,
+    secondBtnFunction,
   };
   store.dispatch('setDataDialog', data);
   store.dispatch('setVisibleDialog', true);
-  firstBtnFunction(funсtionFirstBtn);
-  secondBtnFunction(funсtionSecondBtn);
 }
+
 export default {
   open,
+  close,
 };

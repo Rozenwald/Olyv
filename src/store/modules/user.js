@@ -27,6 +27,17 @@ const mutations = {
   setNotificationIdChanal(state, notificationIdChanal) {
     state.notificationIdChanal = notificationIdChanal;
   },
+  clear(state) {
+    state.chattoken = null;
+    state.notificationIdChanal = null;
+    state.appToken = null;
+    state.notificationToken = null;
+    state.idChanal = null;
+    state.token = null;
+    state.isAuth = null;
+    state.user = {};
+    state.hasData = false;
+  },
 };
 
 const actions = {
@@ -50,6 +61,9 @@ const actions = {
   },
   setUser({ commit }, user) {
     commit('setUser', user);
+  },
+  clear({ commit }) {
+    commit('clear');
   },
 };
 
