@@ -1,20 +1,23 @@
 <template lang="pug">
-    v-dialog.dialogstyle(v-model="visible")
+    v-dialog.dialogstyle(
+        v-model="visible"
+        transition="false"
+        noClickAnimation="false")
       .mainDialog
         v-row(align='center' justify="center")
           v-card-title.titleDialog {{dialogTitle}}
           v-card-text#ModalRulesText {{dialogText}}
       .btnContainer
         v-row.dialogWindow(align='center' justify="space-around")
+          v-btn.buttonColor(v-show="secondBtn"
+                            fab x-large
+                            @click='actionSecondBtn')
+            v-icon close
           v-btn.buttonColor(v-show="firstBtn"
                             fab x-large
                             outlined
                             @click='actionFirstBtn')
             v-icon done
-          v-btn.buttonColor(v-show="secondBtn"
-                            fab x-large
-                            @click='actionSecondBtn')
-            v-icon close
 </template>
 
 <script>
@@ -67,7 +70,7 @@ export default {
 
 <style lang="stylus" scoped>
   .dialogstyle{
-        transition none !important
+    transition none !important
   }
   .v-dialog {
     transition none !important

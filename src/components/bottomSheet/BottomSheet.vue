@@ -85,7 +85,7 @@ export default {
       }
 
       if (this.cost == null) {
-        return 'Укажите цену';
+        return 'Укажите желаемую цену';
       }
 
       if (!this.validCost(this.cost)) {

@@ -25,7 +25,7 @@
           v-col(col="6")
             v-item(v-slot="{ active, toggle }")
               v-card(:class="{'active-card': active}" @click="toggle")
-                v-row.content(align='center' justify='center' no-gutters) Перевод на карту
+                v-row.content(align='center' justify='center' no-gutters) Оплата картой
 
       v-row.panel(align='center', justify='space-between')
         v-btn(text v-text="'Отмена'" @click="cancel")
