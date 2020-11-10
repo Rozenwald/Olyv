@@ -1,41 +1,34 @@
 <template lang="pug">
-        .container
-            v-row#RegBigToolBar(align='center' justify='center')
-              img#regLogo(src="../assets/icons/Plus.svg", alt="alt")
+  .auth-container
+    v-row.logo(align='center' justify='center')
+      img.logo-icon(src="../assets/main-logo.png", alt="alt")
 
-            v-text-field.RegNumber(
-                v-model="email"
-                label='E-mail'
-                type='email'
-                required)
-
-            v-text-field.RegNumber(
-                v-model="password"
-                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                :type="show1 ? 'text' : 'password'"
-                @click:append="show1 = !show1"
-                label='Пароль'
-                required)
-
-            v-btn#RegButton(v-on:click="checkForm") Войти
-            v-btn#SmallAuthButton(
-              @click="route('registration')")
-              |Пройти регистрацию
-
-            span#SpanRulesNM(v-show="!isFocus") Войти с помощью:
-
-            .iconContainer(v-show="!isFocus")
-              svg-icon.regIcon(name='VK'  width='37' height='37')
-              svg-icon.regIcon(name='Google'  width='37' height='37')
-              svg-icon.regIcon(name='Facebook'  width='37' height='37')
-              svg-icon.regIcon(name='Instagram'  width='37' height='37')
-
-            #RegBottomBar(v-show="!isFocus")
-
-            v-dialog(v-model="isError")
-              v-row(align='center' justify='center')
-                .dialog_title {{error}}
-              v-btn(@click="error = ''") ок
+    v-row.text-field(align='center' justify='center')
+          .text-field-center
+            v-text-field.text-field-center-input(
+              v-model="email"
+              solo hide-details
+              label='E-mail'
+              type='email'
+              required)
+            v-text-field.text-field-center-input(
+              v-model="password"
+              solo hide-details
+              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="showPassword ? 'text' : 'password'"
+              @click:append="showPassword = !showPassword"
+              label='Пароль'
+              required)
+    v-row.button(align='center' justify='center')
+      .button-center
+        v-btn.button-center-registration(v-on:click="checkForm") Войти
+        v-btn.button-center-go-to-auth(
+          @click="route('registration')"
+          v-show="!isFocus") Пройти регистрацию
+      .button-icon(v-show="!isFocus")
+        svg-icon.button-icon-svg-icon(name='VK'  width='37' height='37')
+        svg-icon.button-icon-svg-icon(name='Google'  width='37' height='37')
+        svg-icon.button-icon-svg-icon(name='Facebook'  width='37' height='37')
 </template>
 <script>
 import axios from 'axios';
@@ -296,89 +289,88 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-    #SpanRulesNM{
-        display block
-        font-size: 13px
-        text-align center
-    }
-    .iconContainer{
-      margin 10px
-      height auto
-    }
-    .regIcon{
-      margin 5px
-    }
-    #ModalRulesText{
-        font-size: 16px
-    }
-    #V-card-title-rules{
-        word-break normal
-    }
-    #SmallAuthButton{
-        margin-top 10px
-        margin-bottom 10px
-        color #FFF
-        font-size: 10px
-        background: linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
-        border none
-        border-radius 30px
-        height 30px
-        width 50%
-    }
-    #RegButton{
-        margin-top 10px
-        margin-bottom 10px
-        color #56D68B
-        font-size: 13px
-        background: transparent
-        border 1px solid #56D68B
-        border-radius 30px
-        height 56px
-        width 72%
-    }
-    .container{
-        position relative
-        width 100%
-        height 100%
-        padding 0px
-        text-align: center;
-        vertical-align middle
-    }
-    .RegNumber {
-        margin-top 10px
-        padding-right 10px
-        padding-left 10px
-    }
-    #RegBigToolBar {
-        position relative
-        margin-bottom 50px
-        margin-right 0
-        margin-left 0
-        margin-top 0
-        background-color: #2AB06A
-        height: 30vh
-        width: 100%
-        border: none
-        border-radius:0px 0px 50px 0px
-        text-align: center
-    }
-
-    #RegBottomBar {
-        position fixed
-        bottom 0
-        background-color: #2AB06A
-        width: 100%
-        height 10%
-        border: none
-        border-radius:50px 0px 0px 0px
-        align-items: center
-    }
-
-    #regLogo {
+  .auth-container {
+    width 100%
+    height 100%
+    padding 0
+    text-align: center;
+    vertical-align middle
+  }
+  .logo {
+    position relative
+    height: 33vh;
+    width: 100%;
+    margin-bottom 0
+    margin-right 0
+    margin-left 0
+    margin-top 0
+    text-align: center;
+      &-icon {
         position relative
         vertical-align middle
         width:auto;
-        height:50%;
+        height:100%;
+      }
+  }
+  .text-field {
+    width 100%;
+    height 33vh;
+    margin 0;
+      &-center {
+        width 100%;
+        padding-right 10px;
+        padding-left 10px;
+          &-input {
+            padding-right 10px;
+            padding-left 10px;
+            margin-top 10px
+          }
+          &-rules-text {
+            margin-top 20px
+            font-size 14px
+            word-break: normal
+          }
+          &-rules-button {
+            font-size 14px
+            margin-top 5px
+            text-decoration:underline
+            word-break: normal
+          }
+      }
+  }
+  .button {
+    width 100%;
+    height 34vh;
+    margin 0;
+    &-center {
+      width 100%;
+      height 60%;
+        &-registration {
+          height 35% !important
+          color #56D68B
+          font-size: 13px
+          background: transparent
+          border 1px solid #56D68B
+          border-radius 30px
+          width 72%
+        }
+        &-go-to-auth {
+          height 35% !important
+          margin-top 10px
+          color #FFA967
+          font-size: 13px
+          background: transparent
+          border 1px solid #FFA967
+          border-radius 30px
+          width 72%
+        }
     }
-
+    &-icon {
+      width 100%;
+      height 40%;
+        &-svg-icon{
+          margin 5px
+        }
+    }
+  }
 </style>
