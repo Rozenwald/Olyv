@@ -8,7 +8,6 @@
       bottom-navigation
       login-dialog
       error-dialog
-      back-step
       repeat-login-dialog
 </template>
 
@@ -22,7 +21,6 @@ import store from './store/index';
 import LoginDialog from './components/LoginDialog.vue';
 import ErrorDialog from './components/ErrorDialog.vue';
 import RepeatLoginDialog from './components/RepeatLoginDialog.vue';
-import BackStep from './components/BackStep.vue';
 import 'leaflet/dist/leaflet.css';
 import cordova from './plugins/cordova';
 
@@ -36,7 +34,6 @@ export default {
     BottomNavigation,
     LoginDialog,
     ErrorDialog,
-    BackStep,
     RepeatLoginDialog,
     BottomSheetGroup,
   },
@@ -81,7 +78,6 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('showBubble', false);
     cordova.listen();
     if (this.token) {
       this.getUserData();

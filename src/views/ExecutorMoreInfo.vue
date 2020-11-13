@@ -223,6 +223,7 @@ export default {
     },
 
     checkOrderResponse(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           if (this.orderType === ('all' || 'keyword')) {
@@ -257,7 +258,7 @@ export default {
   watch: {
     currentPrice() {
       this.setInputWidth();
-      if (Number.parseInt(this.currentPrice, 10) === 0) {
+      if (Number.parseInt(this.currentPrice, 10) < 0) {
         this.currentPrice = this.changeValue;
       }
     },

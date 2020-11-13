@@ -104,13 +104,6 @@ export default {
       return this.$store.getters.getToken;
     },
   },
-  created() {
-    this.$store.commit('setTitle', 'Заказчик');
-    if (this.token) {
-      this.getData();
-      this.getProcessOrders();
-    }
-  },
   watch: {
     token() {
       if (this.token) {
@@ -118,6 +111,17 @@ export default {
         this.getProcessOrders();
       }
     },
+  },
+  created() {
+    this.$store.commit('setTitle', 'Заказчик');
+    this.$store.dispatch('showBackBtn', false);
+    if (this.token) {
+      this.getData();
+      this.getProcessOrders();
+    }
+  },
+  beforeDestroy() {
+    this.$store.dispatch('showBackBtn', true);
   },
 };
 </script>

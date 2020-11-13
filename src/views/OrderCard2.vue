@@ -1,5 +1,4 @@
 <template lang="pug">
-  swiper.swiper
     v-card.card(@click='this.route')
 
       v-row.main-part(no-gutters)
@@ -16,27 +15,20 @@
 
         v-row.response-wrp(align='center' justify='start')
           svg-icon(name="Responded")
-          .response-text
-            span Откликнулось <br/>
-            span.black-text ??? человек
+          .response-text {{userCount}} ответов
 
         v-row.date-time-wrp(align='center' justify='start')
           svg-icon(name="Distantion")
-          .distantion-text
-            span Расстояние <br/>
-            span.black-text ???
+          .distantion-text &&& Расстояние
 </template>
 
 <script>
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
   name: 'OrderCard2',
   components: {
     SvgIcon,
-    Swiper,
-    SwiperSlide,
   },
   props: {
     type: String,
@@ -51,6 +43,12 @@ export default {
     },
   },
   computed: {
+    userCount() {
+      return this.item.countResponse;
+    },
+    lowcost() {
+      return this.item.lowcost;
+    },
     token() {
       return this.$store.getters.getToken;
     },
@@ -69,12 +67,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .swiper{
-    border 0
-    margin-top 10px
-  }
-
   .card {
+    margin-top 10px
     padding 10px 0 10px 10px
     border 0
   }

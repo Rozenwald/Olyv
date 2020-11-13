@@ -8,9 +8,7 @@ const mutations = {
     state.functionSecond = data.secondBtnFunction;
   },
   setVisibleDialog(state, visible) {
-    console.log(state.visible);
     state.visible = visible;
-    console.log(state.visible);
   },
 };
 

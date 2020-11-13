@@ -59,6 +59,10 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Исполнитель');
+    this.$store.dispatch('showBackBtn', false);
+  },
+  beforeDestroy() {
+    this.$store.dispatch('showBackBtn', true);
   },
 };
 </script>
