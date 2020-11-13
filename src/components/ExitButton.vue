@@ -29,7 +29,7 @@ export default {
           method: 'receive',
           submethod: 'tokenApp',
         })
-        .then((response) => console.log(response))
+        .then((response) => this.checkResponse(response))
         .catch((error) => {
           console.log(error);
         });
@@ -112,9 +112,6 @@ export default {
     appToken() {
       return this.$store.getters.getAppToken || 'dL-oYZj7TfKt-pR5orsM2k:APA91bEasIddFlq0G3PQwuY8XYRcY4qq7yRmgxBKS2KbWT50Cdkbzbn9iIJGJzs2eEYBoizDA0thIssfq54Mx95KNY9dNslNpOAZA8S03xHzhYh91vefBEYu_J_2oPaBVPqy6ev3efIl';
     },
-  },
-  created() {
-    this.receiveAppTokens();
   },
 };
 </script>
