@@ -1,5 +1,10 @@
 <template lang="pug">
-  v-app-bar#toolbar(app v-show="show" fixed dense)
+  v-app-bar#toolbar(app v-show="showAppbar" fixed dense)
+    v-btn.back-step-btn(
+        v-if="showBackbtn"
+        depressed fab small
+        @click="stepback()")
+      v-icon(color="white") arrow_back
     v-row(align='center', justify='center')
       .toolbar-avatar-wrp(v-show="currentRouteName == 'chat'")
         avatar(size="36" color="#AEAEAE" :src="src")
@@ -19,31 +24,27 @@ export default {
     title() {
       return this.$store.getters.getTitle;
     },
-
-    show() {
+    showAppbar() {
       return this.$store.getters.isVisibleAppbar;
     },
-
+    showBackbtn() {
+      return this.$store.getters.isVisibleBackBtn;
+    },
     userRequest() {
       return this.$store.getters.getUserRequest;
     },
-
     currentRouteName() {
       return this.$route.name;
     },
-
     src() {
       if (!this.userRequest) {
         return null;
       }
-
       if (this.userRequest.photo.length) {
         return this.userRequest.photo[this.userRequest.photo.length - 1].urlMin;
       }
-
       return null;
     },
-
     userName() {
       if (!this.user) {
         return null;
@@ -56,11 +57,19 @@ export default {
       return this.user.email;
     },
   },
+  methods: {
+    stepback() {
+      this.$router.back();
+    },
+  },
 };
 </script>
 
 <style lang="stylus" scoped>
-
+  .back-step-btn{
+    position absolute
+    background-color transparent !important
+  }
   #toolbar{
     background-color #56D68B
     box-shadow 0px 2px 2px rgba(0, 0, 0, 0.05)

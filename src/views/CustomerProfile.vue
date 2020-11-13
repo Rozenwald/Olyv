@@ -69,10 +69,14 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Личный кабинет');
+    this.$store.dispatch('showBackBtn', false);
     if (this.user.verification === 'notCompleted') {
       this.getData();
     }
     this.getData();
+  },
+  beforeDestroy() {
+    this.$store.dispatch('showBackBtn', true);
   },
   beforeRouteEnter(to, from, next) {
     if (!store.getters.isAuth) {

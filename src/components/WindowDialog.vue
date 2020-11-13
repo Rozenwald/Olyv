@@ -2,7 +2,7 @@
     v-dialog.dialogstyle(
         v-model="visible"
         transition="false"
-        noClickAnimation="false")
+        noClickAnimation=false)
       .mainDialog
         v-row(align='center' justify="center")
           v-card-title.titleDialog {{dialogTitle}}

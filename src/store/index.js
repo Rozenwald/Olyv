@@ -12,7 +12,6 @@ import user from './modules/user';
 import chat from './modules/chat';
 import myOrder from './modules/myOrder';
 import repeatLoginDialog from './modules/repeatLoginDialog';
-import backstep from './modules/backstep';
 import allOrder from './modules/allOrders';
 import currentPosition from './modules/currentPosition';
 import permissions from './modules/permissions';
@@ -28,7 +27,6 @@ export default new Vuex.Store({
   },
   modules: {
     bottomSheet,
-    backstep,
     bottomNavigation,
     appbar,
     setting,
