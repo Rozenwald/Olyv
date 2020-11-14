@@ -1,6 +1,6 @@
 <template lang="pug">
   v-container.orderContainerHeight
-    v-row.chips(v-show="user.verification == 'completed'"
+    v-row.chips(
                 align='center'
                 justify='space-around')
       v-chip-group(v-model="type" mandatory active-class="active-chip")
