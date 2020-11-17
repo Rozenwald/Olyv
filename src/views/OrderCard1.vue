@@ -12,8 +12,8 @@
               svg-icon(name="Lowcost" color="#FE7664" height="10" width="10")
               .lowcost {{cost}}
               svg-icon(name="RubDefault" color="#FE7664" height="10" width="10")
-      v-row.more-info-wrp(align='center' justify='start' no-gutters)
 
+      v-row.more-info-wrp(align='center' justify='start' no-gutters)
         v-row.response-wrp(align='center' justify='start')
           svg-icon(name="Responded")
           .response-text {{userCount}} ответов

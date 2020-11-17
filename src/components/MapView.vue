@@ -1,12 +1,14 @@
 <template lang="pug">
   l-map(
+    ref='map'
     :zoom="zoom"
     :center="location"
     :options="mapOptions"
+    @fullscreenchange="fullscreenChange"
     style="z-index: 1")
     l-tile-layer(:url="url")
     l-marker(:lat-lng="location" :icon="icon")
-    l-control-fullscreen(:options="{ 'false': 'Go big!', 'true': 'Be regular' }" position="topleft")
+    l-control-fullscreen(position="topleft")
 </template>
 
 <script>
@@ -19,6 +21,8 @@ import {
   LControl,
 } from 'vue2-leaflet';
 import LControlFullscreen from 'vue2-leaflet-fullscreen';
+// eslint-disable-next-line no-unused-vars
+import LeafletFullscreen from 'leaflet-fullscreen';
 
 export default {
   name: 'map-view',
@@ -50,7 +54,24 @@ export default {
         iconSize: [32, 37],
         iconAnchor: [16, 37],
       }),
+      isFullscreenCount: 0,
     };
+  },
+  methods: {
+    fullscreenChange() {
+      if (this.fullscreen && !this.isFullscreenCount) {
+        this.isFullscreenCount += 1;
+        return null;
+      }
+
+      if (this.fullscreen) {
+        this.$store.dispatch('fullscreen', false);
+        this.isFullscreenCount = 0;
+        return null;
+      }
+
+      return null;
+    },
   },
   computed: {
     location() {
@@ -61,6 +82,17 @@ export default {
     },
     dynamicAnchor() {
       return [this.iconSize / 2, this.iconSize * 1.15];
+    },
+    fullscreen() {
+      return this.$store.getters.fullscreen;
+    },
+  },
+  watch: {
+    fullscreen() {
+      console.log(this.fullscreen);
+      if (this.fullscreen) {
+        this.$refs.map.mapObject.toggleFullscreen();
+      }
     },
   },
 };

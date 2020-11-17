@@ -120,9 +120,6 @@ export default {
           longitude: this.addressData.lon,
           latitude: this.addressData.lat,
           address: this.addressData.value,
-          comment: {
-            payType: 'cash',
-          },
         })
         .then((response) => (this.checkResonse(response)))
         .catch(() => (this.error = 'Ошибка'));

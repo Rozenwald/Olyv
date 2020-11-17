@@ -11,6 +11,9 @@ const mutations = {
   setCostSheetStatus(state, status) {
     state.statusCost = status;
   },
+  setMyCostSheetStatus(state, status) {
+    state.statusMyCost = status;
+  },
   setAddressData(state, addressData) {
     state.addressData = addressData;
   },
@@ -22,7 +25,7 @@ const mutations = {
   },
   setAll(state, data) {
     state.cost = data.cost;
-    state.addressData.value = '';
+    state.addressData.value = data.address;
     state.description = data.description;
     // eslint-disable-next-line no-underscore-dangle
     state.orderId = data._id;
@@ -54,6 +57,9 @@ const actions = {
   setCost({ commit }, cost) {
     commit('setCost', cost);
   },
+  setMyCostSheetStatus({ commit }, cost) {
+    commit('setMyCostSheetStatus', cost);
+  },
   setAll({ commit }, data) {
     commit('setAll', data);
   },
@@ -67,6 +73,7 @@ const getters = {
   getAddressSheetStatus: (state) => state.statusAddress,
   getDescriptionSheetStatus: (state) => state.statusDescription,
   getCostSheetStatus: (state) => state.statusCost,
+  getMyCostSheetStatus: (state) => state.statusMyCost,
   getAddressData: (state) => state.addressData,
   getDescription: (state) => state.description,
   getCost: (state) => state.cost,
@@ -78,6 +85,7 @@ const state = {
   statusMain: false,
   statusAddress: false,
   statusCost: false,
+  statusMyCost: false,
   statusDescription: false,
   addressData: {},
   description: null,
