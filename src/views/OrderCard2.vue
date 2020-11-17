@@ -12,17 +12,17 @@
               svg-icon(name="RubDefault" color="#FE7664" height="15" width="15")
 
       v-row.more-info-wrp(align='center' justify='start' no-gutters)
-
         v-row.response-wrp(align='center' justify='start')
           svg-icon(name="Responded")
           .response-text {{userCount}} ответов
 
         v-row.date-time-wrp(align='center' justify='start')
-          svg-icon(name="Distantion")
-          .distantion-text &&& Расстояние
+          svg-icon(name="Time")
+          .distantion-text {{formatedTime}}
 </template>
 
 <script>
+import moment from 'moment';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
@@ -61,6 +61,15 @@ export default {
         return `${costStr.substr(0, 3)}K`;
       }
       return `${this.item.cost}`;
+    },
+    time() {
+      return moment(this.item.createDate);
+    },
+    formatedTime() {
+      if (this.time.isAfter(moment().subtract(1, 'days'))) {
+        return this.time.calendar();
+      }
+      return this.time.format('D MMMM, HH:mm');
     },
   },
 };

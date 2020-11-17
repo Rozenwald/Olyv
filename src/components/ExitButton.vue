@@ -37,22 +37,6 @@ export default {
 
     checkResponse(response) {
       console.log(response);
-      let id;
-      switch (response.data.status) {
-        case 'success':
-          id = this.getTokenId(response.data.data);
-          this.removeTokenApp(id);
-          break;
-        case 'notExist':
-          nativeStorage.clear();
-          this.$store.dispatch('clear');
-          this.loading = false;
-          this.$router.replace('auth');
-          break;
-        default:
-          this.error = response.data.status;
-          break;
-      }
     },
 
     getTokenId(data) {
