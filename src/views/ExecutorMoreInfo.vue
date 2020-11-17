@@ -1,98 +1,26 @@
 <template lang="pug">
-  v-container
-    .customer-more-info
-      v-row.customer-more-info-header(align='center' justify='space-between')
-        .name {{customerUser.name}} {{customerUser.lastname}}
-        v-rating(
-          :length="5"
-          :half-increments="true"
-          :dense="true"
-          color="#FFCA10"
-          background-color="#FFCA10"
-          size="14"
-          v-show="false"
-          )
-      .map-wrp
-        map-view(
-          :lat='order.latitude'
-          :lon='order.longitude')
-      .information-wrp
-        v-row.more-info-wrp-first(align='center' justify='space-between')
-          v-row.save-deal(align='center')
-            svg-icon(name="SaveDeal"  v-show="order.protect == 'yes'")
-            span( v-show="order.protect == 'yes'") Защищенная сделка
-          v-row.cost-wrp(align='center' justify='center')
-            .cost {{order.cost}}
-            svg-icon(name="RubDefault" color="#FE7664" height="15" width="15")
-        v-row.more-info-wrp-second(align='center' justify='start')
-          v-row.responded(align='center')
-            svg-icon(name="Responded")
-            .responded-text
-              span Откликнулось <br/>
-              span.black-text ??? человек
-          v-row.distantion(align='center')
-            svg-icon(name="Distantion")
-            .distantion-text
-              span Расстояние <br/>
-              span.black-text ??? км
-        .description {{order.description}}
-        .media-files
-          v-row
-            v-col.d-flex.child-flex.custom-card-wrp(v-for='n in 5', :key='n', cols='4')
-              v-card.d-flex.custom-card(flat, tail)
-                v-img.grey.lighten-2(:src='`https://picsum.photos/500/300?image=${n * 5 + 10}`', :lazy-src='`https://picsum.photos/10/6?image=${n * 5 + 10}`', aspect-ratio='1')
-                  template(v-slot:placeholder)
-                    v-row.fill-height.ma-0(align='center', justify='center')
-                      v-progress-circular(indeterminate, color='grey lighten-5')
-        v-row.edit-price(align='center' justify='center')
-          v-btn.minus-btn(@click='setPrice(-1 * changeValue)') -
-          input.currentPrice(
-                              v-model="currentPrice"
-                              type="text"
-                              :style="{width: inputWidth + 'px'}"
-                              size="10"
-                              maxlength="10"
-                            )
-          v-btn.plus-btn(@click='setPrice(changeValue)') +
-        v-row.btns(no-gutters  align='center')
-          v-col(align='center')
-            v-btn.accept-btn(
-              rounded
-              @click="acceptOrder"
-              v-show="orderType == 'keyword' "
-            ) Согласиться
-            v-btn.accept-btn(
-              rounded
-              @click="acceptOrder"
-              v-show="orderType == 'all' "
-            ) Согласиться
-            v-btn.cancel-btn(
-              rounded
-              @click="getMyResponseOrder"
-              v-show="orderType == 'await'"
-            ) Отменить
-            v-btn.completed-btn(
-              rounded
-              @click="completeOrder"
-              v-show="orderType == 'process'"
-            ) Завершить
-          v-col(align='center' v-show="orderType != ('all' || 'keyword')")
-            v-btn.chat-btn(rounded @click="goChat") Чат
+  v-container.executor-more-info-wrp
+    user-card.user-card(:user="customerUser")
+    address-field.address-field(:order="order")
+    order-information.order-information(:order="order")
+    bottom-field.bottom-field(:order="order")
 </template>
 
 <script>
 import axios from 'axios';
-import SvgIcon from '../components/SvgIcon.vue';
-import store from '../store';
-import MapView from '../components/MapView.vue';
+import UserCard from '../components/executorMoreInfo/UserCard.vue';
+import BottomField from '../components/executorMoreInfo/BottomField.vue';
+import AddressField from '../components/executorMoreInfo/AddressField.vue';
+import OrderInformation from '../components/executorMoreInfo/OrderInformation.vue';
 
 export default {
   name: 'moreInfoOrder',
   components: {
-    SvgIcon,
     axios,
-    store,
-    MapView,
+    UserCard,
+    BottomField,
+    AddressField,
+    OrderInformation,
   },
   data() {
     return {
@@ -112,21 +40,6 @@ export default {
     goChat() {
       this.$store.dispatch('setIdUserRequest', this.order.idUserCustomer);
       this.$router.push('chat');
-    },
-
-    setPrice(val) {
-      if (Number.parseInt(this.currentPrice, 10) + val > 0) {
-        this.currentPrice = Number.parseInt(this.currentPrice, 10) + val;
-      }
-    },
-
-    setInputWidth() {
-      this.inputWidth = (this.currentPrice.toString().length + 1);
-      if (this.currentPrice.toString().length > 2) {
-        this.inputWidth *= 12;
-      } else {
-        this.inputWidth *= 16;
-      }
     },
 
     getCustomerUserData() {
@@ -175,75 +88,10 @@ export default {
       }
     },
 
-    acceptOrder() {
-      /* eslint-disable no-underscore-dangle */
-      /* eslint-disable no-return-assign */
-      axios
-        .post(`${this.$baseUrl}api/v1/private/response`, {
-          token: this.token,
-          method: 'add',
-          submethod: 'executor',
-          idOrder: this.order._id,
-          comment: this.currentPrice,
-        })
-        .then((response) => (this.checkOrderResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
-      /* eslint-enable no-underscore-dangle */
-      /* eslint-enable no-return-assign */
-    },
-
-    cancelOrder() {
-      /* eslint-disable no-return-assign */
-      axios
-        .post(`${this.$baseUrl}api/v1/private/response`, {
-          token: this.token,
-          method: 'del',
-          submethod: 'executor',
-          id: this.order.idResponse,
-        })
-        .then((response) => (this.checkOrderResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
-      /* eslint-enable no-return-assign */
-    },
-
-    completeOrder() {
-      /* eslint-disable no-underscore-dangle */
-      /* eslint-disable no-return-assign */
-      axios
-        .post(`${this.$baseUrl}api/v1/private/process`, {
-          token: this.token,
-          method: 'completed',
-          submethod: 'executor',
-          idResponse: this.order.idResponse,
-        })
-        .then((response) => (this.checkOrderResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
-      /* eslint-enable no-underscore-dangle */
-      /* eslint-enable no-return-assign */
-    },
-
-    checkOrderResponse(response) {
-      switch (response.data.status) {
-        case 'success':
-          if (this.orderType === ('all' || 'keyword')) {
-            this.$store.dispatch('setType', 'await');
-          } else if (this.orderType === 'await') {
-            this.$store.dispatch('setType', 'all');
-          }
-          break;
-        case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
-          break;
-        default:
-          this.error = 'Ошибка';
-          break;
-      }
-    },
-
   },
   computed: {
     order() {
-      return this.$store.getters.getMyOrder;
+      return this.$store.getters.getMyOrder || {};
     },
 
     orderType() {
@@ -255,21 +103,11 @@ export default {
     },
   },
   watch: {
-    currentPrice() {
-      this.setInputWidth();
-      if (Number.parseInt(this.currentPrice, 10) === 0) {
-        this.currentPrice = this.changeValue;
-      }
-    },
-
     token() {
       if (this.token) {
         this.getCustomerUserData();
       }
     },
-  },
-  mounted() {
-    this.setInputWidth();
   },
   created() {
     this.$store.commit('setTitle', 'Все заказы');
@@ -277,159 +115,20 @@ export default {
     if (this.token) {
       this.getCustomerUserData();
     }
-
-    if (this.order) {
-      this.currentPrice = this.order.cost;
-    }
   },
 };
 </script>
 
 <style lang="stylus" scoped>
-
+  .executor-more-info-wrp {
+    height 100vh
+    padding-bottom 130px
+  }
   .container {
     background-color #fff
   }
 
-  .name {
-    font-style normal
-    font-weight 500
-    font-size 15px
-    line-height 18px
-    color #000000
-  }
-
-  .customer-more-info-header{
-    padding 0 !important
-  }
-
-  .map-wrp {
-    height 200px
-  }
-
-  .row{
-    margin 0
-  }
-
-  .cost-wrp {
-    background #FEF5EE
-    border-radius 10px 0 0 10px
-    width 100px
-    height 36px
-    max-width 100px
-    margin 0 -12px 0 0
-  }
-
-  .cost {
-    font-family Golos
-    font-style normal
-    font-weight 600
-    font-size 18px
-    color: #FE7664
-    margin-right 5px
-  }
-
-  .save-deal span {
-    font-style normal
-    font-weight bold
-    font-size 10px
-    color #FE7664
-    margin-left 5px
-  }
-
-  .more-info-wrp-second {
-    margin 15px 0
-    text-align center
-    font-style normal
-    font-size 10px
-    line-height 1.4
-    color #65686C
-  }
-
-  .more-info-wrp-second div {
-    max-width 95px
-  }
-
-  .more-info-wrp-second .black-text {
-    color: #000000
-  }
-
-  .responded {
-    margin-right 15px
-  }
-
-  .responded-text, .distantion-text {
-    margin-left 5px
-  }
-
-  .description {
-    font-family Golos
-    font-style normal
-    font-weight normal
-    font-size 13px
-    line-height 19px
-    color #3C3F44
-  }
-
-  .media-files .row {
-    overflow auto
-    white-space nowrap
-    flex-wrap nowrap
-    margin-top 10px
-  }
-
-  .plus-btn, .minus-btn {
-    width 40px !important
-    height 40px !important
-    background none !important
-    opacity: 0.3;
-    border: 1px solid rgba(101, 104, 108, 0.8);
-    box-sizing: border-box;
-    border-radius 20px
-    box-shadow none !important
-    min-width 0 !important
-    padding 0 !important
-  }
-
-  .currentPrice{
-    padding 0 12px
-    text-align center
-    font-family Golos
-    font-style normal
-    font-size 14px
-    color #3C3F44
-  }
-
-  .btns{
+  .order-information, .address-field {
     margin-top 15px
-  }
-
-  .edit-price{
-    margin-top 3px
-  }
-
-  .cancel-btn, .completed-btn{
-    margin-right 5%
-  }
-
-  .accept-btn, .cancel-btn, .completed-btn{
-    width 90%
-    background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
-    font-style normal
-    font-weight 600
-    font-size 13px
-    color #FFFFFF
-    box-shadow none !important
-  }
-
-  .chat-btn{
-    width 90%
-    background none !important
-    font-style normal
-    font-weight 600
-    font-size 13px
-    color #56D68B
-    border 1px solid #56D68B
-    box-shadow none !important
   }
 </style>

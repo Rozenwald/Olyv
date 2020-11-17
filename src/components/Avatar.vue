@@ -1,6 +1,6 @@
 <template lang="pug">
   v-avatar(:size='size' :color='color' @click="choosePhoto")
-    svg-icon(name='PhotoCamera' v-if="!picture")
+    v-icon(v-if="!picture" color="#FFFFFF" ) no_photography
     v-img(:src="picture" v-else)
 
     input(type="file" @change="handleFileUpload" ref="input")
@@ -32,6 +32,11 @@ export default {
     isChange: {
       type: Boolean,
       default: false,
+    },
+
+    type: {
+      type: String,
+      default: 'private',
     },
 
   },

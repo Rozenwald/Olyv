@@ -4,6 +4,7 @@
     address-sheet(v-if="stateAddress")
     description-sheet(v-if="stateDescription")
     cost-sheet(v-if="stateCost")
+    my-cost-sheet(v-if="stateMyCost")
 </template>
 
 <script>
@@ -12,6 +13,7 @@ import BottomSheet from './bottomSheet/BottomSheet.vue';
 const AddressSheet = () => import('./bottomSheet/AddressSheet.vue');
 const DescriptionSheet = () => import('./bottomSheet/DescriptionSheet.vue');
 const CostSheet = () => import('./bottomSheet/CostSheet.vue');
+const MyCostSheet = () => import('./bottomSheet/MyCostSheet.vue');
 
 export default {
   name: 'bottom-sheet-group',
@@ -20,6 +22,7 @@ export default {
     AddressSheet,
     DescriptionSheet,
     CostSheet,
+    MyCostSheet,
   },
   computed: {
     stateMain() {
@@ -33,6 +36,9 @@ export default {
     },
     stateCost() {
       return this.$store.getters.getCostSheetStatus;
+    },
+    stateMyCost() {
+      return this.$store.getters.getMyCostSheetStatus;
     },
   },
 };

@@ -1,10 +1,13 @@
 const mutations = {
   setMyOrder(state, order) {
     state.order = order;
+    state.respondedList = [];
   },
   setType(state, type) {
-    console.log(type);
     state.type = type;
+  },
+  setRespondedList(state, respondedList) {
+    state.respondedList = respondedList;
   },
 };
 
@@ -15,16 +18,21 @@ const actions = {
   setType({ commit }, type) {
     commit('setType', type);
   },
+  setRespondedList({ commit }, respondedList) {
+    commit('setRespondedList', respondedList);
+  },
 };
 
 const getters = {
   getMyOrder: (state) => state.order,
   getOrderType: (state) => state.type,
+  getRespondedList: (state) => state.respondedList,
 };
 
 const state = {
   order: null,
   type: null,
+  respondedList: [],
 };
 
 export default {
