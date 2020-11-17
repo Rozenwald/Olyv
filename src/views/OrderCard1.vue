@@ -1,17 +1,19 @@
 <template lang="pug">
-  swiper.swiper
     v-card.card(@click='this.route')
       v-row.main-part(no-gutters)
-          v-col(cols="8").description-wrp
-            .description {{item.description}}
+        v-col(cols="8").description-wrp
+          .description {{item.description}}
 
-          v-col(cols="4" align='right')
+        v-col(cols="4" align='right')
             v-row.cost-wrp(align='center' justify='center')
-                .cost {{cost}}
-                svg-icon(name="RubDefault" color="#FE7664" height="15" width="15")
+              .cost {{cost}}
+              svg-icon(name="RubDefault" color="#FE7664" height="10" width="10")
+            v-row.lowcost-wrp(align='center' justify='center')
+              svg-icon(name="Lowcost" color="#FE7664" height="10" width="10")
+              .lowcost {{cost}}
+              svg-icon(name="RubDefault" color="#FE7664" height="10" width="10")
 
       v-row.more-info-wrp(align='center' justify='start' no-gutters)
-
         v-row.response-wrp(align='center' justify='start')
           svg-icon(name="Responded")
           .response-text {{userCount}} ответов
@@ -22,7 +24,6 @@
 </template>
 
 <script>
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import moment from 'moment';
 import SvgIcon from '../components/SvgIcon.vue';
 
@@ -30,8 +31,6 @@ export default {
   name: 'OrderCard1',
   components: {
     SvgIcon,
-    Swiper,
-    SwiperSlide,
   },
   props: {
     type: String,
@@ -52,7 +51,10 @@ export default {
   },
   computed: {
     userCount() {
-      return 0;
+      return this.item.countResponse;
+    },
+    lowcost() {
+      return this.item.lowcost;
     },
     token() {
       return this.$store.getters.getToken;
@@ -84,14 +86,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .swiper{
-    border 0
-    margin-top 10px
-  }
-
   .card {
     padding 10px 0 10px 10px
     border 0
+    margin-top 10px
   }
 
   .swiper:first-child {
@@ -124,13 +122,27 @@ export default {
     background #FEF5EE
     border-radius 10px 0px 0px 10px
   }
-
+  .lowcost-wrp {
+    margin 0
+    height 36px
+    max-width 100px
+    border-radius 10px 0px 0px 10px
+  }
   .cost {
     font-style normal
     font-weight bold
     font-size 18px
     color #FE7664
-    margin-right 5px
+    margin-right 3px
+    margin-left 5px
+  }
+  .lowcost {
+    font-style normal
+    font-weight bold
+    font-size 16px
+    color #FE7664
+    margin-right 3px
+    margin-left 5px
   }
 
   .more-info-wrp {

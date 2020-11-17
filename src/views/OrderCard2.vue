@@ -1,5 +1,4 @@
 <template lang="pug">
-  swiper.swiper
     v-card.card(@click='this.route')
 
       v-row.main-part(no-gutters)
@@ -13,30 +12,23 @@
               svg-icon(name="RubDefault" color="#FE7664" height="15" width="15")
 
       v-row.more-info-wrp(align='center' justify='start' no-gutters)
-
         v-row.response-wrp(align='center' justify='start')
           svg-icon(name="Responded")
-          .response-text
-            span Откликнулось <br/>
-            span.black-text ??? человек
+          .response-text {{userCount}} ответов
 
         v-row.date-time-wrp(align='center' justify='start')
-          svg-icon(name="Distantion")
-          .distantion-text
-            span Расстояние <br/>
-            span.black-text ???
+          svg-icon(name="Time")
+          .distantion-text {{formatedTime}}
 </template>
 
 <script>
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+import moment from 'moment';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
   name: 'OrderCard2',
   components: {
     SvgIcon,
-    Swiper,
-    SwiperSlide,
   },
   props: {
     type: String,
@@ -51,6 +43,12 @@ export default {
     },
   },
   computed: {
+    userCount() {
+      return this.item.countResponse;
+    },
+    lowcost() {
+      return this.item.lowcost;
+    },
     token() {
       return this.$store.getters.getToken;
     },
@@ -64,17 +62,22 @@ export default {
       }
       return `${this.item.cost}`;
     },
+    time() {
+      return moment(this.item.createDate);
+    },
+    formatedTime() {
+      if (this.time.isAfter(moment().subtract(1, 'days'))) {
+        return this.time.calendar();
+      }
+      return this.time.format('D MMMM, HH:mm');
+    },
   },
 };
 </script>
 
 <style lang="stylus" scoped>
-  .swiper{
-    border 0
-    margin-top 10px
-  }
-
   .card {
+    margin-top 10px
     padding 10px 0 10px 10px
     border 0
   }

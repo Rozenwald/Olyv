@@ -4,7 +4,7 @@
     .about-order-content
       v-row.about-order-content-cost
         span.about-order-content-cost-title Цена:
-        v-row.about-order-content-cost-content {{order.cost}} руб.
+        v-row.about-order-content-cost-content {{formatedCost}}
       v-row.about-order-content-address
         span.about-order-content-cost-title Адрес:
         v-row.about-order-content-cost-content {{order.address}}
@@ -19,6 +19,14 @@ export default {
   computed: {
     order() {
       return this.$store.getters.getMyOrder;
+    },
+
+    formatedCost() {
+      const price = Number.prototype.toFixed.call(parseFloat(this.order.cost || 0) || 0);
+      let priceSep = price.replace(/(\D)/g, ',');
+      priceSep = priceSep.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
+
+      return `${priceSep} руб.`;
     },
   },
 };

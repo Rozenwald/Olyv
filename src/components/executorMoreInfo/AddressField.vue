@@ -46,6 +46,11 @@ export default {
     height 48px
   }
 
+  &-address {
+    width 79%
+    max-width 79%
+  }
+
   &-btn {
     width 20%
     max-width 20%
