@@ -55,7 +55,11 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.all = response.data.data;
-          this.getAwaitOrder();
+          if (this.user.verification === 'completed') {
+            this.getAwaitOrder();
+          } else {
+            this.getMyOrder();
+          }
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -79,7 +83,7 @@ export default {
       /* eslint-enable no-return-assign */
     },
     checkAwaitOrder(response) {
-      console.log(response);
+      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           console.log(this.textForRegexp);
@@ -114,7 +118,7 @@ export default {
       /* eslint-enable no-return-assign */
     },
     checkMyOrderResponse(response) {
-      console.log(response);
+      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           response.data.data.forEach((element) => {
