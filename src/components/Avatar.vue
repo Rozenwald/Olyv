@@ -134,11 +134,6 @@ export default {
       }
     },
   },
-
-  created() {
-    console.log(this.picture);
-  },
-
   computed: {
     token() {
       return this.$store.getters.getToken;

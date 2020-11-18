@@ -2,7 +2,7 @@
   v-sheet.user-field(elevation="1" rounded)
     v-list-item
       v-list-item-avatar(size="62")
-        avatar(type="public" size="62")
+        avatar(type="public" size="62" :src="photo")
       v-list-item-content.content
         v-list-item-title {{user.name}} {{user.lastname}}
         v-list-item-subtitle
@@ -28,6 +28,24 @@ export default {
     user: {
       type: Object,
       default: () => ({}),
+    },
+  },
+  computed: {
+    photo() {
+      if (!this.user.photo) {
+        return ' ';
+      }
+
+      if (!this.user.photo) {
+        return ' ';
+      }
+
+      if (!this.user.photo.length) {
+        return ' ';
+      }
+
+      const url = this.user.photo[this.user.photo.length - 1].urlMin.substr(1);
+      return this.$baseUrlNoPort + url;
     },
   },
 };
