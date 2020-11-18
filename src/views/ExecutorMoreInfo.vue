@@ -121,7 +121,7 @@ export default {
 
 <style lang="stylus" scoped>
   .executor-more-info-wrp {
-    height 100vh
+    min-height 100vh
     padding-bottom 130px
   }
   .container {

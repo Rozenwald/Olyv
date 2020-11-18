@@ -12,7 +12,11 @@
       v-row.chat-action.action(align="center" justify="center" @click="goChat(item.idUserResponse)")
         v-icon(color="#56d68b" ) chat
 
-      v-row.agree-action.action(align="center" justify="center")
+      v-row.agree-action.action(
+        align="center"
+        justify="center"
+        @click="agreeResponse(item._id, item.idUserResponse)")
+
         v-icon(color="#FFFFFF"  ) check
 </template>
 
@@ -46,23 +50,27 @@ export default {
       this.$router.push('chat');
     },
 
-    agreeResponse() {
+    agreeResponse(idResponse, idUserResponse) {
       axios
         .post(`${this.$baseUrl}api/v1/private/process`, {
           method: 'add',
           submethod: 'customer',
           token: this.token,
-          idResponse: this.idResponse,
+          idResponse,
         })
-        .then((response) => (this.checkAgreeResponse(response)))
+        .then((response) => (this.checkAgreeResponse(response, idUserResponse)))
         // eslint-disable-next-line no-return-assign
         .catch((error) => (console.log(error)));
     },
 
-    checkAgreeResponse(response) {
+    checkAgreeResponse(response, idUserResponse) {
       switch (response.data.status) {
         case 'success':
-          this.$router.back();
+          this.$store.dispatch('setType', 'process');
+          // eslint-disable-next-line no-case-declarations
+          const newOrder = { ...this.order };
+          newOrder.idUserExecutor = idUserResponse;
+          this.$store.dispatch('setMyOrder', newOrder);
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
@@ -80,6 +88,10 @@ export default {
 
     token() {
       return this.$store.getters.getToken;
+    },
+
+    order() {
+      return this.$store.getters.getMyOrder;
     },
   },
 };
