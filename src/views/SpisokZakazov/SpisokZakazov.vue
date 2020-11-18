@@ -1,6 +1,6 @@
 <template lang="pug">
   v-container.orderContainerHeight
-    v-row.chips(
+    v-row.chips(v-show="user.verification == 'completed'"
                 align='center'
                 justify='space-around')
       v-chip-group(v-model="type" mandatory active-class="active-chip")
@@ -18,10 +18,10 @@
               outlined
               color="#56d67b"
               text-color="#000") Сделка
-    AllOrder.list-item(v-show="type=='all'")
-    AwaitOrder.list-item(v-show="type=='await'")
-    ProcessOrder.list-item(v-show="type=='process'")
-    KeyOrder.list-item(v-show="type=='keyword'")
+    AllOrder.list-item(v-if="type=='all'")
+    AwaitOrder.list-item(v-if="type=='await'")
+    ProcessOrder.list-item(v-if="type=='process'")
+    KeyOrder.list-item(v-if="type=='keyword'")
 </template>
 
 <script>
