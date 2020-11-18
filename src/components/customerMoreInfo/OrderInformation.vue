@@ -3,14 +3,19 @@
     v-row.about-order-title.font-weight-medium() Информация о заказе
     .about-order-content
       v-row.about-order-content-cost
-        span.about-order-content-cost-title Цена:
-        v-row.about-order-content-cost-content {{formatedCost}}
+        span.about-order-content-title Цена:
+        v-row.about-order-content-main {{formatedCost}}
       v-row.about-order-content-address
-        span.about-order-content-cost-title Адрес:
-        v-row.about-order-content-cost-content {{order.address}}
+        span.about-order-content-title Адрес:
+        v-row.about-order-content-main {{order.address}}
       v-row.about-order-content-description
-        span.about-order-content-cost-title Описание:
-        v-row.about-order-content-cost-content {{order.description}}
+        span.about-order-content-title Описание:
+        v-row.about-order-content-main {{order.description}}
+      v-row.about-order-content-status
+        span.about-order-content-title Статус:
+        v-row.about-order-content-main(
+          :style="{color: statusColor}"
+        ) {{formatedOrderType}}
 </template>
 
 <script>
@@ -19,6 +24,32 @@ export default {
   computed: {
     order() {
       return this.$store.getters.getMyOrder;
+    },
+
+    orderType() {
+      return this.$store.getters.getOrderType;
+    },
+
+    formatedOrderType() {
+      switch (this.orderType) {
+        case 'await':
+          return 'Ожидание';
+        case 'process':
+          return 'В процессе';
+        default:
+          return '';
+      }
+    },
+
+    statusColor() {
+      switch (this.orderType) {
+        case 'await':
+          return '#FBC02D';
+        case 'process':
+          return '#FE7664';
+        default:
+          return 'inherit';
+      }
     },
 
     formatedCost() {
@@ -45,7 +76,7 @@ export default {
     }
 
     &-content {
-      &-cost-title, &-address-title, &-description-title {
+      &-title {
         color rgba(0,0,0,.6) !important;
         margin-right 10px
       }

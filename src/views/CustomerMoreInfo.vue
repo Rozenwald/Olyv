@@ -1,15 +1,18 @@
 <template lang="pug">
   v-container
     order-information.order-information
-    responded-users.responded-users
-    bottom-field
+    responded-users.responded-users(v-if="orderType == 'await'")
+    bottom-field.bottom-field(v-if="orderType == 'await'")
+    executor-card.executor-card(v-if="orderType == 'process'")
 </template>
 
 <script>
 import axios from 'axios';
 import OrderInformation from '../components/customerMoreInfo/OrderInformation.vue';
-import RespondedUsers from '../components/customerMoreInfo/RespondedUsers.vue';
-import BottomField from '../components/customerMoreInfo/BottomField.vue';
+
+const BottomField = () => import('../components/customerMoreInfo/BottomField.vue');
+const ExecutorCard = () => import('../components/customerMoreInfo/ExecutorCard.vue');
+const RespondedUsers = () => import('../components/customerMoreInfo/RespondedUsers.vue');
 
 export default {
   name: 'moreInfoOrder',
@@ -18,6 +21,7 @@ export default {
     OrderInformation,
     RespondedUsers,
     BottomField,
+    ExecutorCard,
   },
   data() {
     return {
@@ -54,41 +58,16 @@ export default {
           break;
       }
     },
-
-    getExecutorData() {
-      axios
-        .post(`${this.$baseUrl}api/v1/private/user`, {
-          method: 'receive',
-          submethod: 'id',
-          token: this.token,
-          id: this.order.idUserExecutor,
-        })
-        .then((response) => (this.checkExecutorData(response)))
-        // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
-    },
-
-    checkExecutorData(response) {
-      switch (response.data.status) {
-        case 'success':
-          this.executorData = response.data.data;
-          break;
-        case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
-          break;
-        default:
-          this.error = 'Ошибка';
-          break;
-      }
-    },
   },
   computed: {
     token() {
       return this.$store.getters.getToken;
     },
+
     orderType() {
       return this.$store.getters.getOrderType;
     },
+
     order() {
       return this.$store.getters.getMyOrder;
     },
@@ -99,10 +78,6 @@ export default {
     if (this.orderType === 'await') {
       this.getOrderResponse();
     }
-
-    if (this.orderType === 'process') {
-      this.getExecutorData();
-    }
   },
 };
 </script>
@@ -110,9 +85,9 @@ export default {
 <style lang="stylus" scoped>
   .container {
     background-color #fff
-    height 100vh
+    min-height 100vh
   }
-  .responded-users {
+  .responded-users, .executor-card {
     margin-top 15px
   }
 </style>
