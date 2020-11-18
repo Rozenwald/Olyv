@@ -78,7 +78,7 @@ export default {
         return null;
       }
       const url = this.user.photo[this.user.photo.length - 1].urlMin.substr(1);
-      return `${this.$baseUrl + url}?token=${this.token}`;
+      return this.$baseUrlNoPort + url;
     },
 
     name() {

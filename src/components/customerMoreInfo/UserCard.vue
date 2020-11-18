@@ -2,7 +2,7 @@
   v-sheet.user-card(elevation="1" rounded)
     v-list-item(dense)
       v-list-item-avatar
-        avatar
+        avatar(:src="photo")
       v-list-item-content
         v-list-item-title {{name}}
         v-list-item-subtitle
@@ -84,6 +84,18 @@ export default {
       }
 
       return '';
+    },
+
+    photo() {
+      if (!this.userData.photo) {
+        return ' ';
+      }
+
+      if (!this.userData.photo.length) {
+        return ' ';
+      }
+      const url = this.userData.photo[this.userData.photo.length - 1].urlMin.substr(1);
+      return this.$baseUrlNoPort + url;
     },
   },
   watch: {
