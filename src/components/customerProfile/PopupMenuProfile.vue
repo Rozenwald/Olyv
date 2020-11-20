@@ -6,7 +6,7 @@
       rounded)
     template(v-slot:activator="{ on, attrs }")
       v-btn.btn(v-bind="attrs" v-on="on" rounded)
-        v-img(src="../assets/i.png" height='30' width='2')
+        v-img(src="../../assets/i.png" height='30' width='2')
     .menu-wrp
       v-row.notification-wrp(align='center' justify='center' ref="wrp")
         span Нет уведомлений

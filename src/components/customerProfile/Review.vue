@@ -29,6 +29,8 @@ export default {
   }
 
   .review {
+    margin-top 10px
+    margin-bottom 10px
     background-color #FFFFFF
     padding 12px
     box-shadow 0 1px 3px rgba(0,0,0,0.12),
