@@ -92,7 +92,7 @@ export default {
       }
 
       if (!this.userData.photo.length) {
-        return ' ';
+        return null;
       }
       const url = this.userData.photo[this.userData.photo.length - 1].urlMin.substr(1);
       return this.$baseUrlNoPort + url;

@@ -5,7 +5,7 @@
     v-row.sheet-content(align="center" justify="center")
       v-list-item
         v-list-item-avatar
-          avatar
+          avatar(:src="photo")
         v-list-item-content
           v-list-item-title {{executorData.name}} {{executorData.lastname}}
           v-list-item-subtitle
@@ -74,8 +74,21 @@ export default {
     token() {
       return this.$store.getters.getToken;
     },
+
     order() {
       return this.$store.getters.getMyOrder;
+    },
+
+    photo() {
+      if (!this.executorData.photo) {
+        return ' ';
+      }
+
+      if (!this.executorData.photo.length) {
+        return null;
+      }
+      const url = this.executorData.photo[this.executorData.photo.length - 1].urlMin.substr(1);
+      return this.$baseUrlNoPort + url;
     },
   },
   created() {

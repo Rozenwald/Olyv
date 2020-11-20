@@ -2,10 +2,10 @@
   v-sheet.address-field(elevation="1" rounded)
     v-row(align="center")
       v-row.address-field-address(align="center") {{order.address}}
-      .address-field-divider-wrp
-        v-divider.address-field-divider(vertical)
-      v-row.address-field-btn(align="center" justify="center" @click="fullscreenMap")
+
+      v-row.address-field-btn(align="center" justify="end" @click="fullscreenMap")
         span.address-field-map-text На карте
+
     .map-wrp
       map-view(:lat="order.latitude" :lon="order.longitude")
 </template>
@@ -38,17 +38,16 @@ export default {
 
 <style lang="stylus" scoped>
 .address-field {
-  height 48px
-  padding 0 0 0 12px
+  padding 12px
 
   .row {
     margin 0
-    height 48px
   }
 
   &-address {
-    width 79%
-    max-width 79%
+    width 80%
+    max-width 80%
+    padding-right 12px
   }
 
   &-btn {
@@ -57,13 +56,16 @@ export default {
   }
 
   &-divider {
-    height 30px !important
-    max-height 30px !important
+    margin-right 6px
+    height 48px
+    min-height 48px
+    z-index 10
   }
 
   &-map-text {
     padding 4px 0;
     font-size 12px
+    text-align center
   }
 }
 </style>
