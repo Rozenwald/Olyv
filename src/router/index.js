@@ -6,7 +6,6 @@ import MoiZakazi from '../views/MoiZakazi.vue';
 import SpisokZakazov from '../views/SpisokZakazov/SpisokZakazov.vue';
 import Registration from '../views/Registration.vue';
 import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
-import EditOrder from '../views/EditOrder.vue';
 import Auth from '../views/Authorization.vue';
 import Create from '../views/Create.vue';
 import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
@@ -22,7 +21,7 @@ const routes = [
   {
     name: 'main',
     path: '/',
-    redirect: '/moiZakazi',
+    redirect: '/spisokZakazov',
   },
   {
     name: 'keyWords',
@@ -93,11 +92,6 @@ const routes = [
     name: 'customerProfile',
     path: '/customerProfile',
     component: CustomerProfile,
-  },
-  {
-    name: 'editOrder',
-    path: '/editOrder',
-    component: EditOrder,
   },
 ];
 

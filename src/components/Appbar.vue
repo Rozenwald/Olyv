@@ -30,7 +30,18 @@ export default {
     },
 
     showBackbtn() {
-      return this.$store.getters.isVisibleBackBtn;
+      switch (this.$route.name) {
+        case 'moiZakazi':
+          return true;
+        case 'spisokZakazov':
+          return true;
+        case 'customerProfile':
+          return true;
+        case 'setting':
+          return true;
+        default:
+          return false;
+      }
     },
 
     userRequest() {
@@ -62,11 +73,9 @@ export default {
       if (!this.user) {
         return null;
       }
-
       if (this.user.name) {
         return `${this.user.name} ${this.user.lastname || ''}`;
       }
-
       return this.user.email;
     },
   },

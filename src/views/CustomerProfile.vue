@@ -2,17 +2,17 @@
   v-container
     user-profile-header
     verification-status
-    //review
+    review
     exit-button
 </template>
 
 <script>
 import axios from 'axios';
 import store from '../store';
-import Review from '../components/Review.vue';
-import ExitButton from '../components/ExitButton.vue';
-import UserProfileHeader from '../components/UserProfileHeader.vue';
-import VerificationStatus from '../components/VerificationStatus.vue';
+import Review from '../components/customerProfile/Review.vue';
+import ExitButton from '../components/customerProfile/ExitButton.vue';
+import UserProfileHeader from '../components/customerProfile/UserProfileHeader.vue';
+import VerificationStatus from '../components/customerProfile/VerificationStatus.vue';
 
 export default {
   name: 'CustomerProfile',
@@ -69,19 +69,15 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Личный кабинет');
-    this.$store.dispatch('showBackBtn', false);
     if (this.user.verification === 'notCompleted') {
       this.getData();
     }
     this.getData();
   },
-  beforeDestroy() {
-    this.$store.dispatch('showBackBtn', true);
-  },
   beforeRouteEnter(to, from, next) {
     if (!store.getters.isAuth) {
       next(from.name);
-      this.$store.dispatch('showLoginDialog', true);
+      store.dispatch('showLoginDialog', true);
     } else {
       next();
     }
