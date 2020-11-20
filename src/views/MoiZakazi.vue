@@ -30,6 +30,7 @@
 
 <script>
 import axios from 'axios';
+import store from '../store';
 import OrderCard1 from './OrderCard1.vue';
 
 export default {
@@ -43,6 +44,7 @@ export default {
   components: {
     OrderCard1,
     axios,
+    store,
   },
   methods: {
     getData() {
@@ -114,14 +116,10 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Заказчик');
-    this.$store.dispatch('showBackBtn', false);
     if (this.token) {
       this.getData();
       this.getProcessOrders();
     }
-  },
-  beforeDestroy() {
-    this.$store.dispatch('showBackBtn', true);
   },
 };
 </script>

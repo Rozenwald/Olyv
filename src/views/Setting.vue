@@ -37,10 +37,6 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Настройки');
-    this.$store.dispatch('showBackBtn', false);
-  },
-  beforeDestroy() {
-    this.$store.dispatch('showBackBtn', true);
   },
 };
 </script>

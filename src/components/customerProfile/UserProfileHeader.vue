@@ -34,8 +34,8 @@
 </template>
 
 <script>
-import SvgIcon from './SvgIcon.vue';
-import Avatar from './Avatar.vue';
+import SvgIcon from '../SvgIcon.vue';
+import Avatar from '../Avatar.vue';
 import PopupMenuProfile from './PopupMenuProfile.vue';
 import UserProfileSubheader from './UserProfileSubheader.vue';
 

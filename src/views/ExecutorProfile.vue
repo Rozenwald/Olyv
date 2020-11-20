@@ -15,7 +15,7 @@
 
 <script>
 
-import UserProfileHeader from '../components/UserProfileHeader.vue';
+import UserProfileHeader from '../components/customerProfile/UserProfileHeader.vue';
 
 export default {
   name: 'ExecutorProfile',

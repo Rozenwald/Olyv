@@ -27,7 +27,7 @@
           @click='open()') Правила и условия политики конфиденциальности
     v-row.button(align='center' justify='center')
       .button-center
-        v-btn.button-center-registration(v-on:click="checkForm") Зарегистрироваться
+        v-btn.button-center-registration(@click="checkForm()") Зарегистрироваться
         v-btn.button-center-go-to-auth(
           @click="route('auth')"
           v-show="!isFocus") Уже есть аккаунт
@@ -76,16 +76,28 @@ export default {
   },
   methods: {
     open() {
-      dialogWindow.open('ВРЕМЯ АТРЕЗАТЬ ПИПИСЬКИ', ' сэекс каблучки мокияжсэекс каблучки мокияжсэекс каблучки мокияжсэекс каблучки мокияж', true, false);
+      dialogWindow.open('Правила и политика конфиденциальности', '', true, false);
     },
     route(routeName) {
       this.$router.push(routeName);
+    },
+    checkForm(e) {
+      this.error = '';
+      if (!this.validEmail(this.email)) {
+        dialogWindow.open('Ошибка', 'Некоректный email', true, false);
+      }
+      if (this.password.length < 6) {
+        dialogWindow.open('Ошибка', 'Пароль должен содержать больше 6 символов', true, false);
+      }
+      if (!this.error.length) {
+        this.signUp();
+      }
+      e.preventDefault();
     },
     validEmail(email) {
       const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return regex.test(email);
     },
-
     signUp() {
       /* eslint-disable no-return-assign */
       axios
@@ -94,10 +106,29 @@ export default {
           password: this.password,
         })
         .then((response) => (this.checkSignUp(response)))
-        .catch(() => (this.error = 'Ошибка регистрации'));
+        .catch((error) => (dialogWindow.open('Ошибка', `${error}`, true, false)));
       /* eslint-enable no-return-assign */
     },
-
+    checkSignUp(response) {
+      switch (response.data.status) {
+        case 'invalidEmail':
+          dialogWindow.open('Ошибка', 'Некоректный email', true, false);
+          break;
+        case 'invalidPassword':
+          dialogWindow.open('Ошибка', 'Пароль должен содержать больше 6 символов', true, false);
+          break;
+        case 'existEmail':
+          dialogWindow.open('Ошибка', 'Данная почта уже зарегистрирована', true, false);
+          break;
+        case 'success':
+          this.signIn();
+          break;
+        default:
+          dialogWindow.open('Ошибка регистрации', '', true, false);
+          console.log(response.data.status);
+          break;
+      }
+    },
     signIn() {
       /* eslint-disable no-return-assign */
       axios
@@ -106,47 +137,9 @@ export default {
           password: this.password,
         })
         .then((response) => (this.checkSignIn(response)))
-        .catch(() => (this.error = 'Ошибка регистрации'));
+        .catch((error) => (dialogWindow.open('Ошибка', `${error}`, true, false)));
       /* eslint-enable no-return-assign */
     },
-
-    checkForm(e) {
-      this.error = '';
-      if (!this.validEmail(this.email)) {
-        this.error = 'Некоректный email';
-      }
-
-      if (this.password.length < 6) {
-        this.error = 'Пароль должен содержать больше 6 символов';
-      }
-
-      if (!this.error.length) {
-        this.signUp();
-      }
-
-      e.preventDefault();
-    },
-
-    checkSignUp(response) {
-      switch (response.data.status) {
-        case 'invalidEmail':
-          this.error = 'Некоректный email';
-          break;
-        case 'invalidPassword':
-          this.error = 'Пароль должен содержать больше 6 символов';
-          break;
-        case 'existEmail':
-          this.error = 'Данная почта уже зарегистрирована';
-          break;
-        case 'success':
-          this.signIn();
-          break;
-        default:
-          this.error = 'Ошибка регистрации';
-          break;
-      }
-    },
-
     checkSignIn(response) {
       switch (response.data.status) {
         case 'success':
@@ -155,7 +148,8 @@ export default {
           this.getData();
           break;
         default:
-          this.error = 'Ошибка регистрации';
+          dialogWindow.open('Ошибка регистрации', '', true, false);
+          console.log(response.data.status);
           break;
       }
     },
@@ -168,7 +162,7 @@ export default {
         })
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => (dialogWindow.open('Ошибка', `${error}`, true, false)));
     },
     checkUserData(response) {
       switch (response.data.status) {
@@ -178,11 +172,11 @@ export default {
           this.getChatAuth();
           break;
         default:
-          this.error = 'Ошибка';
+          dialogWindow.open('Ошибка', 'Неизвестный ответ от сервера', true, false);
+          console.log(response.data.status);
           break;
       }
     },
-
     getChatAuth() {
       /* eslint-disable no-return-assign */
       axios
@@ -191,10 +185,9 @@ export default {
           token: this.currentAuthToken,
         })
         .then((response) => (this.checkChatAuth(response)))
-        .catch(() => (this.error = 'Ошибка авторизации в чате'));
+        .catch((error) => (dialogWindow.open('Ошибка', `${error}`, true, false)));
       /* eslint-disable no-return-assign */
     },
-
     checkChatAuth(response) {
       switch (response.data.status) {
         case 'success':
@@ -205,17 +198,19 @@ export default {
           this.getNotificationAuth();
           break;
         case 'notSuccess':
-          this.error = 'что-то наебнулось, ошибка с бд и т.д';
+          dialogWindow.open('Ошибка', '', true, false);
+          console.log('что-то наебнулось, ошибка с бд и т.д');
           break;
         case 'notExist':
-          this.error = 'видимо косяк в токе не либо он прогорел и следовательно такого юзера найти не может (вдруг кто-то спиздил токен и пытается авторизироваться)';
+          dialogWindow.open('Ошибка', '', true, false);
+          console.log('видимо косяк в токе не либо он прогорел и следовательно такого юзера найти не может (вдруг кто-то спиздил токен и пытается авторизироваться)');
           break;
         default:
-          this.error = 'Ошибка чата';
+          dialogWindow.open('Ошибка', '', true, false);
+          console.log(response.data.status);
           break;
       }
     },
-
     getNotificationAuth() {
       /* eslint-disable no-return-assign */
       axios
@@ -224,10 +219,9 @@ export default {
           token: this.currentAuthToken,
         })
         .then((response) => (this.checkNotificationAuth(response)))
-        .catch((error) => (console.log(error)));
+        .catch((error) => (dialogWindow.open('Ошибка', `${error}`, true, false)));
       /* eslint-disable no-return-assign */
     },
-
     checkNotificationAuth(response) {
       switch (response.data.status) {
         case 'success':
@@ -235,7 +229,6 @@ export default {
           nativeStorage.setItem('setNotificationIdChanal', response.data.data.idChanal);
           this.$store.dispatch('setNotificationToken', response.data.data.token);
           this.$store.dispatch('setNotificationIdChanal', response.data.data.idChanal);
-
           if (this.appToken) {
             this.addAppToken(this.appToken);
           } else {
@@ -245,23 +238,21 @@ export default {
                 this.addAppToken(token);
               })
               .catch(() => {
-                this.error = '(client)';
+                dialogWindow.open('Ошибка', 'client', true, false);
               });
           }
-
           break;
         case 'notSuccess':
-          this.error = 'Ошибка авторизации в уведомлениях';
+          dialogWindow.open('Ошибка', 'Ошибка авторизации в уведомлениях(notSuccess)', true, false);
           break;
         case 'notExist':
-          this.error = 'Ошибка авторизации в уведомлениях';
+          dialogWindow.open('Ошибка', 'Ошибка авторизации в уведомлениях(notExist)', true, false);
           break;
         default:
-          this.error = 'Ошибка авторизации в уведомлениях';
+          dialogWindow.open('Ошибка', 'Ошибка авторизации в уведомлениях', true, false);
           break;
       }
     },
-
     addAppToken(tokenApp) {
       /* eslint-disable no-return-assign */
       axios
@@ -271,15 +262,14 @@ export default {
           tokenApp,
         })
         .then((response) => (this.checkAppToken(response)))
-        .catch((error) => (console.log(error)));
+        .catch((error) => (dialogWindow.open('Ошибка', `${error}`, true, false)));
       /* eslint-disable no-return-assign */
     },
-
     checkAppToken(response) {
       if (response.data.status === 'success' || response.data.status === 'exist') {
         this.$router.go(-2);
       } else {
-        this.error = 'Token app error. Повторите попытку позже';
+        dialogWindow.open('Ошибка', 'Token app error. Повторите попытку позже', true, false);
       }
     },
   },
@@ -295,19 +285,15 @@ export default {
         this.error = '';
       },
     },
-
     show() {
       return this.$store.getters.isVisibleAppbar;
     },
-
     appToken() {
       return this.$store.getters.getAppToken;
     },
-
     notificationToken() {
       return this.$store.getters.getNotificationToken;
     },
-
     token() {
       return this.$store.getters.getToken;
     },
