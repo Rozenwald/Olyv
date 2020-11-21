@@ -45,6 +45,8 @@ import dialogWindow from '../scripts/openDialog';
 import nativeStorage from '../scripts/nativeStorage';
 // eslint-disable-next-line import/no-cycle
 import cordova from '../plugins/cordova';
+import logger from '../scripts/logger';
+import auth from '../scripts/auth/auth';
 
 export default {
   name: 'Registration',
@@ -57,58 +59,61 @@ export default {
       showPassword: false,
       email: null,
       password: null,
-      error: '',
-      dialog: false,
       isFocus: false,
       windowHeight: null,
-      currentAuthToken: null,
+      errorBody: 'Ошибка регистрации. Повторите попытку позже',
+      isAddAppToken: false,
     };
-  },
-  created() {
-    this.windowHeight = window.innerHeight;
-    window.addEventListener('resize', () => {
-      if (window.innerHeight < this.windowHeight) {
-        this.isFocus = true;
-      } else {
-        this.isFocus = false;
-      }
-    });
   },
   methods: {
     open() {
       dialogWindow.open('Правила и политика конфиденциальности', '', true, false);
     },
+
     route(routeName) {
       this.$router.push(routeName);
     },
+
     checkForm(e) {
-      this.error = '';
       if (!this.validEmail(this.email)) {
         dialogWindow.open('Ошибка', 'Некоректный email', true, false);
+        return null;
       }
+
+      if (!this.password) {
+        dialogWindow.open('Ошибка', 'Пароль должен содержать больше 6 символов', true, false);
+        return null;
+      }
+
       if (this.password.length < 6) {
         dialogWindow.open('Ошибка', 'Пароль должен содержать больше 6 символов', true, false);
+        return null;
       }
-      if (!this.error.length) {
-        this.signUp();
-      }
+
+      this.signUp();
       e.preventDefault();
+
+      return null;
     },
+
     validEmail(email) {
       const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return regex.test(email);
     },
+
     signUp() {
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/public/signup/email`, {
           email: this.email,
           password: this.password,
         })
         .then((response) => (this.checkSignUp(response)))
-        .catch((error) => (dialogWindow.open('Ошибка', `${error}`, true, false)));
-      /* eslint-enable no-return-assign */
+        .catch((error) => {
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(error);
+        });
     },
+
     checkSignUp(response) {
       switch (response.data.status) {
         case 'invalidEmail':
@@ -124,36 +129,39 @@ export default {
           this.signIn();
           break;
         default:
-          dialogWindow.open('Ошибка регистрации', '', true, false);
-          console.log(response.data.status);
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(response);
           break;
       }
     },
+
     signIn() {
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/public/signin/email`, {
           username: this.email,
           password: this.password,
         })
         .then((response) => (this.checkSignIn(response)))
-        .catch((error) => (dialogWindow.open('Ошибка', `${error}`, true, false)));
-      /* eslint-enable no-return-assign */
+        .catch((error) => {
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(error);
+        });
     },
+
     checkSignIn(response) {
       switch (response.data.status) {
         case 'success':
           nativeStorage.setItem('token', response.data.data);
           this.$store.dispatch('setToken', response.data.data);
-          this.getData();
           break;
         default:
-          dialogWindow.open('Ошибка регистрации', '', true, false);
-          console.log(response.data.status);
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(response);
           break;
       }
     },
-    getData() {
+
+    getUserData() {
       axios
         .post(`${this.$baseUrl}api/v1/private/user`, {
           method: 'receive',
@@ -161,33 +169,37 @@ export default {
           token: this.token,
         })
         .then((response) => (this.checkUserData(response)))
-        // eslint-disable-next-line no-return-assign
-        .catch((error) => (dialogWindow.open('Ошибка', `${error}`, true, false)));
+        .catch((error) => {
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(error);
+        });
     },
+
     checkUserData(response) {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
-          this.currentAuthToken = response.data.data.currentAuthToken;
-          this.getChatAuth();
           break;
         default:
-          dialogWindow.open('Ошибка', 'Неизвестный ответ от сервера', true, false);
-          console.log(response.data.status);
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(response);
           break;
       }
     },
+
     getChatAuth() {
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseChatUrl}api/v1/public/signin`, {
           method: 'token',
           token: this.currentAuthToken,
         })
         .then((response) => (this.checkChatAuth(response)))
-        .catch((error) => (dialogWindow.open('Ошибка', `${error}`, true, false)));
-      /* eslint-disable no-return-assign */
+        .catch((error) => {
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(error);
+        });
     },
+
     checkChatAuth(response) {
       switch (response.data.status) {
         case 'success':
@@ -195,33 +207,27 @@ export default {
           nativeStorage.setItem('setIdChanal', response.data.data.idChanal);
           this.$store.dispatch('setChatToken', response.data.data.token);
           this.$store.dispatch('setIdChanal', response.data.data.idChanal);
-          this.getNotificationAuth();
-          break;
-        case 'notSuccess':
-          dialogWindow.open('Ошибка', '', true, false);
-          console.log('что-то наебнулось, ошибка с бд и т.д');
-          break;
-        case 'notExist':
-          dialogWindow.open('Ошибка', '', true, false);
-          console.log('видимо косяк в токе не либо он прогорел и следовательно такого юзера найти не может (вдруг кто-то спиздил токен и пытается авторизироваться)');
           break;
         default:
-          dialogWindow.open('Ошибка', '', true, false);
-          console.log(response.data.status);
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(response);
           break;
       }
     },
+
     getNotificationAuth() {
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseNotificationUrl}api/v1/public/signin`, {
           method: 'token',
           token: this.currentAuthToken,
         })
         .then((response) => (this.checkNotificationAuth(response)))
-        .catch((error) => (dialogWindow.open('Ошибка', `${error}`, true, false)));
-      /* eslint-disable no-return-assign */
+        .catch((error) => {
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(error);
+        });
     },
+
     checkNotificationAuth(response) {
       switch (response.data.status) {
         case 'success':
@@ -229,6 +235,9 @@ export default {
           nativeStorage.setItem('setNotificationIdChanal', response.data.data.idChanal);
           this.$store.dispatch('setNotificationToken', response.data.data.token);
           this.$store.dispatch('setNotificationIdChanal', response.data.data.idChanal);
+
+          logger.log(`App token => ${this.appToken}`);
+
           if (this.appToken) {
             this.addAppToken(this.appToken);
           } else {
@@ -237,24 +246,20 @@ export default {
                 this.$store.dispatch('setAppToken', token);
                 this.addAppToken(token);
               })
-              .catch(() => {
-                dialogWindow.open('Ошибка', 'client', true, false);
+              .catch((error) => {
+                dialogWindow.open('Ошибка', this.errorBody, true, false);
+                logger.log(error);
               });
           }
           break;
-        case 'notSuccess':
-          dialogWindow.open('Ошибка', 'Ошибка авторизации в уведомлениях(notSuccess)', true, false);
-          break;
-        case 'notExist':
-          dialogWindow.open('Ошибка', 'Ошибка авторизации в уведомлениях(notExist)', true, false);
-          break;
         default:
-          dialogWindow.open('Ошибка', 'Ошибка авторизации в уведомлениях', true, false);
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(response);
           break;
       }
     },
+
     addAppToken(tokenApp) {
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseNotificationUrl}api/v1/private/tokenApp`, {
           token: this.notificationToken,
@@ -262,41 +267,86 @@ export default {
           tokenApp,
         })
         .then((response) => (this.checkAppToken(response)))
-        .catch((error) => (dialogWindow.open('Ошибка', `${error}`, true, false)));
-      /* eslint-disable no-return-assign */
+        .catch((error) => {
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(error);
+        });
     },
+
     checkAppToken(response) {
       if (response.data.status === 'success' || response.data.status === 'exist') {
-        this.$router.go(-2);
+        this.isAddAppToken = true;
       } else {
-        dialogWindow.open('Ошибка', 'Token app error. Повторите попытку позже', true, false);
+        dialogWindow.open('Ошибка', this.errorBody, true, false);
+        logger.log(response);
       }
     },
   },
   computed: {
-    isError: {
-      get() {
-        if (this.error.length) {
-          return true;
-        }
-        return false;
-      },
-      set() {
-        this.error = '';
-      },
-    },
     show() {
       return this.$store.getters.isVisibleAppbar;
     },
+
     appToken() {
       return this.$store.getters.getAppToken;
     },
-    notificationToken() {
-      return this.$store.getters.getNotificationToken;
-    },
+
     token() {
       return this.$store.getters.getToken;
     },
+
+    currentAuthToken() {
+      return this.$store.getters.getCurrentAuthToken;
+    },
+
+    chatToken() {
+      return this.$store.getters.getChatToken;
+    },
+
+    notificationToken() {
+      return this.$store.getters.getNotificationToken;
+    },
+  },
+  watch: {
+    token() {
+      if (this.token) this.getUserData();
+    },
+
+    currentAuthToken() {
+      if (this.currentAuthToken) {
+        this.getChatAuth();
+
+        if (!window.cordova.platformId === 'browser') {
+          this.getNotificationAuth();
+        } else {
+          this.isAddAppToken = true;
+        }
+      }
+    },
+
+    chatToken() {
+      if (this.chatToken && this.isAddAppToken) {
+        logger.log('good reg');
+      }
+    },
+
+    isAddAppToken() {
+      if (this.chatToken && this.isAddAppToken) {
+        logger.log('good reg');
+      }
+    },
+  },
+  created() {
+    auth.exit();
+
+    this.windowHeight = window.innerHeight;
+    window.addEventListener('resize', () => {
+      if (window.innerHeight < this.windowHeight) {
+        this.isFocus = true;
+      } else {
+        this.isFocus = false;
+      }
+    });
   },
   mounted() {
     this.$store.dispatch('showAppbar', false);

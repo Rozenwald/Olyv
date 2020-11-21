@@ -3,7 +3,8 @@
     v-app
       window-dialog
       appbar
-      router-view.router
+      transition(:name="transitionName" mode="out-in")
+        router-view.router
       bottom-sheet-group
       bottom-navigation
       login-dialog
@@ -37,10 +38,6 @@ export default {
     RepeatLoginDialog,
     BottomSheetGroup,
   },
-
-  data: () => ({
-    error: '',
-  }),
   methods: {
     getUserData() {
       axios
@@ -53,6 +50,7 @@ export default {
         // eslint-disable-next-line no-return-assign
         .catch(() => (this.error = 'Ошибка'));
     },
+
     checkUserData(response) {
       switch (response.data.status) {
         case 'success':
@@ -75,6 +73,10 @@ export default {
   computed: {
     token() {
       return this.$store.getters.getToken;
+    },
+
+    transitionName() {
+      return this.$store.getters.getTransitionName;
     },
   },
   created() {
@@ -100,12 +102,34 @@ export default {
   }
   .router{
     padding-bottom 63px+12px
-    padding-top 56px+12px
+    padding-top 48px+12px
   }
 
   .text-message .v-input__append-inner {
     align-self flex-end !important
     margin-top 0
     margin-bottom 10px
+  }
+
+  .slide-left-enter-active,
+  .slide-left-leave-active,
+  .slide-right-enter-active,
+  .slide-right-leave-active {
+    transition-duration: 0.1s
+    transition-property: height, opacity, transform
+    transition-timing-function: cubic-bezier(0.55, 0, 0.1, 1)
+    overflow: hidden
+  }
+
+  .slide-left-enter,
+  .slide-right-leave-active {
+    opacity: 0
+    transform: translate(2em, 0)
+  }
+
+  .slide-left-leave-active,
+  .slide-right-enter {
+    opacity: 0
+    transform: translate(-2em, 0)
   }
 </style>

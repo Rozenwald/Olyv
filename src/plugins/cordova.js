@@ -77,10 +77,11 @@ function onDeviceReady() {
     });
   notificationListener();
 
-  SocialVk.init('7665832'); // APP ID только цифры
-  SocialVk.login(['offline'], (value) => {
-    console.log(JSON.stringify(value)); // value - вернет JSON с token и user (информация аккаунта)
-  });
+  // SocialVk.init('7665832'); // APP ID только цифры
+  // SocialVk.login(['offline'], (value) => {
+  // eslint-disable-next-line max-len
+  //  console.log(JSON.stringify(value)); // value - вернет JSON с token и user (информация аккаунта)
+  // });
 
   navigator.splashscreen.hide();
 }

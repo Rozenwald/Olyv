@@ -16,9 +16,11 @@ import allOrder from './modules/allOrders';
 import currentPosition from './modules/currentPosition';
 import permissions from './modules/permissions';
 import openDialog from './modules/dialog';
+import route from './modules/route';
 import map from './modules/map';
 
 Vue.use(Vuex);
+
 export default new Vuex.Store({
   state: {
   },
@@ -43,6 +45,7 @@ export default new Vuex.Store({
     currentPosition,
     permissions,
     openDialog,
+    route,
     map,
   },
 });

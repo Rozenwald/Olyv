@@ -14,6 +14,7 @@ import ExecutorProfile from '../views/ExecutorProfile.vue';
 import CustomerProfile from '../views/CustomerProfile.vue';
 import Chat from '../views/Chat.vue';
 import keyWords from '../views/KeyWords.vue';
+import store from '../store/index';
 
 Vue.use(VueRouter);
 
@@ -47,11 +48,13 @@ const routes = [
     name: 'moiZakazi',
     path: '/moiZakazi',
     component: MoiZakazi,
+    meta: { index: 0 },
   },
   {
     name: 'spisokZakazov',
     path: '/spisokZakazov',
     component: SpisokZakazov,
+    meta: { index: 1 },
   },
   {
     name: 'setUserData',
@@ -62,6 +65,7 @@ const routes = [
     name: 'setting',
     path: '/setting',
     component: Setting,
+    meta: { index: 3 },
   },
   {
     name: 'chat',
@@ -92,12 +96,23 @@ const routes = [
     name: 'customerProfile',
     path: '/customerProfile',
     component: CustomerProfile,
+    meta: { index: 2 },
   },
 ];
 
 const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.index > from.meta.index) {
+    store.dispatch('setTransitionName', 'slide-left');
+  } else {
+    store.dispatch('setTransitionName', 'slide-right');
+  }
+
+  next();
 });
 
 export default router;

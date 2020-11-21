@@ -24,7 +24,15 @@ Vue.prototype.$baseChatUrl = process.env.NODE_ENV === 'production'
   ? 'http://test.chat.olyv.services:8888/'
   : 'http://test.chat.olyv.services:8888/';
 
+window.$baseChatUrl = process.env.NODE_ENV === 'production'
+  ? 'http://test.chat.olyv.services:8888/'
+  : 'http://test.chat.olyv.services:8888/';
+
 Vue.prototype.$baseNotificationUrl = process.env.NODE_ENV === 'production'
+  ? 'http://test.notification.olyv.services:8888/'
+  : 'http://test.notification.olyv.services:8888/';
+
+window.$baseNotificationUrl = process.env.NODE_ENV === 'production'
   ? 'http://test.notification.olyv.services:8888/'
   : 'http://test.notification.olyv.services:8888/';
 
