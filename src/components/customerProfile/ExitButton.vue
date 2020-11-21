@@ -5,8 +5,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-import nativeStorage from '../../scripts/nativeStorage';
+import auth from '../../scripts/auth/auth';
 
 export default {
   name: 'exit-button',
@@ -18,83 +17,20 @@ export default {
   methods: {
     exit() {
       this.loading = true;
-      // ! Есть ли step в получении токенов
-      this.receiveAppTokens();
-    },
-
-    receiveAppTokens() {
-      axios
-        .post(`${this.$baseNotificationUrl}api/v1/private/tokenApp`, {
-          token: this.notificationToken,
-          method: 'receive',
-          submethod: 'tokenApp',
-        })
-        .then((response) => this.checkResponse(response))
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
-    checkResponse(response) {
-      console.log(response);
-    },
-
-    getTokenId(data) {
-      if (!this.appToken) {
-        console.log('Ошибка с получением токена приложения');
-        return null;
-      }
-
-      for (let i = 0; i < data.length; i += 1) {
-        if (data[i].tokenApp === this.appToken) {
-          // eslint-disable-next-line no-underscore-dangle
-          return data[i]._id;
-        }
-      }
-
-      return null;
-    },
-
-    removeTokenApp(idTokenApp) {
-      axios
-        .post(`${this.$baseNotificationUrl}api/v1/private/tokenApp`, {
-          token: this.notificationToken,
-          method: 'del',
-          idTokenApp,
-        })
-        .then((response) => this.checkRemoveResponse(response))
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
-    checkRemoveResponse(response) {
-      console.log(response);
-      switch (response.data.status) {
-        case 'success':
-          nativeStorage.clear();
-          this.$store.dispatch('clear');
-          this.loading = false;
-          this.$router.replace('auth');
-          break;
-        case 'notExist':
-          nativeStorage.clear();
-          this.$store.dispatch('clear');
-          this.loading = false;
-          this.$router.replace('auth');
-          break;
-        default:
-          this.error = response.data.status;
-          break;
-      }
+      auth.exit();
     },
   },
   computed: {
-    notificationToken() {
-      return this.$store.getters.getNotificationToken;
+    token() {
+      return this.$store.getters.getToken;
     },
-    appToken() {
-      return this.$store.getters.getAppToken || 'dL-oYZj7TfKt-pR5orsM2k:APA91bEasIddFlq0G3PQwuY8XYRcY4qq7yRmgxBKS2KbWT50Cdkbzbn9iIJGJzs2eEYBoizDA0thIssfq54Mx95KNY9dNslNpOAZA8S03xHzhYh91vefBEYu_J_2oPaBVPqy6ev3efIl';
+  },
+  watch: {
+    token() {
+      if (!this.token) {
+        this.loading = false;
+        this.$router.replace('auth');
+      }
     },
   },
 };

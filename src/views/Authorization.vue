@@ -33,9 +33,12 @@
 <script>
 import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
+import dialogWindow from '../scripts/openDialog';
 import nativeStorage from '../scripts/nativeStorage';
 // eslint-disable-next-line import/no-cycle
 import cordova from '../plugins/cordova';
+import logger from '../scripts/logger';
+import auth from '../scripts/auth/auth';
 
 export default {
   name: 'Authorization',
@@ -45,24 +48,14 @@ export default {
   },
   data() {
     return {
-      show1: false,
+      showPassword: false,
       email: null,
-      password: '',
-      error: '',
+      password: null,
       isFocus: false,
       windowHeight: null,
-      currentAuthToken: null,
+      errorBody: 'Ошибка авторизации. Повторите попытку позже',
+      isAddAppToken: false,
     };
-  },
-  created() {
-    this.windowHeight = window.innerHeight;
-    window.addEventListener('resize', () => {
-      if (window.innerHeight < this.windowHeight) {
-        this.isFocus = true;
-      } else {
-        this.isFocus = false;
-      }
-    });
   },
   methods: {
     route(routeName) {
@@ -75,54 +68,58 @@ export default {
       return regex.test(email);
     },
 
+    checkForm(e) {
+      if (!this.validEmail(this.email)) {
+        dialogWindow.open('Ошибка', 'Некоректный email', true, false);
+        return null;
+      }
+
+      if (!this.password) {
+        dialogWindow.open('Ошибка', 'Пароль должен содержать больше 6 символов', true, false);
+        return null;
+      }
+
+      if (this.password.length < 6) {
+        dialogWindow.open('Ошибка', 'Пароль должен содержать больше 6 символов', true, false);
+        return null;
+      }
+
+      this.signIn();
+      e.preventDefault();
+
+      return null;
+    },
+
     signIn() {
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/public/signin/email`, {
           username: this.email,
           password: this.password,
         })
         .then((response) => (this.checkSignIn(response)))
-        .catch((error) => (console.log(error)));
-      /* eslint-enable no-return-assign */
-    },
-
-    checkForm(e) {
-      if (this.password.length < 6) {
-        this.error = 'Пароль должен содержать больше 6 символов';
-      }
-
-      if (!this.validEmail(this.email)) {
-        this.error = 'Некоректный email';
-      }
-
-      if (!this.error.length) {
-        this.signIn();
-      }
-
-      e.preventDefault();
+        .catch((error) => {
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(error);
+        });
     },
 
     checkSignIn(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           nativeStorage.setItem('token', response.data.data);
           this.$store.dispatch('setToken', response.data.data);
-          this.getData();
           break;
-        case 'invalidEmail':
-          this.error = 'Неверный email';
-          break;
-        case 'invalidPassword':
-          this.error = 'Неверный пароль';
+        case 'notExist':
+          dialogWindow.open('Ошибка', 'Неверный логин или пароль', true, false);
           break;
         default:
-          this.error = `${response.data.status} d`;
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(response);
           break;
       }
     },
-    getData() {
+
+    getUserData() {
       axios
         .post(`${this.$baseUrl}api/v1/private/user`, {
           method: 'receive',
@@ -130,77 +127,74 @@ export default {
           token: this.token,
         })
         .then((response) => (this.checkUserData(response)))
-        // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(error);
+        });
     },
+
     checkUserData(response) {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
-          this.currentAuthToken = response.data.data.currentAuthToken;
-          this.getChatAuth();
           break;
         default:
-          this.error = 'Ошибка';
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(response);
           break;
       }
     },
 
     getChatAuth() {
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseChatUrl}api/v1/public/signin`, {
           method: 'token',
           token: this.currentAuthToken,
         })
         .then((response) => (this.checkChatAuth(response)))
-        .catch((error) => console.log(error));
-      /* eslint-disable no-return-assign */
+        .catch((error) => {
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(error);
+        });
     },
 
     checkChatAuth(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           nativeStorage.setItem('chatToken', response.data.data.token);
-          nativeStorage.setItem('idChanal', response.data.data.idChanal);
+          nativeStorage.setItem('setIdChanal', response.data.data.idChanal);
           this.$store.dispatch('setChatToken', response.data.data.token);
           this.$store.dispatch('setIdChanal', response.data.data.idChanal);
-          this.getNotificationAuth();
-          break;
-        case 'notSuccess':
-          this.error = 'что-то наебнулось, ошибка с бд и т.д';
-          break;
-        case 'notExist':
-          this.error = 'видимо косяк в токе не либо он прогорел и следовательно такого юзера найти не может (вдруг кто-то спиздил токен и пытается авторизироваться)';
           break;
         default:
-          this.error = 'Ошибка чата';
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(response);
           break;
       }
     },
 
     getNotificationAuth() {
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseNotificationUrl}api/v1/public/signin`, {
           method: 'token',
           token: this.currentAuthToken,
         })
         .then((response) => (this.checkNotificationAuth(response)))
-        .catch((error) => (console.log(error)));
-      /* eslint-disable no-return-assign */
+        .catch((error) => {
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(error);
+        });
     },
 
     checkNotificationAuth(response) {
       switch (response.data.status) {
         case 'success':
           nativeStorage.setItem('notificationToken', response.data.data.token);
-          nativeStorage.setItem('idNotificationChanal', response.data.data.idChanal);
+          nativeStorage.setItem('setNotificationIdChanal', response.data.data.idChanal);
           this.$store.dispatch('setNotificationToken', response.data.data.token);
           this.$store.dispatch('setNotificationIdChanal', response.data.data.idChanal);
 
-          console.log(this.appToken);
+          logger.log(`App token => ${this.appToken}`);
 
           if (this.appToken) {
             this.addAppToken(this.appToken);
@@ -210,27 +204,20 @@ export default {
                 this.$store.dispatch('setAppToken', token);
                 this.addAppToken(token);
               })
-              .catch(() => {
-                this.error = 'Token app error (client). Повторите попытку позже';
+              .catch((error) => {
+                dialogWindow.open('Ошибка', this.errorBody, true, false);
+                logger.log(error);
               });
           }
-
-          break;
-        case 'notSuccess':
-          this.error = 'Ошибка авторизации в уведомлениях';
-          break;
-        case 'notExist':
-          this.error = 'Ошибка авторизации в уведомлениях';
           break;
         default:
-          this.error = 'Ошибка авторизации в уведомлениях';
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(response);
           break;
       }
     },
 
     addAppToken(tokenApp) {
-      console.log(tokenApp);
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseNotificationUrl}api/v1/private/tokenApp`, {
           token: this.notificationToken,
@@ -238,47 +225,79 @@ export default {
           tokenApp,
         })
         .then((response) => (this.checkAppToken(response)))
-        .catch((error) => (console.log(error)));
-      /* eslint-disable no-return-assign */
+        .catch((error) => {
+          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          logger.log(error);
+        });
     },
 
     checkAppToken(response) {
-      console.log(JSON.stringify(response));
       if (response.data.status === 'success' || response.data.status === 'exist') {
-        this.$router.back();
+        this.isAddAppToken = true;
       } else {
-        this.error = 'Token app error (server). Повторите попытку позже';
+        dialogWindow.open('Ошибка', this.errorBody, true, false);
+        logger.log(response);
       }
     },
-
   },
   computed: {
-    isError: {
-      get() {
-        if (this.error.length) {
-          return true;
-        }
-        return false;
-      },
-      set() {
-        this.error = '';
-      },
-    },
-
-    token() {
-      return this.$store.getters.getToken;
+    show() {
+      return this.$store.getters.isVisibleAppbar;
     },
 
     appToken() {
       return this.$store.getters.getAppToken;
     },
 
+    token() {
+      return this.$store.getters.getToken;
+    },
+
+    currentAuthToken() {
+      return this.$store.getters.getCurrentAuthToken;
+    },
+
+    chatToken() {
+      return this.$store.getters.getChatToken;
+    },
+
     notificationToken() {
       return this.$store.getters.getNotificationToken;
     },
   },
+  watch: {
+    token() {
+      if (this.token) this.getUserData();
+    },
+
+    currentAuthToken() {
+      if (this.currentAuthToken) {
+        this.getChatAuth();
+
+        if (!window.cordova.platformId === 'browser') {
+          this.getNotificationAuth();
+        } else {
+          this.isAddAppToken = true;
+        }
+      }
+    },
+
+    chatToken() {
+      if (this.chatToken && this.isAddAppToken) {
+        logger.log('good reg');
+      }
+    },
+
+    isAddAppToken() {
+      if (this.chatToken && this.isAddAppToken) {
+        logger.log('good reg');
+      }
+    },
+  },
+  created() {
+    auth.exit();
+  },
   mounted() {
-    console.log(this.appToken);
     this.$store.dispatch('showAppbar', false);
     this.$store.dispatch('showBottomNavigation', false);
   },

@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     photo() {
-      if (!this.user.photo) {
+      if (!this.user) {
         return ' ';
       }
 
@@ -41,7 +41,7 @@ export default {
       }
 
       if (!this.user.photo.length) {
-        return ' ';
+        return null;
       }
 
       const url = this.user.photo[this.user.photo.length - 1].urlMin.substr(1);

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import store from '../store/index';
 import router from '../router/index';
 import nativeStorage from '../scripts/nativeStorage';
@@ -75,6 +76,12 @@ function onDeviceReady() {
       console.log(error);
     });
   notificationListener();
+
+  // SocialVk.init('7665832'); // APP ID только цифры
+  // SocialVk.login(['offline'], (value) => {
+  // eslint-disable-next-line max-len
+  //  console.log(JSON.stringify(value)); // value - вернет JSON с token и user (информация аккаунта)
+  // });
 
   navigator.splashscreen.hide();
 }

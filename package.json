@@ -44,6 +44,7 @@
     "vue-dadata": "^1.4.10",
     "vue-pose": "^0.5.1",
     "vue-router": "^3.2.0",
+    "vue-router-slider": "^0.1.0",
     "vue-scrollmagic": "^1.2.0",
     "vue-swipe-actions": "^2.0.0-beta.20",
     "vue-swipeable-bottom-sheet": "0.0.5",

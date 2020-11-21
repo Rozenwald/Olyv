@@ -7,7 +7,7 @@
       v-icon(color="white") arrow_back
     v-row(align='center', justify='center')
       .toolbar-avatar-wrp(v-show="currentRouteName == 'chat'")
-        avatar(size="36" color="#AEAEAE" :src="src")
+        avatar(size="36" color="#AEAEAE" :src="photo")
       .toolbar-title-wrapper
         .toolbar-title {{title}}
 </template>
@@ -24,9 +24,11 @@ export default {
     title() {
       return this.$store.getters.getTitle;
     },
+
     showAppbar() {
       return this.$store.getters.isVisibleAppbar;
     },
+
     showBackbtn() {
       switch (this.$route.name) {
         case 'moiZakazi':
@@ -41,21 +43,32 @@ export default {
           return false;
       }
     },
+
     userRequest() {
       return this.$store.getters.getUserRequest;
     },
+
     currentRouteName() {
       return this.$route.name;
     },
-    src() {
+
+    photo() {
       if (!this.userRequest) {
+        return ' ';
+      }
+
+      if (!this.userRequest.photo) {
+        return ' ';
+      }
+
+      if (!this.userRequest.photo.length) {
         return null;
       }
-      if (this.userRequest.photo.length) {
-        return this.userRequest.photo[this.userRequest.photo.length - 1].urlMin;
-      }
-      return null;
+
+      const url = this.userRequest.photo[this.userRequest.photo.length - 1].urlMin.substr(1);
+      return this.$baseUrlNoPort + url;
     },
+
     userName() {
       if (!this.user) {
         return null;
