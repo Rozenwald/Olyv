@@ -68,6 +68,7 @@ export default {
     },
 
     checkOrderResponse(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           if (this.orderType === ('all' || 'keyword')) {

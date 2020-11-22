@@ -18,10 +18,10 @@
               outlined
               color="#56d67b"
               text-color="#000") Сделка
-    AllOrder.list-item(v-show="type=='all'")
-    AwaitOrder.list-item(v-show="type=='await'")
-    ProcessOrder.list-item(v-show="type=='process'")
-    KeyOrder.list-item(v-show="type=='keyword'")
+    AllOrder.list-item(v-if="type=='all'")
+    AwaitOrder.list-item(v-if="type=='await'")
+    ProcessOrder.list-item(v-if="type=='process'")
+    KeyOrder.list-item(v-if="type=='keyword'")
 </template>
 
 <script>

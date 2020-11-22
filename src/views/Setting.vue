@@ -45,10 +45,9 @@ export default {
   .container{
     background-color white
     padding-top 56px !important
-    padding-bottom 0 !important
     padding-left 0 !important
     padding-right 0 !important
-    margin-bottom 63px
+    height 100vh
   }
 
   .v-list{

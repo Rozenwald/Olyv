@@ -26,7 +26,9 @@ export default {
     },
 
     showAppbar() {
-      return this.$store.getters.isVisibleAppbar;
+      if (this.currentRouteName === 'auth' || this.currentRouteName === 'registration') return false;
+
+      return true;
     },
 
     showBackbtn() {

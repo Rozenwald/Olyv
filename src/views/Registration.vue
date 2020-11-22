@@ -46,7 +46,7 @@ import nativeStorage from '../scripts/nativeStorage';
 // eslint-disable-next-line import/no-cycle
 import cordova from '../plugins/cordova';
 import logger from '../scripts/logger';
-import auth from '../scripts/auth/auth';
+import auth from '../scripts/auth';
 
 export default {
   name: 'Registration',

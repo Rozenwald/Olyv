@@ -1,7 +1,7 @@
 import axios from 'axios';
-import logger from '../logger';
-import nativeStorage from '../nativeStorage';
-import store from '../../store/index';
+import logger from './logger';
+import nativeStorage from './nativeStorage';
+import store from '../store/index';
 
 let notificationToken;
 let appToken;
