@@ -7,10 +7,8 @@ import SpisokZakazov from '../views/SpisokZakazov/SpisokZakazov.vue';
 import Registration from '../views/Registration.vue';
 import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 import Auth from '../views/Authorization.vue';
-import Create from '../views/Create.vue';
 import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
 import Verification from '../views/Verification.vue';
-import ExecutorProfile from '../views/ExecutorProfile.vue';
 import CustomerProfile from '../views/CustomerProfile.vue';
 import Chat from '../views/Chat.vue';
 import keyWords from '../views/KeyWords.vue';
@@ -28,17 +26,13 @@ const routes = [
     name: 'keyWords',
     path: '/keyWords',
     component: keyWords,
-  },
-  {
-    name: 'create',
-    path: '/create',
-    component: Create,
+    meta: { index: 5 },
   },
   {
     name: 'registration',
     path: '/registration',
     component: Registration,
-    meta: { index: 0 },
+    meta: { index: -1 },
   },
   {
     name: 'auth',
@@ -62,6 +56,7 @@ const routes = [
     name: 'setUserData',
     path: '/setUserData',
     component: SetUserData,
+    meta: { index: 5 },
   },
   {
     name: 'setting',
@@ -73,26 +68,25 @@ const routes = [
     name: 'chat',
     path: '/chat',
     component: Chat,
+    meta: { index: 6 },
   },
   {
     name: 'customerMoreInfo',
     path: '/customerMoreInfo',
     component: CustomerMoreInfo,
+    meta: { index: 5 },
   },
   {
     name: 'executorMoreInfo',
     path: '/executorMoreInfo',
     component: ExecutorMoreInfo,
+    meta: { index: 5 },
   },
   {
     name: 'verification',
     path: '/verification',
     component: Verification,
-  },
-  {
-    name: 'executorProfile',
-    path: '/executorProfile',
-    component: ExecutorProfile,
+    meta: { index: 5 },
   },
   {
     name: 'customerProfile',
