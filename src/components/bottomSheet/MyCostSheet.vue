@@ -22,6 +22,8 @@
 
 <script>
 import axios from 'axios';
+import dialogWindow from '../../scripts/openDialog';
+import logger from '../../scripts/logger';
 
 export default {
   name: 'my-cost-sheet',
@@ -43,7 +45,10 @@ export default {
           comment: this.cost || this.order.cost,
         })
         .then((response) => (this.checkOrderResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialogWindow.open('Ошибка', 'Не удалось откликнуться на заказ, скорее всего его кто-то уже выполняет', true);
+          logger.log(error);
+        });
       /* eslint-enable no-underscore-dangle */
       /* eslint-enable no-return-assign */
     },
@@ -59,10 +64,10 @@ export default {
           this.open = false;
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialogWindow.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialogWindow.open('Ошибка', '', true, false);
           break;
       }
     },
