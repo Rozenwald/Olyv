@@ -18,6 +18,7 @@ import permissions from './modules/permissions';
 import openDialog from './modules/dialog';
 import route from './modules/route';
 import map from './modules/map';
+import actionPhotoDialog from './modules/actionPhotoDialog';
 
 Vue.use(Vuex);
 
@@ -47,5 +48,6 @@ export default new Vuex.Store({
     openDialog,
     route,
     map,
+    actionPhotoDialog,
   },
 });
