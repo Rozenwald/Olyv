@@ -46,6 +46,8 @@
 
 <script>
 import axios from 'axios';
+import dialogWindow from '../../scripts/openDialog';
+import logger from '../../scripts/logger';
 
 export default {
   name: 'bottom-sheet',
@@ -59,7 +61,11 @@ export default {
   },
   methods: {
     clickBtn() {
-      this.error = this.checkForm();
+      if (this.checkForm() !== null) {
+        dialogWindow.open('Ошибка', `${this.checkForm()}`, true, false);
+      } else {
+        this.sendOrder();
+      }
     },
 
     openField(field) {
@@ -83,31 +89,23 @@ export default {
       if (this.addressData.value == null) {
         return 'Укажите адрес';
       }
-
       if (this.cost == null) {
         return 'Укажите желаемую цену';
       }
-
       if (!this.validCost(this.cost)) {
         return 'Неверный формат цены';
       }
-
       if (this.description == null) {
         return 'Описание должно быть больше 10 символов';
       }
-
       if (this.description.length < 10) {
         return 'Описание должно быть больше 10 символов';
       }
-
-      this.sendOrder();
-
       return null;
     },
 
     sendOrder() {
       this.loading = true;
-
       /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
@@ -122,7 +120,10 @@ export default {
           address: this.addressData.value,
         })
         .then((response) => (this.checkResonse(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialogWindow.open('Ошибка', 'Не удалось создать заказ, повторите попытку позже', true, true);
+          logger.log(error);
+        });
       /* eslint-enable no-return-assign */
     },
 
@@ -130,10 +131,10 @@ export default {
       this.loading = false;
       switch (response.data.status) {
         case 'invalidCost':
-          this.error = 'Неверный формат цены';
+          dialogWindow.open('Ошибка', 'Неверный формат цены', true, false);
           break;
         case 'invalidDescription':
-          this.error = 'Описание должно быть больше 10 символов';
+          dialogWindow.open('Ошибка', 'Описание должно быть больше 10 символов', true, false);
           break;
         case 'success':
           this.open = false;
@@ -141,10 +142,11 @@ export default {
           break;
         case 'notAuthenticate':
           this.$store.dispatch('setBottomSheetStatus', false);
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialogWindow.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialogWindow.open('Ошибка', '', true, false);
+          logger.log(response.data);
       }
     },
 
@@ -179,15 +181,6 @@ export default {
 
     openCost() {
       return this.$store.getters.getCostSheetStatus;
-    },
-
-    error: {
-      get() {
-        return this.$store.getters.getError;
-      },
-      set(val) {
-        this.$store.dispatch('setError', val);
-      },
     },
 
     token() {

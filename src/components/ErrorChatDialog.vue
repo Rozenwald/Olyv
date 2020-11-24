@@ -11,6 +11,8 @@ v-dialog(v-model="showDialog")
 
 <script>
 import axios from 'axios';
+import dialogWindow from '../scripts/openDialog';
+import logger from '../scripts/logger';
 
 export default {
   name: 'error-chat-dialog',
@@ -32,7 +34,9 @@ export default {
         })
         .then((response) => (this.checkAddMessage(response)))
         // eslint-disable-next-line no-return-assign
-        .catch((error) => (console.log(error)));
+        .catch((error) => {
+          logger.log(error);
+        });
     },
     checkAddMessage(response) {
       console.log(response);
@@ -45,7 +49,7 @@ export default {
         case 'notExist':
           break;
         default:
-          this.error = 'Ошибка';
+          dialogWindow.open('Ошибка', '', true, false);
           break;
       }
     },

@@ -5,17 +5,14 @@ import bottomNavigation from './modules/bottomNavigaion';
 import appbar from './modules/appbar';
 import setting from './modules/setting';
 import comment from './modules/comment';
-import loginDialog from './modules/loginDialog';
-import errorDialog from './modules/errorDialog';
 import userDataDialog from './modules/userDataDialog';
 import user from './modules/user';
 import chat from './modules/chat';
 import myOrder from './modules/myOrder';
-import repeatLoginDialog from './modules/repeatLoginDialog';
 import allOrder from './modules/allOrders';
 import currentPosition from './modules/currentPosition';
 import permissions from './modules/permissions';
-import openDialog from './modules/dialog';
+import dialog from './modules/dialog';
 import route from './modules/route';
 import map from './modules/map';
 import actionPhotoDialog from './modules/actionPhotoDialog';
@@ -34,18 +31,15 @@ export default new Vuex.Store({
     bottomNavigation,
     appbar,
     setting,
-    loginDialog,
     userDataDialog,
     user,
     myOrder,
     comment,
-    repeatLoginDialog,
-    errorDialog,
     chat,
     allOrder,
     currentPosition,
     permissions,
-    openDialog,
+    dialog,
     route,
     map,
     actionPhotoDialog,

@@ -10,32 +10,28 @@ import { mapActions } from 'vuex';
 import SvgIcon from './SvgIcon.vue';
 import camera from '../scripts/device-modules/camera';
 import file from '../scripts/device-modules/file';
+import dialogWindow from '../scripts/openDialog';
 import logger from '../scripts/logger';
 
 export default {
   name: 'avatar',
   props: {
-
     size: {
       type: String,
       default: '36',
     },
-
     color: {
       type: String,
       default: '#56D68B',
     },
-
     src: {
       type: String,
       default: null,
     },
-
     isChange: {
       type: Boolean,
       default: false,
     },
-
     type: {
       type: String,
       default: 'private',
@@ -45,6 +41,7 @@ export default {
   components: {
     SvgIcon,
     axios,
+    logger,
   },
   data() {
     return {
@@ -72,6 +69,7 @@ export default {
           this.sendPhoto();
         })
         .catch((error) => {
+          dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
           logger.log(error);
         });
     },
@@ -88,7 +86,10 @@ export default {
         .post(`${this.$baseUrl}api/v1/private/user`, data)
         .then((response) => (this.checkPhoto(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка загрузки фото'));
+        .catch((error) => {
+          dialogWindow.open('Ошибка', 'Не удалось загрузить фото попробуйте позже', true, false);
+          logger.log(error);
+        });
     },
 
     checkPhoto(response) {
@@ -98,15 +99,20 @@ export default {
           this.getUserData();
           break;
         case 'invalidPhoto':
-          this.error = 'Неверный формат фото';
+          dialogWindow.open('Ошибка', 'Неверный формат фото', true);
           break;
         case 'notAuthenticate':
+          dialogWindow.open('Ошибка', 'Авторизируйтесь, чтобы пользоваться данным функционалом', true, true, this.route('auth'));
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
-          this.error = 'Ошибка загрузки фото';
+          dialogWindow.open('Ошибка', 'Ошибка загрузки фото', true);
           break;
       }
+    },
+
+    route(route) {
+      this.$router.push(route);
     },
 
     getUserData() {
@@ -118,7 +124,10 @@ export default {
         })
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialogWindow.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true);
+          logger.log(error);
+        });
     },
 
     checkUserData(response) {
@@ -127,10 +136,11 @@ export default {
           this.$store.dispatch('setUser', response.data.data);
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialogWindow.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.route('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialogWindow.open('Ошибка', 'Такого пользователя не существует, скорее всего вы еще просто не зарегистрировались', true, true);
+          logger.log(response.data);
           break;
       }
     },

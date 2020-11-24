@@ -24,13 +24,11 @@ export default {
     title() {
       return this.$store.getters.getTitle;
     },
-
     showAppbar() {
       if (this.currentRouteName === 'auth' || this.currentRouteName === 'registration') return false;
 
       return true;
     },
-
     showBackbtn() {
       switch (this.$route.name) {
         case 'moiZakazi':
@@ -45,32 +43,25 @@ export default {
           return false;
       }
     },
-
     userRequest() {
       return this.$store.getters.getUserRequest;
     },
-
     currentRouteName() {
       return this.$route.name;
     },
-
     photo() {
       if (!this.userRequest) {
         return ' ';
       }
-
       if (!this.userRequest.photo) {
         return ' ';
       }
-
       if (!this.userRequest.photo.length) {
         return null;
       }
-
       const url = this.userRequest.photo[this.userRequest.photo.length - 1].urlMin.substr(1);
       return this.$baseUrlNoPort + url;
     },
-
     userName() {
       if (!this.user) {
         return null;
