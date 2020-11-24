@@ -49,16 +49,34 @@ export default {
         .catch(() => (this.error = 'Ошибка'));
       /* eslint-enable no-return-assign */
     },
+
+    // Получение заказов без авторизации
+    getPublicData() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/public/order`, {
+          method: 'receive',
+        })
+        .then((response) => (this.checkResponse(response)))
+        .catch(() => (this.error = 'Ошибка'));
+      /* eslint-enable no-return-assign */
+    },
+
     // Формирование массива всех заказов
     checkResponse(response) {
       console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.all = response.data.data;
-          if (this.user.verification === 'completed') {
-            this.getAwaitOrder();
+          if (this.token) {
+            if (this.user.verification === 'completed') {
+              this.getAwaitOrder();
+            } else {
+              this.getMyOrder();
+            }
           } else {
-            this.getMyOrder();
+            this.loadType = false;
+            this.allClear = this.all.reverse();
           }
           break;
         case 'notAuthenticate':
@@ -229,6 +247,8 @@ export default {
     this.$store.commit('setTitle', 'Исполнитель');
     if (this.token) {
       this.getData();
+    } else {
+      this.getPublicData();
     }
   },
   mounted() {

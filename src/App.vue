@@ -37,6 +37,11 @@ export default {
     RepeatLoginDialog,
     BottomSheetGroup,
   },
+  data() {
+    return {
+      prevHeight: 0,
+    };
+  },
   methods: {
     getUserData() {
       axios
@@ -70,6 +75,25 @@ export default {
           dialog.open('Ошибка', '', true, false);
           break;
       }
+    },
+
+    beforeLeave(element) {
+      this.prevHeight = getComputedStyle(element).height;
+    },
+    enter(element) {
+      const { height } = getComputedStyle(element);
+
+      // eslint-disable-next-line no-param-reassign
+      element.style.height = this.prevHeight;
+
+      setTimeout(() => {
+        // eslint-disable-next-line no-param-reassign
+        element.style.height = height;
+      });
+    },
+    afterEnter(element) {
+      // eslint-disable-next-line no-param-reassign
+      element.style.height = 'auto';
     },
   },
   computed: {
@@ -121,6 +145,7 @@ export default {
     transition-property: height, opacity, transform
     transition-timing-function: cubic-bezier(0.55, 0, 0.1, 1)
     overflow: hidden
+    position fixed
   }
 
   .slide-left-enter,

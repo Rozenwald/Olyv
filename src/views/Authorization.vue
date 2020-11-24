@@ -26,9 +26,12 @@
           @click="route('registration')"
           v-show="!isFocus") Пройти регистрацию
       .button-icon(v-show="!isFocus")
-        svg-icon.button-icon-svg-icon(name='VK'  width='37' height='37')
-        svg-icon.button-icon-svg-icon(name='Google'  width='37' height='37')
-        svg-icon.button-icon-svg-icon(name='Facebook'  width='37' height='37')
+        v-btn.button-icon-svg-icon(icon @click="getDataVk")
+          svg-icon(name='VK'  width='37' height='37')
+        v-btn.button-icon-svg-icon(icon)
+          svg-icon(name='Google'  width='37' height='37')
+        v-btn.button-icon-svg-icon(icon)
+          svg-icon(name='Facebook'  width='37' height='37')
 </template>
 <script>
 import axios from 'axios';
@@ -37,8 +40,10 @@ import nativeStorage from '../scripts/nativeStorage';
 // eslint-disable-next-line import/no-cycle
 import cordova from '../plugins/cordova';
 import dialog from '../scripts/openDialog';
+import clientVk from '../scripts/vk/client';
+import authVk from '../scripts/vk/auth';
 import logger from '../scripts/logger';
-import auth from '../scripts/auth/auth';
+import auth from '../scripts/auth';
 
 export default {
   name: 'Authorization',
@@ -66,6 +71,26 @@ export default {
     validEmail(email) {
       const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return regex.test(email);
+    },
+
+    getDataVk() {
+      clientVk.init();
+      authVk.login()
+        .then((response) => {
+          logger.log(response);
+
+          const res = JSON.parse(response);
+
+          const accessToken = res.token;
+          logger.log(accessToken);
+
+          const userId = res.user[0].id;
+          logger.log(userId);
+        });
+    },
+
+    signInVk() {
+
     },
 
     checkForm(e) {
@@ -389,6 +414,7 @@ export default {
       height 40%;
         &-svg-icon{
           margin 5px
+          padding 0
         }
     }
   }

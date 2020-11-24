@@ -45,7 +45,7 @@ import nativeStorage from '../scripts/nativeStorage';
 import cordova from '../plugins/cordova';
 import logger from '../scripts/logger';
 import dialog from '../scripts/openDialog';
-import auth from '../scripts/auth/auth';
+import auth from '../scripts/auth';
 
 export default {
   name: 'Registration',
