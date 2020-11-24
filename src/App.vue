@@ -8,19 +8,19 @@
       bottom-sheet-group
       bottom-navigation
       login-dialog
-      error-dialog
       repeat-login-dialog
 </template>
 
 <script>
 import axios from 'axios';
-import WindowDialog from './components/WindowDialog.vue';
+import Dialog from './components/Dialog.vue';
+import dialog from './scripts/openDialog';
+import logger from './scripts/logger';
 import Appbar from './components/Appbar.vue';
 import BottomSheetGroup from './components/BottomSheetGroup.vue';
 import BottomNavigation from './components/BottomNavigation.vue';
 import store from './store/index';
 import LoginDialog from './components/LoginDialog.vue';
-import ErrorDialog from './components/ErrorDialog.vue';
 import RepeatLoginDialog from './components/RepeatLoginDialog.vue';
 import 'leaflet/dist/leaflet.css';
 import cordova from './plugins/cordova';
@@ -30,13 +30,17 @@ export default {
   store,
   axios,
   components: {
-    WindowDialog,
+    Dialog,
     Appbar,
     BottomNavigation,
     LoginDialog,
-    ErrorDialog,
     RepeatLoginDialog,
     BottomSheetGroup,
+  },
+  data() {
+    return {
+      prevHeight: 0,
+    };
   },
   methods: {
     getUserData() {
@@ -48,7 +52,10 @@ export default {
         })
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', 'Не удалось загрузить данные о пользователе', true, true);
+          logger.log(error);
+        });
     },
 
     checkUserData(response) {
@@ -57,17 +64,36 @@ export default {
           this.$store.dispatch('setUser', response.data.data);
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь не авторизирован', true, false);
           break;
         case 'notExist':
           this.$store.dispatch('setToken', null);
           window.localStorage.removeItem('token');
-          this.$store.dispatch('showLoginDialog', true);
+          dialog.open('Ошибка', 'Не существует', true, false);
           break;
         default:
-          this.error = 'Ошибка входа';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
+    },
+
+    beforeLeave(element) {
+      this.prevHeight = getComputedStyle(element).height;
+    },
+    enter(element) {
+      const { height } = getComputedStyle(element);
+
+      // eslint-disable-next-line no-param-reassign
+      element.style.height = this.prevHeight;
+
+      setTimeout(() => {
+        // eslint-disable-next-line no-param-reassign
+        element.style.height = height;
+      });
+    },
+    afterEnter(element) {
+      // eslint-disable-next-line no-param-reassign
+      element.style.height = 'auto';
     },
   },
   computed: {
@@ -119,6 +145,7 @@ export default {
     transition-property: height, opacity, transform
     transition-timing-function: cubic-bezier(0.55, 0, 0.1, 1)
     overflow: hidden
+    position fixed
   }
 
   .slide-left-enter,

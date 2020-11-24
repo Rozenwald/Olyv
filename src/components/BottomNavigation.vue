@@ -29,9 +29,19 @@ export default {
     items() {
       return this.$store.getters.getItemsBottomNavigaion;
     },
+
     show() {
-      return this.$store.getters.isVisibleBottomNavigation;
+      if (this.currentRouteName === 'auth' || this.currentRouteName === 'registration'
+          || this.currentRouteName === 'customerMoreInfo' || this.currentRouteName === 'executorMoreInfo'
+          || this.currentRouteName === 'chat') return false;
+
+      return true;
     },
+
+    currentRouteName() {
+      return this.$route.name;
+    },
+
     isAuth() {
       return this.$store.getters.isAuth;
     },

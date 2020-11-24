@@ -38,23 +38,25 @@ const routes = [
     name: 'registration',
     path: '/registration',
     component: Registration,
+    meta: { index: 0 },
   },
   {
     name: 'auth',
     path: '/auth',
     component: Auth,
+    meta: { index: 0 },
   },
   {
     name: 'moiZakazi',
     path: '/moiZakazi',
     component: MoiZakazi,
-    meta: { index: 0 },
+    meta: { index: 1 },
   },
   {
     name: 'spisokZakazov',
     path: '/spisokZakazov',
     component: SpisokZakazov,
-    meta: { index: 1 },
+    meta: { index: 2 },
   },
   {
     name: 'setUserData',
@@ -65,7 +67,7 @@ const routes = [
     name: 'setting',
     path: '/setting',
     component: Setting,
-    meta: { index: 3 },
+    meta: { index: 4 },
   },
   {
     name: 'chat',
@@ -96,7 +98,7 @@ const routes = [
     name: 'customerProfile',
     path: '/customerProfile',
     component: CustomerProfile,
-    meta: { index: 2 },
+    meta: { index: 3 },
   },
 ];
 

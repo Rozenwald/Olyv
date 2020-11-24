@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import auth from '../../scripts/auth/auth';
+import auth from '../../scripts/auth';
 
 export default {
   name: 'exit-button',

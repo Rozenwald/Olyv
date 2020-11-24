@@ -26,19 +26,24 @@
           @click="route('registration')"
           v-show="!isFocus") Пройти регистрацию
       .button-icon(v-show="!isFocus")
-        svg-icon.button-icon-svg-icon(name='VK'  width='37' height='37')
-        svg-icon.button-icon-svg-icon(name='Google'  width='37' height='37')
-        svg-icon.button-icon-svg-icon(name='Facebook'  width='37' height='37')
+        v-btn.button-icon-svg-icon(icon @click="getDataVk")
+          svg-icon(name='VK'  width='37' height='37')
+        v-btn.button-icon-svg-icon(icon)
+          svg-icon(name='Google'  width='37' height='37')
+        v-btn.button-icon-svg-icon(icon)
+          svg-icon(name='Facebook'  width='37' height='37')
 </template>
 <script>
 import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
-import dialogWindow from '../scripts/openDialog';
 import nativeStorage from '../scripts/nativeStorage';
 // eslint-disable-next-line import/no-cycle
 import cordova from '../plugins/cordova';
+import dialog from '../scripts/openDialog';
+import clientVk from '../scripts/vk/client';
+import authVk from '../scripts/vk/auth';
 import logger from '../scripts/logger';
-import auth from '../scripts/auth/auth';
+import auth from '../scripts/auth';
 
 export default {
   name: 'Authorization',
@@ -68,19 +73,39 @@ export default {
       return regex.test(email);
     },
 
+    getDataVk() {
+      clientVk.init();
+      authVk.login()
+        .then((response) => {
+          logger.log(response);
+
+          const res = JSON.parse(response);
+
+          const accessToken = res.token;
+          logger.log(accessToken);
+
+          const userId = res.user[0].id;
+          logger.log(userId);
+        });
+    },
+
+    signInVk() {
+
+    },
+
     checkForm(e) {
       if (!this.validEmail(this.email)) {
-        dialogWindow.open('Ошибка', 'Некоректный email', true, false);
+        dialog.open('Ошибка', 'Некоректный email', true, false);
         return null;
       }
 
       if (!this.password) {
-        dialogWindow.open('Ошибка', 'Пароль должен содержать больше 6 символов', true, false);
+        dialog.open('Ошибка', 'Пароль должен содержать больше 6 символов', true, false);
         return null;
       }
 
       if (this.password.length < 6) {
-        dialogWindow.open('Ошибка', 'Пароль должен содержать больше 6 символов', true, false);
+        dialog.open('Ошибка', 'Пароль должен содержать больше 6 символов', true, false);
         return null;
       }
 
@@ -98,7 +123,7 @@ export default {
         })
         .then((response) => (this.checkSignIn(response)))
         .catch((error) => {
-          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          dialog.open('Ошибка', this.errorBody, true, false);
           logger.log(error);
         });
     },
@@ -110,10 +135,10 @@ export default {
           this.$store.dispatch('setToken', response.data.data);
           break;
         case 'notExist':
-          dialogWindow.open('Ошибка', 'Неверный логин или пароль', true, false);
+          dialog.open('Ошибка', 'Неверный логин или пароль', true, false);
           break;
         default:
-          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          dialog.open('Ошибка', this.errorBody, true, false);
           logger.log(response);
           break;
       }
@@ -128,7 +153,7 @@ export default {
         })
         .then((response) => (this.checkUserData(response)))
         .catch((error) => {
-          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          dialog.open('Ошибка', this.errorBody, true, false);
           logger.log(error);
         });
     },
@@ -139,7 +164,7 @@ export default {
           this.$store.dispatch('setUser', response.data.data);
           break;
         default:
-          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          dialog.open('Ошибка', this.errorBody, true, false);
           logger.log(response);
           break;
       }
@@ -153,7 +178,7 @@ export default {
         })
         .then((response) => (this.checkChatAuth(response)))
         .catch((error) => {
-          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          dialog.open('Ошибка', this.errorBody, true, false);
           logger.log(error);
         });
     },
@@ -167,7 +192,7 @@ export default {
           this.$store.dispatch('setIdChanal', response.data.data.idChanal);
           break;
         default:
-          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          dialog.open('Ошибка', this.errorBody, true, false);
           logger.log(response);
           break;
       }
@@ -181,7 +206,7 @@ export default {
         })
         .then((response) => (this.checkNotificationAuth(response)))
         .catch((error) => {
-          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          dialog.open('Ошибка', this.errorBody, true, false);
           logger.log(error);
         });
     },
@@ -205,13 +230,13 @@ export default {
                 this.addAppToken(token);
               })
               .catch((error) => {
-                dialogWindow.open('Ошибка', this.errorBody, true, false);
+                dialog.open('Ошибка', this.errorBody, true, false);
                 logger.log(error);
               });
           }
           break;
         default:
-          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          dialog.open('Ошибка', this.errorBody, true, false);
           logger.log(response);
           break;
       }
@@ -226,7 +251,7 @@ export default {
         })
         .then((response) => (this.checkAppToken(response)))
         .catch((error) => {
-          dialogWindow.open('Ошибка', this.errorBody, true, false);
+          dialog.open('Ошибка', this.errorBody, true, false);
           logger.log(error);
         });
     },
@@ -235,7 +260,7 @@ export default {
       if (response.data.status === 'success' || response.data.status === 'exist') {
         this.isAddAppToken = true;
       } else {
-        dialogWindow.open('Ошибка', this.errorBody, true, false);
+        dialog.open('Ошибка', this.errorBody, true, false);
         logger.log(response);
       }
     },
@@ -389,6 +414,7 @@ export default {
       height 40%;
         &-svg-icon{
           margin 5px
+          padding 0
         }
     }
   }
