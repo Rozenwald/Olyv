@@ -56,6 +56,8 @@
 <script>
 import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
+import dialog from '../scripts/openDialog';
+import logger from '../scripts/logger';
 
 export default {
   name: 'Create',
@@ -80,22 +82,27 @@ export default {
     checkForm() {
       if (this.address == null) {
         this.error = 'Укажите адресс';
+        dialog.open('Ошибка', this.error, true, false);
       }
 
       if (this.cost != null) {
         if (!this.validCost(this.cost)) {
           this.error = 'Неверный формат цены';
+          dialog.open('Ошибка', this.error, true, false);
         }
       } else {
         this.error = 'Укажите цену';
+        dialog.open('Ошибка', this.error, true, false);
       }
 
       if (this.description != null) {
         if (this.description.length < 10) {
           this.error = 'Описание должно быть больше 10 символов';
+          dialog.open('Ошибка', this.error, true, false);
         }
       } else {
         this.error = 'Описание должно быть больше 10 символов';
+        dialog.open('Ошибка', this.error, true, false);
       }
 
       if (!this.error) {
@@ -114,7 +121,10 @@ export default {
           protect: this.saveDeal ? 'yes' : 'no',
         })
         .then((response) => (this.checkResonse(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true, true);
+          logger.log(error);
+        });
       /* eslint-enable no-return-assign */
     },
 
@@ -122,18 +132,20 @@ export default {
       switch (response.data.status) {
         case 'invalidCost':
           this.error = 'Неверный формат цены';
+          dialog.open('Ошибка', this.error, true, false);
           break;
         case 'invalidDescription':
           this.error = 'Описание должно быть больше 10 символов';
+          dialog.open('Ошибка', this.error, true, false);
           break;
         case 'success':
-          this.$router.back();
+          this.$router.push('moiZakazi');
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
       }
     },
 
