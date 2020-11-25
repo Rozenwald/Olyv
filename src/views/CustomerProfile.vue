@@ -3,14 +3,16 @@
     user-profile-header
     verification-status
     review
-    exit-button
+    v-btn.exit-btn(block :loading='loading' @click='exit')
+      v-icon(dense color="red") exit_to_app
+      span.text Выход
 </template>
 
 <script>
 import axios from 'axios';
 import store from '../store';
+import auth from '../scripts/auth';
 import Review from '../components/customerProfile/Review.vue';
-import ExitButton from '../components/customerProfile/ExitButton.vue';
 import UserProfileHeader from '../components/customerProfile/UserProfileHeader.vue';
 import VerificationStatus from '../components/customerProfile/VerificationStatus.vue';
 
@@ -19,7 +21,6 @@ export default {
   components: {
     UserProfileHeader,
     VerificationStatus,
-    ExitButton,
     Review,
     store,
     axios,
@@ -27,6 +28,7 @@ export default {
   data() {
     return {
       error: '',
+      loading: false,
     };
   },
   methods: {
@@ -58,6 +60,11 @@ export default {
           break;
       }
     },
+
+    exit() {
+      this.loading = true;
+      auth.exit();
+    },
   },
   computed: {
     token() {
@@ -65,6 +72,14 @@ export default {
     },
     user() {
       return this.$store.getters.getUser;
+    },
+  },
+  watch: {
+    token() {
+      if (!this.token) {
+        this.loading = false;
+        this.$router.replace('auth');
+      }
     },
   },
   created() {
@@ -103,5 +118,20 @@ export default {
     border 1px solid #56D68B
     border-radius 100px
     box-shadow none
+  }
+
+  .exit-btn {
+    background-color #FFFFFF !important
+    box-shadow 0 1px 3px rgba(0,0,0,0.12),
+               0 1px 2px rgba(0,0,0,0.12)
+    border-radius 2px
+    text-transform none
+    margin-top 10px
+    margin-bottom 10px
+  }
+
+  .text{
+    color red
+    margin-left 5px
   }
 </style>

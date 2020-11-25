@@ -1,17 +1,17 @@
 <template lang="pug">
-  v-avatar(:size='size' :color='color' @click="choosePhoto")
-    v-icon(v-if="!picture" color="#FFFFFF" ) no_photography
-    v-img(:src="picture" v-else)
-
-    input(type="file" @change="handleFileUpload" ref="input")
+  v-avatar(:size='size' :color='color' @click="actionPhoto")
+    v-icon(v-if="!src" color="#FFFFFF" ) no_photography
+    v-img(:src="src" v-else)
 </template>
 
 <script>
 import axios from 'axios';
+import { mapActions } from 'vuex';
 import SvgIcon from './SvgIcon.vue';
+import camera from '../scripts/device-modules/camera';
+import file from '../scripts/device-modules/file';
 import dialogWindow from '../scripts/openDialog';
 import logger from '../scripts/logger';
-import route from '../store/modules/route';
 
 export default {
   name: 'avatar',
@@ -45,42 +45,37 @@ export default {
   },
   data() {
     return {
-      content: null,
       file: null,
     };
   },
   methods: {
-    route(routeName) {
-      this.$router.push(routeName);
-    },
-    choosePhoto() {
-      if (this.isChange) {
-        this.$refs.input.click();
-      }
-    },
-    handleFileUpload(event) {
-      event.preventDefault();
-      this.selectImage(event.target.files[0]);
+    ...mapActions('actionPhotoDialog', [
+      'setStatus',
+      'setSourceType',
+    ]),
+
+    actionPhoto() {
+      this.setStatus(true);
     },
 
-    selectImage(file) {
-      this.file = file;
-      console.log(this.file);
-      this.sendPhoto();
-      const reader = new FileReader();
-      reader.onload = this.onImageLoad;
-      reader.readAsDataURL(file);
-    },
-
-    onImageLoad(e) {
-      this.content = e.target.result;
-      console.log(e.target.result);
-      const filename = this.file instanceof File ? this.file.name : '';
-      this.$emit('input', filename);
-      this.$emit('image-changed', this.content);
+    choosePhoto(innerOptions) {
+      // eslint-disable-next-line no-undef
+      camera.open(innerOptions)
+        .then((imageUrl) => {
+          logger.log(imageUrl);
+          const blob = file.dataURLtoBlob(`data:image/jpeg;base64,${imageUrl}`);
+          logger.log(blob);
+          this.file = blob;
+          this.sendPhoto();
+        })
+        .catch((error) => {
+          dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
+          logger.log(error);
+        });
     },
 
     sendPhoto() {
+      logger.log(this.file);
       // eslint-disable-next-line prefer-const
       let data = new FormData();
       data.append('token', this.token);
@@ -98,6 +93,7 @@ export default {
     },
 
     checkPhoto(response) {
+      logger.log(response);
       switch (response.data.status) {
         case 'success':
           this.getUserData();
@@ -106,13 +102,17 @@ export default {
           dialogWindow.open('Ошибка', 'Неверный формат фото', true);
           break;
         case 'notAuthenticate':
-          dialogWindow.open('Ошибка', 'Зарегестрируйтесь чтобы пользоваться данным функционалом', true, true, route('auth'));
+          dialogWindow.open('Ошибка', 'Авторизируйтесь, чтобы пользоваться данным функционалом', true, true, this.route('auth'));
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
           dialogWindow.open('Ошибка', 'Ошибка загрузки фото', true);
           break;
       }
+    },
+
+    route(route) {
+      this.$router.push(route);
     },
 
     getUserData() {
@@ -136,7 +136,7 @@ export default {
           this.$store.dispatch('setUser', response.data.data);
           break;
         case 'notAuthenticate':
-          dialogWindow.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, route('auth'));
+          dialogWindow.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.route('auth'));
           break;
         default:
           dialogWindow.open('Ошибка', 'Такого пользователя не существует, скорее всего вы еще просто не зарегистрировались', true, true);
@@ -144,21 +144,65 @@ export default {
           break;
       }
     },
+
+    getOptions(srcType) {
+      // eslint-disable-next-line no-undef
+      const options = { destinationType: Camera.DestinationType.DATA_URL };
+
+      if (srcType === 'gallery') {
+        // eslint-disable-next-line no-undef
+        options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
+      }
+
+      if (srcType === 'camera') {
+        // eslint-disable-next-line no-undef
+        options.sourceType = Camera.PictureSourceType.CAMERA;
+      }
+
+      return options;
+    },
   },
   computed: {
     token() {
       return this.$store.getters.getToken;
     },
+
     user() {
       return this.$store.getters.getUser;
     },
 
-    picture() {
-      if (this.content) {
-        return this.content;
+    error: {
+      get() {
+        return this.$store.getters.getError;
+      },
+      set(val) {
+        this.$store.dispatch('setError', val);
+      },
+    },
+
+    sourceType: {
+      get() { return this.$store.state.actionPhotoDialog.sourceType; },
+      set(value) { this.setSourceType(value); },
+    },
+  },
+
+  watch: {
+    sourceType() {
+      const options = this.getOptions(this.sourceType);
+
+      if (this.sourceType === 'gallery') {
+        this.choosePhoto(options);
+        logger.log('open gallery');
       }
 
-      return this.src;
+      if (this.sourceType === 'camera') {
+        this.choosePhoto(options);
+        logger.log('open camera');
+      }
+
+      if (this.sourceType) {
+        this.sourceType = null;
+      }
     },
   },
 };

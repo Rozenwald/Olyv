@@ -1,7 +1,7 @@
 <template lang="pug">
   .auth-container
     v-row.logo(align='center' justify='center')
-      img.logo-icon(src="../assets/main-logo.png", alt="alt")
+      img.logo-icon(src="../assets/main-logo.png", alt="../assets/main-logo.png")
 
     v-row.text-field(align='center' justify='center')
           .text-field-center
@@ -309,13 +309,15 @@ export default {
 
     chatToken() {
       if (this.chatToken && this.isAddAppToken) {
-        logger.log('good reg');
+        logger.log('good auth');
+        this.$router.replace('spisokZakazov');
       }
     },
 
     isAddAppToken() {
       if (this.chatToken && this.isAddAppToken) {
-        logger.log('good reg');
+        logger.log('good auth');
+        this.$router.replace('spisokZakazov');
       }
     },
   },

@@ -9,6 +9,7 @@
       bottom-navigation
       login-dialog
       repeat-login-dialog
+      action-photo-dialog
 </template>
 
 <script>
@@ -25,6 +26,8 @@ import RepeatLoginDialog from './components/RepeatLoginDialog.vue';
 import 'leaflet/dist/leaflet.css';
 import cordova from './plugins/cordova';
 
+const ActionPhotoDialog = () => import('./components/ActionPhotoDialog.vue');
+
 export default {
   name: 'App',
   store,
@@ -36,6 +39,7 @@ export default {
     LoginDialog,
     RepeatLoginDialog,
     BottomSheetGroup,
+    ActionPhotoDialog,
   },
   data() {
     return {

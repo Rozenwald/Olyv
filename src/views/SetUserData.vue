@@ -6,16 +6,14 @@
           avatar(:src="src" size="100" isChange)
       v-skeleton-loader(type="text" :loading="!hasData")
         v-text-field.edit-data(
-          label="Имя"
-          dense
+          solo
           color="#65686C"
           hide-details="auto"
           v-model="firstName"
         )
       v-skeleton-loader(type="text" :loading="!hasData")
         v-text-field.edit-data(
-          label="Фамилия"
-          dense
+          solo
           color="#65686C"
           hide-details="auto"
           v-model="lastName"
@@ -118,7 +116,11 @@ export default {
     },
   },
   created() {
+    this.firstName = this.user.name;
+    this.lastName = this.user.lastname;
+
     this.$store.commit('setTitle', 'Личный кабинет');
+
     this.windowHeight = window.innerHeight;
     window.addEventListener('resize', () => {
       if (window.innerHeight < this.windowHeight) {
@@ -132,23 +134,26 @@ export default {
     isAuth() {
       return this.$store.getters.isAuth;
     },
+
     token() {
       return this.$store.getters.getToken;
     },
+
     src() {
-      if (!this.user.photo) {
+      if (!this.hasData) {
         return null;
       }
-
-      if (this.user.photo.length) {
-        return this.user.photo[this.user.photo.length - 1].urlMin;
+      if (!this.user.photo.length) {
+        return null;
       }
-
-      return null;
+      const url = this.user.photo[this.user.photo.length - 1].urlMin.substr(1);
+      return this.$baseUrlNoPort + url;
     },
+
     user() {
       return this.$store.getters.getUser;
     },
+
     hasData() {
       return this.$store.getters.hasData;
     },

@@ -326,12 +326,14 @@ export default {
     chatToken() {
       if (this.chatToken && this.isAddAppToken) {
         logger.log('good reg');
+        this.$router.replace('spisokZakazov');
       }
     },
 
     isAddAppToken() {
       if (this.chatToken && this.isAddAppToken) {
         logger.log('good reg');
+        this.$router.replace('spisokZakazov');
       }
     },
   },
