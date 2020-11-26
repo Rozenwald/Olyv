@@ -23,7 +23,7 @@
 <script>
 
 export default {
-  name: 'window-dialog',
+  name: 'dialog',
   data() {
     return {
     };

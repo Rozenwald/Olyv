@@ -17,6 +17,7 @@
 
 <script>
 import SvgIcon from './SvgIcon.vue';
+import dialog from '../scripts/openDialog';
 
 export default {
   name: 'bottom-navigation',
@@ -48,16 +49,13 @@ export default {
   },
 
   methods: {
-    route(routeName) {
-      this.$router.push(routeName);
+    route(name) {
+      this.$router.push(name);
     },
-    showLoginDialog() {
-      this.$store.dispatch('showLoginDialog', true);
-    },
-    // eslint-disable-next-line no-unused-vars
+
     clickBtn(index, routeName) {
       if ((index === 2 || index === 3) && !this.isAuth) {
-        this.showLoginDialog();
+        dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, () => { this.$router.push('auth'); });
       } else if (index === 2) {
         this.$store.dispatch('setMainSheetStatus', true);
       } else {

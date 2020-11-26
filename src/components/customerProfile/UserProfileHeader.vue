@@ -2,7 +2,8 @@
   .header
     v-row.avatar(align='center' justify='center')
       v-skeleton-loader(type="avatar" :loading="!hasData")
-        avatar(size="100" :src="photo" isChange)
+        v-row.avatar-wrp(@click="actionPhoto")
+          avatar(size="100" :src="photo")
     v-row.name(align='center' justify='center')
       v-skeleton-loader(type="text" :loading="!hasData" width="90")
         span {{name}} {{lastname}}
@@ -34,10 +35,16 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { mapActions } from 'vuex';
 import SvgIcon from '../SvgIcon.vue';
 import Avatar from '../Avatar.vue';
 import PopupMenuProfile from './PopupMenuProfile.vue';
 import UserProfileSubheader from './UserProfileSubheader.vue';
+import camera from '../../scripts/device-modules/camera';
+import file from '../../scripts/device-modules/file';
+import dialogWindow from '../../scripts/openDialog';
+import logger from '../../scripts/logger';
 
 export default {
   name: 'user-profile-header',
@@ -49,12 +56,120 @@ export default {
   },
   data() {
     return {
-
+      file: null,
     };
   },
   methods: {
     route(routeName) {
       this.$router.push(routeName);
+    },
+
+    ...mapActions('actionPhotoDialog', [
+      'setStatus',
+      'setSourceType',
+    ]),
+
+    actionPhoto() {
+      this.setStatus(true);
+    },
+
+    choosePhoto(innerOptions) {
+      // eslint-disable-next-line no-undef
+      camera.open(innerOptions)
+        .then((imageUrl) => {
+          logger.log(imageUrl);
+          const blob = file.dataURLtoBlob(`data:image/jpeg;base64,${imageUrl}`);
+          logger.log(blob);
+          this.file = blob;
+          if (this.file) this.sendPhoto();
+        })
+        .catch((error) => {
+          logger.log(error);
+        });
+    },
+
+    sendPhoto() {
+      logger.log(this.file);
+      // eslint-disable-next-line prefer-const
+      let data = new FormData();
+      data.append('token', this.token);
+      data.append('method', 'update');
+      data.append('photo', this.file);
+      data.append('submethod', 'photo');
+      axios
+        .post(`${this.$baseUrl}api/v1/private/user`, data)
+        .then((response) => (this.checkPhoto(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch((error) => {
+          dialogWindow.open('Ошибка', 'Не удалось загрузить фото попробуйте позже', true, false);
+          logger.log(error);
+        });
+    },
+
+    checkPhoto(response) {
+      logger.log(response);
+      switch (response.data.status) {
+        case 'success':
+          this.getUserData();
+          break;
+        case 'invalidPhoto':
+          dialogWindow.open('Ошибка', 'Неверный формат фото', true);
+          break;
+        case 'notAuthenticate':
+          dialogWindow.open('Ошибка', 'Авторизируйтесь, чтобы пользоваться данным функционалом', true, true, this.route('auth'));
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          dialogWindow.open('Ошибка', 'Ошибка загрузки фото', true);
+          break;
+      }
+    },
+
+    getUserData() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/user`, {
+          method: 'receive',
+          submethod: 'my',
+          token: this.token,
+        })
+        .then((response) => (this.checkUserData(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch((error) => {
+          dialogWindow.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true);
+          logger.log(error);
+        });
+    },
+
+    checkUserData(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.$store.dispatch('setUser', response.data.data);
+          break;
+        case 'notAuthenticate':
+          dialogWindow.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.route('auth'));
+          break;
+        default:
+          dialogWindow.open('Ошибка', 'Такого пользователя не существует, скорее всего вы еще просто не зарегистрировались', true, true);
+          logger.log(response.data);
+          break;
+      }
+    },
+
+    getOptions(srcType) {
+      // eslint-disable-next-line no-undef
+      const options = { destinationType: Camera.DestinationType.DATA_URL };
+
+      if (srcType === 'gallery') {
+        // eslint-disable-next-line no-undef
+        options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
+      }
+
+      if (srcType === 'camera') {
+        // eslint-disable-next-line no-undef
+        options.sourceType = Camera.PictureSourceType.CAMERA;
+      }
+
+      return options;
     },
   },
   computed: {
@@ -97,6 +212,30 @@ export default {
         return '';
       }
       return this.$store.getters.getComment;
+    },
+
+    sourceType: {
+      get() { return this.$store.state.actionPhotoDialog.sourceType; },
+      set(value) { this.setSourceType(value); },
+    },
+  },
+  watch: {
+    sourceType() {
+      const options = this.getOptions(this.sourceType);
+
+      if (this.sourceType === 'gallery') {
+        this.choosePhoto(options);
+        logger.log('open gallery');
+      }
+
+      if (this.sourceType === 'camera') {
+        this.choosePhoto(options);
+        logger.log('open camera');
+      }
+
+      if (this.sourceType) {
+        this.sourceType = null;
+      }
     },
   },
 };
