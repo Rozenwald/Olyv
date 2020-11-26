@@ -6,15 +6,13 @@
         router-view.router
       bottom-sheet-group
       bottom-navigation
-      login-dialog
-      repeat-login-dialog
       action-photo-dialog
-      dialog
+      window-dialog
 </template>
 
 <script>
 import axios from 'axios';
-import Dialog from './components/Dialog.vue';
+import WindowDialog from './components/Dialog.vue';
 import dialog from './scripts/openDialog';
 import logger from './scripts/logger';
 import Appbar from './components/Appbar.vue';
@@ -31,11 +29,9 @@ export default {
   store,
   axios,
   components: {
-    Dialog,
+    WindowDialog,
     Appbar,
     BottomNavigation,
-    LoginDialog,
-    RepeatLoginDialog,
     BottomSheetGroup,
     ActionPhotoDialog,
   },

@@ -11,7 +11,11 @@
           v-show="comment"
         )
         .await-description(v-text="descriptionAwait" v-show="user.verification == 'await'")
-        v-row.btn-load-photo-wrp(align="center" justify="center")
+        v-row.btn-load-photo-wrp(
+          align="center"
+          justify="center"
+          v-show="user.verification == 'notCompleted'")
+
           v-btn.btn-load-photo(rounded @click="actionPhoto") Добавить фото
 
       v-sheet.selected-img-wrp(v-else)
@@ -65,18 +69,16 @@ export default {
     },
 
     choosePhoto(innerOptions) {
-      // eslint-disable-next-line no-undef
       camera.open(innerOptions)
         .then((imageUrl) => {
           logger.log(imageUrl);
+          this.wrpWidth = this.$refs.wrp.offsetWidth;
           this.content = `data:image/jpeg;base64,${imageUrl}`;
           const blob = file.dataURLtoBlob(`data:image/jpeg;base64,${imageUrl}`);
           logger.log(blob);
           this.file = blob;
-          this.sendData();
         })
         .catch((error) => {
-          dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
           logger.log(error);
         });
     },
@@ -107,23 +109,25 @@ export default {
     },
 
     sendData() {
-      // eslint-disable-next-line prefer-const
-      let data = new FormData();
-      data.append('token', this.token);
-      data.append('method', 'add');
-      data.append('photo', this.file);
-      axios
-        .post(`${this.$baseUrl}api/v1/private/passport`, data, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then((response) => (this.checkResponse(response)))
+      if (this.file) {
+        const data = new FormData();
+        data.append('token', this.token);
+        data.append('method', 'add');
+        data.append('photo', this.file);
+
+        axios
+          .post(`${this.$baseUrl}api/v1/private/passport`, data, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((response) => (this.checkResponse(response)))
         // eslint-disable-next-line no-return-assign
-        .catch((error) => {
-          dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
-          logger.log(error);
-        });
+          .catch((error) => {
+            dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
+            logger.log(error);
+          });
+      }
     },
 
     checkResponse(response) {
@@ -146,7 +150,7 @@ export default {
           break;
         default:
           dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
-          logger.log(response.data);
+          logger.log(response);
           break;
       }
     },
@@ -171,13 +175,14 @@ export default {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
           this.content = '';
+          this.$router.back();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showLoginDialog', true);
           break;
         default:
           dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
-          logger.log(response.data);
+          logger.log(response);
           break;
       }
     },

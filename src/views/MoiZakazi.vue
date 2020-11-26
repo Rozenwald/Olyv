@@ -64,13 +64,14 @@ export default {
       /* eslint-enable no-return-assign */
     },
     checkResponse(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.awaitOrders = response.data.data;
           break;
         case 'notAuthenticate':
           dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
+          break;
+        case 'NotExist':
           break;
         default:
           dialog.open('Ошибка', '', true, false);

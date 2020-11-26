@@ -3,7 +3,8 @@
     .set-user-data
       v-row(align='center' justify='center')
         v-skeleton-loader(type="avatar" :loading="!hasData")
-          avatar(:src="src" size="100" isChange)
+          v-row.avatar-wrp(@click="actionPhoto")
+            avatar(:src="src" size="100" @click="actionPhoto")
       v-skeleton-loader(type="text" :loading="!hasData")
         v-text-field.edit-data(
           solo
@@ -24,11 +25,14 @@
 
 <script>
 import axios from 'axios';
+import { mapActions } from 'vuex';
 import store from '../store';
 import SvgIcon from '../components/SvgIcon.vue';
 import Avatar from '../components/Avatar.vue';
 import dialog from '../scripts/openDialog';
 import logger from '../scripts/logger';
+import camera from '../scripts/device-modules/camera';
+import file from '../scripts/device-modules/file';
 
 export default {
   name: 'SetUserData',
@@ -45,6 +49,7 @@ export default {
       firstName: null,
       lastName: null,
       errorBody: '',
+      file: null,
     };
   },
   methods: {
@@ -114,7 +119,8 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
-          this.$router.back();
+          if (!this.file) this.$router.back();
+          this.file = null;
           break;
         case 'notAuthenticate':
           dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
@@ -123,6 +129,88 @@ export default {
           dialog.open('Ошибка', '', true, false);
           break;
       }
+    },
+
+    ...mapActions('actionPhotoDialog', [
+      'setStatus',
+      'setSourceType',
+    ]),
+
+    actionPhoto() {
+      this.setStatus(true);
+    },
+
+    choosePhoto(innerOptions) {
+      // eslint-disable-next-line no-undef
+      camera.open(innerOptions)
+        .then((imageUrl) => {
+          logger.log(imageUrl);
+          const blob = file.dataURLtoBlob(`data:image/jpeg;base64,${imageUrl}`);
+          logger.log(blob);
+          this.file = blob;
+          if (this.file) this.sendPhoto();
+        })
+        .catch((error) => {
+          logger.log(error);
+        });
+    },
+
+    sendPhoto() {
+      logger.log(this.file);
+      // eslint-disable-next-line prefer-const
+      let data = new FormData();
+      data.append('token', this.token);
+      data.append('method', 'update');
+      data.append('photo', this.file);
+      data.append('submethod', 'photo');
+      axios
+        .post(`${this.$baseUrl}api/v1/private/user`, data)
+        .then((response) => (this.checkPhoto(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch((error) => {
+          dialog.open('Ошибка', 'Не удалось загрузить фото попробуйте позже', true, false);
+          logger.log(error);
+        });
+    },
+
+    checkPhoto(response) {
+      logger.log(response);
+      switch (response.data.status) {
+        case 'success':
+          this.getUserData();
+          break;
+        case 'invalidPhoto':
+          dialog.open('Ошибка', 'Неверный формат фото', true);
+          break;
+        case 'notAuthenticate':
+          dialog.open('Ошибка', 'Авторизируйтесь, чтобы пользоваться данным функционалом', true, true, this.route('auth'));
+          this.$store.dispatch('showRepeatLoginDialog', true);
+          break;
+        default:
+          dialog.open('Ошибка', 'Ошибка загрузки фото', true);
+          break;
+      }
+    },
+
+    route(route) {
+      this.$router.push(route);
+    },
+
+    getOptions(srcType) {
+      // eslint-disable-next-line no-undef
+      const options = { destinationType: Camera.DestinationType.DATA_URL };
+
+      if (srcType === 'gallery') {
+        // eslint-disable-next-line no-undef
+        options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
+      }
+
+      if (srcType === 'camera') {
+        // eslint-disable-next-line no-undef
+        options.sourceType = Camera.PictureSourceType.CAMERA;
+      }
+
+      return options;
     },
   },
   created() {
@@ -167,10 +255,29 @@ export default {
     hasData() {
       return this.$store.getters.hasData;
     },
+
+    sourceType: {
+      get() { return this.$store.state.actionPhotoDialog.sourceType; },
+      set(value) { this.setSourceType(value); },
+    },
   },
   watch: {
-    isFocus() {
-      this.$store.dispatch('showBottomNavigation', !this.isFocus);
+    sourceType() {
+      const options = this.getOptions(this.sourceType);
+
+      if (this.sourceType === 'gallery') {
+        this.choosePhoto(options);
+        logger.log('open gallery');
+      }
+
+      if (this.sourceType === 'camera') {
+        this.choosePhoto(options);
+        logger.log('open camera');
+      }
+
+      if (this.sourceType) {
+        this.sourceType = null;
+      }
     },
   },
   beforeRouteEnter(to, from, next) {

@@ -1,19 +1,20 @@
 <template lang="pug">
-    v-dialog.dialogstyle(
+    v-dialog(
         v-model="visible"
         transition="false"
         noClickAnimation=false)
-      .mainDialog
+      .dialog-text
         v-row(align='center' justify="center")
-          v-card-title.titleDialog {{dialogTitle}}
-          v-card-text#ModalRulesText {{dialogText}}
-      .btnContainer
-        v-row.dialogWindow(align='center' justify="space-around")
-          v-btn.buttonColor(v-show="secondBtn"
+          v-card-title.dialog-text-title {{dialogTitle}}
+          v-card-text.dialog-text-text {{dialogText}}
+      .dialog-btn
+        v-row.dialog-btn-center(align='center' justify="space-around")
+          v-btn.dialog-btn-center-action(v-show="secondBtn"
                             fab x-large
+                            outlined
                             @click='actionSecondBtn')
             v-icon close
-          v-btn.buttonColor(v-show="firstBtn"
+          v-btn.dialog-btn-center-action(v-show="firstBtn"
                             fab x-large
                             outlined
                             @click='actionFirstBtn')
@@ -23,7 +24,7 @@
 <script>
 
 export default {
-  name: 'window-dialog',
+  name: 'dialog',
   data() {
     return {
     };
@@ -69,35 +70,33 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .dialogstyle{
-    transition none !important
-  }
-  .v-dialog {
-    transition none !important
-  }
-  .mainDialog {
+  .dialog-text {
     position relative
     background-color #fFf
     padding-top 5px
-    padding-bottom 15px
+    padding-bottom 15px;
+      &-title{
+      }
+      &-text{
+      }
   }
-  .row{
-    margin 0 !important;
-    background-color #fff !important;
-  }
-  .buttonColor{
-    background #fff
-    font-size: 20px !important
-    color #FFA967 !important
-  }
-  .dialogWindow{
-    background-color transparent !important
-  }
-  .btnContainer{
+  .dialog-btn {
     width inherit
     position absolute
     right 0
     left 0
-    bottom 75px
+    bottom 75px;
+      &-center {
+        background-color transparent !important;
+        &-action {
+          background #fff
+          font-size: 20px !important
+          color #FFA967 !important
+        }
+      }
+  }
+  .row{
+    margin 0 !important;
+    background-color #fff !important;
   }
 </style>
