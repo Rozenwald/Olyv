@@ -1,3 +1,8 @@
+const getters = {
+  getTitles: (state) => state.titles,
+  getBodyes: (state) => state.bodyes,
+};
+
 const state = {
   titles: {
     error: ['Ошибка', 'Ой...', 'Что-то пошло не так'],
@@ -29,5 +34,6 @@ const state = {
 
 export default {
   namespaced: true,
+  getters,
   state,
 };
