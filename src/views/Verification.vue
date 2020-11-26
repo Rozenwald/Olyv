@@ -1,56 +1,47 @@
 <template lang="pug">
   v-container
     v-row.verification(align='center' justify='center' ref="wrp")
-      .center-wrp
+      v-sheet.center-wrp(elevation="1" v-if="!content")
         .verification-description(
           v-text="description"
-          v-show="user.verification == 'notCompleted' && !src && !comment"
+          v-show="user.verification == 'notCompleted' && !content && !comment"
         )
         .comment-description(
           v-text="comment"
           v-show="comment"
         )
         .await-description(v-text="descriptionAwait" v-show="user.verification == 'await'")
-        v-col.circle-photo-wrp(align='center' v-show="!src && user.verification == 'notCompleted'")
-          v-row.circle-photo(align='center'
-                             justify='center'
-                             class="animate__animated animate__pulse animate__infinite"
-                             @click="choosePhoto"
-                            )
-            svg-icon(name="PhotoCamera" width="37" height="37")
-        .selected-img-wrp(v-show="src")
-          .img-wrp(@click="setMoreActionImg")
-            v-img.img(:src="src" :width="wrpWidth")
-              v-row.more-action-img(align='center' justify='center' v-show="moreActionImg")
-                span(@click="choosePhoto") Загрузить заново
-          v-btn.send-btn(@click="sendData") Отправить
-      input(type="file" @change="handleFileUpload" ref="input")
+        v-row.btn-load-photo-wrp(align="center" justify="center")
+          v-btn.btn-load-photo(rounded @click="actionPhoto") Добавить фото
 
-    v-dialog(v-model="isError")
-      v-row(align='center' justify='center')
-        .dialog_title {{error}}
-      v-btn(@click="error = ''") ок
+      v-sheet.selected-img-wrp(v-else)
+        .img-wrp(@click="setMoreActionImg")
+          v-img.img(:src="content" :width="wrpWidth")
+            v-row.more-action-img(align='center' justify='center' v-show="moreActionImg")
+              span(@click="actionPhoto") Загрузить заново
+        v-btn.send-btn(@click="sendData") Отправить
 
 </template>
 
 <script>
 import axios from 'axios';
-import animate from 'animate.css';
+import { mapActions } from 'vuex';
 import store from '../store';
 import SvgIcon from '../components/SvgIcon.vue';
+import camera from '../scripts/device-modules/camera';
+import file from '../scripts/device-modules/file';
+import dialogWindow from '../scripts/openDialog';
+import logger from '../scripts/logger';
 
 export default {
   name: 'Verification',
   components: {
     SvgIcon,
-    animate,
-    axios,
-    store,
   },
   data: () => ({
     photoIsLoad: false,
     descriptionAwait: 'Ожидание верификации',
-    description: 'Для получения статуса исполнителя необходимо пройти верификацию. Пожалуйста, загрузите фотографию паспорта',
+    description: 'Для получения статуса исполнителя необходимо пройти верификацию. Пожалуйста, загрузите фотографию паспорта.',
     content: '',
     wrpWidth: null,
     moreActionImg: false,
@@ -63,30 +54,56 @@ export default {
         this.moreActionImg = !this.moreActionImg;
       }
     },
-    choosePhoto(event) {
-      event.preventDefault();
-      this.$refs.input.click();
+
+    ...mapActions('actionPhotoDialog', [
+      'setStatus',
+      'setSourceType',
+    ]),
+
+    actionPhoto() {
+      this.setStatus(true);
     },
 
-    handleFileUpload(event) {
-      event.preventDefault();
-      this.selectImage(event.target.files[0]);
+    choosePhoto(innerOptions) {
+      // eslint-disable-next-line no-undef
+      camera.open(innerOptions)
+        .then((imageUrl) => {
+          logger.log(imageUrl);
+          this.content = `data:image/jpeg;base64,${imageUrl}`;
+          const blob = file.dataURLtoBlob(`data:image/jpeg;base64,${imageUrl}`);
+          logger.log(blob);
+          this.file = blob;
+          this.sendData();
+        })
+        .catch((error) => {
+          dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
+          logger.log(error);
+        });
     },
 
-    selectImage(file) {
-      this.file = file;
-      const reader = new FileReader();
-      reader.onload = this.onImageLoad;
-      reader.readAsDataURL(file);
+    route(route) {
+      this.$router.push(route);
     },
 
-    onImageLoad(e) {
-      this.content = e.target.result;
-      const filename = this.file instanceof File ? this.file.name : '';
-      this.$emit('input', filename);
-      this.$emit('image-changed', this.content);
-      this.wrpWidth = this.$refs.wrp.offsetWidth;
-      this.moreActionImg = false;
+    getOptions(srcType) {
+      const options = {
+        // eslint-disable-next-line no-undef
+        destinationType: Camera.DestinationType.DATA_URL,
+        // eslint-disable-next-line no-undef
+        direction: Camera.Direction.BACK,
+      };
+
+      if (srcType === 'gallery') {
+        // eslint-disable-next-line no-undef
+        options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
+      }
+
+      if (srcType === 'camera') {
+        // eslint-disable-next-line no-undef
+        options.sourceType = Camera.PictureSourceType.CAMERA;
+      }
+
+      return options;
     },
 
     sendData() {
@@ -103,11 +120,14 @@ export default {
         })
         .then((response) => (this.checkResponse(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
+          logger.log(error);
+        });
     },
 
     checkResponse(response) {
-      console.log(response);
+      logger.log(response);
       switch (response.data.status) {
         case 'success':
           this.getUserData();
@@ -116,19 +136,21 @@ export default {
           }
           break;
         case 'invalidPhoto':
-          this.error = 'Неверный формат фото';
+          dialogWindow.open('Ошибка', 'Неверный формат фото', true, false);
           break;
         case 'already':
-          this.error = 'Вы уже отправили запрос';
+          dialogWindow.open('Ошибка', 'Вы уже отправили запрос. Пожалуйста, дождитесь ответа службы поддержки', true, false);
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
-          this.error = 'Ошибка';
+          dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
+          logger.log(response.data);
           break;
       }
     },
+
     getUserData() {
       axios
         .post(`${this.$baseUrl}api/v1/private/user`, {
@@ -138,8 +160,12 @@ export default {
         })
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
+          logger.log(error);
+        });
     },
+
     checkUserData(response) {
       switch (response.data.status) {
         case 'success':
@@ -150,30 +176,20 @@ export default {
           this.$store.dispatch('showLoginDialog', true);
           break;
         default:
-          this.error = 'Ошибка';
+          dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
+          logger.log(response.data);
           break;
       }
     },
   },
   computed: {
-    src() {
-      return this.content;
-    },
-
     token() {
       return this.$store.getters.getToken;
     },
 
-    isError: {
-      get() {
-        if (this.error.length) {
-          return true;
-        }
-        return false;
-      },
-      set() {
-        this.error = '';
-      },
+    sourceType: {
+      get() { return this.$store.state.actionPhotoDialog.sourceType; },
+      set(value) { this.setSourceType(value); },
     },
 
     user() {
@@ -182,6 +198,25 @@ export default {
 
     comment() {
       return this.$store.getters.getComment;
+    },
+  },
+  watch: {
+    sourceType() {
+      const options = this.getOptions(this.sourceType);
+
+      if (this.sourceType === 'gallery') {
+        this.choosePhoto(options);
+        logger.log('open gallery');
+      }
+
+      if (this.sourceType === 'camera') {
+        this.choosePhoto(options);
+        logger.log('open camera');
+      }
+
+      if (this.sourceType) {
+        this.sourceType = null;
+      }
     },
   },
   created() {
@@ -209,20 +244,19 @@ export default {
     height 100%
   }
 
-  .circle-photo-wrp{
-    margin-top 46px
+  .center-wrp {
+    padding 12px
   }
 
-  .circle-photo{
-    width 74px
-    height 74px
-    background-color #56D68B
-    border-radius 12vw
+  .btn-load-photo-wrp {
+    margin-top 24px
   }
 
-  input[type="file"]{
-    position absolute
-    left -500px
+  .btn-load-photo {
+    width 50%
+    background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
+    color #FFF
+    text-transform none
   }
 
   .selected-img-wrp{
@@ -237,7 +271,6 @@ export default {
     max-height 300px
     border-bottom none
     line-height 0
-    margin-top 46px
     border-radius: 5px
   }
 
@@ -260,7 +293,6 @@ export default {
     border-top-right-radius 0px
     background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
     color #FFF
-    font-size 13px
   }
 
   .more-action-img{

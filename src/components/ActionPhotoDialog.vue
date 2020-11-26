@@ -7,7 +7,7 @@
       v-row.dialog-main-btn-gallery( @click="openGallery" align="center" v-ripple="{center: true}")
         span Загрузить с устройства
 
-      v-row.dialog-main-btn-camera( @click="openCamera" v-ripple="{ center: true }")
+      v-row.dialog-main-btn-camera( @click="openCamera" align="center" v-ripple="{ center: true }")
         span Сделать фото
 
 </template>
@@ -49,6 +49,7 @@ export default {
 
       .row {
         margin 0
+        height 48px
       }
 
       &-title {

@@ -55,7 +55,9 @@ export default {
     ]),
 
     actionPhoto() {
-      this.setStatus(true);
+      if (this.isChange) {
+        this.setStatus(true);
+      }
     },
 
     choosePhoto(innerOptions) {
@@ -169,15 +171,6 @@ export default {
 
     user() {
       return this.$store.getters.getUser;
-    },
-
-    error: {
-      get() {
-        return this.$store.getters.getError;
-      },
-      set(val) {
-        this.$store.dispatch('setError', val);
-      },
     },
 
     sourceType: {
