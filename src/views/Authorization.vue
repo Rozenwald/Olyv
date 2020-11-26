@@ -1,7 +1,7 @@
 <template lang="pug">
   .auth-container
     v-row.logo(align='center' justify='center')
-      img.logo-icon(src="../assets/main-logo.png", alt="../assets/main-logo.png")
+      img.logo-icon(src="../assets/nedomain-logo.png", alt="../assets/main-logo.png")
 
     v-row.text-field(align='center' justify='center')
           .text-field-center
@@ -21,17 +21,17 @@
               required)
     v-row.button(align='center' justify='center')
       .button-center
-        v-btn.button-center-registration(v-on:click="checkForm") Войти
+        v-btn.button-center-registration(@click="checkForm()") Войти
         v-btn.button-center-go-to-auth(
           @click="route('registration')"
           v-show="!isFocus") Пройти регистрацию
       .button-icon(v-show="!isFocus")
-        v-btn.button-icon-svg-icon(icon @click="getDataVk")
-          svg-icon(name='VK'  width='37' height='37')
+        v-btn.button-icon-svg-icon(icon @click="getDataVk()")
+          svg-icon(name='VK'  width='41' height='41')
         v-btn.button-icon-svg-icon(icon)
-          svg-icon(name='Google'  width='37' height='37')
+          svg-icon(name='Google'  width='41' height='41')
         v-btn.button-icon-svg-icon(icon)
-          svg-icon(name='Facebook'  width='37' height='37')
+          svg-icon(name='Facebook'  width='41' height='41')
 </template>
 <script>
 import axios from 'axios';
@@ -385,7 +385,7 @@ export default {
       }
   }
   .button {
-    width 100%;
+    width 100% !important
     height 34vh;
     margin 0;
     &-center {
@@ -411,11 +411,13 @@ export default {
         }
     }
     &-icon {
-      width 100%;
-      height 40%;
-        &-svg-icon{
-          margin 5px
-        }
+      width 100%
+
+      &-svg-icon{
+        width 41px
+        height 41px
+        margin 5px
+      }
     }
   }
 </style>

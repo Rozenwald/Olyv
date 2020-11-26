@@ -31,15 +31,12 @@
           @click="route('auth')"
           v-show="!isFocus") Уже есть аккаунт
       .button-icon(v-show="!isFocus")
-        svg-icon.button-icon-svg-icon(name='VK'  width='37' height='37')
-        svg-icon.button-icon-svg-icon(name='Google'  width='37' height='37')
-        svg-icon.button-icon-svg-icon(name='Facebook'  width='37' height='37')
-        v-btn.button-icon-svg-icon(icon @click="getDataVk")
-          svg-icon(name='VK'  width='37' height='37')
+        v-btn.button-icon-svg-icon(icon @click="getDataVk()")
+          svg-icon(name='VK'  width='41' height='41')
         v-btn.button-icon-svg-icon(icon)
-          svg-icon(name='Google'  width='37' height='37')
+          svg-icon(name='Google'  width='41' height='41')
         v-btn.button-icon-svg-icon(icon)
-          svg-icon(name='Facebook'  width='37' height='37')
+          svg-icon(name='Facebook'  width='41' height='41')
 </template>
 
 <script>
@@ -442,10 +439,13 @@ export default {
         }
     }
     &-icon {
-      width 100%;
-        &-svg-icon{
-          margin 5px
-        }
+      width 100%
+
+      &-svg-icon{
+        width 41px
+        height 41px
+        margin 5px
+      }
     }
   }
 </style>
