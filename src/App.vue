@@ -1,28 +1,24 @@
 <template lang="pug">
   #app
     v-app
-      window-dialog
       appbar
       transition(:name="transitionName" mode="out-in")
         router-view.router
       bottom-sheet-group
       bottom-navigation
-      login-dialog
-      repeat-login-dialog
       action-photo-dialog
+      window-dialog
 </template>
 
 <script>
 import axios from 'axios';
-import Dialog from './components/Dialog.vue';
+import WindowDialog from './components/Dialog.vue';
 import dialog from './scripts/openDialog';
 import logger from './scripts/logger';
 import Appbar from './components/Appbar.vue';
 import BottomSheetGroup from './components/BottomSheetGroup.vue';
 import BottomNavigation from './components/BottomNavigation.vue';
 import store from './store/index';
-import LoginDialog from './components/LoginDialog.vue';
-import RepeatLoginDialog from './components/RepeatLoginDialog.vue';
 import 'leaflet/dist/leaflet.css';
 import cordova from './plugins/cordova';
 
@@ -33,11 +29,9 @@ export default {
   store,
   axios,
   components: {
-    Dialog,
+    WindowDialog,
     Appbar,
     BottomNavigation,
-    LoginDialog,
-    RepeatLoginDialog,
     BottomSheetGroup,
     ActionPhotoDialog,
   },

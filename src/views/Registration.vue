@@ -34,7 +34,12 @@
         svg-icon.button-icon-svg-icon(name='VK'  width='37' height='37')
         svg-icon.button-icon-svg-icon(name='Google'  width='37' height='37')
         svg-icon.button-icon-svg-icon(name='Facebook'  width='37' height='37')
-      // *добавить диалоги к ошибкам
+        v-btn.button-icon-svg-icon(icon @click="getDataVk")
+          svg-icon(name='VK'  width='37' height='37')
+        v-btn.button-icon-svg-icon(icon)
+          svg-icon(name='Google'  width='37' height='37')
+        v-btn.button-icon-svg-icon(icon)
+          svg-icon(name='Facebook'  width='37' height='37')
 </template>
 
 <script>
