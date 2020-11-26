@@ -25,12 +25,6 @@
                 span(@click="choosePhoto") Загрузить заново
           v-btn.send-btn(@click="sendData") Отправить
       input(type="file" @change="handleFileUpload" ref="input")
-
-    v-dialog(v-model="isError")
-      v-row(align='center' justify='center')
-        .dialog_title {{error}}
-      v-btn(@click="error = ''") ок
-
 </template>
 
 <script>
@@ -38,6 +32,8 @@ import axios from 'axios';
 import animate from 'animate.css';
 import store from '../store';
 import SvgIcon from '../components/SvgIcon.vue';
+import dialog from '../scripts/openDialog';
+import logger from '../scripts/logger';
 
 export default {
   name: 'Verification',
@@ -55,7 +51,7 @@ export default {
     wrpWidth: null,
     moreActionImg: false,
     file: null,
-    error: '',
+    errorBody: '',
   }),
   methods: {
     setMoreActionImg(event) {
@@ -103,7 +99,10 @@ export default {
         })
         .then((response) => (this.checkResponse(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true, true);
+          logger.log(error);
+        });
     },
 
     checkResponse(response) {
@@ -116,16 +115,18 @@ export default {
           }
           break;
         case 'invalidPhoto':
-          this.error = 'Неверный формат фото';
+          this.errorBody = 'Неверный формат фото';
+          dialog.open('Ошибка', this.errorBody, true, false);
           break;
         case 'already':
-          this.error = 'Вы уже отправили запрос';
+          this.errorBody = 'Вы уже отправили запрос';
+          dialog.open('Ошибка', this.errorBody, true, false);
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', this.errorBody, true, false);
           break;
       }
     },
@@ -138,7 +139,10 @@ export default {
         })
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true);
+          logger.log(error);
+        });
     },
     checkUserData(response) {
       switch (response.data.status) {
@@ -150,7 +154,7 @@ export default {
           this.$store.dispatch('showLoginDialog', true);
           break;
         default:
-          this.error = 'Ошибка';
+          this.errorBody = 'Ошибка';
           break;
       }
     },
@@ -162,18 +166,6 @@ export default {
 
     token() {
       return this.$store.getters.getToken;
-    },
-
-    isError: {
-      get() {
-        if (this.error.length) {
-          return true;
-        }
-        return false;
-      },
-      set() {
-        this.error = '';
-      },
     },
 
     user() {

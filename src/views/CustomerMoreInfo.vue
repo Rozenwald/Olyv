@@ -9,6 +9,8 @@
 <script>
 import axios from 'axios';
 import OrderInformation from '../components/customerMoreInfo/OrderInformation.vue';
+import dialog from '../scripts/openDialog';
+import logger from '../scripts/logger';
 
 const BottomField = () => import('../components/customerMoreInfo/BottomField.vue');
 const ExecutorCard = () => import('../components/customerMoreInfo/ExecutorCard.vue');
@@ -41,7 +43,10 @@ export default {
           idOrder: this.order._id,
         })
         .then((response) => (this.checkOrderResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true);
+          logger.log(error);
+        });
       /* eslint-enable no-return-assign */
     },
 
@@ -51,10 +56,10 @@ export default {
           this.$store.dispatch('setRespondedList', response.data.data);
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },

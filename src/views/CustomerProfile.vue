@@ -3,30 +3,34 @@
     user-profile-header
     verification-status
     review
-    exit-button
+    v-btn.exit-btn(block :loading='loading' @click='exit')
+      v-icon(dense color="red") exit_to_app
+      span.text Выход
 </template>
 
 <script>
 import axios from 'axios';
 import store from '../store';
+import auth from '../scripts/auth';
 import Review from '../components/customerProfile/Review.vue';
-import ExitButton from '../components/customerProfile/ExitButton.vue';
 import UserProfileHeader from '../components/customerProfile/UserProfileHeader.vue';
 import VerificationStatus from '../components/customerProfile/VerificationStatus.vue';
+import dialog from '../scripts/openDialog';
+import logger from '../scripts/logger';
 
 export default {
   name: 'CustomerProfile',
   components: {
     UserProfileHeader,
     VerificationStatus,
-    ExitButton,
     Review,
     store,
     axios,
   },
   data() {
     return {
-      error: '',
+      errorBody: '',
+      loading: false,
     };
   },
   methods: {
@@ -42,21 +46,28 @@ export default {
         })
         .then((response) => (this.checkResponse(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', 'Такого пользователя не существует, скорее всего вы еще просто не зарегистрировались', true);
+          logger.log(error);
+        });
     },
     checkResponse(response) {
       console.log(response);
       switch (response.data.status) {
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         case 'success':
           this.$store.dispatch('setComment', response.data.data.comment);
           break;
         default:
-          this.error = 'Ошибка входа';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
+    },
+    exit() {
+      this.loading = true;
+      auth.exit();
     },
   },
   computed: {
@@ -65,6 +76,14 @@ export default {
     },
     user() {
       return this.$store.getters.getUser;
+    },
+  },
+  watch: {
+    token() {
+      if (!this.token) {
+        this.loading = false;
+        this.$router.replace('auth');
+      }
     },
   },
   created() {
@@ -103,5 +122,20 @@ export default {
     border 1px solid #56D68B
     border-radius 100px
     box-shadow none
+  }
+
+  .exit-btn {
+    background-color #FFFFFF !important
+    box-shadow 0 1px 3px rgba(0,0,0,0.12),
+               0 1px 2px rgba(0,0,0,0.12)
+    border-radius 2px
+    text-transform none
+    margin-top 10px
+    margin-bottom 10px
+  }
+
+  .text{
+    color red
+    margin-left 5px
   }
 </style>

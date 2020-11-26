@@ -26,6 +26,8 @@ import SvgIcon from '../components/SvgIcon.vue';
 import LeftMsg from '../components/LeftMsg.vue';
 import RightMsg from '../components/RightMsg.vue';
 import ErrorChatDialog from '../components/ErrorChatDialog.vue';
+import dialog from '../scripts/openDialog';
+import logger from '../scripts/logger';
 
 export default {
   name: 'Chat',
@@ -41,7 +43,6 @@ export default {
       show: false,
       errorMsg: null,
       messages: null,
-      error: '',
       msg: null,
     };
   },
@@ -57,7 +58,10 @@ export default {
         })
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
-        .catch((error) => (console.log(error)));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true);
+          logger.log(error);
+        });
     },
     // установка имени в тулбар
     checkUserData(response) {
@@ -71,11 +75,11 @@ export default {
           }
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
           this.$store.commit('setTitle', 'Чат');
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },
@@ -97,7 +101,10 @@ export default {
         })
         .then((response) => (this.checkGetMessages(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'ошибка, Витя выжил'));
+        .catch((error) => {
+          dialog.open('Ошибка', 'Не удалось получить сообщения', true);
+          logger.log(error);
+        });
     },
 
     // Проверка получения сообщений
@@ -124,7 +131,7 @@ export default {
           console.log(this.messages);
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },
@@ -152,7 +159,7 @@ export default {
       this.handler(this.url);
     },
     errorCheck(error) {
-      console.log(error);
+      logger.log(error);
       setTimeout(this.handler(this.url), 5000);
     },
     // проверка на пустое сообщение
@@ -231,7 +238,7 @@ export default {
           break;
         default:
           this.errorIcon();
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },
@@ -250,7 +257,10 @@ export default {
         })
         .then((response) => (this.checkMoreMessages(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'ошибка, Витя выжил'));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true);
+          logger.log(error);
+        });
     },
 
     // Проверка получения доп.сообщений
@@ -275,7 +285,7 @@ export default {
         case 'notExist':
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },

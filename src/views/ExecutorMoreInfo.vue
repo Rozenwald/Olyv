@@ -12,6 +12,8 @@ import UserCard from '../components/executorMoreInfo/UserCard.vue';
 import BottomField from '../components/executorMoreInfo/BottomField.vue';
 import AddressField from '../components/executorMoreInfo/AddressField.vue';
 import OrderInformation from '../components/executorMoreInfo/OrderInformation.vue';
+import dialog from '../scripts/openDialog';
+import logger from '../scripts/logger';
 
 export default {
   name: 'moreInfoOrder',
@@ -52,7 +54,10 @@ export default {
         })
         .then((response) => (this.checkCustomerUserData(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка загрузки данных'));
+        .catch((error) => {
+          dialog.open('Ошибка', 'Не получилось загрузить данные', true);
+          logger.log(error);
+        });
     },
 
     getMyResponseOrder() {
@@ -67,11 +72,24 @@ export default {
           id: this.order._id,
         })
         .then((response) => (this.checkMyResponseOrder(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', 'Не получилось загрузить данные', true);
+          logger.log(error);
+        });
       /* eslint-enable no-return-assign */
     },
     checkMyResponseOrder(response) {
-      console.log(response);
+      switch (response.data.status) {
+        case 'success':
+          break;
+        case 'notAuthenticate':
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
+          break;
+        default:
+          this.errorBody = 'Не удалось загрузить данные';
+          dialog.open('Ошибка', this.errorBody, true, false);
+          break;
+      }
     },
 
     checkCustomerUserData(response) {
@@ -80,10 +98,11 @@ export default {
           this.customerUser = response.data.data;
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка загрузки данных';
+          this.errorBody = 'Ошибка загрузки данных';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },

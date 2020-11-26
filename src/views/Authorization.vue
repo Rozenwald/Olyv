@@ -1,7 +1,7 @@
 <template lang="pug">
   .auth-container
     v-row.logo(align='center' justify='center')
-      img.logo-icon(src="../assets/main-logo.png", alt="alt")
+      img.logo-icon(src="../assets/main-logo.png", alt="../assets/main-logo.png")
 
     v-row.text-field(align='center' justify='center')
           .text-field-center
@@ -39,11 +39,11 @@ import SvgIcon from '../components/SvgIcon.vue';
 import nativeStorage from '../scripts/nativeStorage';
 // eslint-disable-next-line import/no-cycle
 import cordova from '../plugins/cordova';
-import dialog from '../scripts/openDialog';
 import clientVk from '../scripts/vk/client';
 import authVk from '../scripts/vk/auth';
-import logger from '../scripts/logger';
 import auth from '../scripts/auth';
+import dialog from '../scripts/openDialog';
+import logger from '../scripts/logger';
 
 export default {
   name: 'Authorization',
@@ -309,13 +309,15 @@ export default {
 
     chatToken() {
       if (this.chatToken && this.isAddAppToken) {
-        logger.log('good reg');
+        logger.log('good auth');
+        this.$router.replace('spisokZakazov');
       }
     },
 
     isAddAppToken() {
       if (this.chatToken && this.isAddAppToken) {
-        logger.log('good reg');
+        logger.log('good auth');
+        this.$router.replace('spisokZakazov');
       }
     },
   },
