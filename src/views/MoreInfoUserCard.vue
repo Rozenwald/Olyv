@@ -39,6 +39,8 @@
 import { SwipeList, SwipeOut } from 'vue-swipe-actions';
 import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
+import dialog from '../scripts/openDialog';
+import logger from '../scripts/logger';
 
 export default {
   name: 'userCard',
@@ -101,7 +103,9 @@ export default {
         })
         .then((response) => (this.checkAgreeResponse(response)))
         // eslint-disable-next-line no-return-assign
-        .catch((error) => (console.log(error)));
+        .catch((error) => {
+          logger.log(error);
+        });
     },
     checkAgreeResponse(response) {
       switch (response.data.status) {
@@ -112,7 +116,7 @@ export default {
           this.$store.dispatch('showRepeatLoginDialog', true);
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },
@@ -126,7 +130,9 @@ export default {
         })
         .then((response) => (this.checkExecutorData(response)))
         // eslint-disable-next-line no-return-assign
-        .catch((error) => (console.log(error)));
+        .catch((error) => {
+          logger.log(error);
+        });
     },
 
     checkExecutorData(response) {
@@ -135,10 +141,10 @@ export default {
           this.executorData = response.data.data;
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },
@@ -147,7 +153,6 @@ export default {
     token() {
       return this.$store.getters.getToken;
     },
-
     photo() {
       if (!this.executorData.photo) {
         return null;

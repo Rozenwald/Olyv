@@ -12,6 +12,8 @@
 
 <script>
 import axios from 'axios';
+import dialog from '../../scripts/openDialog';
+import logger from '../../scripts/logger';
 
 export default {
   name: 'bottom-field',
@@ -28,7 +30,10 @@ export default {
           comment: this.order.cost,
         })
         .then((response) => (this.checkOrderResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true);
+          logger.log(error);
+        });
       /* eslint-enable no-underscore-dangle */
       /* eslint-enable no-return-assign */
     },
@@ -47,7 +52,10 @@ export default {
           id: this.order.idResponse,
         })
         .then((response) => (this.checkOrderResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true);
+          logger.log(error);
+        });
       /* eslint-enable no-return-assign */
     },
 
@@ -62,7 +70,10 @@ export default {
           idResponse: this.order.idResponse,
         })
         .then((response) => (this.checkOrderResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true);
+          logger.log(error);
+        });
       /* eslint-enable no-underscore-dangle */
       /* eslint-enable no-return-assign */
     },
@@ -78,10 +89,10 @@ export default {
           }
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },
@@ -107,7 +118,7 @@ export default {
           this.completeOrder();
           break;
         default:
-          this.error = 'Неизвестная ошибка';
+          dialog.open('Ошибка', '', true, false);
       }
     },
 
@@ -126,7 +137,7 @@ export default {
           this.goChat();
           break;
         default:
-          this.error = 'Неизвестная ошибка';
+          dialog.open('Ошибка', '', true, false);
       }
     },
   },

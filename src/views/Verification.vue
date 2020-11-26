@@ -46,7 +46,7 @@ export default {
     wrpWidth: null,
     moreActionImg: false,
     file: null,
-    error: '',
+    errorBody: '',
   }),
   methods: {
     setMoreActionImg(event) {
@@ -142,7 +142,7 @@ export default {
           dialogWindow.open('Ошибка', 'Вы уже отправили запрос. Пожалуйста, дождитесь ответа службы поддержки', true, false);
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialogWindow.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
           dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);

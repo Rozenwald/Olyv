@@ -34,6 +34,8 @@
 
 <script>
 import axios from 'axios';
+import dialog from '../../scripts/openDialog';
+import logger from '../../scripts/logger';
 
 export default {
   name: 'popup-menu-profile',
@@ -58,14 +60,17 @@ export default {
         })
         .then((response) => (this.checkStatusResponse(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true);
+          logger.log(error);
+        });
     },
 
     checkStatusResponse(response) {
       if (response.data.status === 'success') {
         this.verificationStatus = response.data.data.verification;
       } else {
-        this.error = 'Ошибка';
+        dialog.open('Ошибка', '', true, false);
       }
     },
 

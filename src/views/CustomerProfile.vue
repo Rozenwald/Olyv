@@ -15,6 +15,8 @@ import auth from '../scripts/auth';
 import Review from '../components/customerProfile/Review.vue';
 import UserProfileHeader from '../components/customerProfile/UserProfileHeader.vue';
 import VerificationStatus from '../components/customerProfile/VerificationStatus.vue';
+import dialog from '../scripts/openDialog';
+import logger from '../scripts/logger';
 
 export default {
   name: 'CustomerProfile',
@@ -27,7 +29,7 @@ export default {
   },
   data() {
     return {
-      error: '',
+      errorBody: '',
       loading: false,
     };
   },
@@ -44,23 +46,25 @@ export default {
         })
         .then((response) => (this.checkResponse(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', 'Такого пользователя не существует, скорее всего вы еще просто не зарегистрировались', true);
+          logger.log(error);
+        });
     },
     checkResponse(response) {
       console.log(response);
       switch (response.data.status) {
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         case 'success':
           this.$store.dispatch('setComment', response.data.data.comment);
           break;
         default:
-          this.error = 'Ошибка входа';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },
-
     exit() {
       this.loading = true;
       auth.exit();
