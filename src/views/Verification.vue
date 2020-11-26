@@ -30,7 +30,7 @@
 <script>
 import axios from 'axios';
 import { mapActions } from 'vuex';
-// import store from '../store';
+import store from '../store';
 import SvgIcon from '../components/SvgIcon.vue';
 import camera from '../scripts/device-modules/camera';
 import file from '../scripts/device-modules/file';
@@ -150,7 +150,7 @@ export default {
           break;
         default:
           dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
-          logger.log(response.data);
+          logger.log(response);
           break;
       }
     },
@@ -175,14 +175,14 @@ export default {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
           this.content = '';
-          this.router.back();
+          this.$router.back();
           break;
         case 'notAuthenticate':
           this.$store.dispatch('showLoginDialog', true);
           break;
         default:
           dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
-          logger.log(response.data);
+          logger.log(response);
           break;
       }
     },
@@ -227,14 +227,14 @@ export default {
   created() {
     this.$store.commit('setTitle', 'Верификация');
   },
-  // beforeRouteEnter(to, from, next) {
-  // if (!store.getters.isAuth) {
-  //   next(from.name);
-  //   this.$store.dispatch('showLoginDialog', true);
-  // } else {
-  //   next();
-  // }
-  // },
+  beforeRouteEnter(to, from, next) {
+    if (!store.getters.isAuth) {
+      next(from.name);
+      this.$store.dispatch('showLoginDialog', true);
+    } else {
+      next();
+    }
+  },
 };
 </script>
 
