@@ -27,6 +27,8 @@ import axios from 'axios';
 import store from '../store';
 import SvgIcon from '../components/SvgIcon.vue';
 import Avatar from '../components/Avatar.vue';
+import dialog from '../scripts/openDialog';
+import logger from '../scripts/logger';
 
 export default {
   name: 'SetUserData',
@@ -42,17 +44,19 @@ export default {
       windowHeight: null,
       firstName: null,
       lastName: null,
+      errorBody: '',
     };
   },
   methods: {
     checkForm() {
       if (this.firstName == null) {
-        this.error = 'Введите имя';
+        this.errorBody = 'Введите имя';
         return undefined;
       }
 
       if (this.firstName.length === 0) {
-        this.error = 'Введите имя';
+        this.errorBody = 'Введите имя';
+        dialog.open('Ошибка', this.errorBody, true, false);
         return undefined;
       }
 
@@ -71,7 +75,10 @@ export default {
         })
         .then((response) => (this.checkResponse(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', 'Такого пользователя не существует, скорее всего вы еще просто не зарегистрировались', true, true);
+          logger.log(error);
+        });
     },
 
     checkResponse(response) {
@@ -80,10 +87,10 @@ export default {
           this.getUserData();
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },
@@ -97,7 +104,10 @@ export default {
         })
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', 'Такого пользователя не существует, скорее всего вы еще просто не зарегистрировались', true, true);
+          logger.log(error);
+        });
     },
 
     checkUserData(response) {
@@ -107,10 +117,10 @@ export default {
           this.$router.back();
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },
@@ -156,15 +166,6 @@ export default {
 
     hasData() {
       return this.$store.getters.hasData;
-    },
-
-    error: {
-      get() {
-        return this.$store.getters.getError;
-      },
-      set(val) {
-        this.$store.dispatch('setError', val);
-      },
     },
   },
   watch: {

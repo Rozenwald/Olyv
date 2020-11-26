@@ -1,7 +1,6 @@
 <template lang="pug">
     v-container
       v-row.chips(align='center' justify='space-around' )
-
         v-chip-group(v-model="type" mandatory active-class="active-chip")
           v-chip(value="all"
                 outlined
@@ -11,7 +10,6 @@
                 outlined
                 color="#56d67b"
                 text-color="#000") В процессе
-
       .await-order-list(v-show="type=='all'")
         OrderCard1(
           v-for='order in awaitOrders'
@@ -32,6 +30,8 @@
 import axios from 'axios';
 import store from '../store';
 import OrderCard1 from './OrderCard1.vue';
+import dialog from '../scripts/openDialog';
+import logger from '../scripts/logger';
 
 export default {
   name: 'moiZakazi',
@@ -57,7 +57,10 @@ export default {
           status: 'await',
         })
         .then((response) => (this.checkResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true);
+          logger.log(error);
+        });
       /* eslint-enable no-return-assign */
     },
     checkResponse(response) {
@@ -67,10 +70,10 @@ export default {
           this.awaitOrders = response.data.data;
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },
@@ -84,7 +87,10 @@ export default {
           status: 'process',
         })
         .then((response) => (this.checkProcessOrdersResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true);
+          logger.log(error);
+        });
       /* eslint-enable no-return-assign */
     },
     checkProcessOrdersResponse(response) {
@@ -93,10 +99,10 @@ export default {
           this.processOrders = response.data.data.reverse();
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },

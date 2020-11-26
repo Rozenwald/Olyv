@@ -9,6 +9,8 @@
 
 <script>
 import axios from 'axios';
+import dialog from '../../scripts/openDialog';
+import logger from '../../scripts/logger';
 
 export default {
   name: 'bottom-field',
@@ -23,7 +25,10 @@ export default {
           id: this.order._id,
         })
         .then((response) => (this.checkResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true);
+          logger.log(error);
+        });
       /* eslint-enable no-return-assign */
     },
 
@@ -39,10 +44,10 @@ export default {
           this.$router.back();
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },

@@ -25,6 +25,8 @@ import axios from 'axios';
 import { SwipeList, SwipeOut } from 'vue-swipe-actions';
 import 'vue-swipe-actions/dist/vue-swipe-actions.css';
 import UserCard from './UserCard.vue';
+import dialog from '../../scripts/openDialog';
+import logger from '../../scripts/logger';
 
 export default {
   name: 'swipe-cards',
@@ -60,7 +62,10 @@ export default {
         })
         .then((response) => (this.checkAgreeResponse(response, idUserResponse)))
         // eslint-disable-next-line no-return-assign
-        .catch((error) => (console.log(error)));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true);
+          logger.log(error);
+        });
     },
 
     checkAgreeResponse(response, idUserResponse) {
@@ -73,10 +78,10 @@ export default {
           this.$store.dispatch('setMyOrder', newOrder);
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },

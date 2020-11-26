@@ -25,6 +25,8 @@
 <script>
 import axios from 'axios';
 import Avatar from '../Avatar.vue';
+import dialog from '../../scripts/openDialog';
+import logger from '../../scripts/logger';
 
 export default {
   name: 'executor-card',
@@ -53,7 +55,10 @@ export default {
         })
         .then((response) => (this.checkExecutorData(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true);
+          logger.log(error);
+        });
     },
 
     checkExecutorData(response) {
@@ -62,10 +67,10 @@ export default {
           this.executorData = response.data.data;
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },

@@ -12,7 +12,6 @@
           close
           @click:close="remove(item)")
           strong {{ item }}&nbsp;
-
     .text-message-wrp(align='center')
       v-textarea.text-message.ma-0(
           v-model="keyword"
@@ -30,6 +29,8 @@
 <script>
 import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
+import dialog from '../scripts/openDialog';
+import logger from '../scripts/logger';
 
 export default {
   name: 'keyWords',
@@ -40,6 +41,7 @@ export default {
       keyword: null,
       date: null,
       id: null,
+      errorBody: '',
     };
   },
   components: {
@@ -56,7 +58,10 @@ export default {
           date: this.date,
         })
         .then((response) => (this.checkKeyWord(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          dialog.open('Ошибка', '', true);
+          logger.log(error);
+        });
       /* eslint-enable no-return-assign */
     },
     checkKeyWord(response) {
@@ -73,10 +78,10 @@ export default {
           this.getKeyWord();
           break;
         case 'notExist':
-          console.log('notExist');
+          dialog.open('Ошибка', 'notExist', true, false);
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },
@@ -110,14 +115,13 @@ export default {
           this.chips.unshift(response.data.data.text);
           this.keywords.unshift(response.data.data);
           break;
-        case 'notSuccess':
-          this.error = 'Ошибка notSuccess';
-          break;
         case 'notExist':
-          this.error = 'Ошибка notExist';
+          this.errorBody = 'Не найдено';
+          dialog.open('Ошибка', this.errorBody, true, false);
           break;
         default:
-          this.error = 'Ошибка';
+          this.errorBody = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },
@@ -134,7 +138,10 @@ export default {
             id,
           })
           .then((response) => (this.checkRemove(response, item)))
-          .catch(() => (this.error = 'Ошибка'));
+          .catch((error) => {
+            dialog.open('Ошибка', 'Не удалось удалить слово', true);
+            logger.log(error);
+          });
         /* eslint-enable no-return-assign */
       } else {
         this.chips.splice(this.chips.indexOf(item), 1);
@@ -149,13 +156,14 @@ export default {
           this.chips = [...this.chips];
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
           break;
         case 'notExist':
-          this.error = 'Ошибка notExist';
+          this.errorBody = 'Не найдено';
+          dialog.open('Ошибка', this.errorBody, true, false);
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open('Ошибка', '', true, false);
           break;
       }
     },
