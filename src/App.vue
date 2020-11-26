@@ -1,7 +1,6 @@
 <template lang="pug">
   #app
     v-app
-      window-dialog
       appbar
       transition(:name="transitionName" mode="out-in")
         router-view.router
@@ -10,6 +9,7 @@
       login-dialog
       repeat-login-dialog
       action-photo-dialog
+      dialog
 </template>
 
 <script>
@@ -21,8 +21,6 @@ import Appbar from './components/Appbar.vue';
 import BottomSheetGroup from './components/BottomSheetGroup.vue';
 import BottomNavigation from './components/BottomNavigation.vue';
 import store from './store/index';
-import LoginDialog from './components/LoginDialog.vue';
-import RepeatLoginDialog from './components/RepeatLoginDialog.vue';
 import 'leaflet/dist/leaflet.css';
 import cordova from './plugins/cordova';
 
