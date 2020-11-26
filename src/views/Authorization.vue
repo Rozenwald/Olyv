@@ -373,11 +373,11 @@ export default {
           }
           &-rules-text {
             margin-top 20px
-            font-size 14px
+            font-size 13px
             word-break: normal
           }
           &-rules-button {
-            font-size 14px
+            font-size 13px
             margin-top 5px
             text-decoration:underline
             word-break: normal
@@ -390,9 +390,8 @@ export default {
     margin 0;
     &-center {
       width 100%;
-      height 60%;
         &-registration {
-          height 35% !important
+          height 56px !important
           color #56D68B
           font-size: 13px
           background: transparent
@@ -401,7 +400,7 @@ export default {
           width 72%
         }
         &-go-to-auth {
-          height 35% !important
+          height 56px !important
           margin-top 10px
           color #FFA967
           font-size: 13px
@@ -416,7 +415,6 @@ export default {
       height 40%;
         &-svg-icon{
           margin 5px
-          padding 0
         }
     }
   }
