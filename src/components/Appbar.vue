@@ -1,15 +1,17 @@
+// Стили написаны по код стайлу
+// Ошибки описывать здесь не нужно
 <template lang="pug">
-  v-app-bar#toolbar(app v-show="showAppbar" fixed dense)
-    v-btn.back-step-btn(
+  v-app-bar.toolbar(app v-show="showAppbar" fixed dense)
+    v-btn.toolbar-back-btn(
         v-if="showBackbtn"
         depressed fab small
         @click="stepback()")
       v-icon(color="white") arrow_back
     v-row(align='center', justify='center')
-      .toolbar-avatar-wrp(v-show="currentRouteName == 'chat'")
+      .toolbar-avatar(v-show="currentRouteName == 'chat'")
         avatar(size="36" color="#AEAEAE" :src="photo")
-      .toolbar-title-wrapper
-        .toolbar-title {{title}}
+      .toolbar-title
+        .toolbar-title-text {{title}}
 </template>
 
 <script>
@@ -26,7 +28,6 @@ export default {
     },
     showAppbar() {
       if (this.currentRouteName === 'auth' || this.currentRouteName === 'registration') return false;
-
       return true;
     },
     showBackbtn() {
@@ -81,23 +82,23 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .back-step-btn{
+  .toolbar {
+    background-color #56D68B !important
+    box-shadow 0px 2px 2px rgba(0, 0, 0, 0.05) !important
+
+    &-back-btn {
     position absolute
     background-color transparent !important
-  }
-  #toolbar{
-    background-color #56D68B
-    box-shadow 0px 2px 2px rgba(0, 0, 0, 0.05)
-  }
-
-  .toolbar-title-wrapper{
-    font-style normal
-    font-weight 600
-    font-size 17px
-    color #FFFFFF
-  }
-
-  .toolbar-avatar-wrp {
-    margin-right 12px
+    }
+    &-avatar {
+      margin-right 12px
+    }
+    &-title{
+      font-style normal
+      font-weight 600
+      font-size 17px
+      color #FFFFFF
+      &-text{}
+    }
   }
 </style>

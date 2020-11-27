@@ -323,6 +323,15 @@ export default {
   },
   created() {
     auth.exit();
+
+    this.windowHeight = window.innerHeight;
+    window.addEventListener('resize', () => {
+      if (window.innerHeight < this.windowHeight) {
+        this.isFocus = true;
+      } else {
+        this.isFocus = false;
+      }
+    });
   },
   mounted() {
     this.$store.dispatch('showAppbar', false);
