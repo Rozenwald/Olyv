@@ -17,6 +17,9 @@ import UserProfileHeader from '../components/customerProfile/UserProfileHeader.v
 import VerificationStatus from '../components/customerProfile/VerificationStatus.vue';
 import dialog from '../scripts/openDialog';
 import logger from '../scripts/logger';
+import dialogMessages from '../scripts/dialogMessages';
+// eslint-disable-next-line import/no-cycle
+import router from '../router';
 
 export default {
   name: 'CustomerProfile',
@@ -47,21 +50,24 @@ export default {
         .then((response) => (this.checkResponse(response)))
         // eslint-disable-next-line no-return-assign
         .catch((error) => {
-          dialog.open('Ошибка', 'Такого пользователя не существует, скорее всего вы еще просто не зарегистрировались', true);
           logger.log(error);
         });
     },
     checkResponse(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'notAuthenticate':
-          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         case 'success':
           this.$store.dispatch('setComment', response.data.data.comment);
           break;
         default:
-          dialog.open('Ошибка', '', true, false);
           break;
       }
     },
@@ -96,7 +102,13 @@ export default {
   beforeRouteEnter(to, from, next) {
     if (!store.getters.isAuth) {
       next(from.name);
-      store.dispatch('showLoginDialog', true);
+      dialog.open(
+        dialogMessages.getTitle('error'),
+        dialogMessages.getBody('notAuthentucate'),
+        true,
+        true,
+        router.push('auth'),
+      );
     } else {
       next();
     }

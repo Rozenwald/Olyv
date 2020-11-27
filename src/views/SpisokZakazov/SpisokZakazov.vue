@@ -90,6 +90,9 @@ export default {
     width 100%
     z-index 2
     left 0
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.1),
+                0px 1px 1px 0px rgba(0, 0, 0, 0.11),
+                0px 1px 3px 0px rgba(0, 0, 0, 0.01) !important;
   }
 
   .active-chip {

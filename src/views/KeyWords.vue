@@ -31,6 +31,7 @@ import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
 import dialog from '../scripts/openDialog';
 import logger from '../scripts/logger';
+import dialogMessages from '../scripts/dialogMessages';
 
 export default {
   name: 'keyWords',
@@ -59,13 +60,17 @@ export default {
         })
         .then((response) => (this.checkKeyWord(response)))
         .catch((error) => {
-          dialog.open('Ошибка', '', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
           logger.log(error);
         });
       /* eslint-enable no-return-assign */
     },
     checkKeyWord(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.date = new Date(response.data.data[response.data.data.length - 1].createDate);
@@ -74,14 +79,19 @@ export default {
             this.chips.push(`${element.text}`);
             this.keywords.push(element);
           });
-          console.log(this.keywords);
           this.getKeyWord();
           break;
-        case 'notExist':
-          dialog.open('Ошибка', 'notExist', true, false);
+        case 'notAuthenticate':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialog.open('Ошибка', '', true, false);
+          logger.log(response);
           break;
       }
     },
@@ -106,29 +116,52 @@ export default {
         })
         .then((response) => (this.checkSendKeyWord(response)))
         // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch(() => {
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('addKeyWordError'),
+            true,
+            false,
+          );
+        });
     },
     checkSendKeyWord(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.chips.unshift(response.data.data.text);
           this.keywords.unshift(response.data.data);
           break;
         case 'notExist':
-          this.errorBody = 'Не найдено';
-          dialog.open('Ошибка', this.errorBody, true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('addKeyWordError'),
+            true,
+            false,
+          );
+          break;
+        case 'notAuthenticate':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          this.errorBody = 'Ошибка';
-          dialog.open('Ошибка', '', true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('addKeyWordError'),
+            true,
+            false,
+          );
           break;
       }
     },
     remove(item) {
       /* eslint-disable no-underscore-dangle */
       const id = this.keywords[this.chips.indexOf(item)]._id;
-      console.log(id);
+
       if (id !== undefined) {
         /* eslint-disable no-return-assign */
         axios
@@ -139,7 +172,12 @@ export default {
           })
           .then((response) => (this.checkRemove(response, item)))
           .catch((error) => {
-            dialog.open('Ошибка', 'Не удалось удалить слово', true);
+            dialog.open(
+              dialogMessages.getTitle('error'),
+              dialogMessages.getBody('removeKeyWordError'),
+              true,
+              false,
+            );
             logger.log(error);
           });
         /* eslint-enable no-return-assign */
@@ -156,15 +194,21 @@ export default {
           this.chips = [...this.chips];
           break;
         case 'notAuthenticate':
-          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
-          break;
-        case 'notExist':
-          this.errorBody = 'Не найдено';
-          dialog.open('Ошибка', this.errorBody, true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialog.open('Ошибка', '', true, false);
-          break;
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('removeKeyWordError'),
+            true,
+            false,
+          );
       }
     },
   },

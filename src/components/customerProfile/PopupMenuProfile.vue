@@ -34,7 +34,6 @@
 
 <script>
 import axios from 'axios';
-import dialog from '../../scripts/openDialog';
 import logger from '../../scripts/logger';
 
 export default {
@@ -59,9 +58,7 @@ export default {
           token: this.token,
         })
         .then((response) => (this.checkStatusResponse(response)))
-        // eslint-disable-next-line no-return-assign
         .catch((error) => {
-          dialog.open('Ошибка', '', true);
           logger.log(error);
         });
     },
@@ -70,7 +67,7 @@ export default {
       if (response.data.status === 'success') {
         this.verificationStatus = response.data.data.verification;
       } else {
-        dialog.open('Ошибка', '', true, false);
+        logger.log(response);
       }
     },
 

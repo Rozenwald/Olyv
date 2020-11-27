@@ -11,15 +11,14 @@ v-dialog(v-model="showDialog")
 
 <script>
 import axios from 'axios';
-import dialogWindow from '../scripts/openDialog';
 import logger from '../scripts/logger';
+import dialog from '../scripts/openDialog';
+import dialogMessages from '../scripts/dialogMessages';
 
 export default {
   name: 'error-chat-dialog',
   methods: {
     repeatSendMessage() {
-      console.log(this.msg);
-      console.log(this.errorNumber);
       this.errorMsg = {
         element: this.errorNumber,
         show: false,
@@ -39,17 +38,28 @@ export default {
         });
     },
     checkAddMessage(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setErrorShow', this.errorMsg);
           break;
         case 'notAuthenticate':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         case 'notExist':
           break;
         default:
-          dialogWindow.open('Ошибка', '', true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
           break;
       }
     },
