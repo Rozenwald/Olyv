@@ -26,6 +26,8 @@
 <script>
 import axios from 'axios';
 import { mapActions } from 'vuex';
+// eslint-disable-next-line import/no-cycle
+import router from '../router';
 import store from '../store';
 import SvgIcon from '../components/SvgIcon.vue';
 import Avatar from '../components/Avatar.vue';
@@ -33,6 +35,7 @@ import dialog from '../scripts/openDialog';
 import logger from '../scripts/logger';
 import camera from '../scripts/device-modules/camera';
 import file from '../scripts/device-modules/file';
+import dialogMessages from '../scripts/dialogMessages';
 
 export default {
   name: 'SetUserData',
@@ -44,24 +47,20 @@ export default {
   },
   data() {
     return {
-      isFocus: false,
-      windowHeight: null,
       firstName: null,
       lastName: null,
-      errorBody: '',
       file: null,
     };
   },
   methods: {
     checkForm() {
       if (this.firstName == null) {
-        this.errorBody = 'Введите имя';
+        this.$router.back();
         return undefined;
       }
 
       if (this.firstName.length === 0) {
-        this.errorBody = 'Введите имя';
-        dialog.open('Ошибка', this.errorBody, true, false);
+        this.$router.back();
         return undefined;
       }
 
@@ -81,7 +80,12 @@ export default {
         .then((response) => (this.checkResponse(response)))
         // eslint-disable-next-line no-return-assign
         .catch((error) => {
-          dialog.open('Ошибка', 'Такого пользователя не существует, скорее всего вы еще просто не зарегистрировались', true, true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
           logger.log(error);
         });
     },
@@ -92,10 +96,22 @@ export default {
           this.getUserData();
           break;
         case 'notAuthenticate':
-          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialog.open('Ошибка', '', true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(response);
           break;
       }
     },
@@ -110,7 +126,12 @@ export default {
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
         .catch((error) => {
-          dialog.open('Ошибка', 'Такого пользователя не существует, скорее всего вы еще просто не зарегистрировались', true, true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
           logger.log(error);
         });
     },
@@ -123,10 +144,22 @@ export default {
           this.file = null;
           break;
         case 'notAuthenticate':
-          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialog.open('Ошибка', '', true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(response);
           break;
       }
     },
@@ -168,7 +201,12 @@ export default {
         .then((response) => (this.checkPhoto(response)))
         // eslint-disable-next-line no-return-assign
         .catch((error) => {
-          dialog.open('Ошибка', 'Не удалось загрузить фото попробуйте позже', true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorPhoto'),
+            true,
+            false,
+          );
           logger.log(error);
         });
     },
@@ -180,14 +218,29 @@ export default {
           this.getUserData();
           break;
         case 'invalidPhoto':
-          dialog.open('Ошибка', 'Неверный формат фото', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidPhoto'),
+            true,
+            false,
+          );
           break;
         case 'notAuthenticate':
-          dialog.open('Ошибка', 'Авторизируйтесь, чтобы пользоваться данным функционалом', true, true, this.route('auth'));
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialog.open('Ошибка', 'Ошибка загрузки фото', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorPhoto'),
+            true,
+            false,
+          );
           break;
       }
     },
@@ -218,15 +271,6 @@ export default {
     this.lastName = this.user.lastname;
 
     this.$store.commit('setTitle', 'Личный кабинет');
-
-    this.windowHeight = window.innerHeight;
-    window.addEventListener('resize', () => {
-      if (window.innerHeight < this.windowHeight) {
-        this.isFocus = true;
-      } else {
-        this.isFocus = false;
-      }
-    });
   },
   computed: {
     isAuth() {
@@ -241,9 +285,11 @@ export default {
       if (!this.hasData) {
         return null;
       }
+
       if (!this.user.photo.length) {
         return null;
       }
+
       const url = this.user.photo[this.user.photo.length - 1].urlMin.substr(1);
       return this.$baseUrlNoPort + url;
     },
@@ -283,7 +329,13 @@ export default {
   beforeRouteEnter(to, from, next) {
     if (!store.getters.isAuth) {
       next(from.name);
-      store.dispatch('showLoginDialog', true);
+      dialog.open(
+        dialogMessages.getTitle('needToAuth'),
+        dialogMessages.getBody('needToAuth'),
+        true,
+        false,
+        router.push('auth'),
+      );
     } else {
       next();
     }

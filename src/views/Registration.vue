@@ -48,6 +48,7 @@ import cordova from '../plugins/cordova';
 import logger from '../scripts/logger';
 import dialog from '../scripts/openDialog';
 import auth from '../scripts/auth';
+import dialogMessages from '../scripts/dialogMessages';
 
 export default {
   name: 'Registration',
@@ -62,13 +63,17 @@ export default {
       password: null,
       isFocus: false,
       windowHeight: null,
-      errorBody: 'Ошибка регистрации. Повторите попытку позже',
       isAddAppToken: false,
     };
   },
   methods: {
     open() {
-      dialog.open('Правила и политика конфиденциальности', '', true, false);
+      dialog.open(
+        dialogMessages.getTitle('rules'),
+        '',
+        true,
+        false,
+      );
     },
 
     route(routeName) {
