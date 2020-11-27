@@ -82,17 +82,32 @@ export default {
 
     checkForm(e) {
       if (!this.validEmail(this.email)) {
-        dialog.open('Ошибка', 'Некоректный email', true, false);
+        dialog.open(
+          dialogMessages.getTitle('error'),
+          dialogMessages.getBody('invalidEmail'),
+          true,
+          false,
+        );
         return null;
       }
 
       if (!this.password) {
-        dialog.open('Ошибка', 'Пароль должен содержать больше 6 символов', true, false);
+        dialog.open(
+          dialogMessages.getTitle('error'),
+          dialogMessages.getBody('invalidPassword'),
+          true,
+          false,
+        );
         return null;
       }
 
       if (this.password.length < 6) {
-        dialog.open('Ошибка', 'Пароль должен содержать больше 6 символов', true, false);
+        dialog.open(
+          dialogMessages.getTitle('error'),
+          dialogMessages.getBody('invalidPassword'),
+          true,
+          false,
+        );
         return null;
       }
 
@@ -115,7 +130,12 @@ export default {
         })
         .then((response) => (this.checkSignUp(response)))
         .catch((error) => {
-          dialog.open('Ошибка', this.errorBody, true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorRegistration'),
+            true,
+            false,
+          );
           logger.log(error);
         });
     },
@@ -123,19 +143,39 @@ export default {
     checkSignUp(response) {
       switch (response.data.status) {
         case 'invalidEmail':
-          dialog.open('Ошибка', 'Некоректный email', true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidEmail'),
+            true,
+            false,
+          );
           break;
         case 'invalidPassword':
-          dialog.open('Ошибка', 'Пароль должен содержать больше 6 символов', true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidPassword'),
+            true,
+            false,
+          );
           break;
         case 'existEmail':
-          dialog.open('Ошибка', 'Данная почта уже зарегистрирована', true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('existEmail'),
+            true,
+            false,
+          );
           break;
         case 'success':
           this.signIn();
           break;
         default:
-          dialog.open('Ошибка', this.errorBody, true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorRegistration'),
+            true,
+            false,
+          );
           logger.log(response);
           break;
       }
@@ -149,7 +189,12 @@ export default {
         })
         .then((response) => (this.checkSignIn(response)))
         .catch((error) => {
-          dialog.open('Ошибка', this.errorBody, true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorRegistration'),
+            true,
+            false,
+          );
           logger.log(error);
         });
     },
@@ -161,7 +206,12 @@ export default {
           this.$store.dispatch('setToken', response.data.data);
           break;
         default:
-          dialog.open('Ошибка', this.errorBody, true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorRegistration'),
+            true,
+            false,
+          );
           logger.log(response);
           break;
       }
@@ -176,7 +226,12 @@ export default {
         })
         .then((response) => (this.checkUserData(response)))
         .catch((error) => {
-          dialog.open('Ошибка', this.errorBody, true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorRegistration'),
+            true,
+            false,
+          );
           logger.log(error);
         });
     },
@@ -187,7 +242,12 @@ export default {
           this.$store.dispatch('setUser', response.data.data);
           break;
         default:
-          dialog.open('Ошибка', this.errorBody, true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorRegistration'),
+            true,
+            false,
+          );
           logger.log(response);
           break;
       }
@@ -201,7 +261,12 @@ export default {
         })
         .then((response) => (this.checkChatAuth(response)))
         .catch((error) => {
-          dialog.open('Ошибка', this.errorBody, true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorRegistration'),
+            true,
+            false,
+          );
           logger.log(error);
         });
     },
@@ -215,7 +280,12 @@ export default {
           this.$store.dispatch('setIdChanal', response.data.data.idChanal);
           break;
         default:
-          dialog.open('Ошибка', this.errorBody, true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorRegistration'),
+            true,
+            false,
+          );
           logger.log(response);
           break;
       }
@@ -229,7 +299,12 @@ export default {
         })
         .then((response) => (this.checkNotificationAuth(response)))
         .catch((error) => {
-          dialog.open('Ошибка', this.errorBody, true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorRegistration'),
+            true,
+            false,
+          );
           logger.log(error);
         });
     },
@@ -253,13 +328,23 @@ export default {
                 this.addAppToken(token);
               })
               .catch((error) => {
-                dialog.open('Ошибка', this.errorBody, true, false);
+                dialog.open(
+                  dialogMessages.getTitle('error'),
+                  dialogMessages.getBody('errorRegistration'),
+                  true,
+                  false,
+                );
                 logger.log(error);
               });
           }
           break;
         default:
-          dialog.open('Ошибка', this.errorBody, true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorRegistration'),
+            true,
+            false,
+          );
           logger.log(response);
           break;
       }
@@ -274,7 +359,12 @@ export default {
         })
         .then((response) => (this.checkAppToken(response)))
         .catch((error) => {
-          dialog.open('Ошибка', this.errorBody, true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorRegistration'),
+            true,
+            false,
+          );
           logger.log(error);
         });
     },
@@ -283,7 +373,12 @@ export default {
       if (response.data.status === 'success' || response.data.status === 'exist') {
         this.isAddAppToken = true;
       } else {
-        dialog.open('Ошибка', this.errorBody, true, false);
+        dialog.open(
+          dialogMessages.getTitle('error'),
+          dialogMessages.getBody('errorRegistration'),
+          true,
+          false,
+        );
         logger.log(response);
       }
     },

@@ -22,8 +22,9 @@
 
 <script>
 import axios from 'axios';
-import dialogWindow from '../../scripts/openDialog';
+import dialog from '../../scripts/openDialog';
 import logger from '../../scripts/logger';
+import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
   name: 'my-cost-sheet',
@@ -35,7 +36,6 @@ export default {
   methods: {
     acceptOrder() {
       /* eslint-disable no-underscore-dangle */
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/response`, {
           token: this.token,
@@ -46,11 +46,15 @@ export default {
         })
         .then((response) => (this.checkOrderResponse(response)))
         .catch((error) => {
-          dialogWindow.open('Ошибка', 'Не удалось откликнуться на заказ, скорее всего его кто-то уже выполняет', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorCreateResponse'),
+            true,
+            false,
+          );
           logger.log(error);
         });
       /* eslint-enable no-underscore-dangle */
-      /* eslint-enable no-return-assign */
     },
 
     checkOrderResponse(response) {
@@ -61,15 +65,34 @@ export default {
           } else if (this.orderType === ('await' || 'process')) {
             this.$store.dispatch('setType', 'all');
           }
-          this.open = false;
           break;
         case 'notAuthenticate':
-          dialogWindow.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
+          break;
+        case 'notExist':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorCreateResponse'),
+            true,
+            false,
+          );
           break;
         default:
-          dialogWindow.open('Ошибка', '', true, false);
-          break;
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(response);
       }
+      this.open = false;
     },
 
     buttonBack(e) {

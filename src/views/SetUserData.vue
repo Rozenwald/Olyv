@@ -112,7 +112,6 @@ export default {
             false,
           );
           logger.log(response);
-          break;
       }
     },
 
@@ -124,7 +123,6 @@ export default {
           token: this.token,
         })
         .then((response) => (this.checkUserData(response)))
-        // eslint-disable-next-line no-return-assign
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
@@ -160,7 +158,6 @@ export default {
             false,
           );
           logger.log(response);
-          break;
       }
     },
 

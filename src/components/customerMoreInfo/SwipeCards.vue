@@ -27,6 +27,7 @@ import 'vue-swipe-actions/dist/vue-swipe-actions.css';
 import UserCard from './UserCard.vue';
 import dialog from '../../scripts/openDialog';
 import logger from '../../scripts/logger';
+import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
   name: 'swipe-cards',
@@ -63,7 +64,12 @@ export default {
         .then((response) => (this.checkAgreeResponse(response, idUserResponse)))
         // eslint-disable-next-line no-return-assign
         .catch((error) => {
-          dialog.open('Ошибка', '', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorAcceptOrder'),
+            true,
+            false,
+          );
           logger.log(error);
         });
     },
@@ -78,10 +84,21 @@ export default {
           this.$store.dispatch('setMyOrder', newOrder);
           break;
         case 'notAuthenticate':
-          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialog.open('Ошибка', '', true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorAcceptOrder'),
+            true,
+            false,
+          );
           break;
       }
     },

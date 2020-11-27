@@ -15,6 +15,9 @@
 import axios from 'axios';
 import { SemipolarSpinner } from 'epic-spinners';
 import OrderCard2 from '../OrderCard2.vue';
+import logger from '../../scripts/logger';
+import dialogMessages from '../../scripts/dialogMessages';
+import dialog from '../../scripts/openDialog';
 
 export default {
   name: 'allOrder',
@@ -37,7 +40,6 @@ export default {
   methods: {
     // Получение заказов
     getData() {
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
@@ -46,25 +48,25 @@ export default {
           status: 'await',
         })
         .then((response) => (this.checkResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
-      /* eslint-enable no-return-assign */
+        .catch((error) => {
+          logger.log(error);
+        });
     },
 
     // Получение заказов без авторизации
     getPublicData() {
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/public/order`, {
           method: 'receive',
         })
         .then((response) => (this.checkResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
-      /* eslint-enable no-return-assign */
+        .catch((error) => {
+          logger.log(error);
+        });
     },
 
     // Формирование массива всех заказов
     checkResponse(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.all = response.data.data;
@@ -80,7 +82,13 @@ export default {
           }
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
           this.error = 'Ошибка';
@@ -88,7 +96,6 @@ export default {
       }
     },
     getAwaitOrder() {
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/response`, {
           token: this.token,
@@ -97,14 +104,13 @@ export default {
           status: 'await',
         })
         .then((response) => (this.checkAwaitOrder(response)))
-        .catch(() => (this.error = 'Ошибка'));
-      /* eslint-enable no-return-assign */
+        .catch((error) => {
+          logger.log(error);
+        });
     },
     checkAwaitOrder(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
-          console.log(this.textForRegexp);
           response.data.data.forEach((element) => {
             // eslint-disable-next-line no-underscore-dangle
             this.textForRegexp = `${this.textForRegexp + element.idOrder}|`;
@@ -112,18 +118,23 @@ export default {
           this.getMyOrder();
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         case 'notExist':
           this.getMyOrder();
           break;
         default:
-          this.error = 'Ошибка';
+          logger.log(response);
           break;
       }
     },
     getMyOrder() {
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
@@ -132,11 +143,11 @@ export default {
           status: 'await',
         })
         .then((response) => (this.checkMyOrderResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
-      /* eslint-enable no-return-assign */
+        .catch((error) => {
+          logger.log(error);
+        });
     },
     checkMyOrderResponse(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           response.data.data.forEach((element) => {
@@ -146,13 +157,19 @@ export default {
           this.createRegular();
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         case 'notExist':
           this.createRegular();
           break;
         default:
-          this.error = 'Ошибка';
+          logger.log(response);
           break;
       }
     },
@@ -166,10 +183,8 @@ export default {
       }
     },
     getClearAll() {
-      console.log(this.textForRegexp);
       if (this.textForRegexp === '') {
         this.allClear = [...this.allClear, ...this.all];
-        console.log(this.allClear);
       } else {
         for (let j = 0; j < this.all.length; j += 1) {
           // eslint-disable-next-line no-underscore-dangle
@@ -185,15 +200,12 @@ export default {
       this.lastDate = this.all[this.all.length - 1].ofCreateDate;
       const date = new Date(this.lastDate).getTime() - 1000;
       window.onscroll = () => {
-        console.log(this.$refs.scrollUpdate.clientHeight);
-        console.log(window.scrollY);
         if ((this.$refs.scrollUpdate.clientHeight - window.scrollY) <= 1000) {
           this.getMoreOrder(date);
         }
       };
     },
     getMoreOrder(date) {
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
@@ -203,21 +215,26 @@ export default {
           date,
         })
         .then((response) => (this.checkMoreOrderResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
-      /* eslint-enable no-return-assign */
+        .catch((error) => {
+          logger.log(error);
+        });
     },
     checkMoreOrderResponse(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           if (response.data.data[response.data.data.length - 1].ofCreateDate !== this.lastDate) {
             this.all = response.data.data;
-            console.log(this.all);
             this.getClearAll();
           }
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         case 'notExist':
           this.error = 'Ошибка';

@@ -15,6 +15,9 @@
 import axios from 'axios';
 import { SemipolarSpinner } from 'epic-spinners';
 import OrderCard2 from '../OrderCard2.vue';
+import dialog from '../../scripts/openDialog';
+import logger from '../../scripts/logger';
+import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
   name: 'allOrder',
@@ -41,7 +44,9 @@ export default {
         })
         .then((response) => (this.checkAwaitOrder(response)))
       // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          logger.log(error);
+        });
     },
     // По полученным айдишникам обращаюсь на сервер по одному элементу
     checkAwaitOrder(response) {
@@ -53,14 +58,16 @@ export default {
           this.loadType = false;
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
-          break;
-        case 'notExist':
-          break;
-        case 'invalidSubmethod':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          this.error = 'Ошибка';
+          logger.log(response);
           break;
       }
     },
@@ -76,7 +83,9 @@ export default {
           id: element.idOrder,
         })
         .then((response) => (this.checkOrder(response, element)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          logger.log(error);
+        });
       /* eslint-enable no-return-assign */
     },
     // Добавляю этот элемент в массив заказов на которые я откликнулся
@@ -88,13 +97,16 @@ export default {
           this.awaitOrders[this.awaitOrders.length - 1].idResponse = element._id;
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
-          break;
-        case 'notExist':
-          // console.log(this.awaitOrders);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          this.error = 'Ошибка';
+          logger.log(response);
           break;
       }
     },

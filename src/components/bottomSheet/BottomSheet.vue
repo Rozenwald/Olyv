@@ -39,15 +39,16 @@
               :loading="loading"
               align-content='center'
               rounded
-              @click="clickBtn"
+              @click="checkForm()"
               v-text="loading ? null : isEdit ? 'Редактировать': 'Создать'"
             )
 </template>
 
 <script>
 import axios from 'axios';
-import dialogWindow from '../../scripts/openDialog';
+import dialog from '../../scripts/openDialog';
 import logger from '../../scripts/logger';
+import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
   name: 'bottom-sheet',
@@ -60,14 +61,6 @@ export default {
     };
   },
   methods: {
-    clickBtn() {
-      if (this.checkForm() !== null) {
-        dialogWindow.open('Ошибка', `${this.checkForm()}`, true, false);
-      } else {
-        this.sendOrder();
-      }
-    },
-
     openField(field) {
       document.removeEventListener('backbutton', this.buttonBack, false);
       switch (field) {
@@ -87,20 +80,52 @@ export default {
 
     checkForm() {
       if (this.addressData.value == null) {
-        return 'Укажите адрес';
+        dialog.open(
+          dialogMessages.getTitle('warning'),
+          dialogMessages.getBody('errorAddress'),
+          true,
+          false,
+        );
+        return null;
       }
       if (this.cost == null) {
-        return 'Укажите желаемую цену';
+        dialog.open(
+          dialogMessages.getTitle('warning'),
+          dialogMessages.getBody('errorCost'),
+          true,
+          false,
+        );
+        return null;
       }
       if (!this.validCost(this.cost)) {
-        return 'Неверный формат цены';
+        dialog.open(
+          dialogMessages.getTitle('error'),
+          dialogMessages.getBody('invalidCost'),
+          true,
+          false,
+        );
+        return null;
       }
       if (this.description == null) {
-        return 'Описание должно быть больше 10 символов';
+        dialog.open(
+          dialogMessages.getTitle('error'),
+          dialogMessages.getBody('invalidDescription'),
+          true,
+          false,
+        );
+        return null;
       }
       if (this.description.length < 10) {
-        return 'Описание должно быть больше 10 символов';
+        dialog.open(
+          dialogMessages.getTitle('error'),
+          dialogMessages.getBody('invalidDescription'),
+          true,
+          false,
+        );
+        return null;
       }
+
+      this.sendOrder();
       return null;
     },
 
@@ -121,7 +146,12 @@ export default {
         })
         .then((response) => (this.checkResonse(response)))
         .catch((error) => {
-          dialogWindow.open('Ошибка', 'Не удалось создать заказ, повторите попытку позже', true, true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            this.isEdit ? dialogMessages.getBody('errorCreateOrder') : dialogMessages.getBody('errorEditOrder'),
+            true,
+            false,
+          );
           logger.log(error);
         });
       /* eslint-enable no-return-assign */
@@ -131,10 +161,20 @@ export default {
       this.loading = false;
       switch (response.data.status) {
         case 'invalidCost':
-          dialogWindow.open('Ошибка', 'Неверный формат цены', true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidCost'),
+            true,
+            false,
+          );
           break;
         case 'invalidDescription':
-          dialogWindow.open('Ошибка', 'Описание должно быть больше 10 символов', true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidDescription'),
+            true,
+            false,
+          );
           break;
         case 'success':
           this.open = false;
@@ -142,10 +182,21 @@ export default {
           break;
         case 'notAuthenticate':
           this.$store.dispatch('setBottomSheetStatus', false);
-          dialogWindow.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialogWindow.open('Ошибка', '', true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            this.isEdit ? dialogMessages.getBody('errorCreateOrder') : dialogMessages.getBody('errorEditOrder'),
+            true,
+            false,
+          );
           logger.log(response.data);
       }
     },

@@ -11,6 +11,7 @@ import axios from 'axios';
 import OrderInformation from '../components/customerMoreInfo/OrderInformation.vue';
 import dialog from '../scripts/openDialog';
 import logger from '../scripts/logger';
+import dialogMessages from '../scripts/dialogMessages';
 
 const BottomField = () => import('../components/customerMoreInfo/BottomField.vue');
 const ExecutorCard = () => import('../components/customerMoreInfo/ExecutorCard.vue');
@@ -25,12 +26,6 @@ export default {
     BottomField,
     ExecutorCard,
   },
-  data() {
-    return {
-      responseList: [],
-      executorData: {},
-    };
-  },
   methods: {
     getOrderResponse() {
       /* eslint-disable no-return-assign */
@@ -44,7 +39,6 @@ export default {
         })
         .then((response) => (this.checkOrderResponse(response)))
         .catch((error) => {
-          dialog.open('Ошибка', '', true);
           logger.log(error);
         });
       /* eslint-enable no-return-assign */
@@ -56,10 +50,16 @@ export default {
           this.$store.dispatch('setRespondedList', response.data.data);
           break;
         case 'notAuthenticate':
-          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialog.open('Ошибка', '', true, false);
+          logger.log(response);
           break;
       }
     },
