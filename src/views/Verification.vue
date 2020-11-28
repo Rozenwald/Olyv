@@ -36,6 +36,9 @@ import camera from '../scripts/device-modules/camera';
 import file from '../scripts/device-modules/file';
 import dialogWindow from '../scripts/openDialog';
 import logger from '../scripts/logger';
+import dialogMessages from '../scripts/dialogMessages';
+// eslint-disable-next-line import/no-cycle
+import router from '../router';
 
 export default {
   name: 'Verification',
@@ -124,7 +127,12 @@ export default {
           .then((response) => (this.checkResponse(response)))
         // eslint-disable-next-line no-return-assign
           .catch((error) => {
-            dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
+            dialogWindow.open(
+              dialogMessages.getTitle('error'),
+              dialogMessages.getBody('errorPhoto'),
+              true,
+              false,
+            );
             logger.log(error);
           });
       }
@@ -140,16 +148,37 @@ export default {
           }
           break;
         case 'invalidPhoto':
-          dialogWindow.open('Ошибка', 'Неверный формат фото', true, false);
+          dialogWindow.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidPhoto'),
+            true,
+            false,
+          );
           break;
         case 'already':
-          dialogWindow.open('Ошибка', 'Вы уже отправили запрос. Пожалуйста, дождитесь ответа службы поддержки', true, false);
+          dialogWindow.open(
+            dialogMessages.getTitle('warning'),
+            dialogMessages.getBody('awaitAdminResponse'),
+            true,
+            false,
+          );
           break;
         case 'notAuthenticate':
-          dialogWindow.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
+          dialogWindow.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
+          dialogWindow.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorPhoto'),
+            true,
+            false,
+          );
           logger.log(response);
           break;
       }
@@ -165,7 +194,12 @@ export default {
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
         .catch((error) => {
-          dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
+          dialogWindow.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorPhoto'),
+            true,
+            false,
+          );
           logger.log(error);
         });
     },
@@ -178,10 +212,21 @@ export default {
           this.$router.back();
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showLoginDialog', true);
+          dialogWindow.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialogWindow.open('Ошибка', 'Не удалось загрузить фото', true, false);
+          dialogWindow.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorPhoto'),
+            true,
+            false,
+          );
           logger.log(response);
           break;
       }
@@ -230,7 +275,13 @@ export default {
   beforeRouteEnter(to, from, next) {
     if (!store.getters.isAuth) {
       next(from.name);
-      this.$store.dispatch('showLoginDialog', true);
+      dialogWindow.open(
+        dialogMessages.getTitle('needToAuth'),
+        dialogMessages.getBody('needToAuth'),
+        true,
+        false,
+        router.push('auth'),
+      );
     } else {
       next();
     }

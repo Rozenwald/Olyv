@@ -23,6 +23,7 @@ import axios from 'axios';
 import Avatar from '../Avatar.vue';
 import dialog from '../../scripts/openDialog';
 import logger from '../../scripts/logger';
+import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
   name: 'user-card',
@@ -48,25 +49,27 @@ export default {
           id: this.idUser,
         })
         .then((response) => (this.checkExecutorData(response)))
-        // eslint-disable-next-line no-return-assign
         .catch((error) => {
-          dialog.open('Ошибка', '', true);
           logger.log(error);
         });
     },
 
     checkExecutorData(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.userData = response.data.data;
           break;
         case 'notAuthenticate':
-          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
-
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialog.open('Ошибка', '', true, false);
+          logger.log(response);
           break;
       }
     },

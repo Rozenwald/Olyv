@@ -14,6 +14,7 @@ import AddressField from '../components/executorMoreInfo/AddressField.vue';
 import OrderInformation from '../components/executorMoreInfo/OrderInformation.vue';
 import dialog from '../scripts/openDialog';
 import logger from '../scripts/logger';
+import dialogMessages from '../scripts/dialogMessages';
 
 export default {
   name: 'moreInfoOrder',
@@ -27,11 +28,6 @@ export default {
   data() {
     return {
       customerUser: {},
-      changeValue: 1000,
-      currentPrice: null, // Number
-      respondedCount: 12,
-      distantion: 3,
-      inputWidth: null,
     };
   },
   methods: {
@@ -55,41 +51,8 @@ export default {
         .then((response) => (this.checkCustomerUserData(response)))
         // eslint-disable-next-line no-return-assign
         .catch((error) => {
-          dialog.open('Ошибка', 'Не получилось загрузить данные', true);
           logger.log(error);
         });
-    },
-
-    getMyResponseOrder() {
-      /* eslint-disable no-return-assign */
-      axios
-        .post(`${this.$baseUrl}api/v1/private/response`, {
-          token: this.token,
-          method: 'receive',
-          submethod: 'executor',
-          status: 'await',
-          // eslint-disable-next-line no-underscore-dangle
-          id: this.order._id,
-        })
-        .then((response) => (this.checkMyResponseOrder(response)))
-        .catch((error) => {
-          dialog.open('Ошибка', 'Не получилось загрузить данные', true);
-          logger.log(error);
-        });
-      /* eslint-enable no-return-assign */
-    },
-    checkMyResponseOrder(response) {
-      switch (response.data.status) {
-        case 'success':
-          break;
-        case 'notAuthenticate':
-          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
-          break;
-        default:
-          this.errorBody = 'Не удалось загрузить данные';
-          dialog.open('Ошибка', this.errorBody, true, false);
-          break;
-      }
     },
 
     checkCustomerUserData(response) {
@@ -98,11 +61,16 @@ export default {
           this.customerUser = response.data.data;
           break;
         case 'notAuthenticate':
-          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          this.errorBody = 'Ошибка загрузки данных';
-          dialog.open('Ошибка', '', true, false);
+          logger.log(response);
           break;
       }
     },

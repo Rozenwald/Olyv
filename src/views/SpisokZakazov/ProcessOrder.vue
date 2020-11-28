@@ -15,13 +15,15 @@
 import axios from 'axios';
 import { SemipolarSpinner } from 'epic-spinners';
 import OrderCard2 from '../OrderCard2.vue';
+import dialog from '../../scripts/openDialog';
+import logger from '../../scripts/logger';
+import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
   name: 'allOrder',
   data: () => ({
     processOrders: null,
     textForUser: '',
-    error: '',
     type: 'process',
     loadType: true,
   }),
@@ -41,8 +43,9 @@ export default {
           status: 'process',
         })
         .then((response) => (this.checkProcessOrdersResponse(response)))
-      // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          logger.log(error);
+        });
     },
     // Создаю массив и отправляю его во Vuex
     checkProcessOrdersResponse(response) {
@@ -53,10 +56,15 @@ export default {
           this.loadType = false;
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          this.error = 'Ошибка';
           break;
       }
     },

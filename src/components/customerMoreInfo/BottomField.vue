@@ -11,6 +11,7 @@
 import axios from 'axios';
 import dialog from '../../scripts/openDialog';
 import logger from '../../scripts/logger';
+import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
   name: 'bottom-field',
@@ -26,7 +27,12 @@ export default {
         })
         .then((response) => (this.checkResponse(response)))
         .catch((error) => {
-          dialog.open('Ошибка', '', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorDeleteOrder'),
+            true,
+            false,
+          );
           logger.log(error);
         });
       /* eslint-enable no-return-assign */
@@ -44,10 +50,21 @@ export default {
           this.$router.back();
           break;
         case 'notAuthenticate':
-          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialog.open('Ошибка', '', true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorDeleteOrder'),
+            true,
+            false,
+          );
           break;
       }
     },

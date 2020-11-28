@@ -21,6 +21,9 @@
 import axios from 'axios';
 import { SemipolarSpinner } from 'epic-spinners';
 import OrderCard2 from '../OrderCard2.vue';
+import dialog from '../../scripts/openDialog';
+import logger from '../../scripts/logger';
+import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
   name: 'allOrder',
@@ -57,7 +60,9 @@ export default {
           status: 'await',
         })
         .then((response) => (this.checkResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          logger.log(error);
+        });
       /* eslint-enable no-return-assign */
     },
     // Формирование массива всех заказов
@@ -68,7 +73,13 @@ export default {
           this.getAwaitOrder();
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
           this.error = 'Ошибка';
@@ -85,7 +96,9 @@ export default {
           status: 'await',
         })
         .then((response) => (this.checkAwaitOrder(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          logger.log(error);
+        });
       /* eslint-enable no-return-assign */
     },
     checkAwaitOrder(response) {
@@ -98,18 +111,23 @@ export default {
           this.getMyOrder();
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         case 'notExist':
           this.getMyOrder();
           break;
         default:
-          this.error = 'Ошибка';
+          logger.log(response);
           break;
       }
     },
     getMyOrder() {
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
@@ -118,8 +136,9 @@ export default {
           status: 'await',
         })
         .then((response) => (this.checkMyOrderResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
-      /* eslint-enable no-return-assign */
+        .catch((error) => {
+          logger.log(error);
+        });
     },
     checkMyOrderResponse(response) {
       switch (response.data.status) {
@@ -131,13 +150,19 @@ export default {
           this.getClearAll();
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         case 'notExist':
           this.getClearAll();
           break;
         default:
-          this.error = 'Ошибка';
+          logger.log(response);
           break;
       }
     },
@@ -151,12 +176,12 @@ export default {
         })
         .then((response) => (this.checkKeyWord(response)))
       // eslint-disable-next-line no-return-assign
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          logger.log(error);
+        });
     },
     // формирование текста для регулярки и формирование регулярки
     checkKeyWord(response) {
-      console.log(response);
-      console.log(response.data.data);
       switch (response.data.status) {
         case 'success':
           this.keyData = new Date(response.data.data[response.data.data.length - 1].createDate);
@@ -177,16 +202,14 @@ export default {
           }
           break;
         default:
-          this.error = 'Ошибка';
+          logger.log(response);
           break;
       }
     },
     getClearAll() {
-      console.log(this.keyword);
       /* eslint-disable max-len */
       if (this.textForRegexp !== '') {
         this.textForRegexp = this.textForRegexp.substring(0, this.textForRegexp.length - 1);
-        console.log(this.awaitMyRegexp = new RegExp(`${this.textForRegexp}`));
         for (let j = 0; j < this.all.length; j += 1) {
           // eslint-disable-next-line no-underscore-dangle
           if ((this.awaitMyRegexp.test(this.all[j]._id) !== true) && (this.keyRegexp.test(this.all[j].description))) {
@@ -211,7 +234,6 @@ export default {
         this.getMoreOrder(date);
       }
       window.onscroll = () => {
-        console.log(this.keyword.length);
         if (((this.$refs.scrollUpdate.clientHeight - window.scrollY) <= 1000)) {
           this.getMoreOrder(date);
         }
@@ -228,16 +250,14 @@ export default {
           date,
         })
         .then((response) => (this.checkMoreOrderResponse(response)))
-        .catch(() => (this.error = 'Ошибка'));
+        .catch((error) => {
+          logger.log(error);
+        });
       /* eslint-enable no-return-assign */
     },
     checkMoreOrderResponse(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
-          console.log(this.keyOrder);
-          console.log(response.data.data[response.data.data.length - 1].ofCreateDate);
-          console.log(this.lastDate);
           if ((response.data.data[response.data.data.length - 1].ofCreateDate === this.lastDate) && (this.keyOrder.length === 0)) {
             this.textForUser1 = 'По вашим ключевым словам и настройкам';
             this.textForUser2 = 'Не найдено ни одной заявки';
@@ -245,19 +265,20 @@ export default {
           }
           if (response.data.data[response.data.data.length - 1].ofCreateDate !== this.lastDate) {
             this.all = response.data.data;
-            console.log(this.all);
             this.getClearAll();
           }
           break;
         case 'notAuthenticate':
-          this.$store.dispatch('showRepeatLoginDialog', true);
-          break;
-        case 'notExist':
-          this.error = 'Ошибка';
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          this.error = 'Ошибка';
-          break;
+          logger.log(response);
       }
     },
   },

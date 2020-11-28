@@ -1,6 +1,6 @@
 <template lang="pug">
   v-container.orderContainerHeight
-    v-sheet(fixed elevation="1" ).chips-wrp
+    v-sheet(fixed elevation="1" "chips" v-show="user.verification === 'completed'").chips-wrp
       v-row.chips(
                   align='center'
                   justify='space-around')
@@ -19,10 +19,10 @@
                 outlined
                 color="#56d67b"
                 text-color="#000") Сделка
-    AllOrder.list-item(v-if="type=='all'")
-    AwaitOrder.list-item(v-if="type=='await'")
-    ProcessOrder.list-item(v-if="type=='process'")
-    KeyOrder.list-item(v-if="type=='keyword'")
+    AllOrder.list-item(v-if="type=='all'" :style="{marginTop: margin}")
+    AwaitOrder.list-item(v-if="type=='await'" :style="{marginTop: margin}")
+    ProcessOrder.list-item(v-if="type=='process'" :style="{marginTop: margin}")
+    KeyOrder.list-item(v-if="type=='keyword'" :style="{marginTop: margin}")
 </template>
 
 <script>
@@ -56,7 +56,16 @@ export default {
     user() {
       return this.$store.getters.getUser;
     },
-
+    margin() {
+      let margin = 0;
+      if (this.user.verification === 'completed') {
+        margin = 48;
+      } else {
+        margin = 0;
+      }
+      const length = `${margin}px`;
+      return length;
+    },
   },
   created() {
     this.$store.commit('setTitle', 'Исполнитель');
@@ -65,9 +74,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .list-item {
-    margin-top 48px
-  }
 
   .list-item:first-child{
     margin-top 0
@@ -84,6 +90,9 @@ export default {
     width 100%
     z-index 2
     left 0
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.1),
+                0px 1px 1px 0px rgba(0, 0, 0, 0.11),
+                0px 1px 3px 0px rgba(0, 0, 0, 0.01) !important;
   }
 
   .active-chip {

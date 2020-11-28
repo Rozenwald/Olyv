@@ -70,6 +70,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .row{
+    margin 0 !important;
+    background-color #fff !important;
+  }
   .dialog-text {
     position relative
     background-color #fFf
@@ -85,18 +89,16 @@ export default {
     position absolute
     right 0
     left 0
-    bottom 75px;
-      &-center {
-        background-color transparent !important;
-        &-action {
-          background #fff
-          font-size: 20px !important
-          color #FFA967 !important
-        }
+    bottom 75px
+
+    &-center {
+      background-color transparent !important;
+
+      &-action {
+        background #fff
+        font-size: 20px !important
+        color #FFA967 !important
       }
-  }
-  .row{
-    margin 0 !important;
-    background-color #fff !important;
+    }
   }
 </style>
