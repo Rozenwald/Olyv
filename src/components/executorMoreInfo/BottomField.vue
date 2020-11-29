@@ -14,13 +14,13 @@
 import axios from 'axios';
 import dialog from '../../scripts/openDialog';
 import logger from '../../scripts/logger';
+import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
   name: 'bottom-field',
   methods: {
     acceptOrder() {
       /* eslint-disable no-underscore-dangle */
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/response`, {
           token: this.token,
@@ -35,7 +35,6 @@ export default {
           logger.log(error);
         });
       /* eslint-enable no-underscore-dangle */
-      /* eslint-enable no-return-assign */
     },
 
     acceptOrderMyCost() {
@@ -53,7 +52,12 @@ export default {
         })
         .then((response) => (this.checkOrderResponse(response)))
         .catch((error) => {
-          dialog.open('Ошибка', '', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorDeleteResponse'),
+            true,
+            false,
+          );
           logger.log(error);
         });
       /* eslint-enable no-return-assign */
@@ -61,7 +65,6 @@ export default {
 
     completeOrder() {
       /* eslint-disable no-underscore-dangle */
-      /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/process`, {
           token: this.token,
@@ -71,15 +74,18 @@ export default {
         })
         .then((response) => (this.checkOrderResponse(response)))
         .catch((error) => {
-          dialog.open('Ошибка', '', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorCompletedOrder'),
+            true,
+            false,
+          );
           logger.log(error);
         });
       /* eslint-enable no-underscore-dangle */
-      /* eslint-enable no-return-assign */
     },
 
     checkOrderResponse(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           if (this.orderType === ('all' || 'keyword')) {
@@ -89,11 +95,22 @@ export default {
           }
           break;
         case 'notAuthenticate':
-          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialog.open('Ошибка', '', true, false);
-          break;
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(response);
       }
     },
 
@@ -118,7 +135,7 @@ export default {
           this.completeOrder();
           break;
         default:
-          dialog.open('Ошибка', '', true, false);
+          break;
       }
     },
 
@@ -137,7 +154,7 @@ export default {
           this.goChat();
           break;
         default:
-          dialog.open('Ошибка', '', true, false);
+          break;
       }
     },
   },

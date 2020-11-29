@@ -43,8 +43,9 @@ import PopupMenuProfile from './PopupMenuProfile.vue';
 import UserProfileSubheader from './UserProfileSubheader.vue';
 import camera from '../../scripts/device-modules/camera';
 import file from '../../scripts/device-modules/file';
-import dialogWindow from '../../scripts/openDialog';
+import dialog from '../../scripts/openDialog';
 import logger from '../../scripts/logger';
+import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
   name: 'user-profile-header',
@@ -74,7 +75,6 @@ export default {
     },
 
     choosePhoto(innerOptions) {
-      // eslint-disable-next-line no-undef
       camera.open(innerOptions)
         .then((imageUrl) => {
           logger.log(imageUrl);
@@ -101,7 +101,12 @@ export default {
         .then((response) => (this.checkPhoto(response)))
         // eslint-disable-next-line no-return-assign
         .catch((error) => {
-          dialogWindow.open('Ошибка', 'Не удалось загрузить фото попробуйте позже', true, false);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorPhoto'),
+            true,
+            false,
+          );
           logger.log(error);
         });
     },
@@ -113,14 +118,29 @@ export default {
           this.getUserData();
           break;
         case 'invalidPhoto':
-          dialogWindow.open('Ошибка', 'Неверный формат фото', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidPhoto'),
+            true,
+            false,
+          );
           break;
         case 'notAuthenticate':
-          dialogWindow.open('Ошибка', 'Авторизируйтесь, чтобы пользоваться данным функционалом', true, true, this.route('auth'));
-          this.$store.dispatch('showRepeatLoginDialog', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialogWindow.open('Ошибка', 'Ошибка загрузки фото', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorPhoto'),
+            true,
+            false,
+          );
           break;
       }
     },
@@ -133,9 +153,13 @@ export default {
           token: this.token,
         })
         .then((response) => (this.checkUserData(response)))
-        // eslint-disable-next-line no-return-assign
         .catch((error) => {
-          dialogWindow.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
           logger.log(error);
         });
     },
@@ -146,12 +170,22 @@ export default {
           this.$store.dispatch('setUser', response.data.data);
           break;
         case 'notAuthenticate':
-          dialogWindow.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.route('auth'));
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            this.$router.push('auth'),
+          );
           break;
         default:
-          dialogWindow.open('Ошибка', 'Такого пользователя не существует, скорее всего вы еще просто не зарегистрировались', true, true);
-          logger.log(response.data);
-          break;
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(response);
       }
     },
 

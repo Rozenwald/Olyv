@@ -4,6 +4,10 @@ import SetUserData from '../views/SetUserData.vue';
 import Setting from '../views/Setting.vue';
 import MoiZakazi from '../views/MoiZakazi.vue';
 import SpisokZakazov from '../views/SpisokZakazov/SpisokZakazov.vue';
+import AllOrder from '../views/SpisokZakazov/AllOrder.vue';
+import AwaitOrder from '../views/SpisokZakazov/AwaitOrder.vue';
+import ProcessOrder from '../views/SpisokZakazov/ProcessOrder.vue';
+import KeyOrder from '../views/SpisokZakazov/KeyOrder.vue';
 import Registration from '../views/Registration.vue';
 import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 import Auth from '../views/Authorization.vue';
@@ -51,6 +55,32 @@ const routes = [
     path: '/spisokZakazov',
     component: SpisokZakazov,
     meta: { index: 2 },
+    children: [
+      {
+        name: 'KeyOrder',
+        path: '/spisokZakazov/KeyOrder',
+        component: KeyOrder,
+        meta: { index: 0 },
+      },
+      {
+        name: 'allOrder',
+        path: '/spisokZakazov/allorder',
+        component: AllOrder,
+        meta: { index: 1 },
+      },
+      {
+        name: 'allOrder',
+        path: '/spisokZakazov/awaitorder',
+        component: AwaitOrder,
+        meta: { index: 2 },
+      },
+      {
+        name: 'ProcessOrder',
+        path: '/spisokZakazov/ProcessOrder',
+        component: ProcessOrder,
+        meta: { index: 3 },
+      },
+    ],
   },
   {
     name: 'setUserData',

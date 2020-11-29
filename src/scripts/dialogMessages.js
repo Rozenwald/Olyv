@@ -4,6 +4,7 @@ function randElement(arr) {
   if (!arr) return undefined;
 
   const rand = Math.floor(Math.random() * arr.length);
+
   return arr[rand];
 }
 
