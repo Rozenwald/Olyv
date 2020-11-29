@@ -17,7 +17,7 @@ const getters = {
 
 const state = {
   items: [
-    { title: 'Заказчик', icon: 'MyOrder', routeName: 'moiZakazi' },
+    { title: 'Заказчик', icon: 'MyOrder', routeName: 'myAwaitOrders' },
     { title: 'Исполнитель', icon: 'OrdersList', routeName: 'allOrder' },
     { title: '', icon: 'Plus' },
     { title: 'Профиль', icon: 'User', routeName: 'customerProfile' },

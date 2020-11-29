@@ -3,6 +3,8 @@ import VueRouter from 'vue-router';
 import SetUserData from '../views/SetUserData.vue';
 import Setting from '../views/Setting.vue';
 import MoiZakazi from '../views/MoiZakazi.vue';
+import AwaitOrders from '../components/myOrders/AwaitOrders.vue';
+import ProcessOrders from '../components/myOrders/ProcessOrders.vue';
 import SpisokZakazov from '../views/SpisokZakazov.vue';
 import AllOrder from '../views/SpisokZakazov/AllOrder.vue';
 import AwaitOrder from '../views/SpisokZakazov/AwaitOrder.vue';
@@ -51,16 +53,18 @@ const routes = [
     meta: { index: 1 },
     children: [
       {
-        name: 'myAwaitOrder',
-        path: '',
-        component: KeyOrder,
-        meta: { index: 0 },
+        name: 'myAwaitOrders',
+        path: 'myAwaitOrders',
+        component: AwaitOrders,
       },
       {
-        name: 'myProcessOrder',
-        path: 'myProcessOrder',
-        component: AllOrder,
-        meta: { index: 1 },
+        name: 'myProcessOrders',
+        path: 'myProcessOrders',
+        component: ProcessOrders,
+      },
+      {
+        path: '',
+        redirect: 'myAwaitOrders',
       },
     ],
   },
@@ -78,7 +82,7 @@ const routes = [
       },
       {
         name: 'allOrder',
-        path: '',
+        path: 'allOrder',
         component: AllOrder,
         meta: { index: 1 },
       },
@@ -93,6 +97,10 @@ const routes = [
         path: 'processOrder',
         component: ProcessOrder,
         meta: { index: 3 },
+      },
+      {
+        path: '',
+        redirect: 'allOrder',
       },
     ],
   },

@@ -93,6 +93,14 @@ export default {
           } else if (this.orderType === ('await' || 'process')) {
             this.$store.dispatch('setType', 'all');
           }
+
+          if (response.data.data) {
+            const order = { ...this.order };
+            // eslint-disable-next-line no-underscore-dangle
+            order.idResponse = response.data.data._id;
+
+            this.$store.dispatch('setMyOrder', order);
+          }
           break;
         case 'notAuthenticate':
           dialog.open(

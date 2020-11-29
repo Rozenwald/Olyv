@@ -3,7 +3,7 @@
       v-sheet(fixed elevation="1" ).chips-wrp
         v-row.chips(align='center' justify='space-around' )
           v-chip-group(v-model="type" mandatory active-class="active-chip")
-            v-chip(value="all"
+            v-chip(value="await"
                   outlined
                   color="#56d67b"
                   text-color="#000") В ожидании
@@ -11,20 +11,7 @@
                   outlined
                   color="#56d67b"
                   text-color="#000") В процессе
-      .await-order-list(v-show="type=='all'")
-        OrderCard1(
-          v-for='order in awaitOrders'
-          type="await"
-          :key='order.id'
-          :item='order'
-        )
-      .process-order-list(v-show="type=='process'")
-        OrderCard1(
-          v-for="order in processOrders"
-          type="process"
-          :key='order.id'
-          :item='order'
-        )
+      router-view
 </template>
 
 <script>
@@ -38,10 +25,7 @@ import dialogMessages from '../scripts/dialogMessages';
 export default {
   name: 'moiZakazi',
   data: () => ({
-    awaitOrders: null,
-    processOrders: null,
-    error: '',
-    type: 'all',
+    type: 'await',
   }),
   components: {
     OrderCard1,
@@ -65,7 +49,7 @@ export default {
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.awaitOrders = response.data.data;
+          this.$store.dispatch('setMyOrders', response.data.data);
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -99,7 +83,7 @@ export default {
     checkProcessOrdersResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.processOrders = response.data.data.reverse();
+          this.$store.dispatch('setMyProcessOrders', response.data.data);
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -126,6 +110,18 @@ export default {
       if (this.token) {
         this.getData();
         this.getProcessOrders();
+      }
+    },
+
+    type() {
+      console.log(this.type);
+
+      if (this.type === 'await') {
+        this.$router.push({ name: 'myAwaitOrders' });
+      }
+
+      if (this.type === 'process') {
+        this.$router.push({ name: 'myProcessOrders' });
       }
     },
   },
