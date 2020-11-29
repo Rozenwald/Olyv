@@ -51,11 +51,13 @@ const routes = [
     meta: { index: 1 },
     children: [
       {
+        name: 'myAwaitOrder',
         path: '',
         component: KeyOrder,
         meta: { index: 0 },
       },
       {
+        name: 'myProcessOrder',
         path: 'myProcessOrder',
         component: AllOrder,
         meta: { index: 1 },
