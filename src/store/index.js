@@ -17,6 +17,7 @@ import route from './modules/route';
 import map from './modules/map';
 import actionPhotoDialog from './modules/actionPhotoDialog';
 import dialogMessages from './modules/dialogMessages';
+import myOrders from './modules/myOrders';
 
 Vue.use(Vuex);
 
@@ -45,5 +46,6 @@ export default new Vuex.Store({
     map,
     actionPhotoDialog,
     dialogMessages,
+    myOrders,
   },
 });

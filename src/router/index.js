@@ -3,6 +3,8 @@ import VueRouter from 'vue-router';
 import SetUserData from '../views/SetUserData.vue';
 import Setting from '../views/Setting.vue';
 import MoiZakazi from '../views/MoiZakazi.vue';
+import AwaitOrders from '../components/myOrders/AwaitOrders.vue';
+import ProcessOrders from '../components/myOrders/ProcessOrders.vue';
 import SpisokZakazov from '../views/SpisokZakazov/SpisokZakazov.vue';
 import Registration from '../views/Registration.vue';
 import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
@@ -45,6 +47,22 @@ const routes = [
     path: '/moiZakazi',
     component: MoiZakazi,
     meta: { index: 1 },
+    children: [
+      {
+        name: 'myAwaitOrders',
+        path: 'myAwaitOrders',
+        component: AwaitOrders,
+      },
+      {
+        name: 'myProcessOrders',
+        path: 'myProcessOrders',
+        component: ProcessOrders,
+      },
+      {
+        path: '',
+        redirect: 'myAwaitOrders',
+      },
+    ],
   },
   {
     name: 'spisokZakazov',
