@@ -44,7 +44,7 @@ export default {
       axios
         .post(`${this.$baseUrl}api/v1/private/passport`, {
           method: 'receive',
-          submethod: 'verification',
+          submethod: 'comment',
           token: this.token,
         })
         .then((response) => (this.checkResponse(response)))
@@ -54,6 +54,7 @@ export default {
         });
     },
     checkResponse(response) {
+      logger.log(response);
       switch (response.data.status) {
         case 'notAuthenticate':
           dialog.open(
