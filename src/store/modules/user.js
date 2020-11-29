@@ -38,7 +38,7 @@ const mutations = {
     state.notificationToken = null;
     state.idChanal = null;
     state.token = null;
-    state.isAuth = null;
+    state.isAuth = false;
     state.user = {};
     state.hasData = false;
   },

@@ -1,37 +1,37 @@
 <template lang="pug">
   v-container.orderContainerHeight
     v-sheet(fixed elevation="1" "chips" v-show="user.verification === 'completed'").chips-wrp
-      v-row.chips(
-                  align='center'
-                  justify='space-around')
+      v-row.chips(align='center' justify='space-around')
         v-chip-group(v-model="type" mandatory active-class="active-chip")
-          v-chip.keyword-chip(value="keyword")
+          v-chip.keyword-chip(
+                value="keyword"
+                @click="route('keyOrder')")
             svg-icon(name='KeyWord' width='30' height='30' color='#000')
           v-chip(value="all"
                 outlined
                 color="#56d67b"
-                text-color="#000") Общие
+                text-color="#000"
+                @click="route('allOrder')") Общие
           v-chip(value="await"
                 outlined
                 color="#56d67b"
-                text-color="#000") Ожидание
+                text-color="#000"
+                @click="route('awaitOrder')") Ожидание
           v-chip(value="process"
                 outlined
                 color="#56d67b"
-                text-color="#000") Сделка
-    AllOrder.list-item(v-if="type=='all'" :style="{marginTop: margin}")
-    AwaitOrder.list-item(v-if="type=='await'" :style="{marginTop: margin}")
-    ProcessOrder.list-item(v-if="type=='process'" :style="{marginTop: margin}")
-    KeyOrder.list-item(v-if="type=='keyword'" :style="{marginTop: margin}")
+                text-color="#000"
+                @click="route('processOrder')") Сделка
+    router-view.list-item(:style="{marginTop: margin}")
 </template>
 
 <script>
 import axios from 'axios';
-import SvgIcon from '../../components/SvgIcon.vue';
-import KeyOrder from './KeyOrder.vue';
-import AllOrder from './AllOrder.vue';
-import AwaitOrder from './AwaitOrder.vue';
-import ProcessOrder from './ProcessOrder.vue';
+import SvgIcon from '../components/SvgIcon.vue';
+import AllOrder from './SpisokZakazov/AllOrder.vue';
+import AwaitOrder from './SpisokZakazov/AwaitOrder.vue';
+import ProcessOrder from './SpisokZakazov/ProcessOrder.vue';
+import KeyOrder from './SpisokZakazov/KeyOrder.vue';
 
 export default {
   name: 'spisokZakazov',
@@ -48,6 +48,9 @@ export default {
     ProcessOrder,
   },
   methods: {
+    route(name) {
+      this.$router.push({ name });
+    },
   },
   computed: {
     token() {
