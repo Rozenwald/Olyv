@@ -64,4 +64,8 @@ export default {
     margin-bottom -12px
     border-radius 0
   }
+
+  .fail {
+    color #F44336;
+  }
 </style>

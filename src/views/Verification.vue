@@ -6,17 +6,19 @@
           v-text="description"
           v-show="user.verification == 'notCompleted' && !content && !comment"
         )
-        .comment-description(
-          v-text="comment"
-          v-show="comment"
-        )
+        .comment-wrp(v-show="comment")
+          .comment-description(v-text="commentDescription")
+          .comment(v-text="comment")
         .await-description(v-text="descriptionAwait" v-show="user.verification == 'await'")
         v-row.btn-load-photo-wrp(
           align="center"
           justify="center"
-          v-show="user.verification == 'notCompleted'")
+          v-show="user.verification == 'notCompleted' || !user.verification")
 
-          v-btn.btn-load-photo(rounded @click="actionPhoto") Добавить фото
+          v-btn.btn-load-photo(
+            rounded
+            @click="actionPhoto"
+            v-text="user.verification ? 'Добавить фото': 'Выбрать другое фото'")
 
       v-sheet.selected-img-wrp(v-else)
         .img-wrp(@click="setMoreActionImg")
@@ -48,6 +50,7 @@ export default {
   data: () => ({
     photoIsLoad: false,
     descriptionAwait: 'Ожидание верификации',
+    commentDescription: 'Вам было отказано в верификации со следующим комментарием:',
     description: 'Для получения статуса исполнителя необходимо пройти верификацию. Пожалуйста, загрузите фотографию паспорта.',
     content: '',
     wrpWidth: null,
@@ -357,6 +360,11 @@ export default {
     width 100%
     margin 0 !important
     color #FFF
+  }
+
+  .comment {
+    font-weight 400
+    margin-top: 12px;
   }
 
 </style>
