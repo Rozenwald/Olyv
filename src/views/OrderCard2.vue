@@ -37,7 +37,7 @@ export default {
       if (this.isAuth === true) {
         this.$store.dispatch('setMyOrder', this.item);
         this.$store.dispatch('setType', this.type);
-        this.$router.push('executorMoreInfo');
+        this.$router.push({ name: 'executorMoreInfo' });
       } else {
         dialog.open(
           dialogMessages.getTitle('needToAuth'),
