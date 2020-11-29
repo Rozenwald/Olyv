@@ -42,7 +42,7 @@ export default {
           method: 'add',
           submethod: 'executor',
           idOrder: this.order._id,
-          comment: this.cost || this.order.cost,
+          cost: this.cost || this.order.cost,
         })
         .then((response) => (this.checkOrderResponse(response)))
         .catch((error) => {
