@@ -117,11 +117,11 @@ export default {
       console.log(this.type);
 
       if (this.type === 'await') {
-        this.$router.push({ path: 'myAwaitOrders' });
+        this.$router.push({ name: 'myAwaitOrders' });
       }
 
       if (this.type === 'process') {
-        this.$router.push({ path: 'myProcessOrders' });
+        this.$router.push({ name: 'myProcessOrders' });
       }
     },
   },

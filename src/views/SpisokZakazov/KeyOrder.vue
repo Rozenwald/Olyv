@@ -26,7 +26,7 @@ import logger from '../../scripts/logger';
 import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
-  name: 'allOrder',
+  name: 'keyOrder',
   data: () => ({
     keyword: '',
     keyRegexp: null,

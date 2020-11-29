@@ -5,7 +5,11 @@ import Setting from '../views/Setting.vue';
 import MoiZakazi from '../views/MoiZakazi.vue';
 import AwaitOrders from '../components/myOrders/AwaitOrders.vue';
 import ProcessOrders from '../components/myOrders/ProcessOrders.vue';
-import SpisokZakazov from '../views/SpisokZakazov/SpisokZakazov.vue';
+import SpisokZakazov from '../views/SpisokZakazov.vue';
+import AllOrder from '../views/SpisokZakazov/AllOrder.vue';
+import AwaitOrder from '../views/SpisokZakazov/AwaitOrder.vue';
+import ProcessOrder from '../views/SpisokZakazov/ProcessOrder.vue';
+import KeyOrder from '../views/SpisokZakazov/KeyOrder.vue';
 import Registration from '../views/Registration.vue';
 import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 import Auth from '../views/Authorization.vue';
@@ -69,6 +73,32 @@ const routes = [
     path: '/spisokZakazov',
     component: SpisokZakazov,
     meta: { index: 2 },
+    children: [
+      {
+        name: 'keyOrder',
+        path: 'keyOrder',
+        component: KeyOrder,
+        meta: { index: 0 },
+      },
+      {
+        name: 'allOrder',
+        path: '',
+        component: AllOrder,
+        meta: { index: 1 },
+      },
+      {
+        name: 'awaitOrder',
+        path: 'awaitOrder',
+        component: AwaitOrder,
+        meta: { index: 2 },
+      },
+      {
+        name: 'processOrder',
+        path: 'processOrder',
+        component: ProcessOrder,
+        meta: { index: 3 },
+      },
+    ],
   },
   {
     name: 'setUserData',

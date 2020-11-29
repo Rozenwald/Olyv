@@ -34,11 +34,23 @@ export default {
       switch (this.$route.name) {
         case 'moiZakazi':
           return false;
+        case 'myAwaitOrder':
+          return false;
+        case 'myProcessOrder':
+          return false;
         case 'spisokZakazov':
           return false;
         case 'customerProfile':
           return false;
         case 'setting':
+          return false;
+        case 'allOrder':
+          return false;
+        case 'awaitOrder':
+          return false;
+        case 'keyOrder':
+          return false;
+        case 'processOrder':
           return false;
         default:
           return true;

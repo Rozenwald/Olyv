@@ -1,21 +1,16 @@
 <template lang="pug">
     v-card.card(@click='this.route')
-
       v-row.main-part(no-gutters)
-
           v-col(cols="8").description-wrp
             .description {{item.description}}
-
           v-col(cols="4" align='right')
             v-row.cost-wrp(align='center' justify='center')
               .cost {{cost}}
               svg-icon(name="RubDefault" color="#FE7664" height="15" width="15")
-
       v-row.more-info-wrp(align='center' justify='start' no-gutters)
         v-row.response-wrp(align='center' justify='start')
           svg-icon(name="Responded")
           .response-text {{userCount}} ответов
-
         v-row.date-time-wrp(align='center' justify='start')
           svg-icon(name="Time")
           .distantion-text {{formatedTime}}
@@ -24,6 +19,8 @@
 <script>
 import moment from 'moment';
 import SvgIcon from '../components/SvgIcon.vue';
+import dialog from '../scripts/openDialog';
+import dialogMessages from '../scripts/dialogMessages';
 
 export default {
   name: 'OrderCard2',
@@ -37,12 +34,25 @@ export default {
   methods: {
     route() {
       // eslint-disable-next-line no-underscore-dangle
-      this.$store.dispatch('setMyOrder', this.item);
-      this.$store.dispatch('setType', this.type);
-      this.$router.push('executorMoreInfo');
+      if (this.isAuth === true) {
+        this.$store.dispatch('setMyOrder', this.item);
+        this.$store.dispatch('setType', this.type);
+        this.$router.push('executorMoreInfo');
+      } else {
+        dialog.open(
+          dialogMessages.getTitle('needToAuth'),
+          dialogMessages.getBody('needToAuth'),
+          true,
+          true,
+          () => { this.$router.push({ name: 'auth' }); },
+        );
+      }
     },
   },
   computed: {
+    isAuth() {
+      return this.$store.getters.isAuth;
+    },
     userCount() {
       return this.item.countResponse;
     },

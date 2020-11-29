@@ -50,7 +50,7 @@ export default {
 
   methods: {
     route(name) {
-      this.$router.push(name);
+      this.$router.push({ name });
     },
 
     clickBtn(index, routeName) {
