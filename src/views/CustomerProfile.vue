@@ -76,6 +76,16 @@ export default {
       this.loading = true;
       auth.exit();
     },
+
+    receive() {
+      axios.post(`${this.$baseNotificationUrl}api/v1/private/tokenApp`, {
+        token: this.notificationToken,
+        method: 'receive',
+        submethod: 'tokenApp',
+      })
+        .then((response) => logger.log(response))
+        .catch((error) => logger.log(error));
+    },
   },
   computed: {
     token() {
@@ -83,6 +93,9 @@ export default {
     },
     user() {
       return this.$store.getters.getUser;
+    },
+    notificationToken() {
+      return this.$store.getters.getNotificationToken;
     },
   },
   watch: {
@@ -94,6 +107,7 @@ export default {
     },
   },
   created() {
+    this.receive();
     this.$store.commit('setTitle', 'Личный кабинет');
     if (this.user.verification === 'notCompleted') {
       this.getData();
