@@ -44,7 +44,7 @@ export default {
       axios
         .post(`${this.$baseUrl}api/v1/private/passport`, {
           method: 'receive',
-          submethod: 'comment',
+          submethod: 'passport',
           token: this.token,
         })
         .then((response) => (this.checkResponse(response)))

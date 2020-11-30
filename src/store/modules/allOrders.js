@@ -15,8 +15,11 @@ const mutations = {
     state.keyOrder = response;
     console.log(state.keyOrder);
   },
+  setChipStatus(state, response) {
+    state.chipStatus = response;
+    console.log(state.keyOrder);
+  },
 };
-
 const actions = {
   setAllOrder({ commit }, data) {
     commit('setAllOrder', data);
@@ -30,6 +33,9 @@ const actions = {
   setKeyOrder({ commit }, keyOrder) {
     commit('setKeyOrder', keyOrder);
   },
+  setChipStatus({ commit }, chipStatus) {
+    commit('setChipStatus', chipStatus);
+  },
 };
 
 const getters = {
@@ -38,6 +44,7 @@ const getters = {
   getAwaitOrder: (state) => state.awaitOrder,
   getProcessOrder: (state) => state.processOrder,
   getShowLoading: (state) => state.showLoading,
+  getChipStatus: (state) => state.chipStatus,
 };
 
 const state = {
@@ -46,7 +53,7 @@ const state = {
   awaitOrder: null,
   processOrder: null,
   showLoading: false,
-  chipStatus: 'free',
+  chipStatus: 'all',
 };
 
 export default {

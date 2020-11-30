@@ -85,6 +85,7 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch('setChipStatus', 'process');
     if (this.token) {
       this.getProcessOrders();
     }

@@ -37,7 +37,6 @@ export default {
   name: 'spisokZakazov',
   data: () => ({
     error: '',
-    type: 'all',
   }),
   components: {
     axios,
@@ -53,6 +52,9 @@ export default {
     },
   },
   computed: {
+    type() {
+      return this.$store.getters.getChipStatus;
+    },
     token() {
       return this.$store.getters.getToken;
     },
