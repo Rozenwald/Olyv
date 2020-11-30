@@ -6,11 +6,13 @@
             v-chip(value="await"
                   outlined
                   color="#56d67b"
-                  text-color="#000") В ожидании
+                  text-color="#000"
+                  @click="route('myAwaitOrders')") В ожидании
             v-chip(value="process"
                   outlined
                   color="#56d67b"
-                  text-color="#000") В процессе
+                  text-color="#000"
+                  @click="route('myProcessOrders')") В процессе
       router-view.list-item
 </template>
 
@@ -26,23 +28,17 @@ export default {
     axios,
     store,
   },
+  methods: {
+    route(name) {
+      this.$router.push({ name });
+    },
+  },
   computed: {
     type() {
       return this.$store.getters.getChipStatus;
     },
     token() {
       return this.$store.getters.getToken;
-    },
-  },
-  watch: {
-    type() {
-      console.log(this.type);
-      if (this.type === 'await') {
-        this.$router.push({ name: 'myAwaitOrders' });
-      }
-      if (this.type === 'process') {
-        this.$router.push({ name: 'myProcessOrders' });
-      }
     },
   },
   created() {
