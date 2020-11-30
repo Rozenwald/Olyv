@@ -26,7 +26,10 @@
           @click='open()') Правила и условия политики конфиденциальности
     v-row.button(align='center' justify='center')
       .button-center
-        v-btn.button-center-registration(@click="checkForm()") Зарегистрироваться
+        v-btn.button-center-registration(
+          @click="checkForm()"
+          :loading='loading'
+          :disabled='loading') Зарегистрироваться
         v-btn.button-center-go-to-auth(
           @click="route('auth')"
           v-show="!isFocus") Уже есть аккаунт
@@ -64,6 +67,7 @@ export default {
       isFocus: false,
       windowHeight: null,
       isAddAppToken: false,
+      loading: false,
     };
   },
   methods: {
@@ -81,6 +85,7 @@ export default {
     },
 
     checkForm(e) {
+      this.loading = true;
       if (!this.validEmail(this.email)) {
         dialog.open(
           dialogMessages.getTitle('error'),
@@ -88,6 +93,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
 
@@ -98,6 +104,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
 
@@ -108,6 +115,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
 
@@ -136,6 +144,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -149,6 +158,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           break;
         case 'invalidPassword':
           dialog.open(
@@ -157,6 +167,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           break;
         case 'existEmail':
           dialog.open(
@@ -165,6 +176,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           break;
         case 'success':
           this.signIn();
@@ -176,6 +188,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(response);
           break;
       }
@@ -195,6 +208,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -212,6 +226,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(response);
           break;
       }
@@ -232,6 +247,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -248,6 +264,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(response);
           break;
       }
@@ -267,6 +284,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -286,6 +304,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(response);
           break;
       }
@@ -305,6 +324,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -334,6 +354,7 @@ export default {
                   true,
                   false,
                 );
+                this.loading = false;
                 logger.log(error);
               });
           }
@@ -345,6 +366,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(response);
           break;
       }
@@ -365,6 +387,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -372,6 +395,7 @@ export default {
     checkAppToken(response) {
       if (response.data.status === 'success' || response.data.status === 'exist') {
         this.isAddAppToken = true;
+        this.loading = false;
       } else {
         dialog.open(
           dialogMessages.getTitle('error'),
@@ -379,6 +403,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         logger.log(response);
       }
     },
