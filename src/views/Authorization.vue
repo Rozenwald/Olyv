@@ -21,7 +21,10 @@
               required)
     v-row.button(align='center' justify='center')
       .button-center
-        v-btn.button-center-registration(@click="checkForm()") Войти
+        v-btn.button-center-registration(
+          @click="checkForm()"
+          :loading='loading'
+          :disabled='loading') Войти
         v-btn.button-center-go-to-auth(
           @click="route('registration')"
           v-show="!isFocus") Пройти регистрацию
@@ -60,6 +63,7 @@ export default {
       isFocus: false,
       windowHeight: null,
       isAddAppToken: false,
+      loading: false,
     };
   },
   methods: {
@@ -94,6 +98,7 @@ export default {
     },
 
     checkForm(e) {
+      this.loading = true;
       if (!this.validEmail(this.email)) {
         dialog.open(
           dialogMessages.getTitle('error'),
@@ -101,6 +106,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
 
@@ -111,6 +117,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
 
@@ -121,6 +128,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
 
@@ -162,6 +170,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           break;
         default:
           dialog.open(
@@ -170,6 +179,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(response);
           break;
       }
@@ -190,6 +200,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -207,6 +218,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(response);
           break;
       }
@@ -226,6 +238,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -246,6 +259,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(response);
           break;
       }
@@ -265,6 +279,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -277,7 +292,7 @@ export default {
           nativeStorage.setItem('setNotificationIdChanal', response.data.data.idChanal);
           this.$store.dispatch('setNotificationToken', response.data.data.token);
           this.$store.dispatch('setNotificationIdChanal', response.data.data.idChanal);
-
+          this.loading = false;
           logger.log(`App token => ${this.appToken}`);
 
           if (this.appToken) {
@@ -296,6 +311,7 @@ export default {
                   false,
                 );
                 logger.log(error);
+                this.loading = false;
               });
           }
           break;
@@ -306,6 +322,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(response);
           break;
       }
@@ -478,7 +495,7 @@ export default {
     height 34vh;
     margin 0;
     &-center {
-      width 100%;
+      width 100% !important;
         &-registration {
           height 56px !important
           color #56D68B
@@ -486,7 +503,7 @@ export default {
           background: transparent
           border 1px solid #56D68B
           border-radius 30px
-          width 72%
+          width 72% !important
         }
         &-go-to-auth {
           height 56px !important

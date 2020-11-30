@@ -28,7 +28,6 @@ export default {
     textForRegexp: '',
     regexp: null,
     lastDate: null,
-    error: '',
     type: 'all',
     loadType: true,
   }),
@@ -262,6 +261,7 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Исполнитель');
+    this.$store.dispatch('setChipStatus', 'all');
     if (this.token) {
       this.getData();
     } else {

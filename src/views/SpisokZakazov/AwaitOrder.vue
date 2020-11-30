@@ -127,6 +127,7 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch('setChipStatus', 'await');
     if (this.token) {
       this.getAwaitOrder();
     }

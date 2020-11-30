@@ -82,7 +82,7 @@ const routes = [
       },
       {
         name: 'allOrder',
-        path: '',
+        path: 'allOrder',
         component: AllOrder,
         meta: { index: 1 },
       },
@@ -97,6 +97,10 @@ const routes = [
         path: 'processOrder',
         component: ProcessOrder,
         meta: { index: 3 },
+      },
+      {
+        path: '',
+        redirect: 'allOrder',
       },
     ],
   },

@@ -300,6 +300,7 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Исполнитель');
+    this.$store.dispatch('setChipStatus', 'keyword');
     if (this.token) {
       this.getKeyWord();
       this.getData();
