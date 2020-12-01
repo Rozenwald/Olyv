@@ -5,15 +5,15 @@
         avatar(type="public" size="62" :src="photo")
       v-list-item-content.content
         v-list-item-title {{user.name}} {{user.lastname}}
-        v-list-item-subtitle
-          v-rating(
+        <!--v-list-item-subtitle
+           v-rating(
             :length="5"
             readonly
             :half-increments="true"
             dense
             color="#FFCA10"
             background-color="#FFCA10"
-            size="14")
+            size="14") -->
 </template>
 
 <script>

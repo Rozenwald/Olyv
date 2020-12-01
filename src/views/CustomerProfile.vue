@@ -2,7 +2,7 @@
   v-container
     user-profile-header
     verification-status
-    review
+    // review
     v-btn.exit-btn(block :loading='loading' @click='exit')
       v-icon(dense color="red") exit_to_app
       span.text Выход
