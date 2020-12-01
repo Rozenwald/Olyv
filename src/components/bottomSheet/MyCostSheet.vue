@@ -17,7 +17,7 @@
         ref="costInput")
 
       v-row.my-cost-sheet-wrp-sheet-btn-wrp(align="center" justify="center")
-        v-btn(rounded @click="beforeAcceptOrder") Отозваться
+        v-btn(rounded @click="acceptOrder") Отозваться
 </template>
 
 <script>
@@ -34,16 +34,7 @@ export default {
     };
   },
   methods: {
-    beforeAcceptOrder() {
-      if (this.cost === this.order.cost) {
-        const costField = undefined;
-        console.log(costField);
-        this.acceptOrder(costField);
-      } else {
-        this.acceptOrder(this.cost);
-      }
-    },
-    acceptOrder(costField) {
+    acceptOrder() {
       /* eslint-disable no-underscore-dangle */
       axios
         .post(`${this.$baseUrl}api/v1/private/response`, {
@@ -51,7 +42,7 @@ export default {
           method: 'add',
           submethod: 'executor',
           idOrder: this.order._id,
-          cost: costField,
+          cost: this.cost || undefined,
         })
         .then((response) => (this.checkOrderResponse(response)))
         .catch((error) => {

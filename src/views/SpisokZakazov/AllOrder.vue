@@ -86,7 +86,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         default:
@@ -122,7 +122,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push({ name: 'auth' }),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         case 'notAuthenticate':
@@ -131,7 +131,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push({ name: 'auth' }),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         case 'notExist':
@@ -170,7 +170,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         case 'notExist':
@@ -241,7 +241,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         case 'notExist':
