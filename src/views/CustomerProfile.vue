@@ -44,7 +44,7 @@ export default {
       axios
         .post(`${this.$baseUrl}api/v1/private/passport`, {
           method: 'receive',
-          submethod: 'passport',
+          submethod: 'comment',
           token: this.token,
         })
         .then((response) => (this.checkResponse(response)))
@@ -122,7 +122,7 @@ export default {
         dialogMessages.getBody('notAuthentucate'),
         true,
         true,
-        router.push('auth'),
+        router.push({ name: 'auth' }),
       );
     } else {
       next();

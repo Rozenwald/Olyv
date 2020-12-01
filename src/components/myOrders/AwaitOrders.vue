@@ -44,7 +44,6 @@ export default {
         });
     },
     checkResponse(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setMyOrders', response.data.data);
@@ -59,7 +58,8 @@ export default {
             this.$router.push('auth'),
           );
           break;
-        case 'NotExist':
+        case 'notExist':
+          this.loadType = false;
           break;
         default:
           logger.log(response);

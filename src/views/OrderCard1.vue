@@ -46,7 +46,7 @@ export default {
       // eslint-disable-next-line no-underscore-dangle
       this.$store.dispatch('setMyOrder', this.item);
       this.$store.dispatch('setType', this.type);
-      this.$router.push('customerMoreInfo');
+      this.$router.push({ name: 'customerMoreInfo' });
     },
   },
   computed: {

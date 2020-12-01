@@ -396,7 +396,7 @@ export default {
       if (this.currentAuthToken) {
         this.getChatAuth();
 
-        if (!window.cordova.platformId === 'browser') {
+        if (window.cordova.platformId !== 'browser') {
           this.getNotificationAuth();
         } else {
           this.isAddAppToken = true;

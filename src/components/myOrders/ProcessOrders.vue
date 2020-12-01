@@ -6,7 +6,7 @@
                         :color="'#fd7363'")
     OrderCard1(v-else
               v-for='order in processOrders'
-              type="await"
+              type="process"
               :key='order.id'
               :item='order')
 </template>
@@ -44,7 +44,6 @@ export default {
         });
     },
     checkProcessOrdersResponse(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setMyProcessOrders', response.data.data);
@@ -58,6 +57,9 @@ export default {
             true,
             this.$router.push('auth'),
           );
+          break;
+        case 'notExist':
+          this.loadType = false;
           break;
         default:
           logger.log(response);
