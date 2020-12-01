@@ -8,9 +8,9 @@
             v-row.cost-wrp(align='center' justify='center')
               .cost {{cost}}
               svg-icon(name="RubDefault" color="#FE7664" height="10" width="10")
-            v-row.lowcost-wrp(align='center' justify='center')
+            v-row.lowcost-wrp(v-show='lowcost != null' align='center' justify='center')
               svg-icon(name="Lowcost" color="#FE7664" height="10" width="10")
-              .lowcost {{cost}}
+              .lowcost {{lowcost}}
               svg-icon(name="RubDefault" color="#FE7664" height="10" width="10")
 
       v-row.more-info-wrp(align='center' justify='start' no-gutters)
@@ -54,7 +54,7 @@ export default {
       return this.item.countResponse;
     },
     lowcost() {
-      return this.item.lowcost;
+      return this.item.lowCost;
     },
     token() {
       return this.$store.getters.getToken;

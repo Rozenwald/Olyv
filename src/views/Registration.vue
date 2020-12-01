@@ -33,7 +33,7 @@
         v-btn.button-center-go-to-auth(
           @click="route('auth')"
           v-show="!isFocus") Уже есть аккаунт
-      .button-icon(v-show="!isFocus")
+      // .button-icon(v-show="!isFocus")
         v-btn.button-icon-svg-icon(icon @click="getDataVk()")
           svg-icon(name='VK'  width='41' height='41')
         v-btn.button-icon-svg-icon(icon)

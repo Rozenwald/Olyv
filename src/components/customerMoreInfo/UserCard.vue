@@ -5,15 +5,16 @@
         avatar(:src="photo")
       v-list-item-content
         v-list-item-title {{name}}
-        v-list-item-subtitle
-          v-rating(
+        <!-- v-list-item-subtitle
+           v-rating(
             :length="5"
             readonly
             :half-increments="true"
             dense
             color="#FFCA10"
             background-color="#FFCA10"
-            size="14")
+            size="14"
+              ) -->
       v-list-item-action
         v-row.cost(align='center') {{cost}} руб.
 </template>
