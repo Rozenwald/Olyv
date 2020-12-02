@@ -74,7 +74,7 @@ export default {
     open() {
       axios
         .get(`${this.$baseUrlNoPort}static/ect/rules.pdf`)
-        .then((response) => { logger.log(response); })
+        .then((response) => { console.log(response); })
         .catch((error) => { console.log(error); });
       dialog.open(
         dialogMessages.getTitle('rules'),
