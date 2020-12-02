@@ -47,7 +47,7 @@ import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
 import nativeStorage from '../scripts/nativeStorage';
 // eslint-disable-next-line import/no-cycle
-import cordova from '../plugins/cordova';
+import cordovaLocal from '../plugins/cordova';
 import logger from '../scripts/logger';
 import dialog from '../scripts/openDialog';
 import auth from '../scripts/auth';
@@ -72,6 +72,10 @@ export default {
   },
   methods: {
     open() {
+      axios
+        .get(`${this.$baseUrlNoPort}static/ect/rules.pdf`)
+        .then((response) => { logger.log(response); })
+        .catch((error) => { console.log(error); });
       dialog.open(
         dialogMessages.getTitle('rules'),
         '',
@@ -342,7 +346,7 @@ export default {
           if (this.appToken) {
             this.addAppToken(this.appToken);
           } else {
-            cordova.getToken()
+            cordovaLocal.getToken()
               .then((token) => {
                 this.$store.dispatch('setAppToken', token);
                 this.addAppToken(token);
