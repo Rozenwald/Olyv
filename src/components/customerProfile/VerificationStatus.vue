@@ -1,8 +1,10 @@
 <template lang="pug">
-  .verification-status(v-show="user.verification == 'await' || comment")
+  .verification-status(
+    v-show="(user.verification == 'await' || comment) && user.verification != 'completed'"
+  )
     .title-verification Верификация
     v-row.status-wrp(align='center' justify='center')
-      .await(v-text="'Ожидание верификации'" v-show="user.verification == 'await'")
+      .await(v-text="'Ожидание верификации'" v-show="user.verification == 'await' && !comment")
       .fail(v-text="'Отказ в верификации'" v-show="comment")
     v-row.action(align='center' justify='center')
       v-btn.comment(v-text="'Посмотреть комментарий'" text v-show="comment" @click='route')

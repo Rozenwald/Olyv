@@ -1,10 +1,16 @@
 `<template lang="pug">
   .order-container
-    v-row.icon-container(justify='center' align='center' v-if='loadType')
+    v-row.icon-container(justify='center' align='center' v-if="loadType ==='icon'")
       semipolar-spinner(:animation-duration="1500"
                         :size="75"
                         :color="'#fd7363'")
-    OrderCard2(v-else
+    v-row.text-container(justify='center'
+                         align='center'
+                         v-else-if="loadType === 'text'")
+      .errorText-container
+        span.errorText-container {{textForUser1}} <br/>
+        span.errorText-container {{textForUser2}}
+    OrderCard2(v-else-if="loadType === 'order'"
                v-for='item in awaitOrders'
                type='await'
                :key='item._id'
@@ -24,8 +30,9 @@ export default {
   data: () => ({
     awaitOrders: [],
     error: '',
-    type: 'load',
-    loadType: true,
+    loadType: 'icon',
+    textForUser1: '',
+    textForUser2: '',
   }),
   components: {
     OrderCard2,
@@ -52,10 +59,15 @@ export default {
     checkAwaitOrder(response) {
       switch (response.data.status) {
         case 'success':
-          response.data.data.forEach((element) => {
-            this.getOrder(element);
-          });
-          this.loadType = false;
+          if (response.data.data.length === 0) {
+            this.textForUser1 = 'Вы еще не откликнулись ни на один заказ';
+            this.textForUser2 = 'Нажмите на карточку чтобы узнать о заказе больше и отозваться';
+            this.loadType = 'text';
+          } else {
+            response.data.data.forEach((element) => {
+              this.getOrder(element);
+            });
+          }
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -63,7 +75,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         default:
@@ -96,13 +108,16 @@ export default {
           // eslint-disable-next-line no-underscore-dangle
           this.awaitOrders[this.awaitOrders.length - 1].idResponse = element._id;
           break;
+        case 'notExist':
+          this.loadType = 'order';
+          break;
         case 'notAuthenticate':
           dialog.open(
             dialogMessages.getTitle('error'),
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         default:
@@ -127,6 +142,7 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch('setChipStatus', 'await');
     if (this.token) {
       this.getAwaitOrder();
     }
@@ -135,6 +151,17 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .text-container{
+    text-align center
+    height 100%
+    padding-bottom: 75px
+  }
+  .errorText-container{
+    display: inline-block
+    font-style normal
+    font-weight bold
+    font-size 18px
+  }
   .order-container{
     padding 0
     height 100%

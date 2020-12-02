@@ -26,11 +26,14 @@
           @click='open()') Правила и условия политики конфиденциальности
     v-row.button(align='center' justify='center')
       .button-center
-        v-btn.button-center-registration(@click="checkForm()") Зарегистрироваться
+        v-btn.button-center-registration(
+          @click="checkForm()"
+          :loading='loading'
+          :disabled='loading') Зарегистрироваться
         v-btn.button-center-go-to-auth(
           @click="route('auth')"
           v-show="!isFocus") Уже есть аккаунт
-      .button-icon(v-show="!isFocus")
+      // .button-icon(v-show="!isFocus")
         v-btn.button-icon-svg-icon(icon @click="getDataVk()")
           svg-icon(name='VK'  width='41' height='41')
         v-btn.button-icon-svg-icon(icon)
@@ -44,7 +47,7 @@ import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
 import nativeStorage from '../scripts/nativeStorage';
 // eslint-disable-next-line import/no-cycle
-import cordova from '../plugins/cordova';
+import cordovaLocal from '../plugins/cordova';
 import logger from '../scripts/logger';
 import dialog from '../scripts/openDialog';
 import auth from '../scripts/auth';
@@ -64,10 +67,15 @@ export default {
       isFocus: false,
       windowHeight: null,
       isAddAppToken: false,
+      loading: false,
     };
   },
   methods: {
     open() {
+      axios
+        .get(`${this.$baseUrlNoPort}static/ect/rules.pdf`)
+        .then((response) => { logger.log(response); })
+        .catch((error) => { console.log(error); });
       dialog.open(
         dialogMessages.getTitle('rules'),
         '',
@@ -81,6 +89,7 @@ export default {
     },
 
     checkForm(e) {
+      this.loading = true;
       if (!this.validEmail(this.email)) {
         dialog.open(
           dialogMessages.getTitle('error'),
@@ -88,6 +97,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
 
@@ -98,6 +108,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
 
@@ -108,6 +119,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
 
@@ -136,6 +148,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -149,6 +162,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           break;
         case 'invalidPassword':
           dialog.open(
@@ -157,6 +171,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           break;
         case 'existEmail':
           dialog.open(
@@ -165,6 +180,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           break;
         case 'success':
           this.signIn();
@@ -176,6 +192,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(response);
           break;
       }
@@ -195,6 +212,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -212,6 +230,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(response);
           break;
       }
@@ -232,6 +251,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -248,6 +268,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(response);
           break;
       }
@@ -267,6 +288,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -286,6 +308,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(response);
           break;
       }
@@ -305,6 +328,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -322,7 +346,7 @@ export default {
           if (this.appToken) {
             this.addAppToken(this.appToken);
           } else {
-            cordova.getToken()
+            cordovaLocal.getToken()
               .then((token) => {
                 this.$store.dispatch('setAppToken', token);
                 this.addAppToken(token);
@@ -334,6 +358,7 @@ export default {
                   true,
                   false,
                 );
+                this.loading = false;
                 logger.log(error);
               });
           }
@@ -345,6 +370,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(response);
           break;
       }
@@ -365,6 +391,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           logger.log(error);
         });
     },
@@ -372,6 +399,7 @@ export default {
     checkAppToken(response) {
       if (response.data.status === 'success' || response.data.status === 'exist') {
         this.isAddAppToken = true;
+        this.loading = false;
       } else {
         dialog.open(
           dialogMessages.getTitle('error'),
@@ -379,6 +407,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         logger.log(response);
       }
     },
@@ -417,7 +446,7 @@ export default {
       if (this.currentAuthToken) {
         this.getChatAuth();
 
-        if (!window.cordova.platformId === 'browser') {
+        if (window.cordova.platformId !== 'browser') {
           this.getNotificationAuth();
         } else {
           this.isAddAppToken = true;

@@ -34,11 +34,10 @@ const mutations = {
   clear(state) {
     state.chattoken = null;
     state.notificationIdChanal = null;
-    state.appToken = null;
     state.notificationToken = null;
     state.idChanal = null;
     state.token = null;
-    state.isAuth = null;
+    state.isAuth = false;
     state.user = {};
     state.hasData = false;
   },

@@ -9,16 +9,19 @@
         .comment-wrp(v-show="comment")
           .comment-description(v-text="commentDescription")
           .comment(v-text="comment")
-        .await-description(v-text="descriptionAwait" v-show="user.verification == 'await'")
+        .await-description(
+          v-text="descriptionAwait"
+          v-show="user.verification == 'await' && !comment")
+
         v-row.btn-load-photo-wrp(
           align="center"
           justify="center"
-          v-show="user.verification == 'notCompleted' || !user.verification")
+          v-show="user.verification == 'notCompleted' || comment")
 
           v-btn.btn-load-photo(
             rounded
             @click="actionPhoto"
-            v-text="user.verification ? 'Добавить фото': 'Выбрать другое фото'")
+            v-text="comment ? 'Выбрать другое фото' : 'Добавить фото'")
 
       v-sheet.selected-img-wrp(v-else)
         .img-wrp(@click="setMoreActionImg")
@@ -312,7 +315,6 @@ export default {
   }
 
   .btn-load-photo {
-    width 50%
     background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
     color #FFF
     text-transform none

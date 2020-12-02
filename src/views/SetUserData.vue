@@ -50,6 +50,7 @@ export default {
       firstName: null,
       lastName: null,
       file: null,
+      windowHeight: null,
     };
   },
   methods: {
@@ -268,6 +269,15 @@ export default {
     this.lastName = this.user.lastname;
 
     this.$store.commit('setTitle', 'Личный кабинет');
+
+    this.windowHeight = window.innerHeight;
+    window.addEventListener('resize', () => {
+      if (window.innerHeight < this.windowHeight) {
+        this.$store.dispatch('showBottomNavigation', false);
+      } else {
+        this.$store.dispatch('showBottomNavigation', true);
+      }
+    });
   },
   computed: {
     isAuth() {

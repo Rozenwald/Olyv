@@ -28,7 +28,6 @@ export default {
     textForRegexp: '',
     regexp: null,
     lastDate: null,
-    error: '',
     type: 'all',
     loadType: true,
   }),
@@ -87,7 +86,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         default:
@@ -117,13 +116,22 @@ export default {
           });
           this.getMyOrder();
           break;
+        case 'invalidSubmethod':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            () => { this.$router.push({ name: 'auth' }); },
+          );
+          break;
         case 'notAuthenticate':
           dialog.open(
             dialogMessages.getTitle('error'),
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         case 'notExist':
@@ -162,7 +170,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         case 'notExist':
@@ -233,7 +241,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         case 'notExist':
@@ -262,6 +270,7 @@ export default {
   },
   created() {
     this.$store.commit('setTitle', 'Исполнитель');
+    this.$store.dispatch('setChipStatus', 'all');
     if (this.token) {
       this.getData();
     } else {

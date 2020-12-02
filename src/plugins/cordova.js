@@ -51,10 +51,17 @@ function notificationListener() {
   }
 
   window.FirebasePlugin.onMessageReceived((message) => {
+    console.log(JSON.stringify(message));
     if (message.messageType === 'notification') {
       if (message.tap) {
         console.log(message.type);
         checkNotification(message);
+      } else {
+        cordova.plugins.notification.local.schedule({
+          title: message.title,
+          text: message.body,
+          foreground: true,
+        });
       }
     }
   }, (error) => {
@@ -64,6 +71,7 @@ function notificationListener() {
 
 function onDeviceReady() {
   console.log('onDeviceReady');
+  cordova.plugins.notification.local.on('click', (notification) => { console.log(JSON.stringify(notification)); }, { });
 
   getStorage();
   getToken()

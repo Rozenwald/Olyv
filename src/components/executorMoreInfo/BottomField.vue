@@ -27,7 +27,6 @@ export default {
           method: 'add',
           submethod: 'executor',
           idOrder: this.order._id,
-          comment: this.order.cost,
         })
         .then((response) => (this.checkOrderResponse(response)))
         .catch((error) => {
@@ -93,6 +92,14 @@ export default {
           } else if (this.orderType === ('await' || 'process')) {
             this.$store.dispatch('setType', 'all');
           }
+
+          if (response.data.data) {
+            const order = { ...this.order };
+            // eslint-disable-next-line no-underscore-dangle
+            order.idResponse = response.data.data._id;
+
+            this.$store.dispatch('setMyOrder', order);
+          }
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -121,44 +128,67 @@ export default {
     },
 
     clickRightBtn() {
-      switch (this.orderType) {
-        case 'all':
-          this.acceptOrder();
-          break;
-        case 'keyword':
-          this.acceptOrder();
-          break;
-        case 'await':
-          this.cancelOrder();
-          break;
-        case 'process':
-          this.completeOrder();
-          break;
-        default:
-          break;
+      if (this.user.verification === 'completed') {
+        switch (this.orderType) {
+          case 'all':
+            this.acceptOrder();
+            break;
+          case 'keyword':
+            this.acceptOrder();
+            break;
+          case 'await':
+            this.cancelOrder();
+            break;
+          case 'process':
+            this.completeOrder();
+            break;
+          default:
+            break;
+        }
+      } else {
+        dialog.open(
+          dialogMessages.getTitle('warning'),
+          dialogMessages.getBody('needToVerification'),
+          true,
+          true,
+          () => { this.$router.push({ name: 'verification' }); },
+        );
       }
     },
 
     clickLeftBtn() {
-      switch (this.orderType) {
-        case 'all':
-          this.acceptOrderMyCost();
-          break;
-        case 'keyword':
-          this.acceptOrderMyCost();
-          break;
-        case 'await':
-          this.goChat();
-          break;
-        case 'process':
-          this.goChat();
-          break;
-        default:
-          break;
+      if (this.user.verification === 'completed') {
+        switch (this.orderType) {
+          case 'all':
+            this.acceptOrderMyCost();
+            break;
+          case 'keyword':
+            this.acceptOrderMyCost();
+            break;
+          case 'await':
+            this.goChat();
+            break;
+          case 'process':
+            this.goChat();
+            break;
+          default:
+            break;
+        }
+      } else {
+        dialog.open(
+          dialogMessages.getTitle('warning'),
+          dialogMessages.getBody('needToVerification'),
+          true,
+          true,
+          () => { this.$router.push({ name: 'verification' }); },
+        );
       }
     },
   },
   computed: {
+    user() {
+      return this.$store.getters.getUser;
+    },
     token() {
       return this.$store.getters.getToken;
     },

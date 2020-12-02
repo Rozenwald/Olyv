@@ -10,44 +10,40 @@
       .errorText-container
         span.errorText-container {{textForUser1}} <br/>
         span.errorText-container {{textForUser2}}
-    OrderCard2(v-else-if="loadType === 'order'"
-               v-for='item in processOrders'
-               type='process'
-               :key='item._id'
-               :item='item')
+    OrderCard1(v-else-if="loadType === 'order'"
+              v-for='order in processOrders'
+              type="process"
+              :key='order.id'
+              :item='order')
 </template>
 
 <script>
 import axios from 'axios';
 import { SemipolarSpinner } from 'epic-spinners';
-import OrderCard2 from '../OrderCard2.vue';
-import dialog from '../../scripts/openDialog';
+import OrderCard1 from '../../views/OrderCard1.vue';
 import logger from '../../scripts/logger';
 import dialogMessages from '../../scripts/dialogMessages';
+import dialog from '../../scripts/openDialog';
 
 export default {
-  name: 'allOrder',
+  name: 'await-orders',
   data: () => ({
-    processOrders: null,
-    textForUser: '',
-    type: 'process',
     loadType: 'icon',
     textForUser1: '',
     textForUser2: '',
   }),
   components: {
-    OrderCard2,
     axios,
+    OrderCard1,
     SemipolarSpinner,
   },
   methods: {
-    // Получаю объект с массивом заказов которые в исполнении
     getProcessOrders() {
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
           method: 'receive',
-          submethod: 'executor',
+          submethod: 'customer',
           status: 'process',
         })
         .then((response) => (this.checkProcessOrdersResponse(response)))
@@ -55,18 +51,11 @@ export default {
           logger.log(error);
         });
     },
-    // Создаю массив и отправляю его во Vuex
     checkProcessOrdersResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.processOrders = response.data.data;
+          this.$store.dispatch('setMyProcessOrders', response.data.data);
           this.loadType = 'order';
-          // this.$store.dispatch('setProcessOrder', this.processOrders);
-          break;
-        case 'notExist':
-          this.textForUser1 = 'Вас пока не взяли исполнителем';
-          this.textForUser2 = 'Советуем предложить заказчику более интересные условия';
-          this.loadType = 'text';
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -77,7 +66,13 @@ export default {
             () => { this.$router.push({ name: 'auth' }); },
           );
           break;
+        case 'notExist':
+          this.textForUser1 = 'Пока что ни один из ваших заказов не находится в исполнении';
+          this.textForUser2 = 'Выберите исполнителя из числа откликнувшихся пользователей';
+          this.loadType = 'text';
+          break;
         default:
+          logger.log(response);
           break;
       }
     },
@@ -86,22 +81,13 @@ export default {
     token() {
       return this.$store.getters.getToken;
     },
-    user() {
-      return this.$store.getters.getUser;
-    },
-  },
-  watch: {
-    token() {
-      if (this.token) {
-        this.getProcessOrders();
-      }
+    processOrders() {
+      return this.$store.getters.getMyProcessOrders;
     },
   },
   created() {
     this.$store.dispatch('setChipStatus', 'process');
-    if (this.token) {
-      this.getProcessOrders();
-    }
+    this.getProcessOrders();
   },
 };
 </script>
@@ -118,7 +104,7 @@ export default {
     font-weight bold
     font-size 18px
   }
-  .order-container{
+  .order-container {
     padding 0
     height 100%
   }
@@ -130,7 +116,8 @@ export default {
     border-bottom 0.5px solid #65686C
     padding 0 !important
   }
-  .v-list-item:last-child {
-    border-bottom none
+
+  .process-order-list {
+    margin-top: 48px
   }
 </style>
