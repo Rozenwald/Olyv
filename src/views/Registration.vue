@@ -78,6 +78,9 @@ export default {
           console.log(response);
           console.log(response.data);
           console.log(typeof response.data);
+
+          const blob = new Blob([response.data], { type: 'application/pdf' });
+          console.log(blob);
         })
         .catch((error) => { console.log(error); });
       dialog.open(
