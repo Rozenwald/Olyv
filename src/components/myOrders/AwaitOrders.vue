@@ -1,10 +1,16 @@
-<template lang="pug">
-  .order-container(ref="scrollUpdate")
-    v-row.icon-container(justify='center' align='center' v-if='loadType')
+`<template lang="pug">
+  .order-container
+    v-row.icon-container(justify='center' align='center' v-if="loadType ==='icon'")
       semipolar-spinner(:animation-duration="1500"
                         :size="75"
                         :color="'#fd7363'")
-    OrderCard1(v-else
+    v-row.text-container(justify='center'
+                         align='center'
+                         v-else-if="loadType === 'text'")
+      .errorText-container
+        span.errorText-container {{textForUser1}} <br/>
+        span.errorText-container {{textForUser2}}
+    OrderCard1(v-else-if="loadType === 'order'"
               v-for='order in awaitOrders'
               type="await"
               :key='order.id'
@@ -22,7 +28,9 @@ import dialog from '../../scripts/openDialog';
 export default {
   name: 'await-orders',
   data: () => ({
-    loadType: true,
+    loadType: 'icon',
+    textForUser1: '',
+    textForUser2: '',
   }),
   components: {
     axios,
@@ -44,11 +52,10 @@ export default {
         });
     },
     checkResponse(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setMyOrders', response.data.data);
-          this.loadType = false;
+          this.loadType = 'order';
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -56,10 +63,12 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push({ name: 'auth' }),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
-        case 'NotExist':
+        case 'notExist':
+          this.textForUser1 = 'Вы пока не создали ни одного заказа';
+          this.loadType = 'text';
           break;
         default:
           logger.log(response);
@@ -83,6 +92,17 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .text-container{
+    text-align center
+    height 100%
+    padding-bottom: 75px
+  }
+  .errorText-container{
+    display: inline-block
+    font-style normal
+    font-weight bold
+    font-size 18px
+  }
   .order-container {
     padding 0
     height 100%

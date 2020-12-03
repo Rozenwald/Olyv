@@ -3,13 +3,7 @@ import logger from './logger';
 import nativeStorage from './nativeStorage';
 import store from '../store/index';
 
-let notificationToken;
-let appToken;
-
-function receiveAppTokens() {
-  notificationToken = store.getters.getNotificationToken;
-  appToken = store.getters.getAppToken;
-
+function receiveAppTokens(notificationToken) {
   try {
     return axios.post(`${window.$baseNotificationUrl}api/v1/private/tokenApp`, {
       token: notificationToken,
@@ -22,7 +16,7 @@ function receiveAppTokens() {
   }
 }
 
-function getTokenId(data) {
+function getTokenId(data, appToken) {
   if (!data) {
     return null;
   }
@@ -31,6 +25,8 @@ function getTokenId(data) {
     logger.log('App token is null');
     return null;
   }
+
+  logger.log(appToken);
 
   for (let i = 0; i < data.length; i += 1) {
     if (data[i].tokenApp === appToken) {
@@ -42,7 +38,7 @@ function getTokenId(data) {
   return null;
 }
 
-function removeTokenApp(idTokenApp) {
+function removeTokenApp(idTokenApp, notificationToken) {
   if (!idTokenApp) {
     return null;
   }
@@ -59,18 +55,26 @@ function removeTokenApp(idTokenApp) {
   }
 }
 
-async function deleteAppToken() {
-  const tokenList = await receiveAppTokens();
+async function deleteAppToken(notificationToken, appToken) {
+  const tokenList = await receiveAppTokens(notificationToken);
   if (!tokenList) return null;
 
-  const token = getTokenId(tokenList.data.data);
-  if (!token) return null;
+  logger.log(tokenList);
 
-  const resultData = await removeTokenApp(token);
+  const tokenId = getTokenId(tokenList.data.data, appToken);
+  if (!tokenId) return null;
+
+  logger.log(tokenId);
+
+  const resultData = await removeTokenApp(tokenId, notificationToken);
+
   return resultData;
 }
 
 async function exit() {
+  const notificationToken = store.getters.getNotificationToken;
+  const appToken = store.getters.getAppToken;
+
   nativeStorage.clear();
   store.dispatch('clear');
 
@@ -79,8 +83,8 @@ async function exit() {
   logger.log(store.getters.getNotificationToken);
   logger.log(store.getters.getChatToken);
 
-  if (!window.cordova.platformId === 'browser') {
-    const result = await deleteAppToken();
+  if (window.cordova.platformId !== 'browser') {
+    const result = await deleteAppToken(notificationToken, appToken);
 
     if (!result) return false;
 

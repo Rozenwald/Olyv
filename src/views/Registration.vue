@@ -47,9 +47,10 @@ import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
 import nativeStorage from '../scripts/nativeStorage';
 // eslint-disable-next-line import/no-cycle
-import cordova from '../plugins/cordova';
+import cordovaLocal from '../plugins/cordova';
 import logger from '../scripts/logger';
 import dialog from '../scripts/openDialog';
+import file from '../scripts/device-modules/file';
 import auth from '../scripts/auth';
 import dialogMessages from '../scripts/dialogMessages';
 
@@ -72,6 +73,22 @@ export default {
   },
   methods: {
     open() {
+      axios
+        .get(`${this.$baseUrlNoPort}static/ect/rules.pdf`, { responseType: 'blob' })
+        .then((response) => {
+          console.log(response);
+          console.log(response.data);
+          console.log(typeof response.data);
+
+          const blob = new Blob([response.data], { type: 'application/pdf' });
+          console.log(blob);
+        })
+        .catch((error) => { console.log(error); });
+
+      file.getTemporaryFile()
+        .then((fs) => { logger.log(fs); })
+        .catch((error) => { logger.log(error); });
+
       dialog.open(
         dialogMessages.getTitle('rules'),
         '',
@@ -342,7 +359,7 @@ export default {
           if (this.appToken) {
             this.addAppToken(this.appToken);
           } else {
-            cordova.getToken()
+            cordovaLocal.getToken()
               .then((token) => {
                 this.$store.dispatch('setAppToken', token);
                 this.addAppToken(token);
@@ -442,7 +459,7 @@ export default {
       if (this.currentAuthToken) {
         this.getChatAuth();
 
-        if (!window.cordova.platformId === 'browser') {
+        if (window.cordova.platformId !== 'browser') {
           this.getNotificationAuth();
         } else {
           this.isAddAppToken = true;

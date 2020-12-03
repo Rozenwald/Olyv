@@ -44,6 +44,7 @@
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.1",
     "vue-dadata": "^1.4.10",
+    "vue-pdf": "^4.2.0",
     "vue-pose": "^0.5.1",
     "vue-router": "^3.2.0",
     "vue-router-slider": "^0.1.0",

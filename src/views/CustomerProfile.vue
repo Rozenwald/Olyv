@@ -44,7 +44,7 @@ export default {
       axios
         .post(`${this.$baseUrl}api/v1/private/passport`, {
           method: 'receive',
-          submethod: 'passport',
+          submethod: 'comment',
           token: this.token,
         })
         .then((response) => (this.checkResponse(response)))
@@ -76,6 +76,16 @@ export default {
       this.loading = true;
       auth.exit();
     },
+
+    receive() {
+      axios.post(`${this.$baseNotificationUrl}api/v1/private/tokenApp`, {
+        token: this.notificationToken,
+        method: 'receive',
+        submethod: 'tokenApp',
+      })
+        .then((response) => logger.log(response))
+        .catch((error) => logger.log(error));
+    },
   },
   computed: {
     token() {
@@ -83,6 +93,9 @@ export default {
     },
     user() {
       return this.$store.getters.getUser;
+    },
+    notificationToken() {
+      return this.$store.getters.getNotificationToken;
     },
   },
   watch: {
@@ -94,6 +107,7 @@ export default {
     },
   },
   created() {
+    this.receive();
     this.$store.commit('setTitle', 'Личный кабинет');
     if (this.user.verification === 'notCompleted') {
       this.getData();
@@ -108,7 +122,7 @@ export default {
         dialogMessages.getBody('notAuthentucate'),
         true,
         true,
-        router.push('auth'),
+        router.push({ name: 'auth' }),
       );
     } else {
       next();

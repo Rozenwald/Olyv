@@ -1,5 +1,5 @@
-<template lang="pug">
-  .order-container(ref="scrollUpdate")
+`<template lang="pug">
+  .order-container
     v-row.icon-container(justify='center' align='center' v-if="loadType ==='icon'")
       semipolar-spinner(:animation-duration="1500"
                         :size="75"
@@ -78,11 +78,15 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push({ name: 'auth' }),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         default:
-          this.error = 'Ошибка';
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('error'),
+            true,
+          );
           break;
       }
     },
@@ -116,7 +120,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push({ name: 'auth' }),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         case 'notExist':
@@ -155,7 +159,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push({ name: 'auth' }),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         case 'notExist':
@@ -274,7 +278,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push({ name: 'auth' }),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         default:

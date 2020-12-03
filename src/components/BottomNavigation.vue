@@ -34,9 +34,9 @@ export default {
     show() {
       if (this.currentRouteName === 'auth' || this.currentRouteName === 'registration'
           || this.currentRouteName === 'customerMoreInfo' || this.currentRouteName === 'executorMoreInfo'
-          || this.currentRouteName === 'chat') return false;
+          || this.currentRouteName === 'chat' || this.currentRouteName === 'keyWords') return false;
 
-      return true;
+      return this.bottomNavigationStatus;
     },
 
     currentRouteName() {
@@ -45,6 +45,10 @@ export default {
 
     isAuth() {
       return this.$store.getters.isAuth;
+    },
+
+    bottomNavigationStatus() {
+      return this.$store.getters.isVisibleBottomNavigation;
     },
   },
 

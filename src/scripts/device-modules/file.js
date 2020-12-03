@@ -1,7 +1,22 @@
-// @return FileEntry
+// @return Promise with FileEntry
 function getSystemFile(fileUrl) {
   return new Promise((onSuccess, onError) => {
     window.resolveLocalFileSystemURL(fileUrl, onSuccess, onError);
+  });
+}
+
+// @return Promise with FileSystem
+function getTemporaryFile(size) {
+  let currentSize;
+
+  if (!size) {
+    currentSize = 5 * 1024 * 1024;
+  } else {
+    currentSize = size;
+  }
+
+  return new Promise((onSuccess, onError) => {
+    window.requestFileSystem(window.TEMPORARY, currentSize, onSuccess, onError);
   });
 }
 
@@ -12,6 +27,7 @@ function getFile(fileEntry) {
   });
 }
 
+// @return Blob
 function dataURLtoBlob(dataUrl) {
   const arr = dataUrl.split(',');
   const mime = arr[0].match(/:(.*?);/)[1];
@@ -31,4 +47,5 @@ export default {
   getSystemFile,
   getFile,
   dataURLtoBlob,
+  getTemporaryFile,
 };

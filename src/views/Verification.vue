@@ -21,7 +21,7 @@
           v-btn.btn-load-photo(
             rounded
             @click="actionPhoto"
-            v-text="user.verification ? 'Добавить фото': 'Выбрать другое фото'")
+            v-text="comment ? 'Выбрать другое фото' : 'Добавить фото'")
 
       v-sheet.selected-img-wrp(v-else)
         .img-wrp(@click="setMoreActionImg")
