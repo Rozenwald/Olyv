@@ -1,7 +1,22 @@
-// @return FileEntry
+// @return Promise with FileEntry
 function getSystemFile(fileUrl) {
   return new Promise((onSuccess, onError) => {
     window.resolveLocalFileSystemURL(fileUrl, onSuccess, onError);
+  });
+}
+
+// @return Promise with FileSystem
+function getTemporaryFile(size) {
+  let currentSize;
+
+  if (!size) {
+    currentSize = 5 * 1024 * 1024;
+  } else {
+    currentSize = size;
+  }
+
+  return new Promise((onSuccess, onError) => {
+    window.requestFileSystem(window.TEMPORARY, currentSize, onSuccess, onError);
   });
 }
 
@@ -28,30 +43,9 @@ function dataURLtoBlob(dataUrl) {
   return new Blob([u8arr], { type: mime });
 }
 
-function listDir() {
-  // eslint-disable-next-line no-undef
-  console.log(JSON.stringify(cordova.file));
-  // eslint-disable-next-line no-undef
-  const path = cordova.file.cacheDirectory;
-  window.resolveLocalFileSystemURL(path,
-    (fileSystem) => {
-      console.log(JSON.stringify(fileSystem));
-      const reader = fileSystem.createReader();
-      reader.readEntries(
-        (entries) => {
-          console.log(JSON.stringify(entries));
-        },
-        (err) => {
-          console.log(JSON.stringify(err));
-        },
-      );
-    }, (err) => {
-      console.log(JSON.stringify(err));
-    });
-}
 export default {
   getSystemFile,
   getFile,
   dataURLtoBlob,
-  listDir,
+  getTemporaryFile,
 };
