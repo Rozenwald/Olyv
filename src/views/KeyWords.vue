@@ -32,6 +32,9 @@ import SvgIcon from '../components/SvgIcon.vue';
 import dialog from '../scripts/openDialog';
 import logger from '../scripts/logger';
 import dialogMessages from '../scripts/dialogMessages';
+// eslint-disable-next-line import/no-cycle
+import router from '../router';
+import store from '../store';
 
 export default {
   name: 'keyWords',
@@ -87,7 +90,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         default:
@@ -145,7 +148,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         default:
@@ -199,7 +202,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         default:
@@ -230,6 +233,20 @@ export default {
   created() {
     this.$store.commit('setTitle', 'Ключевые слова');
     this.getKeyWord();
+  },
+  beforeRouteEnter(to, from, next) {
+    if (!store.getters.isAuth) {
+      next(from.name);
+      dialog.open(
+        dialogMessages.getTitle('needToAuth'),
+        dialogMessages.getBody('needToAuth'),
+        true,
+        true,
+        () => router.push({ name: 'auth' }),
+      );
+    } else {
+      next();
+    }
   },
 };
 </script>

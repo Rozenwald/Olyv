@@ -102,7 +102,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         default:
@@ -148,7 +148,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         default:
@@ -229,7 +229,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         default:
@@ -340,8 +340,8 @@ export default {
         dialogMessages.getTitle('needToAuth'),
         dialogMessages.getBody('needToAuth'),
         true,
-        false,
-        router.push('auth'),
+        true,
+        () => router.push({ name: 'auth' }),
       );
     } else {
       next();
