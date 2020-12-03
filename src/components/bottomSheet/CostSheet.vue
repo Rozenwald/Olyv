@@ -92,6 +92,7 @@ export default {
 
   .cost-field {
     margin-top 15px
+    padding-bottom: 82px;
   }
 
   .v-card {
