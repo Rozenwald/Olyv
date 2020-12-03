@@ -54,7 +54,14 @@ export default {
       return this.item.countResponse;
     },
     lowcost() {
-      return this.item.lowCost;
+      const lowCostStr = String(this.item.lowCost);
+      if (lowCostStr.length > 6) {
+        return `${lowCostStr.substr(0, 1)}М`;
+      }
+      if (lowCostStr.length > 5) {
+        return `${lowCostStr.substr(0, 3)}K`;
+      }
+      return `${this.item.lowCost}`;
     },
     token() {
       return this.$store.getters.getToken;
