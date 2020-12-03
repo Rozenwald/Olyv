@@ -20,6 +20,10 @@ window.$baseUrl = process.env.NODE_ENV === 'production'
   ? 'http://test.cabinet.olyv.services:8888/'
   : 'http://test.cabinet.olyv.services:8888/';
 
+window.$baseUrlNoPort = process.env.NODE_ENV === 'production'
+  ? 'http://test.cabinet.olyv.services/'
+  : 'http://test.cabinet.olyv.services/';
+
 Vue.prototype.$baseChatUrl = process.env.NODE_ENV === 'production'
   ? 'http://test.chat.olyv.services:8888/'
   : 'http://test.chat.olyv.services:8888/';

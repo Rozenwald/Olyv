@@ -25,6 +25,7 @@
     "cordova-plugin-camera": "^5.0.1",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-dialogs": "^2.0.2",
+    "cordova-plugin-document-viewer": "^0.9.13",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-file-opener2": "^3.0.5",
     "cordova-plugin-firebasex": "^11.0.3",
@@ -82,7 +83,8 @@
       "cordova-plugin-file": {},
       "cordova-plugin-file-opener2": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
-      }
+      },
+      "cordova-plugin-document-viewer": {}
     },
     "platforms": [
       "browser",
