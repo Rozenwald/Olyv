@@ -50,6 +50,7 @@ import nativeStorage from '../scripts/nativeStorage';
 import cordovaLocal from '../plugins/cordova';
 import logger from '../scripts/logger';
 import dialog from '../scripts/openDialog';
+import file from '../scripts/device-modules/file';
 import auth from '../scripts/auth';
 import dialogMessages from '../scripts/dialogMessages';
 
@@ -73,7 +74,7 @@ export default {
   methods: {
     open() {
       axios
-        .get(`${this.$baseUrlNoPort}static/ect/rules.pdf`)
+        .get(`${this.$baseUrlNoPort}static/ect/rules.pdf`, { responseType: 'blob' })
         .then((response) => {
           console.log(response);
           console.log(response.data);
@@ -83,6 +84,11 @@ export default {
           console.log(blob);
         })
         .catch((error) => { console.log(error); });
+
+      file.getTemporaryFile()
+        .then((fs) => { logger.log(fs); })
+        .catch((error) => { logger.log(error); });
+
       dialog.open(
         dialogMessages.getTitle('rules'),
         '',
