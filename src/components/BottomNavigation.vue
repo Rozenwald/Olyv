@@ -18,19 +18,17 @@
 <script>
 import SvgIcon from './SvgIcon.vue';
 import dialog from '../scripts/openDialog';
+import dialogMessages from '../scripts/dialogMessages';
 
 export default {
   name: 'bottom-navigation',
-
   components: {
     SvgIcon,
   },
-
   computed: {
     items() {
       return this.$store.getters.getItemsBottomNavigaion;
     },
-
     show() {
       if (this.currentRouteName === 'auth' || this.currentRouteName === 'registration'
           || this.currentRouteName === 'customerMoreInfo' || this.currentRouteName === 'executorMoreInfo'
@@ -38,7 +36,6 @@ export default {
 
       return this.bottomNavigationStatus;
     },
-
     currentRouteName() {
       return this.$route.name;
     },
@@ -56,10 +53,15 @@ export default {
     route(name) {
       this.$router.push({ name });
     },
-
     clickBtn(index, routeName) {
       if ((index === 2 || index === 3) && !this.isAuth) {
-        dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, () => { this.$router.push('auth'); });
+        dialog.open(
+          dialogMessages.getTitle('error'),
+          dialogMessages.getBody('notAuthentucate'),
+          true,
+          true,
+          () => { this.$router.push({ name: 'auth' }); },
+        );
       } else if (index === 2) {
         this.$store.dispatch('setMainSheetStatus', true);
       } else {
@@ -96,21 +98,17 @@ export default {
     color #656565
     opacity 0.7
   }
-
   .bottom-navigation-icon{
     margin-bottom 5px
   }
-
   .nav-btn{
     max-width 20% !important
     min-width 0 !important
     width 20%
   }
-
   .v-btn::before{
      background-color #FFFFFF !important
   }
-
   #create-order-btn{
     position absolute
     width 60px
