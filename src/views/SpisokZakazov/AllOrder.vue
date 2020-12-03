@@ -66,6 +66,7 @@ export default {
 
     // Формирование массива всех заказов
     checkResponse(response) {
+      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.all = response.data.data;
@@ -259,13 +260,6 @@ export default {
     },
     user() {
       return this.$store.getters.getUser;
-    },
-  },
-  watch: {
-    token() {
-      if (this.token) {
-        this.getData();
-      }
     },
   },
   created() {
