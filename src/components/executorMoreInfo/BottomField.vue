@@ -5,9 +5,15 @@
       .bottom-field-cost {{formatedCost}}
     v-row.bottom-field-btns-wrp
       v-row(cols="6" align="center" justify="center")
-        v-btn.bottom-field-btns-wrp-accept-my-cost(rounded @click="clickLeftBtn") {{leftBtnText}}
+        v-btn.bottom-field-btns-wrp-accept-my-cost(rounded
+          :loading='loading'
+          :disabled='loading'
+          @click="clickLeftBtn") {{leftBtnText}}
       v-row(cols="6" align="center" justify="center")
-        v-btn.bottom-field-btns-wrp-accept(rounded @click="clickRightBtn") {{rightBtnText}}
+        v-btn.bottom-field-btns-wrp-accept(rounded
+          :loading='loading'
+          :disabled='loading'
+          @click="clickRightBtn") {{rightBtnText}}
 </template>
 
 <script>
@@ -18,8 +24,14 @@ import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
   name: 'bottom-field',
+  data() {
+    return {
+      loading: false,
+    };
+  },
   methods: {
     acceptOrder() {
+      this.loading = true;
       /* eslint-disable no-underscore-dangle */
       axios
         .post(`${this.$baseUrl}api/v1/private/response`, {
@@ -27,20 +39,21 @@ export default {
           method: 'add',
           submethod: 'executor',
           idOrder: this.order._id,
+          cost: this.order.cost,
         })
         .then((response) => (this.checkOrderResponse(response)))
         .catch((error) => {
           dialog.open('Ошибка', '', true);
           logger.log(error);
+          this.loading = false;
         });
       /* eslint-enable no-underscore-dangle */
     },
-
     acceptOrderMyCost() {
       this.$store.dispatch('setMyCostSheetStatus', true);
     },
-
     cancelOrder() {
+      this.loading = true;
       /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/response`, {
@@ -58,11 +71,12 @@ export default {
             false,
           );
           logger.log(error);
+          this.loading = false;
         });
       /* eslint-enable no-return-assign */
     },
-
     completeOrder() {
+      this.loading = true;
       /* eslint-disable no-underscore-dangle */
       axios
         .post(`${this.$baseUrl}api/v1/private/process`, {
@@ -80,24 +94,25 @@ export default {
             false,
           );
           logger.log(error);
+          this.loading = false;
         });
       /* eslint-enable no-underscore-dangle */
     },
-
     checkOrderResponse(response) {
       switch (response.data.status) {
         case 'success':
           if (this.orderType === ('all' || 'keyword')) {
             this.$store.dispatch('setType', 'await');
+            this.loading = false;
           } else if (this.orderType === ('await' || 'process')) {
             this.$store.dispatch('setType', 'all');
+            this.loading = false;
           }
 
           if (response.data.data) {
             const order = { ...this.order };
             // eslint-disable-next-line no-underscore-dangle
             order.idResponse = response.data.data._id;
-
             this.$store.dispatch('setMyOrder', order);
           }
           break;
@@ -109,6 +124,7 @@ export default {
             true,
             this.$router.push('auth'),
           );
+          this.loading = false;
           break;
         default:
           dialog.open(
@@ -118,6 +134,7 @@ export default {
             false,
           );
           logger.log(response);
+          this.loading = false;
       }
     },
 
@@ -125,6 +142,7 @@ export default {
       // eslint-disable-next-line no-underscore-dangle
       this.$store.dispatch('setIdUserRequest', this.order.idUserCustomer);
       this.$router.push('chat');
+      this.loading = false;
     },
 
     clickRightBtn() {

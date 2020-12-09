@@ -57,6 +57,7 @@ export default {
     },
     // По полученным айдишникам обращаюсь на сервер по одному элементу
     checkAwaitOrder(response) {
+      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           if (response.data.data.length === 0) {
@@ -67,6 +68,7 @@ export default {
             response.data.data.forEach((element) => {
               this.getOrder(element);
             });
+            this.loadType = 'order';
           }
           break;
         case 'notAuthenticate':
@@ -102,6 +104,7 @@ export default {
     },
     // Добавляю этот элемент в массив заказов на которые я откликнулся
     checkOrder(response, element) {
+      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.awaitOrders.push(response.data.data[0]);
@@ -109,7 +112,6 @@ export default {
           this.awaitOrders[this.awaitOrders.length - 1].idResponse = element._id;
           break;
         case 'notExist':
-          this.loadType = 'order';
           break;
         case 'notAuthenticate':
           dialog.open(

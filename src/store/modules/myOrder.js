@@ -8,6 +8,7 @@ const mutations = {
   },
   setRespondedList(state, respondedList) {
     state.respondedList = respondedList;
+    console.log(state.respondedList);
   },
 };
 
