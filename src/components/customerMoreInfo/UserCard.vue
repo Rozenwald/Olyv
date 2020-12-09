@@ -56,6 +56,7 @@ export default {
     },
 
     checkExecutorData(response) {
+      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.userData = response.data.data;
