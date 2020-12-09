@@ -52,6 +52,7 @@ import logger from '../scripts/logger';
 import dialog from '../scripts/openDialog';
 import auth from '../scripts/auth';
 import dialogMessages from '../scripts/dialogMessages';
+import pdfPrivacyPolicy from '../scripts/pdfPrivacyPolicy';
 
 export default {
   name: 'Registration',
@@ -72,12 +73,7 @@ export default {
   },
   methods: {
     open() {
-      dialog.open(
-        dialogMessages.getTitle('rules'),
-        '',
-        true,
-        false,
-      );
+      pdfPrivacyPolicy.getPdf();
     },
 
     route(routeName) {

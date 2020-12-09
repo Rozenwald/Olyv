@@ -39,6 +39,7 @@ export default {
   methods: {
     // Получение заказов
     getData() {
+      console.log('private');
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
@@ -46,7 +47,7 @@ export default {
           submethod: 'executor',
           status: 'await',
         })
-        .then((response) => (this.checkResponse(response)))
+        .then((response) => (this.checkPrivateResponse(response)))
         .catch((error) => {
           logger.log(error);
         });
@@ -54,31 +55,46 @@ export default {
 
     // Получение заказов без авторизации
     getPublicData() {
+      console.log('public');
       axios
         .post(`${this.$baseUrl}api/v1/public/order`, {
           method: 'receive',
         })
-        .then((response) => (this.checkResponse(response)))
+        .then((response) => (this.checkPublicResponse(response)))
         .catch((error) => {
           logger.log(error);
         });
     },
-
-    // Формирование массива всех заказов
-    checkResponse(response) {
+    checkPublicResponse(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.allClear = response.data.data.reverse();
+          this.loadType = false;
+          break;
+        case 'notAuthenticate':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            () => { this.$router.push({ name: 'auth' }); },
+          );
+          break;
+        default:
+          this.error = 'Ошибка';
+          break;
+      }
+    },
+    checkPrivateResponse(response) {
       switch (response.data.status) {
         case 'success':
           this.all = response.data.data;
-          if (this.token) {
-            if (this.user.verification === 'completed') {
-              this.getAwaitOrder();
-            } else {
-              this.getMyOrder();
-            }
+          if (this.user.verification === 'completed') {
+            this.getAwaitOrder();
           } else {
-            this.loadType = false;
-            this.allClear = this.all.reverse();
+            this.getMyOrder();
           }
+          this.allClear = [];
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -205,8 +221,11 @@ export default {
       this.watchScroll();
     },
     watchScroll() {
+      console.log(this.lastDate);
       this.lastDate = this.all[this.all.length - 1].ofCreateDate;
+      console.log(this.lastDate);
       const date = new Date(this.lastDate).getTime() - 1000;
+      console.log(this.date);
       window.onscroll = () => {
         if ((this.$refs.scrollUpdate.clientHeight - window.scrollY) <= 1000) {
           this.getMoreOrder(date);
@@ -228,10 +247,11 @@ export default {
         });
     },
     checkMoreOrderResponse(response) {
+      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           if (response.data.data[response.data.data.length - 1].ofCreateDate !== this.lastDate) {
-            this.all = response.data.data;
+            this.all = response.data.data.reverse();
             this.getClearAll();
           }
           break;
@@ -261,14 +281,8 @@ export default {
       return this.$store.getters.getUser;
     },
   },
-  watch: {
-    token() {
-      if (this.token) {
-        this.getData();
-      }
-    },
-  },
   created() {
+    console.log(this.token);
     this.$store.commit('setTitle', 'Исполнитель');
     this.$store.dispatch('setChipStatus', 'all');
     if (this.token) {
@@ -277,7 +291,15 @@ export default {
       this.getPublicData();
     }
   },
+  watch: {
+    token() {
+      if (this.token) {
+        this.getData();
+      }
+    },
+  },
   mounted() {
+    console.log(this.token);
   },
 };
 </script>

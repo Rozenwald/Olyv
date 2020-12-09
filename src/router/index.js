@@ -123,6 +123,11 @@ const routes = [
     meta: { index: 6 },
   },
   {
+    name: 'allChat',
+    path: '/allChat',
+    component: allChat,
+  },
+  {
     name: 'customerMoreInfo',
     path: '/customerMoreInfo',
     component: CustomerMoreInfo,

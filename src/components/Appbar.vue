@@ -32,6 +32,8 @@ export default {
     },
     showBackbtn() {
       switch (this.$route.name) {
+        case 'allChat':
+          return false;
         case 'moiZakazi':
           return false;
         case 'myAwaitOrders':

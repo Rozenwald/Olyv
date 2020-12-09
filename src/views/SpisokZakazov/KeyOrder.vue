@@ -181,6 +181,12 @@ export default {
         .then((response) => (this.checkKeyWord(response)))
       // eslint-disable-next-line no-return-assign
         .catch((error) => {
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
           logger.log(error);
         });
     },
@@ -214,6 +220,7 @@ export default {
       /* eslint-disable max-len */
       if (this.textForRegexp !== '') {
         this.textForRegexp = this.textForRegexp.substring(0, this.textForRegexp.length - 1);
+        this.awaitMyRegexp = new RegExp(`${this.textForRegexp}`, 'im');
         for (let j = 0; j < this.all.length; j += 1) {
           // eslint-disable-next-line no-underscore-dangle
           if ((this.awaitMyRegexp.test(this.all[j]._id) !== true) && (this.keyRegexp.test(this.all[j].description))) {

@@ -33,10 +33,6 @@ export default {
     show: Boolean,
   },
   methods: {
-    route() {
-      this.showDialog = false;
-      this.$router.push('auth');
-    },
   },
   computed: {
     visible: {

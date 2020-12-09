@@ -27,6 +27,7 @@ import LeftMsg from '../components/LeftMsg.vue';
 import RightMsg from '../components/RightMsg.vue';
 import ErrorChatDialog from '../components/ErrorChatDialog.vue';
 import dialog from '../scripts/openDialog';
+import dialogMessages from '../scripts/dialogMessages';
 import logger from '../scripts/logger';
 
 export default {
@@ -75,7 +76,13 @@ export default {
           }
           break;
         case 'notAuthenticate':
-          dialog.open('Ошибка', 'Пользователь неавторизирован, советуем пройти авторизацию, чтобы получить доступ к полному функционалу приложения', true, true, this.$router.push('auth'));
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            () => { this.$router.push({ name: 'auth' }); },
+          );
           break;
         default:
           this.$store.commit('setTitle', 'Чат');

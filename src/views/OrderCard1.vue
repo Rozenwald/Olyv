@@ -54,12 +54,12 @@ export default {
       return this.item.countResponse;
     },
     lowcost() {
-      const costStr = String(this.item.lowCost);
-      if (costStr.length > 6) {
-        return `${costStr.substr(0, 1)}М`;
+      const lowCostStr = String(this.item.lowCost);
+      if (lowCostStr.length > 6) {
+        return `${lowCostStr.substr(0, 1)}М`;
       }
-      if (costStr.length > 5) {
-        return `${costStr.substr(0, 3)}K`;
+      if (lowCostStr.length > 5) {
+        return `${lowCostStr.substr(0, 3)}K`;
       }
       return `${this.item.lowCost}`;
     },

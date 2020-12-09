@@ -62,7 +62,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         case 'success':
@@ -122,7 +122,7 @@ export default {
         dialogMessages.getBody('notAuthentucate'),
         true,
         true,
-        router.push({ name: 'auth' }),
+        () => router.push({ name: 'auth' }),
       );
     } else {
       next();
