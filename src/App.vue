@@ -104,6 +104,7 @@ export default {
     },
   },
   created() {
+    console.log(this.token);
     cordova.listen();
     if (this.token) {
       this.getUserData();

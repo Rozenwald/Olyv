@@ -125,7 +125,7 @@ const routes = [
   },
   {
     name: 'allChat',
-    path: '/allchat',
+    path: '/allChat',
     component: allChat,
   },
   {
