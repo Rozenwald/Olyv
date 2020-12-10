@@ -13,7 +13,8 @@
                   color="#56d67b"
                   text-color="#000"
                   @click="route('myProcessOrders')") В процессе
-      router-view.list-item
+      transition(:name="transitionName" mode="out-in")
+        router-view.list-item
 </template>
 
 <script>
@@ -34,11 +35,20 @@ export default {
     },
   },
   computed: {
-    type() {
-      return this.$store.getters.getChipStatus;
+    type: {
+      get() {
+        return this.$store.getters.getChipStatus;
+      },
+
+      set(value) {
+        this.$store.dispatch('setChipStatus', value);
+      },
     },
     token() {
       return this.$store.getters.getToken;
+    },
+    transitionName() {
+      return this.$store.getters.getTransitionName;
     },
   },
   created() {

@@ -68,6 +68,8 @@ async function deleteAppToken(notificationToken, appToken) {
 
   const resultData = await removeTokenApp(tokenId, notificationToken);
 
+  logger.log(resultData);
+
   return resultData;
 }
 

@@ -22,7 +22,8 @@
                 color="#56d67b"
                 text-color="#000"
                 @click="route('processOrder')") Сделка
-    router-view.list-item(:style="{marginTop: margin}")
+    transition(:name="transitionName" mode="out-in")
+      router-view.list-item(:style="{marginTop: margin}")
 </template>
 
 <script>
@@ -52,8 +53,14 @@ export default {
     },
   },
   computed: {
-    type() {
-      return this.$store.getters.getChipStatus;
+    type: {
+      get() {
+        return this.$store.getters.getChipStatus;
+      },
+
+      set(value) {
+        this.$store.dispatch('setChipStatus', value);
+      },
     },
     token() {
       return this.$store.getters.getToken;
@@ -70,6 +77,9 @@ export default {
       }
       const length = `${margin}px`;
       return length;
+    },
+    transitionName() {
+      return this.$store.getters.getTransitionName;
     },
   },
   created() {
