@@ -17,6 +17,7 @@ import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
 import Verification from '../views/Verification.vue';
 import CustomerProfile from '../views/CustomerProfile.vue';
 import Chat from '../views/Chat.vue';
+import allChat from '../views/AllChat.vue';
 import keyWords from '../views/KeyWords.vue';
 import store from '../store/index';
 
@@ -123,6 +124,11 @@ const routes = [
     path: '/chat',
     component: Chat,
     meta: { index: 6 },
+  },
+  {
+    name: 'allChat',
+    path: '/allChat',
+    component: allChat,
   },
   {
     name: 'customerMoreInfo',

@@ -6,7 +6,7 @@
   )
     template(v-slot="{ item, index, revealRight }")
       .user-wrp(@click="itemClick(index)")
-        user-card(:idUser="item.idUserResponse" :cost="item.comment")
+        user-card(:idUser="item.idUserResponse" :cost="item.cost")
 
     template(v-slot:right="{ item }")
       v-row.chat-action.action(align="center" justify="center" @click="goChat(item.idUserResponse)")
@@ -35,11 +35,6 @@ export default {
     UserCard,
     SwipeList,
     SwipeOut,
-  },
-  data() {
-    return {
-      items: [{}, {}],
-    };
   },
   methods: {
     itemClick(index) {
