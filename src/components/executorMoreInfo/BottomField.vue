@@ -106,11 +106,7 @@ export default {
         case 'success':
           if (this.orderType === ('all' || 'keyword')) {
             this.$store.dispatch('setType', 'await');
-<<<<<<< HEAD
           } else if (this.orderType === ('await' || 'process')) {
-=======
-          } else if (this.orderType === 'await') {
->>>>>>> 2f19a5b92680c4c5613768663746b66d0f04c07d
             this.$store.dispatch('setType', 'all');
           }
 
