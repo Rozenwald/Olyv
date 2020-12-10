@@ -4,7 +4,7 @@
       v-list-item-avatar(size="62")
         avatar(type="public" size="62" :src="photo")
       v-list-item-content.content
-        v-list-item-title {{user.name}} {{user.lastname}}
+        v-list-item-title {{name}}
         <!--v-list-item-subtitle
            v-rating(
             :length="5"
@@ -46,6 +46,22 @@ export default {
 
       const url = this.user.photo[this.user.photo.length - 1].urlMin.substr(1);
       return this.$baseUrlNoPort + url;
+    },
+
+    name() {
+      if (this.user.name && this.user.lastname) {
+        return `${this.user.name} ${this.user.lastname}`;
+      }
+
+      if (this.user.name) {
+        return this.user.name;
+      }
+
+      if (this.user.email) {
+        return this.user.email;
+      }
+
+      return '';
     },
   },
 };

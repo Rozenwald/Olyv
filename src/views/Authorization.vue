@@ -348,7 +348,7 @@ export default {
     },
 
     checkAppToken(response) {
-      console.log(response.data);
+      logger.log(response);
       if (response.data.status === 'success' || response.data.status === 'exist') {
         this.isAddAppToken = true;
       } else {

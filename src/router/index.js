@@ -56,11 +56,13 @@ const routes = [
         name: 'myAwaitOrders',
         path: 'myAwaitOrders',
         component: AwaitOrders,
+        meta: { index: 1, subindex: 1 },
       },
       {
         name: 'myProcessOrders',
         path: 'myProcessOrders',
         component: ProcessOrders,
+        meta: { index: 1, subindex: 2 },
       },
       {
         path: '',
@@ -78,25 +80,25 @@ const routes = [
         name: 'keyOrder',
         path: 'keyOrder',
         component: KeyOrder,
-        meta: { index: 0 },
+        meta: { index: 2, subindex: 1 },
       },
       {
         name: 'allOrder',
         path: 'allOrder',
         component: AllOrder,
-        meta: { index: 1 },
+        meta: { index: 2, subindex: 2 },
       },
       {
         name: 'awaitOrder',
         path: 'awaitOrder',
         component: AwaitOrder,
-        meta: { index: 2 },
+        meta: { index: 2, subindex: 3 },
       },
       {
         name: 'processOrder',
         path: 'processOrder',
         component: ProcessOrder,
-        meta: { index: 3 },
+        meta: { index: 2, subindex: 4 },
       },
       {
         path: '',
@@ -155,6 +157,10 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.index > from.meta.index) {
+    store.dispatch('setTransitionName', 'slide-left');
+  } else if (!to.meta.subindex || !from.meta.subindex) {
+    store.dispatch('setTransitionName', 'slide-right');
+  } else if (to.meta.subindex > from.meta.subindex) {
     store.dispatch('setTransitionName', 'slide-left');
   } else {
     store.dispatch('setTransitionName', 'slide-right');

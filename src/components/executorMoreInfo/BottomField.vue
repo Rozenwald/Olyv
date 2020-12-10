@@ -89,8 +89,12 @@ export default {
         case 'success':
           if (this.orderType === ('all' || 'keyword')) {
             this.$store.dispatch('setType', 'await');
-          } else if (this.orderType === ('await' || 'process')) {
+          } else if (this.orderType === 'await') {
             this.$store.dispatch('setType', 'all');
+          }
+
+          if (this.orderType === 'process') {
+            this.$router.back();
           }
 
           if (response.data.data) {

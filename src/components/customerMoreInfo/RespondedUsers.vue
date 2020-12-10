@@ -5,6 +5,10 @@
 </template>
 
 <script>
+import axios from 'axios';
+import dialog from '../../scripts/openDialog';
+import logger from '../../scripts/logger';
+import dialogMessages from '../../scripts/dialogMessages';
 import SwipeCards from './SwipeCards.vue';
 
 export default {
@@ -12,9 +16,61 @@ export default {
   components: {
     SwipeCards,
   },
+  methods: {
+    getOrderResponse() {
+      /* eslint-disable no-return-assign */
+      axios
+        .post(`${this.$baseUrl}api/v1/private/response`, {
+          token: this.token,
+          method: 'receive',
+          submethod: 'customer',
+          // eslint-disable-next-line no-underscore-dangle
+          idOrder: this.order._id,
+        })
+        .then((response) => (this.checkOrderResponse(response)))
+        .catch((error) => {
+          logger.log(error);
+        });
+      /* eslint-enable no-return-assign */
+    },
+
+    checkOrderResponse(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.$store.dispatch('setRespondedList', response.data.data);
+          break;
+        case 'notAuthenticate':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            () => { this.$router.push({ name: 'auth' }); },
+          );
+          break;
+        default:
+          logger.log(response);
+          break;
+      }
+    },
+  },
   computed: {
     respondedList() {
       return this.$store.getters.getRespondedList || [];
+    },
+    token() {
+      return this.$store.getters.getToken;
+    },
+
+    order() {
+      return this.$store.getters.getMyOrder;
+    },
+  },
+  watch: {
+    respondedList() {
+      if (!this.respondedList.length) {
+        this.getOrderResponse();
+      }
     },
   },
 };
