@@ -47,6 +47,7 @@ export default {
           logger.log(error);
           this.loading = false;
         });
+      this.loading = false;
       /* eslint-enable no-underscore-dangle */
     },
     acceptOrderMyCost() {
@@ -73,6 +74,7 @@ export default {
           logger.log(error);
           this.loading = false;
         });
+      this.loading = false;
       /* eslint-enable no-return-assign */
     },
     completeOrder() {
@@ -96,6 +98,7 @@ export default {
           logger.log(error);
           this.loading = false;
         });
+      this.loading = false;
       /* eslint-enable no-underscore-dangle */
     },
     checkOrderResponse(response) {
@@ -103,9 +106,8 @@ export default {
         case 'success':
           if (this.orderType === ('all' || 'keyword')) {
             this.$store.dispatch('setType', 'await');
-          } else if (this.orderType === 'await') {
+          } else if (this.orderType === ('await' || 'process')) {
             this.$store.dispatch('setType', 'all');
-            this.loading = false;
           }
 
           if (this.orderType === 'process') {
@@ -127,7 +129,6 @@ export default {
             true,
             () => { this.$router.push({ name: 'auth' }); },
           );
-          this.loading = false;
           break;
         default:
           dialog.open(
@@ -137,11 +138,11 @@ export default {
             false,
           );
           logger.log(response);
-          this.loading = false;
       }
     },
 
     goChat() {
+      this.loading = true;
       // eslint-disable-next-line no-underscore-dangle
       this.$store.dispatch('setIdUserRequest', this.order.idUserCustomer);
       this.$router.push('chat');
