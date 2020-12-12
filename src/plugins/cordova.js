@@ -1,14 +1,38 @@
 /* eslint-disable no-undef */
+import axios from 'axios';
 import store from '../store/index';
 import router from '../router/index';
 import logger from '../scripts/logger';
 import nativeStorage from '../scripts/nativeStorage';
+
+function addAppToken(tokenApp, notificationToken) {
+  axios
+    .post(`${window.$baseNotificationUrl}api/v1/private/tokenApp`, {
+      token: notificationToken,
+      method: 'add',
+      tokenApp,
+    })
+    .then((response) => (logger.log(response)))
+    .catch((error) => {
+      logger.log(error);
+    });
+}
 
 function getStorageItem(key, action) {
   nativeStorage.getItem(key)
     .then((item) => {
       logger.log(item);
       store.dispatch(action, item);
+
+      logger.log(key);
+      if (key === 'notificationToken') {
+        FirebasePlugin.onTokenRefresh((fcmToken) => {
+          logger.log('App token refresh');
+          addAppToken(fcmToken, item);
+        }, (error) => {
+          logger.log(error);
+        });
+      }
     })
     .catch((error) => {
       logger.log(error);
