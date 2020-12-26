@@ -27,6 +27,13 @@ function getFile(fileEntry) {
   });
 }
 
+// @return File
+function getDirFile(dirEntry, fileName) {
+  return new Promise((onSuccess, onError) => {
+    dirEntry.getFile(fileName, { create: true, exclusive: false }, onSuccess, onError);
+  });
+}
+
 // @return Blob
 function dataURLtoBlob(dataUrl) {
   const arr = dataUrl.split(',');
@@ -48,4 +55,5 @@ export default {
   getFile,
   dataURLtoBlob,
   getTemporaryFile,
+  getDirFile,
 };

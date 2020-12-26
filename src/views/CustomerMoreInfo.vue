@@ -55,7 +55,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         default:
@@ -81,6 +81,7 @@ export default {
     this.$store.commit('setTitle', 'Мои заказы');
 
     if (this.orderType === 'await') {
+      console.log('aaaaa');
       this.getOrderResponse();
     }
   },

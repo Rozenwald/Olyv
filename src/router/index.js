@@ -17,6 +17,7 @@ import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
 import Verification from '../views/Verification.vue';
 import CustomerProfile from '../views/CustomerProfile.vue';
 import Chat from '../views/Chat.vue';
+import allChat from '../views/AllChat.vue';
 import keyWords from '../views/KeyWords.vue';
 import store from '../store/index';
 
@@ -56,11 +57,13 @@ const routes = [
         name: 'myAwaitOrders',
         path: 'myAwaitOrders',
         component: AwaitOrders,
+        meta: { index: 1, subindex: 1 },
       },
       {
         name: 'myProcessOrders',
         path: 'myProcessOrders',
         component: ProcessOrders,
+        meta: { index: 1, subindex: 2 },
       },
       {
         path: '',
@@ -78,25 +81,25 @@ const routes = [
         name: 'keyOrder',
         path: 'keyOrder',
         component: KeyOrder,
-        meta: { index: 0 },
+        meta: { index: 2, subindex: 1 },
       },
       {
         name: 'allOrder',
         path: 'allOrder',
         component: AllOrder,
-        meta: { index: 1 },
+        meta: { index: 2, subindex: 2 },
       },
       {
         name: 'awaitOrder',
         path: 'awaitOrder',
         component: AwaitOrder,
-        meta: { index: 2 },
+        meta: { index: 2, subindex: 3 },
       },
       {
         name: 'processOrder',
         path: 'processOrder',
         component: ProcessOrder,
-        meta: { index: 3 },
+        meta: { index: 2, subindex: 4 },
       },
       {
         path: '',
@@ -121,6 +124,11 @@ const routes = [
     path: '/chat',
     component: Chat,
     meta: { index: 6 },
+  },
+  {
+    name: 'allChat',
+    path: '/allChat',
+    component: allChat,
   },
   {
     name: 'customerMoreInfo',
@@ -155,6 +163,10 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.index > from.meta.index) {
+    store.dispatch('setTransitionName', 'slide-left');
+  } else if (!to.meta.subindex || !from.meta.subindex) {
+    store.dispatch('setTransitionName', 'slide-right');
+  } else if (to.meta.subindex > from.meta.subindex) {
     store.dispatch('setTransitionName', 'slide-left');
   } else {
     store.dispatch('setTransitionName', 'slide-right');

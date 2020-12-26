@@ -1,16 +1,41 @@
 /* eslint-disable no-undef */
+import axios from 'axios';
 import store from '../store/index';
 import router from '../router/index';
+import logger from '../scripts/logger';
 import nativeStorage from '../scripts/nativeStorage';
+
+function addAppToken(tokenApp, notificationToken) {
+  axios
+    .post(`${window.$baseNotificationUrl}api/v1/private/tokenApp`, {
+      token: notificationToken,
+      method: 'add',
+      tokenApp,
+    })
+    .then((response) => (logger.log(response)))
+    .catch((error) => {
+      logger.log(error);
+    });
+}
 
 function getStorageItem(key, action) {
   nativeStorage.getItem(key)
     .then((item) => {
-      console.log(item);
+      logger.log(item);
       store.dispatch(action, item);
+
+      logger.log(key);
+      if (key === 'notificationToken') {
+        FirebasePlugin.onTokenRefresh((fcmToken) => {
+          logger.log('App token refresh');
+          addAppToken(fcmToken, item);
+        }, (error) => {
+          logger.log(error);
+        });
+      }
     })
     .catch((error) => {
-      console.log(error);
+      logger.log(error);
     });
 }
 
@@ -28,17 +53,21 @@ function getToken() {
   }));
 }
 
-function checkNotification(message) {
-  const data = JSON.parse(message.data);
-  switch (message.type) {
-    case 'order':
-      store.dispatch('setMyOrder', data);
-      store.dispatch('setType', 'all');
-      router.replace('executorMoreInfo');
+function checkNotification(messageData) {
+  switch (messageData.type) {
+    case 'process':
+      store.dispatch('setMyOrder', messageData.order);
+      store.dispatch('setType', 'process');
+      router.replace({ name: 'executorMoreInfo' });
+      break;
+    case 'response':
+      store.dispatch('setMyOrder', messageData.order);
+      store.dispatch('setType', 'await');
+      router.replace({ name: 'customerMoreInfo' });
       break;
     case 'chat':
-      store.dispatch('setIdUserRequest', data.idUserRequest);
-      router.replace('chat');
+      store.dispatch('setIdUserRequest', messageData.idUserRequest);
+      router.replace({ name: 'chat' });
       break;
     default:
       break;
@@ -51,37 +80,47 @@ function notificationListener() {
   }
 
   window.FirebasePlugin.onMessageReceived((message) => {
-    console.log(JSON.stringify(message));
+    logger.log(JSON.stringify(message));
+
+    const rawMessageData = decodeURIComponent(escape(atob(message.data)));
+    logger.log(JSON.stringify(rawMessageData));
+
+    const messageData = JSON.parse(rawMessageData);
+    logger.log(JSON.stringify(messageData));
+
     if (message.messageType === 'notification') {
-      if (message.tap) {
-        console.log(message.type);
-        checkNotification(message);
+      if (message.tap === 'background') {
+        checkNotification(messageData);
       } else {
         cordova.plugins.notification.local.schedule({
           title: message.title,
           text: message.body,
           foreground: true,
+          data: messageData,
         });
       }
     }
   }, (error) => {
-    console.error(error);
+    logger.error(error);
   });
 }
 
 function onDeviceReady() {
-  console.log('onDeviceReady');
-  cordova.plugins.notification.local.on('click', (notification) => { console.log(JSON.stringify(notification)); }, { });
+  logger.log('onDeviceReady');
+  cordova.plugins.notification.local.on('click', (notification) => {
+    logger.log(JSON.stringify(notification));
+    checkNotification(notification.data);
+  }, { });
 
   getStorage();
   getToken()
     .then((token) => {
-      console.log(token);
+      logger.log(token);
       store.dispatch('setAppToken', token);
-      console.log(token);
+      logger.log(token);
     })
     .catch((error) => {
-      console.log(error);
+      logger.log(error);
     });
   notificationListener();
 

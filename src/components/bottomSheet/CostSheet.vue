@@ -16,7 +16,7 @@
         v-model="cost"
         ref="costInput")
 
-      v-item-group(mandatory)
+      v-item-group(mandatory v-if="false")
         v-row(no-gutters)
           v-col(col="6")
             v-item(v-slot="{ active, toggle }")
@@ -92,6 +92,7 @@ export default {
 
   .cost-field {
     margin-top 15px
+    padding-bottom: 82px;
   }
 
   .v-card {

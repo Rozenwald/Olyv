@@ -1,20 +1,15 @@
 <template lang="pug">
-    v-container.orderContainerHeight
-      v-sheet(fixed elevation="1").chips-wrp
-        v-row.chips(align='center' justify='space-around' )
-          v-chip-group(v-model="type" mandatory active-class="active-chip")
-            v-chip(value="await"
-                  outlined
-                  color="#56d67b"
-                  text-color="#000"
-                  @click="route('myAwaitOrders')") В ожидании
-            v-chip(value="process"
-                  outlined
-                  color="#56d67b"
-                  text-color="#000"
-                  @click="route('myProcessOrders')") В процессе
-      transition(:name="transitionName" mode="out-in")
-        router-view.list-item
+v-container.orderContainerHeight
+  .order-container(ref="scrollUpdate")
+    v-row.icon-container(justify='center' align='center' v-if='loadType')
+      semipolar-spinner(:animation-duration="1500"
+                        :size="75"
+                        :color="'#fd7363'")
+    OrderCard2(v-else
+               v-for='item in allClear'
+               type='all'
+               :key='item._id'
+               :item='item')
 </template>
 
 <script>
@@ -35,24 +30,15 @@ export default {
     },
   },
   computed: {
-    type: {
-      get() {
-        return this.$store.getters.getChipStatus;
-      },
-
-      set(value) {
-        this.$store.dispatch('setChipStatus', value);
-      },
+    type() {
+      return this.$store.getters.getChipStatus;
     },
     token() {
       return this.$store.getters.getToken;
     },
-    transitionName() {
-      return this.$store.getters.getTransitionName;
-    },
   },
   created() {
-    this.$store.commit('setTitle', 'Заказчик');
+    this.$store.commit('setTitle', 'Сообщения');
   },
 };
 </script>

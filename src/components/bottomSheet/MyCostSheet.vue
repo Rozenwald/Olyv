@@ -42,7 +42,7 @@ export default {
           method: 'add',
           submethod: 'executor',
           idOrder: this.order._id,
-          cost: this.cost || undefined,
+          cost: this.cost || this.order.cost,
         })
         .then((response) => (this.checkOrderResponse(response)))
         .catch((error) => {
@@ -72,7 +72,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         case 'notExist':

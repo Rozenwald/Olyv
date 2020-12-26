@@ -157,7 +157,6 @@ export default {
     },
 
     checkSignIn(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           nativeStorage.setItem('token', response.data.data);
@@ -184,7 +183,6 @@ export default {
           break;
       }
     },
-
     getUserData() {
       axios
         .post(`${this.$baseUrl}api/v1/private/user`, {
@@ -204,9 +202,7 @@ export default {
           logger.log(error);
         });
     },
-
     checkUserData(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
@@ -244,7 +240,6 @@ export default {
     },
 
     checkChatAuth(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           nativeStorage.setItem('chatToken', response.data.data.token);
@@ -285,7 +280,6 @@ export default {
     },
 
     checkNotificationAuth(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           nativeStorage.setItem('notificationToken', response.data.data.token);
@@ -348,7 +342,6 @@ export default {
     },
 
     checkAppToken(response) {
-      console.log(response.data);
       if (response.data.status === 'success' || response.data.status === 'exist') {
         this.isAddAppToken = true;
       } else {

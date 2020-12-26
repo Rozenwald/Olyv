@@ -56,6 +56,7 @@ export default {
     },
 
     checkExecutorData(response) {
+      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.userData = response.data.data;
@@ -66,7 +67,7 @@ export default {
             dialogMessages.getBody('notAuthentucate'),
             true,
             true,
-            this.$router.push('auth'),
+            () => { this.$router.push({ name: 'auth' }); },
           );
           break;
         default:
