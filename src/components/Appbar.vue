@@ -89,6 +89,7 @@ export default {
   },
   methods: {
     stepback() {
+      console.log(this.$router);
       this.$router.back();
     },
   },

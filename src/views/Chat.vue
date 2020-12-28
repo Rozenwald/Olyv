@@ -227,6 +227,7 @@ export default {
     },
     // Проверка отправилось ли сообщение на сервер
     checkAddMessage(response) {
+      console.log(response.data);
       this.msg = null;
       switch (response.data.status) {
         case 'success':

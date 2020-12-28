@@ -34,7 +34,7 @@ export default {
     padding 5px 10px
     margin-top 3px
     background-color #e7e7e7
-    border-radius 15px 15px 0px 15px
+    border-radius 15px 15px 15px 0px
     font-size 13px
     max-width 75%
 
