@@ -56,6 +56,7 @@ export default {
     },
 
     checkCustomerUserData(response) {
+      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.customerUser = response.data.data;
