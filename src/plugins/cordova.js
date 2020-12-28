@@ -23,8 +23,6 @@ function getStorageItem(key, action) {
     .then((item) => {
       logger.log(item);
       store.dispatch(action, item);
-
-      logger.log(key);
       if (key === 'notificationToken') {
         FirebasePlugin.onTokenRefresh((fcmToken) => {
           logger.log('App token refresh');

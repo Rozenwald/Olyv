@@ -54,7 +54,7 @@ export default {
       this.$router.push({ name });
     },
     clickBtn(index, routeName) {
-      if ((index === 2 || index === 3) && !this.isAuth) {
+      if ((index === 3 || index === 3) && !this.isAuth) {
         dialog.open(
           dialogMessages.getTitle('error'),
           dialogMessages.getBody('notAuthentucate'),

@@ -7,6 +7,7 @@
       bottom-sheet-group
       bottom-navigation
       action-photo-dialog
+      action-file-dialog
       window-dialog
 </template>
 
@@ -23,6 +24,7 @@ import 'leaflet/dist/leaflet.css';
 import cordova from './plugins/cordova';
 
 const ActionPhotoDialog = () => import('./components/ActionPhotoDialog.vue');
+const ActionFileDialog = () => import('./components/ActionFileDialog.vue');
 
 export default {
   name: 'App',
@@ -34,6 +36,7 @@ export default {
     BottomNavigation,
     BottomSheetGroup,
     ActionPhotoDialog,
+    ActionFileDialog,
   },
   data() {
     return {
@@ -104,7 +107,6 @@ export default {
     },
   },
   created() {
-    console.log(this.token);
     cordova.listen();
     if (this.token) {
       this.getUserData();

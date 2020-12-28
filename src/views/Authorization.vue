@@ -243,7 +243,7 @@ export default {
       switch (response.data.status) {
         case 'success':
           nativeStorage.setItem('chatToken', response.data.data.token);
-          nativeStorage.setItem('setIdChanal', response.data.data.idChanal);
+          nativeStorage.setItem('idChanal', response.data.data.idChanal);
           this.$store.dispatch('setChatToken', response.data.data.token);
           this.$store.dispatch('setIdChanal', response.data.data.idChanal);
           break;
@@ -283,7 +283,7 @@ export default {
       switch (response.data.status) {
         case 'success':
           nativeStorage.setItem('notificationToken', response.data.data.token);
-          nativeStorage.setItem('setNotificationIdChanal', response.data.data.idChanal);
+          nativeStorage.setItem('notificationIdChanal', response.data.data.idChanal);
           this.$store.dispatch('setNotificationToken', response.data.data.token);
           this.$store.dispatch('setNotificationIdChanal', response.data.data.idChanal);
           this.loading = false;

@@ -11,7 +11,6 @@ const mutations = {
     state.user = user;
     state.hasData = true;
     state.currentAuthToken = user.currentAuthToken;
-    console.log(user);
   },
   setCurrentAuthToken(state, chattoken) {
     state.chattoken = chattoken;

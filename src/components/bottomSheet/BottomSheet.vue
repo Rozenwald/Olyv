@@ -34,6 +34,8 @@
             ref="costInput"
           )
 
+        order-media-files
+
         v-row(align='center' justify='center')
             v-btn.create-btn(
               :loading="loading"
@@ -49,11 +51,12 @@ import axios from 'axios';
 import dialog from '../../scripts/openDialog';
 import logger from '../../scripts/logger';
 import dialogMessages from '../../scripts/dialogMessages';
+import OrderMediaFiles from '../OrderMediaFiles.vue';
 
 export default {
   name: 'bottom-sheet',
   components: {
-    axios,
+    OrderMediaFiles,
   },
   data() {
     return {
@@ -305,7 +308,7 @@ export default {
   }
 
   .cost-field {
-    margin-bottom 30px !important
+    margin-bottom 12px !important
   }
 
   .create-btn{
