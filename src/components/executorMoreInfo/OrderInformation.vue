@@ -13,21 +13,21 @@
     .media-files
       v-row
         v-col.d-flex.child-flex.custom-card-wrp(v-for='n in 5', :key='n', cols='6')
-          v-card.d-flex.custom-card(flat, tail)
-            v-img.grey.lighten-2(:src="media", :lazy-src='`https://picsum.photos/10/6?image=${n * 5 + 10}`', aspect-ratio='1')
-              template(v-slot:placeholder)
-                v-row.fill-height.ma-0(align='center', justify='center')
-                  v-progress-circular(indeterminate, color='grey lighten-5')
+          v-photoswipe-gallery.image-container(
+              :isOpen="isOpenGallery"
+              :options="optionsGallery"
+              :items="items")
+            v-card.d-flex.custom-card(flat, tail)
+              v-img.grey.lighten-2(slot-scope="props" :src="media", :lazy-src='`https://picsum.photos/10/6?image=${n * 5 + 10}`', aspect-ratio='1')
+                template(v-slot:placeholder)
+                  v-row.fill-height.ma-0(align='center', justify='center')
+                    v-progress-circular(indeterminate, color='grey lighten-5')
           // v-img(v-if="!media" :src="media")
-      v-photoswipe-gallery.image-container(:isOpen="isOpenGallery"
-      :options="optionsGallery" :items="items")
-        img.image-container(slot-scope="props" :src="props.item.src")
-
 </template>
 
 <script>
 import moment from 'moment';
-import { PhotoSwipe, PhotoSwipeGallery } from 'v-photoswipe';
+import { PhotoSwipeGallery } from 'v-photoswipe';
 import Avatar from '../Avatar.vue';
 import SvgIcon from '../SvgIcon.vue';
 
@@ -36,30 +36,24 @@ export default {
   components: {
     SvgIcon,
     Avatar,
-    'v-photoswipe': PhotoSwipe,
     'v-photoswipe-gallery': PhotoSwipeGallery,
   },
   data() {
     return {
-      isOpen: false,
+      mediaFiles: [],
+      photoFiles: [],
       isOpenGallery: false,
       options: {
         index: 0,
       },
-      optionsGallery: {},
-      items: [
-        {
-          src: 'https://farm4.staticflickr.com/3894/15008518202_c265dfa55f_h.jpg',
-          w: 780,
-          h: 1466,
-          title: 'Thion.',
-        }, {
-          src: 'https://farm4.staticflickr.com/3902/14985871946_24f47d4b53_h.jpg',
-          w: 250,
-          h: 250,
-          title: 'typeset text.',
-        },
-      ],
+      optionsGallery: {
+        index: 0,
+        showHideOpacity: true,
+        fullscreenEl: false,
+        zoomEl: false,
+        shareEl: false,
+        arrowEl: false,
+      },
     };
   },
   props: {

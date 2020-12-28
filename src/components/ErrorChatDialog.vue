@@ -75,8 +75,13 @@ export default {
     },
   },
   computed: {
-    showDialog() {
-      return this.$store.getters.isVisibleChatDialog;
+    showDialog: {
+      get() {
+        return this.$store.getters.isVisibleChatDialog;
+      },
+      set(val) {
+        this.$store.dispatch('showChatDialog', val);
+      },
     },
     errorNumber() {
       return this.$store.getters.getElement;

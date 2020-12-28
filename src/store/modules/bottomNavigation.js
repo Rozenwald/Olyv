@@ -20,7 +20,7 @@ const state = {
     { title: 'Заказчик', icon: 'MyOrder', routeName: 'myAwaitOrders' },
     { title: 'Исполнитель', icon: 'OrdersList', routeName: 'allOrder' },
     { title: '', icon: 'Plus' },
-    { title: 'Сообщения', icon: 'Chat', routeName: 'allChat' },
+    { title: 'Сообщения', icon: 'allChat', routeName: 'allChat' },
     { title: 'Профиль', icon: 'User', routeName: 'customerProfile' },
   ],
   show: true,
