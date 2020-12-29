@@ -23,6 +23,24 @@ const mutations = {
   setCost(state, cost) {
     state.cost = cost;
   },
+  setMediaFiles(state, mediaFiles) {
+    state.mediaFiles = mediaFiles;
+  },
+  setPhotoFiles(state, photoFiles) {
+    state.photoFiles = photoFiles;
+  },
+  addMediaFile(state, mediaFile) {
+    state.mediaFiles.push(mediaFile);
+  },
+  addPhotoFile(state, photoFiles) {
+    state.photoFiles.push(photoFiles);
+  },
+  removeMediaFile(state, index) {
+    state.mediaFiles.splice(index, 1);
+  },
+  removePhotoFile(state, index) {
+    state.photoFiles.splice(index, 1);
+  },
   setAll(state, data) {
     state.cost = data.cost;
     state.addressData.value = data.address;
@@ -57,6 +75,24 @@ const actions = {
   setCost({ commit }, cost) {
     commit('setCost', cost);
   },
+  setMediaFiles({ commit }, mediaFiles) {
+    commit('setMediaFiles', mediaFiles);
+  },
+  setPhotoFiles({ commit }, photoFiles) {
+    commit('setPhotoFiles', photoFiles);
+  },
+  addMediaFile({ commit }, mediaFiles) {
+    commit('addMediaFile', mediaFiles);
+  },
+  addPhotoFile({ commit }, photoFiles) {
+    commit('addPhotoFile', photoFiles);
+  },
+  removeMediaFile({ commit }, index) {
+    commit('removeMediaFile', index);
+  },
+  removePhotoFile({ commit }, index) {
+    commit('removePhotoFile', index);
+  },
   setMyCostSheetStatus({ commit }, cost) {
     commit('setMyCostSheetStatus', cost);
   },
@@ -78,6 +114,8 @@ const getters = {
   getDescription: (state) => state.description,
   getCost: (state) => state.cost,
   getOrderId: (state) => state.orderId,
+  getMediaFiles: (state) => state.mediaFiles,
+  getPhotoFiles: (state) => state.photoFiles,
   isEdit: (state) => state.isEdit,
 };
 
@@ -91,6 +129,8 @@ const state = {
   description: null,
   cost: null,
   isEdit: false,
+  mediaFiles: [],
+  photoFiles: [],
   orderId: null,
 };
 

@@ -14,6 +14,7 @@
         span Сделать фото
 
       v-row.dialog-main-btn-camera-video(
+        @click="openCameraVideo"
         align="center"
         v-ripple="{ center: true }")
         span Сделать видео

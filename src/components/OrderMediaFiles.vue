@@ -61,6 +61,7 @@ import file from '../scripts/device-modules/file';
 import dialogWindow from '../scripts/openDialog';
 import dialogMessages from '../scripts/dialogMessages';
 import logger from '../scripts/logger';
+import mediaCapture from '../scripts/device-modules/mediaCapture';
 
 export default {
   name: 'order-media-files',
@@ -70,8 +71,6 @@ export default {
   },
   data() {
     return {
-      mediaFiles: [],
-      photoFiles: [],
       isOpenGallery: false,
       optionsGallery: {
         index: 0,
@@ -87,6 +86,7 @@ export default {
     showPhotoGallery(mediaFile) {
       if (mediaFile.type === 'image') {
         this.isOpenGallery = true;
+        logger.log(mediaFile.photoIndex);
         this.$set(this.optionsGallery, 'index', mediaFile.photoIndex);
       }
     },
@@ -112,11 +112,11 @@ export default {
           mediaFile.h = el.target.height;
         };
 
-        this.mediaFiles.push(mediaFile);
+        this.$store.dispatch('addMediaFile', mediaFile);
       };
       reader.readAsDataURL(mediaFile.file);
 
-      this.sendFile(mediaFile);
+      this.formatFile(mediaFile);
     },
     ...mapActions('actionFileDialog', [
       'setStatus',
@@ -135,15 +135,29 @@ export default {
 
       const status = this.checkDeleteFileResponse(res);
 
-      logger.log(status);
+      logger.log(mediaFile);
 
       if (this.mediaFiles[index] === mediaFile && (status || mediaFile.status === 'error')) {
-        this.mediaFiles.splice(index, 1);
+        if (mediaFile.photoIndex >= 0) {
+          const { photoIndex } = mediaFile;
+          logger.log(photoIndex);
+
+          this.$store.dispatch('removePhotoFile', index);
+
+          this.photoFiles.forEach((element) => {
+            if (element.photoIndex !== 0 && photoIndex < element.photoIndex) {
+            // eslint-disable-next-line no-param-reassign
+              element.photoIndex -= 1;
+            }
+          });
+        }
+
+        this.$store.dispatch('removeMediaFile', index);
       }
     },
 
     getOptions(srcType) {
-      const options = {
+      let options = {
         // eslint-disable-next-line no-undef
         destinationType: Camera.DestinationType.FILE_URI,
         // eslint-disable-next-line no-undef
@@ -162,10 +176,16 @@ export default {
         options.sourceType = Camera.PictureSourceType.CAMERA;
       }
 
+      if (srcType === 'camera-video') {
+        options = {};
+        options.limit = 1;
+        options.duration = 180;
+      }
+
       return options;
     },
 
-    choosePhoto(innerOptions) {
+    chooseMedia(innerOptions) {
       camera.open(innerOptions)
         .then((dataUri) => {
           let filePath = dataUri;
@@ -178,7 +198,7 @@ export default {
             status: 'loading',
           };
 
-          this.mediaFiles.push(mediaFile);
+          this.$store.dispatch('addMediaFile', mediaFile);
 
           file.getSystemFile(filePath)
             .then((fileEntry) => {
@@ -195,7 +215,7 @@ export default {
                     mediaFile.src = inputFile.localURL;
 
                     mediaFile.photoIndex = this.photoFiles.length;
-                    this.photoFiles.push(mediaFile);
+                    this.$store.dispatch('addPhotoFile', mediaFile);
 
                     const image = new Image();
                     image.src = inputFile.localURL;
@@ -205,7 +225,7 @@ export default {
                     };
                   }
 
-                  this.sendFile(mediaFile);
+                  this.formatFile(mediaFile);
                 });
             })
             .catch((error) => {
@@ -220,6 +240,11 @@ export default {
 
     /* eslint-disable no-param-reassign */
     createThumbnail(mediaFile, fileUri, outputFileName) {
+      logger.log('========>>');
+      logger.log(mediaFile);
+      logger.log(fileUri);
+      logger.log(outputFileName);
+
       // eslint-disable-next-line no-undef
       VideoEditor.createThumbnail(
         (path) => {
@@ -251,8 +276,8 @@ export default {
     /* eslint-disable no-param-reassign */
 
     /* eslint-disable no-param-reassign */
-    async sendFile(mediaFile) {
-      const res = await this.uploadFile(mediaFile);
+    async sendFile(blob, mediaFile) {
+      const res = await this.uploadFile(blob);
       logger.log(res);
 
       mediaFile.serverData = this.checkUploadFile(res);
@@ -264,11 +289,28 @@ export default {
     },
     /* eslint-enable no-param-reassign */
 
+    formatFile(mediaFile) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const blob = new Blob([e.target.result], { type: mediaFile.file.type });
+
+        logger.log(mediaFile);
+        logger.log(blob);
+        logger.log(mediaFile.file);
+        logger.log(mediaFile.file.type);
+
+        this.sendFile(blob, mediaFile);
+      };
+
+      reader.readAsArrayBuffer(mediaFile.file);
+    },
+
     async uploadFile(mediaFile) {
+      logger.log(mediaFile);
       const formData = new FormData();
       formData.append('token', this.token);
       formData.append('method', 'add');
-      formData.append('file', mediaFile.file);
+      formData.append('file', mediaFile);
 
       try {
         const res = await axios.post(
@@ -333,7 +375,7 @@ export default {
           {
             token: this.token,
             method: 'del',
-            file: mediaFile.path,
+            file: mediaFile.serverData,
           },
         );
 
@@ -354,6 +396,23 @@ export default {
 
       return null;
     },
+
+    captureVideo(innerOptions) {
+      mediaCapture.captureVideo(innerOptions)
+        .then((captureResult) => {
+          const mediaFile = {
+            status: 'loading',
+            file: captureResult[0],
+          };
+
+          this.$store.dispatch('addMediaFile', mediaFile);
+
+          this.createThumbnail(mediaFile, mediaFile.file.fullPath, mediaFile.file.name);
+
+          this.sendFile(mediaFile);
+        })
+        .catch((error) => logger.log(error));
+    },
   },
   computed: {
     sourceType: {
@@ -363,19 +422,30 @@ export default {
     token() {
       return this.$store.getters.getToken;
     },
+    mediaFiles() {
+      return this.$store.getters.getMediaFiles;
+    },
+    photoFiles() {
+      return this.$store.getters.getPhotoFiles;
+    },
   },
   watch: {
     sourceType() {
       const options = this.getOptions(this.sourceType);
 
       if (this.sourceType === 'gallery') {
-        this.choosePhoto(options);
+        this.chooseMedia(options);
         logger.log('open gallery');
       }
 
       if (this.sourceType === 'camera-photo') {
-        this.choosePhoto(options);
+        this.chooseMedia(options);
         logger.log('open camera');
+      }
+
+      if (this.sourceType === 'camera-video') {
+        this.captureVideo(options);
+        logger.log('open video camera');
       }
 
       if (this.sourceType) {

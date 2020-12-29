@@ -81,7 +81,7 @@ export default {
     this.$store.commit('setTitle', 'Мои заказы');
 
     if (this.orderType === 'await') {
-      console.log('aaaaa');
+      console.log(this.order);
       this.getOrderResponse();
     }
   },

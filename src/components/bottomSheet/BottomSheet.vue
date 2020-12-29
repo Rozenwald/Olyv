@@ -134,6 +134,14 @@ export default {
 
     sendOrder() {
       this.loading = true;
+
+      const files = [];
+      this.mediaFiles.forEach((element) => {
+        files.push(element.serverData);
+      });
+
+      logger.log(files);
+
       /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
@@ -146,6 +154,7 @@ export default {
           longitude: this.addressData.lon,
           latitude: this.addressData.lat,
           address: this.addressData.value,
+          files,
         })
         .then((response) => (this.checkResonse(response)))
         .catch((error) => {
@@ -259,6 +268,10 @@ export default {
 
     id() {
       return this.$store.getters.getOrderId;
+    },
+
+    mediaFiles() {
+      return this.$store.getters.getMediaFiles;
     },
   },
   watch: {

@@ -32,6 +32,7 @@
     "cordova-plugin-firebasex": "^11.0.3",
     "cordova-plugin-local-notification": "^0.9.0-beta.2",
     "cordova-plugin-local-notifications": "^1.0.0",
+    "cordova-plugin-media-capture": "^3.0.3",
     "cordova-plugin-nativestorage": "^2.3.2",
     "cordova-plugin-splashscreen": "^6.0.0",
     "cordova-plugin-video-editor": "^1.1.3",
@@ -88,7 +89,8 @@
       },
       "cordova-plugin-document-viewer": {},
       "cordova-plugin-video-editor": {},
-      "cordova-plugin-filepath": {}
+      "cordova-plugin-filepath": {},
+      "cordova-plugin-media-capture": {}
     },
     "platforms": [
       "browser",
