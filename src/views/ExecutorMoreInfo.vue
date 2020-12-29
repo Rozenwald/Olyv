@@ -100,6 +100,10 @@ export default {
   created() {
     this.$store.commit('setTitle', 'Все заказы');
 
+    logger.log('sasasa');
+
+    logger.log(this.order);
+
     if (this.token) {
       this.getCustomerUserData();
     }
