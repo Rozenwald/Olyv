@@ -124,6 +124,9 @@ const routes = [
     path: '/chat',
     component: Chat,
     meta: { index: 6 },
+    beforeEnter: (to, from, next) => {
+      if (to.name !== 'customerMoreInfo' || 'executorMoreInfo' || 'allChat') next({ name: 'allchat' });
+    },
   },
   {
     name: 'allChat',

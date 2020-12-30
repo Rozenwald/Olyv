@@ -105,7 +105,6 @@ export default {
       this.$router.push({ name: 'setting' });
     },
     stepback() {
-      console.log(this.$router);
       this.$router.back();
     },
   },
