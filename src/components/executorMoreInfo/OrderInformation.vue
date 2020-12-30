@@ -63,11 +63,9 @@ export default {
     },
   },
   methods: {
-    mediaSort() {
-      this.mediaFiles = this.order.files;
+    mediaSort(media) {
       let index = 0;
-      this.mediaFiles.forEach((element) => {
-        console.log(element);
+      media.forEach((element) => {
         if (element.ext === ('jpg' || 'png')) {
           this.photoObject = {
             src: this.$baseUrlNoPort + element.url.substr(1),
@@ -77,26 +75,25 @@ export default {
             indexPhoto: index,
             serverData: element,
           };
-          console.log(this.photoObject);
+          this.photoFiles.push(this.photoObject);
           index = +1;
         }
-        this.photoFiles.push(this.photoObject);
+        if (element.ext === ('mp4' || 'wav')) {
+          this.photoObject = {
+            src: this.$baseUrlNoPort + element.url.substr(1),
+            type: 'video',
+            w: 400,
+            h: 400,
+            serverData: element,
+          };
+          this.mediaFiles.push(this.photoObject);
+        }
       });
-      console.log(this.photoObject);
-      console.log(this.photoFiles);
-    },
-    showPhotoSwipe(index) {
-      this.isOpen = true;
-      this.$set(this.options, 'index', index);
-    },
-    hidePhotoSwipe() {
-      this.isOpen = false;
+      console.log('media', this.mediaFiles);
+      console.log('photo', this.photoFiles);
     },
   },
   computed: {
-    photo() {
-      return this.photoFiles.src;
-    },
     time() {
       return moment(this.order.createDate);
     },
@@ -108,9 +105,7 @@ export default {
     },
   },
   created() {
-    console.log(this.items);
-    console.log(this.order);
-    this.mediaSort();
+    this.mediaSort(this.order.files);
   },
 };
 </script>
