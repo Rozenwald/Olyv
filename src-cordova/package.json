@@ -36,6 +36,7 @@
     "cordova-plugin-nativestorage": "^2.3.2",
     "cordova-plugin-splashscreen": "^6.0.0",
     "cordova-plugin-video-editor": "^1.1.3",
+    "cordova-plugin-video-player": "^1.0.1",
     "cordova-plugin-whitelist": "~1.3.4",
     "cordova-vk-auth": "git+https://github.com/iRapoo/cordova-vk-auth.git",
     "cordova.plugins.diagnostic": "^6.0.2",
@@ -90,7 +91,8 @@
       "cordova-plugin-document-viewer": {},
       "cordova-plugin-video-editor": {},
       "cordova-plugin-filepath": {},
-      "cordova-plugin-media-capture": {}
+      "cordova-plugin-media-capture": {},
+      "com.moust.cordova.videoplayer": {}
     },
     "platforms": [
       "browser",

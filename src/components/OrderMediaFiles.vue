@@ -27,7 +27,7 @@
 
         v-img.media-file(
           :src="mediaFile.src"
-          @click="showPhotoGallery(mediaFile)")
+          @click="showMedia(mediaFile)")
 
           .status-wrp(v-show="mediaFile.status != 'upload'")
             v-row.status-content(align="center" justify="center")
@@ -83,11 +83,27 @@ export default {
     };
   },
   methods: {
-    showPhotoGallery(mediaFile) {
+    showMedia(mediaFile) {
       if (mediaFile.type === 'image') {
         this.isOpenGallery = true;
         logger.log(mediaFile.photoIndex);
         this.$set(this.optionsGallery, 'index', mediaFile.photoIndex);
+      }
+
+      if (mediaFile.type === 'video') {
+        logger.log(mediaFile);
+        logger.log(this.$baseUrlNoPort + mediaFile.serverData.substr(1));
+
+        // eslint-disable-next-line no-undef
+        VideoPlayer.play(
+          this.$baseUrlNoPort + mediaFile.serverData.substr(1),
+          () => {
+            logger.log('video completed');
+          },
+          (err) => {
+            logger.log(err);
+          },
+        );
       }
     },
 
