@@ -170,6 +170,7 @@ export default {
     },
 
     checkResonse(response) {
+      console.log(response);
       this.loading = false;
       switch (response.data.status) {
         case 'invalidCost':
