@@ -64,10 +64,11 @@ export default {
   },
   methods: {
     mediaSort(media) {
+      let mediaObject = {};
       let index = 0;
       media.forEach((element) => {
         if (element.ext === ('jpg' || 'png')) {
-          this.photoObject = {
+          mediaObject = {
             src: this.$baseUrlNoPort + element.url.substr(1),
             type: 'image',
             w: 400,
@@ -75,19 +76,19 @@ export default {
             indexPhoto: index,
             serverData: element,
           };
-          this.photoFiles.push(this.photoObject);
+          this.photoFiles.push(mediaObject);
           index = +1;
         }
         if (element.ext === ('mp4' || 'wav')) {
-          this.photoObject = {
+          mediaObject = {
             src: this.$baseUrlNoPort + element.url.substr(1),
             type: 'video',
             w: 400,
             h: 400,
             serverData: element,
           };
-          this.mediaFiles.push(this.photoObject);
         }
+        this.mediaFiles.push(mediaObject);
       });
       console.log('media', this.mediaFiles);
       console.log('photo', this.photoFiles);
