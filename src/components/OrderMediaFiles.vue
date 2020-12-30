@@ -116,7 +116,10 @@ export default {
       };
       reader.readAsDataURL(mediaFile.file);
 
-      this.formatFile(mediaFile);
+      // this.formatFile(mediaFile);
+
+      logger.log(this.$refs.file.files[0].size);
+      this.sendFile(mediaFile.file, mediaFile);
     },
     ...mapActions('actionFileDialog', [
       'setStatus',
@@ -294,6 +297,8 @@ export default {
       reader.onload = (e) => {
         const blob = new Blob([e.target.result], { type: mediaFile.file.type });
 
+        logger.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+        logger.log(blob.size);
         logger.log(mediaFile);
         logger.log(blob);
         logger.log(mediaFile.file);
