@@ -12,15 +12,22 @@
         avatar(size="36" color="#AEAEAE" :src="photo")
       .toolbar-title
         .toolbar-title-text {{title}}
+    v-btn.toolbar-setting-btn(
+        v-if="showSettingBtn"
+        depressed fab small
+        @click="route()")
+      svg-icon(color="white" name="Setting")
 </template>
 
 <script>
 import Avatar from './Avatar.vue';
+import SvgIcon from './SvgIcon.vue';
 
 export default {
   name: 'appbar',
   components: {
     Avatar,
+    SvgIcon,
   },
   computed: {
     title() {
@@ -29,6 +36,14 @@ export default {
     showAppbar() {
       if (this.currentRouteName === 'auth' || this.currentRouteName === 'registration') return false;
       return true;
+    },
+    showSettingBtn() {
+      switch (this.$route.name) {
+        case 'customerProfile':
+          return true;
+        default:
+          return false;
+      }
     },
     showBackbtn() {
       switch (this.$route.name) {
@@ -43,8 +58,6 @@ export default {
         case 'spisokZakazov':
           return false;
         case 'customerProfile':
-          return false;
-        case 'setting':
           return false;
         case 'allOrder':
           return false;
@@ -88,6 +101,9 @@ export default {
     },
   },
   methods: {
+    route() {
+      this.$router.push({ name: 'setting' });
+    },
     stepback() {
       console.log(this.$router);
       this.$router.back();
@@ -114,6 +130,11 @@ export default {
       font-size 17px
       color #FFFFFF
       &-text{}
+    }
+    &-setting-btn {
+    position absolute
+    right 16px
+    background-color transparent !important
     }
   }
 </style>

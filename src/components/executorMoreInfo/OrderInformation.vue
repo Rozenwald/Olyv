@@ -10,19 +10,18 @@
           svg-icon(name="Time")
           span {{formatedTime}}
     v-row.information-description {{order.description}}
-    .media-files
-      v-row
-        v-col.d-flex.child-flex.custom-card-wrp(v-for='n in 5', :key='n', cols='6')
-          v-photoswipe-gallery.image-container(
-              :isOpen="isOpenGallery"
-              :options="optionsGallery"
-              :items="items")
-            v-card.d-flex.custom-card(flat, tail)
-              v-img.grey.lighten-2(slot-scope="props" :src="media", :lazy-src='`https://picsum.photos/10/6?image=${n * 5 + 10}`', aspect-ratio='1')
-                template(v-slot:placeholder)
-                  v-row.fill-height.ma-0(align='center', justify='center')
-                    v-progress-circular(indeterminate, color='grey lighten-5')
-          // v-img(v-if="!media" :src="media")
+    .media-wrp
+      v-photoswipe-gallery(
+          :isOpen="isOpenGallery"
+          :options="optionsGallery"
+          :items="photoFiles")
+        v-img.media-file(
+            slot-scope="props"
+            :src="props.item.src",
+            aspect-ratio='1')
+          template(v-slot:placeholder)
+            v-row(align='center', justify='center')
+              v-progress-circular(indeterminate, color='grey lighten-5')
 </template>
 
 <script>
@@ -42,6 +41,7 @@ export default {
     return {
       mediaFiles: [],
       photoFiles: [],
+      photoObject: null,
       isOpenGallery: false,
       options: {
         index: 0,
@@ -63,6 +63,28 @@ export default {
     },
   },
   methods: {
+    mediaSort() {
+      this.mediaFiles = this.order.files;
+      let index = 0;
+      this.mediaFiles.forEach((element) => {
+        console.log(element);
+        if (element.ext === ('jpg' || 'png')) {
+          this.photoObject = {
+            src: this.$baseUrlNoPort + element.url.substr(1),
+            type: 'image',
+            w: 400,
+            h: 400,
+            indexPhoto: index,
+            serverData: element,
+          };
+          console.log(this.photoObject);
+          index = +1;
+        }
+        this.photoFiles.push(this.photoObject);
+      });
+      console.log(this.photoObject);
+      console.log(this.photoFiles);
+    },
     showPhotoSwipe(index) {
       this.isOpen = true;
       this.$set(this.options, 'index', index);
@@ -72,6 +94,9 @@ export default {
     },
   },
   computed: {
+    photo() {
+      return this.photoFiles.src;
+    },
     time() {
       return moment(this.order.createDate);
     },
@@ -81,68 +106,62 @@ export default {
       }
       return this.time.format('D MMMM, HH:mm');
     },
-    media() {
-      const url = 'http://pm1.narvii.com/7616/357dcc68740d783ed5c7aac60508720afa87e90ar1-1200-1697v2_uhq.jpg';
-      return url;
-    },
-  // media() {
-  //  if (!this.order) {
-  //    return ' ';
-  //  }
-  //  if (!this.order.files) {
-  //    return ' ';
-  //  }
-  //  if (!this.order.files.length) {
-  //    return null;
-  //  }
-  //  const url = this.order.files[this.order.files.length - 1].urlMax.substr(1);
-  //  return this.$baseUrlNoPort + url;
-  // },
   },
   created() {
+    console.log(this.items);
     console.log(this.order);
+    this.mediaSort();
   },
 };
 </script>
 
 <style lang="stylus" scoped>
-  .media-files .row{
+  .media-file {
+    width 42%
+    display inline-block
+    vertical-align: top
+    margin-right 7px
+    border-radius 4px
+  }
+  .media-wrp{
+    overflow: hidden;
+    overflow-x: scroll;
+    white-space:nowrap;
+    padding 12px
+  }
+  .media-container{
+    margin 5px
+    width 45%
+    padding 0
     overflow auto
     white-space nowrap
     flex-wrap nowrap
   }
-  .image-container{
-    margin-top 5px !important
-    width 100%
-    height 100%;
-      &-image{
-      }
+  .media-files .row{
+    display inlane
+    overflow auto
+    white-space nowrap
+    flex-wrap nowrap
   }
   .information {
     .row {
       margin 0
     }
-
     &-header {
       padding 12px
-
       .col {
         padding 0
       }
-
       svg {
         margin-right 5px
       }
-
       span {
         font-style normal
         font-size 12px
         line-height 1.4
         color #65686c
       }
-    }
-
-    &-description {
+    }    &-description {
       padding 0 12px 12px
     }
   }
