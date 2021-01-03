@@ -9,7 +9,6 @@ function mergeOptions(defaultOptions, innerOptions) {
 
 const defaultVideoOptions = {
   limit: 1,
-  duration: 180,
 };
 
 function captureVideo(innerOptions) {

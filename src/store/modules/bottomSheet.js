@@ -32,8 +32,8 @@ const mutations = {
   addMediaFile(state, mediaFile) {
     state.mediaFiles.push(mediaFile);
   },
-  addPhotoFile(state, photoFiles) {
-    state.photoFiles.push(photoFiles);
+  addPhotoFile(state, photoFile) {
+    state.photoFiles.push(photoFile);
   },
   removeMediaFile(state, index) {
     state.mediaFiles.splice(index, 1);
@@ -84,8 +84,8 @@ const actions = {
   addMediaFile({ commit }, mediaFiles) {
     commit('addMediaFile', mediaFiles);
   },
-  addPhotoFile({ commit }, photoFiles) {
-    commit('addPhotoFile', photoFiles);
+  addPhotoFile({ commit }, photoFile) {
+    commit('addPhotoFile', photoFile);
   },
   removeMediaFile({ commit }, index) {
     commit('removeMediaFile', index);

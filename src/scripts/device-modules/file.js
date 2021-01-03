@@ -50,10 +50,17 @@ function dataURLtoBlob(dataUrl) {
   return new Blob([u8arr], { type: mime });
 }
 
+function isStorageEnabled() {
+  return new Promise((onSuccess, onError) => {
+    window.cordova.plugins.diagnostic.isExternalStorageAuthorized(onSuccess, onError);
+  });
+}
+
 export default {
   getSystemFile,
   getFile,
   dataURLtoBlob,
   getTemporaryFile,
   getDirFile,
+  isStorageEnabled,
 };

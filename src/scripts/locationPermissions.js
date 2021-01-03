@@ -98,7 +98,7 @@ function evaluateAuthorization(status) {
           'Для корректной работы сервиса поиска адресов и использования собственного местоположения мы рекомендуем включить доступ к геоданным',
           (i) => {
             if (i === 1) {
-              window.cordova.plugins.diagnostic.switchToSettings();
+              window.cordova.plugins.diagnostic.switchToLocationSettings();
             }
           }, 'Доступ к геоданным', ['Ок', 'Отмена'],
         );

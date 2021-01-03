@@ -33,7 +33,7 @@
             v-row.status-content(align="center" justify="center")
               v-progress-circular.progress(
                 v-show="mediaFile.status == 'loading'"
-                indeterminate
+                :value="mediaFile.progressUpload"
                 :size="40"
                 :width="4"
                 color="#56D68B")
@@ -61,6 +61,7 @@ import file from '../scripts/device-modules/file';
 import dialogWindow from '../scripts/openDialog';
 import dialogMessages from '../scripts/dialogMessages';
 import logger from '../scripts/logger';
+import storagePermissions from '../scripts/permissions/storagePermissions';
 import mediaCapture from '../scripts/device-modules/mediaCapture';
 
 export default {
@@ -86,23 +87,25 @@ export default {
     showMedia(mediaFile) {
       if (mediaFile.type === 'image') {
         this.isOpenGallery = true;
-        logger.log(mediaFile.photoIndex);
         this.$set(this.optionsGallery, 'index', mediaFile.photoIndex);
       }
 
       if (mediaFile.type === 'video') {
-        logger.log(mediaFile);
-        logger.log(this.$baseUrlNoPort + mediaFile.serverData.substr(1));
+        const options = {
+          successCallback() {
+            logger.log('Video was closed without error.');
+          },
+          errorCallback(error) {
+            logger.log(error);
+          },
+        };
 
-        // eslint-disable-next-line no-undef
-        VideoPlayer.play(
-          this.$baseUrlNoPort + mediaFile.serverData.substr(1),
-          () => {
-            logger.log('video completed');
-          },
-          (err) => {
-            logger.log(err);
-          },
+        logger.log('dsdsdsdsdsdsds');
+        logger.log(mediaFile.fileEntry);
+
+        window.plugins.streamingMedia.playVideo(
+          mediaFile.fileEntry.nativeURL,
+          options,
         );
       }
     },
@@ -116,6 +119,7 @@ export default {
       // eslint-disable-next-line prefer-destructuring
       mediaFile.file = this.$refs.file.files[0];
       mediaFile.status = 'loading';
+      mediaFile.progressUpload = 0;
 
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -143,6 +147,11 @@ export default {
     ]),
 
     actionAddMedia() {
+      file.isStorageEnabled()
+        .then((enable) => {
+          if (enable) this.setStatus(true);
+          else storagePermissions.checkStorageAuthorization();
+        });
       this.setStatus(true);
     },
 
@@ -154,24 +163,32 @@ export default {
 
       const status = this.checkDeleteFileResponse(res);
 
-      logger.log(mediaFile);
+      logger.log('===================================');
+      logger.log(mediaFile.photoIndex);
+      logger.log(index);
 
-      if (this.mediaFiles[index] === mediaFile && (status || mediaFile.status === 'error')) {
+      if (this.mediaFiles[index] === mediaFile && (status || mediaFile.status)) {
+        this.$store.dispatch('removeMediaFile', index);
+        logger.log('=====================');
+        logger.log(mediaFile);
         if (mediaFile.photoIndex >= 0) {
           const { photoIndex } = mediaFile;
           logger.log(photoIndex);
 
-          this.$store.dispatch('removePhotoFile', index);
+          this.$store.dispatch('removePhotoFile', photoIndex);
 
-          this.photoFiles.forEach((element) => {
+          this.mediaFiles.forEach((element) => {
+            logger.log(element);
             if (element.photoIndex !== 0 && photoIndex < element.photoIndex) {
             // eslint-disable-next-line no-param-reassign
               element.photoIndex -= 1;
             }
+            logger.log(element);
           });
-        }
 
-        this.$store.dispatch('removeMediaFile', index);
+          logger.log(this.photoFiles.length);
+          logger.log(this.mediaFiles.length);
+        }
       }
     },
 
@@ -198,7 +215,6 @@ export default {
       if (srcType === 'camera-video') {
         options = {};
         options.limit = 1;
-        options.duration = 180;
       }
 
       return options;
@@ -215,6 +231,7 @@ export default {
 
           const mediaFile = {
             status: 'loading',
+            progressUpload: 0,
           };
 
           this.$store.dispatch('addMediaFile', mediaFile);
@@ -224,6 +241,7 @@ export default {
               file.getFile(fileEntry)
                 .then((inputFile) => {
                   mediaFile.file = inputFile;
+                  mediaFile.fileEntry = fileEntry;
 
                   if (inputFile.type.indexOf('image') !== 0) {
                     mediaFile.type = 'video';
@@ -234,13 +252,17 @@ export default {
                     mediaFile.src = inputFile.localURL;
 
                     mediaFile.photoIndex = this.photoFiles.length;
-                    this.$store.dispatch('addPhotoFile', mediaFile);
+                    const photoFile = {
+                      src: mediaFile.src,
+                    };
+                    logger.log(photoFile);
+                    this.$store.dispatch('addPhotoFile', photoFile);
 
                     const image = new Image();
                     image.src = inputFile.localURL;
                     image.onload = (el) => {
-                      mediaFile.w = el.target.width;
-                      mediaFile.h = el.target.height;
+                      photoFile.w = el.target.width;
+                      photoFile.h = el.target.height;
                     };
                   }
 
@@ -259,11 +281,6 @@ export default {
 
     /* eslint-disable no-param-reassign */
     createThumbnail(mediaFile, fileUri, outputFileName) {
-      logger.log('========>>');
-      logger.log(mediaFile);
-      logger.log(fileUri);
-      logger.log(outputFileName);
-
       // eslint-disable-next-line no-undef
       VideoEditor.createThumbnail(
         (path) => {
@@ -273,13 +290,6 @@ export default {
               file.getFile(thumbnailFileEntry)
                 .then((thumbnailFile) => {
                   mediaFile.src = thumbnailFile.localURL;
-
-                  const image = new Image();
-                  image.src = thumbnailFile.localURL;
-                  image.onload = (el) => {
-                    mediaFile.w = el.target.width;
-                    mediaFile.h = el.target.height;
-                  };
                 })
                 .catch((error) => logger.log(error));
             })
@@ -296,42 +306,38 @@ export default {
 
     /* eslint-disable no-param-reassign */
     async sendFile(blob, mediaFile) {
-      const res = await this.uploadFile(blob);
+      const res = await this.uploadFile(blob, mediaFile);
       logger.log(res);
 
       mediaFile.serverData = this.checkUploadFile(res);
 
-      if (mediaFile.serverData) mediaFile.status = 'upload';
-      else mediaFile.status = 'error';
-
-      logger.log(mediaFile);
+      if (mediaFile.serverData) {
+        mediaFile.progressUpload = 100;
+        mediaFile.status = 'upload';
+      } else mediaFile.status = 'error';
     },
     /* eslint-enable no-param-reassign */
 
     formatFile(mediaFile) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        const blob = new Blob([e.target.result], { type: mediaFile.file.type });
-
-        logger.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-        logger.log(blob.size);
-        logger.log(mediaFile);
-        logger.log(blob);
-        logger.log(mediaFile.file);
-        logger.log(mediaFile.file.type);
-
+        const blob = new Blob([new Uint8Array(e.target.result)], { type: mediaFile.file.type });
         this.sendFile(blob, mediaFile);
       };
+
+      reader.onerror = (err) => logger.log(err);
+
+      logger.log(mediaFile);
 
       reader.readAsArrayBuffer(mediaFile.file);
     },
 
-    async uploadFile(mediaFile) {
-      logger.log(mediaFile);
+    async uploadFile(blob, mediaFile) {
+      logger.log(blob);
       const formData = new FormData();
       formData.append('token', this.token);
       formData.append('method', 'add');
-      formData.append('file', mediaFile);
+      formData.append('file', blob);
 
       try {
         const res = await axios.post(
@@ -340,6 +346,11 @@ export default {
           {
             headers: {
               'Content-Type': 'multipart/form-data',
+            },
+
+            onUploadProgress: (e) => {
+              // eslint-disable-next-line no-param-reassign
+              mediaFile.progressUpload = Math.min(Math.round((e.loaded / e.total) * 100), 99);
             },
           },
         );
@@ -365,7 +376,7 @@ export default {
             true,
             false,
           );
-          break;
+          return null;
         case 'notAuthenticate':
           dialogWindow.open(
             dialogMessages.getTitle('error'),
@@ -374,7 +385,7 @@ export default {
             true,
             () => { this.$router.push({ name: 'auth' }); },
           );
-          break;
+          return null;
         default:
           dialogWindow.open(
             dialogMessages.getTitle('error'),
@@ -383,10 +394,8 @@ export default {
             false,
           );
           logger.log(response);
-          break;
+          return null;
       }
-
-      return null;
     },
 
     async deleteFile(mediaFile) {
@@ -423,14 +432,26 @@ export default {
         .then((captureResult) => {
           const mediaFile = {
             status: 'loading',
-            file: captureResult[0],
+            progressUpload: 0,
+            type: 'video',
           };
 
           this.$store.dispatch('addMediaFile', mediaFile);
 
-          this.createThumbnail(mediaFile, mediaFile.file.fullPath, mediaFile.file.name);
+          file.getSystemFile(captureResult[0].localURL)
+            .then((fileEntry) => {
+              file.getFile(fileEntry)
+                .then((inputFile) => {
+                  mediaFile.file = inputFile;
+                  mediaFile.fileEntry = fileEntry;
 
-          this.sendFile(mediaFile);
+                  this.createThumbnail(mediaFile, fileEntry.nativeURL, fileEntry.name);
+
+                  this.formatFile(mediaFile);
+                })
+                .catch((error) => logger.log(error));
+            })
+            .catch((error) => logger.log(error));
         })
         .catch((error) => logger.log(error));
     },
