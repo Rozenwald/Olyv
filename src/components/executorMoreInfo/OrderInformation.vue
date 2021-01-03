@@ -64,33 +64,41 @@ export default {
   },
   methods: {
     mediaSort(media) {
+      let mediaObject = {};
       let index = 0;
       media.forEach((element) => {
         if (element.ext === ('jpg' || 'png')) {
-          this.photoObject = {
+          mediaObject = {
             src: this.$baseUrlNoPort + element.url.substr(1),
             type: 'image',
-            w: 400,
-            h: 400,
             indexPhoto: index,
             serverData: element,
           };
-          this.photoFiles.push(this.photoObject);
           index = +1;
         }
         if (element.ext === ('mp4' || 'wav')) {
-          this.photoObject = {
+          mediaObject = {
             src: this.$baseUrlNoPort + element.url.substr(1),
             type: 'video',
-            w: 400,
-            h: 400,
             serverData: element,
           };
-          this.mediaFiles.push(this.photoObject);
         }
+        this.photoFiles.push(mediaObject);
+        this.mediaFiles.push(mediaObject);
+
+        this.photoFiles.forEach((elementObject) => {
+          console.log(elementObject);
+          const image = new Image();
+          image.src = elementObject.src;
+          console.log(image);
+          image.onload = (el) => {
+            // eslint-disable-next-line no-param-reassign
+            elementObject.w = el.target.width;
+            // eslint-disable-next-line no-param-reassign
+            elementObject.h = el.target.height;
+          };
+        });
       });
-      console.log('media', this.mediaFiles);
-      console.log('photo', this.photoFiles);
     },
   },
   computed: {
@@ -105,7 +113,7 @@ export default {
     },
   },
   created() {
-    this.mediaSort(this.order.files);
+    this.mediaSort(this.order.files, {});
   },
 };
 </script>
