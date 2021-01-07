@@ -20,15 +20,12 @@
         overlap
         v-for="mediaFile in mediaFiles"
         :key="mediaFile.src")
-
         template(v-slot:badge)
           v-row.badge-wrp(align="center" justify="center" @click="deleteMediaFile(mediaFile)")
             v-icon clear
-
         v-img.media-file(
           :src="mediaFile.src"
           @click="showMedia(mediaFile)")
-
           .status-wrp(v-show="mediaFile.status != 'upload'")
             v-row.status-content(align="center" justify="center")
               v-progress-circular.progress(
@@ -38,7 +35,6 @@
                 :width="4"
                 color="#56D68B")
               v-icon(v-show="mediaFile.status == 'error'") error
-
       .media-file(v-show="mediaFiles.length < 10")
         v-row.media-file-wrp-add(align="center")
           v-btn.media-file-wrp-add-btn( rounded @click="actionAddMedia" )

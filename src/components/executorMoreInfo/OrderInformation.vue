@@ -10,32 +10,39 @@
           svg-icon(name="Time")
           span {{formatedTime}}
     v-row.information-description {{order.description}}
-    .media-wrp
-      v-photoswipe-gallery(
-          :isOpen="isOpenGallery"
-          :options="optionsGallery"
-          :items="photoFiles")
-        v-img.media-file(
-            slot-scope="props"
-            :src="props.item.src",
-            aspect-ratio='1')
-          template(v-slot:placeholder)
-            v-row(align='center', justify='center')
-              v-progress-circular(indeterminate, color='grey lighten-5')
+    .media-wrp(v-show="mediaFiles.length")
+      .media-file(
+        v-for="mediaFile in mediaFiles"
+        :key="mediaFile.src")
+        v-img(
+          v-if="mediaFile.type != 'video'"
+          :src="mediaFile.src"
+          @click="showMedia(mediaFile)"
+          aspect-ratio='1')
+        v-img.status-content(v-else aspect-ratio='1')
+          v-row.status-content(align="center" justify="center")
+            v-icon(x-large) play_arrow
+    photo-swipe(
+      :isOpen="isOpenGallery"
+      :items="photoFiles"
+      :options="optionsGallery"
+      @close="hidePhotoGallery")
 </template>
 
 <script>
+import axios from 'axios';
 import moment from 'moment';
-import { PhotoSwipeGallery } from 'v-photoswipe';
+import { PhotoSwipe } from 'v-photoswipe';
 import Avatar from '../Avatar.vue';
 import SvgIcon from '../SvgIcon.vue';
+import logger from '../../scripts/logger';
 
 export default {
   name: 'order-information',
   components: {
     SvgIcon,
     Avatar,
-    'v-photoswipe-gallery': PhotoSwipeGallery,
+    'photo-swipe': PhotoSwipe,
   },
   data() {
     return {
@@ -63,42 +70,77 @@ export default {
     },
   },
   methods: {
+    download(url) {
+      axios.get(url, { responseType: 'blob' })
+        .then((res) => logger.log(res))
+        .catch((error) => logger.log(error));
+    },
+
+    showMedia(mediaFile) {
+      if (mediaFile.type === 'image') {
+        this.isOpenGallery = true;
+        this.$set(this.optionsGallery, 'index', mediaFile.photoIndex);
+      }
+
+      if (mediaFile.type === 'video') {
+        const options = {
+          successCallback() {
+            logger.log('Video was closed without error.');
+          },
+          errorCallback(error) {
+            logger.log(error);
+          },
+        };
+
+        logger.log('dsdsdsdsdsdsds');
+        logger.log(mediaFile.src);
+
+        window.plugins.streamingMedia.playVideo(
+          mediaFile.src,
+          options,
+        );
+      }
+    },
     mediaSort(media) {
       let mediaObject = {};
       let index = 0;
       media.forEach((element) => {
-        if (element.ext === ('jpg' || 'png')) {
+        if ((element.ext === 'jpg') || (element.ext === 'png')) {
           mediaObject = {
             src: this.$baseUrlNoPort + element.url.substr(1),
             type: 'image',
-            indexPhoto: index,
-            serverData: element,
+            photoIndex: index,
+            serverData: element.src,
           };
           index = +1;
+          this.photoFiles.push(mediaObject);
         }
-        if (element.ext === ('mp4' || 'wav')) {
+        if ((element.ext === 'mp4') || (element.ext === 'wav')) {
           mediaObject = {
             src: this.$baseUrlNoPort + element.url.substr(1),
             type: 'video',
-            serverData: element,
+            serverData: element.src,
           };
         }
-        this.photoFiles.push(mediaObject);
         this.mediaFiles.push(mediaObject);
-
         this.photoFiles.forEach((elementObject) => {
-          console.log(elementObject);
-          const image = new Image();
-          image.src = elementObject.src;
-          console.log(image);
-          image.onload = (el) => {
-            // eslint-disable-next-line no-param-reassign
-            elementObject.w = el.target.width;
-            // eslint-disable-next-line no-param-reassign
-            elementObject.h = el.target.height;
-          };
+          if (elementObject.type === 'image') {
+            const image = new Image();
+            image.src = elementObject.src;
+            image.onload = (el) => {
+              // eslint-disable-next-line no-param-reassign
+              elementObject.w = el.target.width;
+              // eslint-disable-next-line no-param-reassign
+              elementObject.h = el.target.height;
+            };
+          }
         });
+        console.log(this.photoFiles);
+        console.log(this.mediaFiles);
       });
+    },
+    hidePhotoGallery() {
+      this.isOpenGallery = false;
     },
   },
   computed: {
@@ -119,7 +161,18 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .gallery {
+    display inline-block
+  }
   .media-file {
+    width 42%
+    height 100%
+    display inline-block
+    vertical-align: top
+    margin-right 7px
+    border-radius 4px
+  }
+  .video-file {
     width 42%
     display inline-block
     vertical-align: top
@@ -167,5 +220,10 @@ export default {
     }    &-description {
       padding 0 12px 12px
     }
+  }
+  .status-content {
+    width 100%
+    height 100%
+    background-color rgba(189, 189, 189, 0.5) !important
   }
 </style>

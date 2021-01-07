@@ -1,6 +1,6 @@
 <template lang="pug">
   v-container
-    order-information.order-information
+    order-information.order-information(:order="order")
     responded-users.responded-users(v-if="orderType == 'await'")
     bottom-field.bottom-field(v-if="orderType == 'await'")
     executor-card.executor-card(v-if="orderType == 'process'")
@@ -78,6 +78,7 @@ export default {
     },
   },
   created() {
+    console.log(this.order);
     this.$store.commit('setTitle', 'Мои заказы');
 
     if (this.orderType === 'await') {
