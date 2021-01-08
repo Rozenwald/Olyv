@@ -25,7 +25,7 @@
             :src="mediaFile.src"
             @click="showMedia(mediaFile)"
             aspect-ratio='1')
-          v-img.status-content(v-else aspect-ratio='1')
+          v-img.status-content(v-else aspect-ratio='1' @click="showMedia(mediaFile)")
             v-row.status-content(align="center" justify="center")
               v-icon(x-large) play_arrow
     photo-swipe(
