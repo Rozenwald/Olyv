@@ -7,14 +7,19 @@
     v-row.text-container(justify='center'
                          align='center'
                          v-else-if="loadType === 'text'")
-      .errorText-container
-        span.errorText-container {{textForUser1}} <br/>
-        span.errorText-container {{textForUser2}}
-    OrderCard2(v-else-if="loadType === 'order'"
-               v-for='item in keyOrder'
-               type='keyword'
-               :key='item._id'
-               :item='item')
+        v-btn.route-btn(
+          @click="route('keyWords')") к ключевым словам
+        .errorText-container
+          span.errorText-container {{textForUser1}} <br/>
+          span.errorText-container {{textForUser2}}
+    v-row.padding-px(v-else-if="loadType === ('order')" justify='center' align='center')
+      v-btn.route-btn(
+        @click="route('keyWords')") к ключевым словам
+      OrderCard2(
+                v-for='item in keyOrder'
+                type='keyword'
+                :key='item._id'
+                :item='item')
 </template>
 
 <script>
@@ -49,6 +54,9 @@ export default {
     SemipolarSpinner,
   },
   methods: {
+    route(routeName) {
+      this.$router.push({ name: routeName });
+    },
     // Получение заказов
     getData() {
       /* eslint-disable no-return-assign */
@@ -321,9 +329,20 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .padding-px {
+    padding-right 12px
+    padding-left 12px
+  }
+  .route-btn {
+    margin-bottom: 25px
+    background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
+    color #FFF
+    text-transform none
+    border-radius 30px
+  }
   .text-container{
+    padding-top: 75px
     text-align center
-    height 100%
     padding-bottom: 75px
   }
   .errorText-container{
