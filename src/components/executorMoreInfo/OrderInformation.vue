@@ -112,7 +112,9 @@ export default {
             photoIndex: index,
             serverData: element.src,
           };
-          index = +1;
+          console.log(index);
+          index += 1;
+          console.log(index);
           this.photoFiles.push(mediaObject);
         }
         if ((element.ext === 'mp4') || (element.ext === 'wav')) {

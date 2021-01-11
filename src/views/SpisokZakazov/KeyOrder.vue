@@ -15,7 +15,7 @@
     v-row.padding-px(v-else-if="loadType === ('order')" justify='center' align='center')
       v-btn.route-btn(
         @click="route('keyWords')") к ключевым словам
-      OrderCard2(
+      OrderCard2.cards(
                 v-for='item in keyOrder'
                 type='keyword'
                 :key='item._id'
@@ -329,12 +329,16 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .cards {
+    width 100%
+  }
   .padding-px {
     padding-right 12px
     padding-left 12px
   }
   .route-btn {
-    margin-bottom: 25px
+    display block
+    margin-bottom: 15px
     background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
     color #FFF
     text-transform none

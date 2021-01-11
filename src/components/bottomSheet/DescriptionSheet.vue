@@ -8,7 +8,7 @@
 
       v-textarea.description-field(
         solo
-        rows="9"
+        rows="20"
         no-resize
         hide-details
         v-model="description"

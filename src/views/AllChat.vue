@@ -1,9 +1,9 @@
 <template lang="pug">
 v-container.orderContainerHeight
-  .order-container(ref="scrollUpdate")
-    lastMsgDialog(v-for='item in messages'
-               :key='item._id'
-               :item='item')
+    .order-container(ref="scrollUpdate")
+      lastMsgDialog(v-for='item in messages'
+                :key='item._id'
+                :item='item')
 </template>
 
 <script>
@@ -102,14 +102,12 @@ export default {
 <style lang="stylus" scoped>
   .orderContainerHeight {
     width 100%
-    height 100vh
     padding-top 48px
     padding-right 0px
     padding-left 0px
   }
   .order-container{
     width 100%
-    height 100vh
     padding 0
   }
   .icon-container{
