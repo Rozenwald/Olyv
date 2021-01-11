@@ -4,7 +4,7 @@
     hide-details
     readonly
   )
-    input(type="file" ref="file" v-on:change="handle()")
+    //input(type="file" ref="file" v-on:change="handle()")
     .no-file-selected-wrp(v-show="!mediaFiles.length")
       v-list-item.no-file-selected
         v-list-item-action
