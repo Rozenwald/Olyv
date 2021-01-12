@@ -49,12 +49,10 @@ export default {
         });
     },
     checkGetMessages(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           response.data.data.forEach((element) => {
             this.messages.push(element);
-            console.log(this.messages);
             this.loadType = false;
           });
           break;
@@ -68,12 +66,13 @@ export default {
           );
           break;
         case 'notExist':
-          this.$store.dispatch('setAllMessages', {
-            messages: [],
-            id: this.idUserRequest,
-          });
-          this.getMessagesFromVuex();
-          console.log(this.messages);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            true,
+            () => { this.$router.push({ name: 'auth' }); },
+          );
           break;
         default:
           dialog.open('Ошибка', '', true, false);
@@ -82,9 +81,6 @@ export default {
     },
   },
   computed: {
-    type() {
-      return this.$store.getters.getChipStatus;
-    },
     token() {
       return this.$store.getters.getToken;
     },
