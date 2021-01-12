@@ -170,7 +170,6 @@ export default {
     },
 
     checkResonse(response) {
-      console.log(response);
       this.loading = false;
       switch (response.data.status) {
         case 'invalidCost':
@@ -282,6 +281,8 @@ export default {
         this.$store.dispatch('setAddressData', {});
         this.$store.dispatch('setDescription', null);
         this.$store.dispatch('setCost', null);
+        this.$store.dispatch('setMediaFiles', []);
+        this.$store.dispatch('setPhotoFiles', []);
         document.removeEventListener('backbutton', this.buttonBack, false);
       } else document.addEventListener('backbutton', this.buttonBack, false);
     },

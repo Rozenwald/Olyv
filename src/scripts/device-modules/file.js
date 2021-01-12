@@ -20,6 +20,13 @@ function getTemporaryFile(size) {
   });
 }
 
+// @return Promise with FileSystem
+function getPersistentyFile() {
+  return new Promise((onSuccess, onError) => {
+    window.requestFileSystem(window.PERSISTENT, 0, onSuccess, onError);
+  });
+}
+
 // @return File
 function getFile(fileEntry) {
   return new Promise((onSuccess, onError) => {
@@ -27,7 +34,7 @@ function getFile(fileEntry) {
   });
 }
 
-// @return File
+// @return FileEntry
 function getDirFile(dirEntry, fileName) {
   return new Promise((onSuccess, onError) => {
     dirEntry.getFile(fileName, { create: true, exclusive: false }, onSuccess, onError);
@@ -56,6 +63,11 @@ function isStorageEnabled() {
   });
 }
 
+function download(fileEntry, uri) {
+  const fileTransfer = new FileTransfer();
+  const fileURL = fileEntry.toURL();
+}
+
 export default {
   getSystemFile,
   getFile,
@@ -63,4 +75,5 @@ export default {
   getTemporaryFile,
   getDirFile,
   isStorageEnabled,
+  getPersistentyFile,
 };
