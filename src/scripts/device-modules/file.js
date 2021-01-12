@@ -63,11 +63,6 @@ function isStorageEnabled() {
   });
 }
 
-function download(fileEntry, uri) {
-  const fileTransfer = new FileTransfer();
-  const fileURL = fileEntry.toURL();
-}
-
 export default {
   getSystemFile,
   getFile,

@@ -11,7 +11,7 @@
           v-btn.media-file-wrp-add-btn( rounded @click="actionAddMedia" )
             svg-icon(name="Plus")
         v-list-item-content
-          v-list-item-subtitle Вы можете загружать до 10 фото и видео файлов
+          v-list-item-subtitle Вы можете загружать до 10 фотографий
 
     .media-wrp(v-show="mediaFiles.length")
       v-badge(
@@ -96,9 +96,6 @@ export default {
           },
         };
 
-        logger.log('dsdsdsdsdsdsds');
-        logger.log(mediaFile.fileEntry);
-
         window.plugins.streamingMedia.playVideo(
           mediaFile.fileEntry.nativeURL,
           options,
@@ -132,12 +129,10 @@ export default {
       };
       reader.readAsDataURL(mediaFile.file);
 
-      // this.formatFile(mediaFile);
-
       logger.log(this.$refs.file.files[0].size);
       this.sendFile(mediaFile.file, mediaFile);
     },
-    ...mapActions('actionFileDialog', [
+    ...mapActions('actionPhotoDialog', [
       'setStatus',
       'setSourceType',
     ]),
@@ -159,31 +154,19 @@ export default {
 
       const status = this.checkDeleteFileResponse(res);
 
-      logger.log('===================================');
-      logger.log(mediaFile.photoIndex);
-      logger.log(index);
-
       if (this.mediaFiles[index] === mediaFile && (status || mediaFile.status)) {
         this.$store.dispatch('removeMediaFile', index);
-        logger.log('=====================');
-        logger.log(mediaFile);
         if (mediaFile.photoIndex >= 0) {
           const { photoIndex } = mediaFile;
-          logger.log(photoIndex);
 
           this.$store.dispatch('removePhotoFile', photoIndex);
 
           this.mediaFiles.forEach((element) => {
-            logger.log(element);
             if (element.photoIndex !== 0 && photoIndex < element.photoIndex) {
             // eslint-disable-next-line no-param-reassign
               element.photoIndex -= 1;
             }
-            logger.log(element);
           });
-
-          logger.log(this.photoFiles.length);
-          logger.log(this.mediaFiles.length);
         }
       }
     },
@@ -195,7 +178,7 @@ export default {
         // eslint-disable-next-line no-undef
         direction: Camera.Direction.BACK,
         // eslint-disable-next-line no-undef
-        mediaType: Camera.MediaType.ALLMEDIA,
+        mediaType: Camera.MediaType.PICTURE,
       };
 
       if (srcType === 'gallery') {
@@ -454,7 +437,7 @@ export default {
   },
   computed: {
     sourceType: {
-      get() { return this.$store.state.actionFileDialog.sourceType; },
+      get() { return this.$store.state.actionPhotoDialog.sourceType; },
       set(value) { this.setSourceType(value); },
     },
     token() {

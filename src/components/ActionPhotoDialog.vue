@@ -29,7 +29,7 @@ export default {
     },
 
     openCamera() {
-      this.setSourceType('camera');
+      this.setSourceType('camera-photo');
       this.open = false;
     },
   },
