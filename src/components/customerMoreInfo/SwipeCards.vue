@@ -45,7 +45,7 @@ export default {
     goChat(id) {
       // eslint-disable-next-line no-underscore-dangle
       this.$store.dispatch('setIdUserRequest', id);
-      this.$router.push('chat');
+      this.$router.push({ name: 'chat' });
     },
 
     agreeResponse(idResponse, idUserResponse) {

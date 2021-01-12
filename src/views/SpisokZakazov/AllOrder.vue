@@ -251,7 +251,7 @@ export default {
       switch (response.data.status) {
         case 'success':
           if (response.data.data[response.data.data.length - 1].ofCreateDate !== this.lastDate) {
-            this.all = response.data.data.reverse();
+            this.all = response.data.data;
             this.getClearAll();
           }
           break;

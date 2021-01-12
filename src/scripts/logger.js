@@ -6,6 +6,7 @@ function log(message) {
 
   if (window.cordova.platformId === 'android') {
     console.log(JSON.stringify(message));
+    console.log(message);
     return null;
   }
 

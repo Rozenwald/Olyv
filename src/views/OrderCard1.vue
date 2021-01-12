@@ -54,6 +54,7 @@ export default {
       return this.item.countResponse;
     },
     lowcost() {
+      console.log(this.item);
       const lowCostStr = String(this.item.lowCost);
       if (lowCostStr.length > 6) {
         return `${lowCostStr.substr(0, 1)}М`;
