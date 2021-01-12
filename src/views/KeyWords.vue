@@ -18,7 +18,7 @@
           solo
           flat
           hide-details
-          placeholder='Ключевое слово и фраза'
+          placeholder='Ключевое слово и фразы'
           rows="1"
           auto-grow)
         template(slot="append")

@@ -66,6 +66,7 @@ export default {
         });
     },
     checkPublicResponse(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.allClear = response.data.data.reverse();
