@@ -34,6 +34,10 @@ steps:
 
 - name: telegram-notification
   image: appleboy/drone-telegram
+  trigger:
+    event:
+    - push
+    - pull_request
   settings:
     token: 1421331969:AAFFxYtCvBYaJ6vsNf4KLrY1Jazl6RID4J0
     to: -416411935
