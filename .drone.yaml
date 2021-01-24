@@ -25,6 +25,7 @@ steps:
   image: ravino/cordova-v10-for-android:latest
   commands:
   - npm i
+  - cd src-cordova && yes | cordova platforms add android@9.0.0 && cd ../
   - npm run cordova-build-android
   when:
     branch:
