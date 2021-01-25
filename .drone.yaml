@@ -21,15 +21,15 @@ steps:
 #    - dev
 
 
-#- name: cordova-build-android-pretest
-#  image: ravino/cordova-v10-for-android:latest
-#  commands:
-#  - npm i
-#  - cd src-cordova && yes | cordova platforms add android@9.0.0 && cd ../
-#  - npm run cordova-build-android
-#  when:
-#    branch:
-#    - cordova-build-android-pretest
+- name: cordova-build-android-pretest
+  image: ravino/cordova-v10-for-android:latest
+  commands:
+  - npm i
+  - cd src-cordova && yes | cordova platforms add android@9.0.0 && cd ../
+  - npm run cordova-build-android
+  when:
+    branch:
+    - cordova-build-android-pretest
 
 
 - name: telegram-notification
@@ -41,3 +41,5 @@ steps:
       {{#success build.event}}
         Push commit {{commit.message}} by {{commit.author}} from branch {{commit.branch}} of repo {{repo.name}}
       {{/success}}
+
+      {{#success 
