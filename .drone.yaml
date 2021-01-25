@@ -4,6 +4,17 @@ name: default
 
 
 steps:
+- name: telegram-notification
+  image: appleboy/drone-telegram
+  settings:
+    token: 1421331969:AAFFxYtCvBYaJ6vsNf4KLrY1Jazl6RID4J0
+    to: -416411935
+    message: |
+      {{#success build.event}}
+        Push commit {{commit.message}} by {{commit.author}} from branch {{commit.branch}} of repo {{repo.name}}
+      {{/success}}
+
+
 #- name: eslint
 #  image: node:12
 #  commands:
@@ -30,16 +41,3 @@ steps:
   when:
     branch:
     - cordova-build-android-pretest
-
-
-- name: telegram-notification
-  image: appleboy/drone-telegram
-  settings:
-    token: 1421331969:AAFFxYtCvBYaJ6vsNf4KLrY1Jazl6RID4J0
-    to: -416411935
-    message: |
-      {{#success build.event}}
-        Push commit {{commit.message}} by {{commit.author}} from branch {{commit.branch}} of repo {{repo.name}}
-      {{/success}}
-
-      {{#success 
