@@ -39,5 +39,5 @@ steps:
     to: -416411935
 +    message: >
 +      {{#push build.event}}
-+        Start building {{build.number}} from Author {{commit.author}} | Branch {{commit.branch}} | Commit {{commit.message | Repo {{repo.name}}
-
++        Start building {{build.number}} from Author {{commit.author}} | Branch {{commit.branch}} | Commit {{commit.message}} | Repo {{repo.name}}
++      {{/push}}
