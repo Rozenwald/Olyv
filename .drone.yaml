@@ -40,7 +40,6 @@ steps:
     message: |
       {{#push build.event}}
         Push commit {{commit.message}} by {{commit.author}} from branch {{commit.branch}} of repo {{repo.name}}
-      {{else}}
       {{/push}}
       {{#success build.status}}
         build {{build.number}} succeeded. Good job.
