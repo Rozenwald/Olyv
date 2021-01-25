@@ -43,7 +43,3 @@ steps:
     event:
     - push
     - pull_request
-    status:
-    - either
-
-
