@@ -34,7 +34,7 @@ steps:
 
 - name: telegram-notification
   image: appleboy/drone-telegram
-  trigger:
+  when:
     event:
     - push
     - pull_request
