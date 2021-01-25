@@ -11,7 +11,7 @@ steps:
     to: -416411935
     message: |
       {{commit.author}} push to {{repo.name}} branch {{commit.branch}} \n
-      Start pipeline #{{build.number}} in {{datetime build.started}}
+      Start pipeline #{{build.number}} in {{build.started}}
       See in dashboard {{build.link}}
 
 
