@@ -37,4 +37,4 @@ steps:
   settings:
     token: 1421331969:AAFFxYtCvBYaJ6vsNf4KLrY1Jazl6RID4J0
     to: -416411935
-+     message: Test {{build.number}} and {{build.event}}
+    message: Fuckof
