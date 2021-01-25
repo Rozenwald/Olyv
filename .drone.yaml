@@ -37,7 +37,7 @@ steps:
   settings:
     token: 1421331969:AAFFxYtCvBYaJ6vsNf4KLrY1Jazl6RID4J0
     to: -416411935
-+    message: >
+    message: >
 +      {{#push build.event}}
 +        Start building {{build.number}} from Author {{commit.author}}  Branch {{commit.branch}}  Commit {{commit.message}}  Repo {{repo.name}}
 +      {{/push}}
