@@ -41,8 +41,3 @@ steps:
       {{#push build.event}}
         Push commit {{commit.message}} by {{commit.author}} from branch {{commit.branch}} of repo {{repo.name}}
       {{/push}}
-      {{#success build.status}}
-        build {{build.number}} succeeded. Good job.
-      {{else}}
-        build {{build.number}} failed. Fix me please.
-      {{/success}}
