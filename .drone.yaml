@@ -40,7 +40,7 @@ steps:
     - dev
 
 
-- name: cordova-build-android-pretest
+- name: cordova-build-android-test
   image: ravino/cordova-v10-for-android:latest
   commands:
   - npm i
