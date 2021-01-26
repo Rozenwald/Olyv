@@ -69,15 +69,3 @@ steps:
         Finish in: {{build.finished}}
         Dashboard link: {{build.link}}
       {{/success}}
-  when:
-    status:
-    - failure
-    - success
-
-
-trigger:
-  status:
-  - success
-    telegram-notification-status
-  - failure
-    telegram-notification-status
