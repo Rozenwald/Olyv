@@ -23,7 +23,7 @@ steps:
       Dashboard link: {{build.link}}
 
 
-- name: telegram-notification
+- name: telegram-notification-status
   image: appleboy/drone-telegram
   settings:
     token: 1421331969:AAFFxYtCvBYaJ6vsNf4KLrY1Jazl6RID4J0
@@ -32,12 +32,15 @@ steps:
       {{#success build.status}}
         Build number: {{build.number}}
         Build status: {{build.status}}
-        Finish in {{build.finished}}
+        Finish in: {{build.finished}}
       {{else}}
+        Build number: {{build.number}}
+        Build status: {{build.status}}
+        Finish in: {{build.finished}}
       {{/success}}
   when:
     status:
-    -failure
+    - failure
     - success
 
 
