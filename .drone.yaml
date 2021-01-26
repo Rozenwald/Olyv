@@ -1,4 +1,5 @@
 kind: pipeline
+type: docker
 name: telegram-notification
 
 
@@ -20,8 +21,6 @@ steps:
       Build nummber: {{build.number}}
       Start in: {{build.started}}
       Dashboard link: {{build.link}}
-
-
 ___
 kind: pipeline
 type: docker
