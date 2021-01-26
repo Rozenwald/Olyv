@@ -1,6 +1,5 @@
 kind: pipeline
-type: docker
-name: default
+name: telegram-notification
 
 
 steps:
@@ -23,6 +22,15 @@ steps:
       Dashboard link: {{build.link}}
 
 
+___
+
+
+kind: pipeline
+type: docker
+name: eslint
+
+
+steps:
 - name: eslint
   image: node:12
   commands:
@@ -30,16 +38,34 @@ steps:
   - npm run lint
 
 
-- name: dev
+---
+
+
+kind: pipeline
+type: docker
+name: frontend-dev
+
+
+steps:
+- name: frontend-dev
   image: node:12
   commands:
   - npm i
   - npm run dev
   when:
     branch:
-    - dev
+    - frontend-dev
 
 
+---
+
+
+kind: pipeline
+type: docker
+name: cordova-build-android-test
+
+
+steps:
 - name: cordova-build-android-test
   image: ravino/cordova-v10-for-android:latest
   commands:
@@ -58,6 +84,23 @@ steps:
     token: 1421331969:AAFFxYtCvBYaJ6vsNf4KLrY1Jazl6RID4J0
     to: -416411935
     document: ./src-cordova/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+
+
+---
+
+
+kind: pipeline
+name: telegram-notification-finish
+
+
+steps:
+
+
+- name: telegram-notification
+  image: appleboy/drone-telegram
+  settings:
+    token: 1421331969:AAFFxYtCvBYaJ6vsNf4KLrY1Jazl6RID4J0
+    to: -416411935
     message: |
       {{#success build.status}}
         Build number: {{build.number}}
@@ -69,3 +112,9 @@ steps:
         Finish in: {{build.finished}}
         Dashboard link: {{build.link}}
       {{/success}}
+
+
+depends_on:
+- eslint
+- frontend-dev
+- cordova-build-android-test
