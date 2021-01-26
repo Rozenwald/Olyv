@@ -46,7 +46,7 @@ steps:
   - npm i
   - cd src-cordova && yes | cordova platforms add android@9.0.0 && cd ../
   - yes | npm run cordova-build-only-www-android
-  - cd src-cordova && yes | cordova build --debug android
+  - cd src-cordova && yes | cordova build --debug android && cd ../
   when:
     branch:
     - cordova-build-android-test
@@ -67,6 +67,7 @@ steps:
         Build number: {{build.number}}
         Build status: {{build.status}}
         Finish in: {{build.finished}}
+        Dashboard link: {{build.link}}
       {{/success}}
   when:
     status:
