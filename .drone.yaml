@@ -75,6 +75,6 @@ steps:
 trigger:
   status:
   - success
-  telegram-notification-status
+    telegram-notification-status
   - failure
-  telegram-notification-status
+    telegram-notification-status
