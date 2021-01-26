@@ -33,6 +33,8 @@ steps:
         Build number: {{build.number}}
         Build status: {{build.status}}
         Finish in {{build.finished}}
+      {{else}}
+      {{/success}}
   when:
     status:
     -failure
