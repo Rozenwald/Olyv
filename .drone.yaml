@@ -1,29 +1,35 @@
 kind: pipeline
-type: docker
 name: telegram-notification
+
+
 steps:
 - name: telegram-notification
   image: appleboy/drone-telegram
   settings:
     token: 1421331969:AAFFxYtCvBYaJ6vsNf4KLrY1Jazl6RID4J0
     to: -416411935
-#    message: |
-#      Build event:: {{build.event}}
-#      Author name: {{commit.author}}
-#      Author email: {{commit.email}}
-#      Repo owner: {{repo.owner}}
-#      Repo name: {{repo.name}}
-#      Branch name: {{commit.branch}}
-#      Commit message: {{commit.message}}
-#      Commit hash: {{commit.sha}}
-#      Build nummber: {{build.number}}
-#      Start in: {{build.started}}
-#      Dashboard link: {{build.link}}
+    message: |
+      Build event:: {{build.event}}
+      Author name: {{commit.author}}
+      Author email: {{commit.email}}
+      Repo owner: {{repo.owner}}
+      Repo name: {{repo.name}}
+      Branch name: {{commit.branch}}
+      Commit message: {{commit.message}}
+      Commit hash: {{commit.sha}}
+      Build nummber: {{build.number}}
+      Start in: {{build.started}}
+      Dashboard link: {{build.link}}
 
-___
+
+
+
+---
 kind: pipeline
 type: docker
 name: eslint
+
+
 steps:
 - name: eslint
   image: node:12
@@ -31,10 +37,15 @@ steps:
   - npm i
   - npm run lint
 
+
+
+
 ---
 kind: pipeline
 type: docker
 name: frontend-dev
+
+
 steps:
 - name: frontend-dev
   image: node:12
@@ -44,6 +55,8 @@ steps:
   when:
     branch:
     - frontend-dev
+
+
 
 ---
 kind: pipeline
@@ -62,6 +75,7 @@ steps:
   when:
     branch:
     - cordova-build-android-test
+
 - name: telegram-notification-status
   image: appleboy/drone-telegram
   settings:
@@ -69,9 +83,14 @@ steps:
     to: -416411935
     document: ./src-cordova/platforms/android/app/build/outputs/apk/debug/app-debug.apk
 
+
+
+
 ---
 kind: pipeline
 name: telegram-notification-finish
+
+
 steps:
 - name: telegram-notification
   image: appleboy/drone-telegram
