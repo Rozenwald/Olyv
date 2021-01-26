@@ -1,5 +1,4 @@
 kind: pipeline
-type: docker
 name: telegram-notification
 
 
@@ -24,8 +23,6 @@ steps:
 
 
 ___
-
-
 kind: pipeline
 type: docker
 name: eslint
