@@ -45,10 +45,11 @@ steps:
   commands:
   - npm i
   - cd src-cordova && yes | cordova platforms add android@9.0.0 && cd ../
-  - npm run cordova-build-android
+  - yes | npm run cordova-build-only-www-android
+  cd src-cordova && yes | cordova build --debug android
   when:
     branch:
-    - cordova-build-android-pretest
+    - cordova-build-android-test
 
 
 - name: telegram-notification-status
@@ -56,6 +57,7 @@ steps:
   settings:
     token: 1421331969:AAFFxYtCvBYaJ6vsNf4KLrY1Jazl6RID4J0
     to: -416411935
+    document: ./src-cordova/platforms/android/app/build/outputs/apk/debug/app-debug.apk
     message: |
       {{#success build.status}}
         Build number: {{build.number}}
