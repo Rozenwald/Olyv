@@ -70,7 +70,7 @@ steps:
   commands:
   - npm i
   - cd src-cordova && yes | cordova platforms add android@9.0.0 && cd ../
-  - yes | npm run cordova-build-android
+  - npm run cordova-build-android
   when:
     branch:
     - cordova-build-android-test
