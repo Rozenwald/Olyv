@@ -70,10 +70,9 @@ steps:
   commands:
   - npm i
   - cd src-cordova && yes | cordova platforms add android@9.0.0 && cd ../
-  - npm run cordova-build-android
-  - cp ./src-cordova/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk ./Olyv_Unsigned.apk
-  - echo "Sosihui_123" | jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ./Olyv.keystore ./Olyv_Unsigned.apk Olyv
-  - zipalign -v 4 ./Olyv_Unsigned.apk Olyv_Signed.apk
+  - npm run cordova-build-only-www-android
+  - cd ./src-cordova && cordova build --debug android && cd ../
+  - cp ./src-cordova/platforms/android/app/build/outputs/apk/debug/app-debug.apk ./Olyv_Unsigned_Debug_Test.apk
   when:
     branch:
     - cordova-build-android-test
@@ -83,7 +82,37 @@ steps:
   settings:
     token: 1421331969:AAFFxYtCvBYaJ6vsNf4KLrY1Jazl6RID4J0
     to: -416411935
-    document: ./Olyv_Signed.apk
+    document: ./Olyv_Unsigned_Debug_Test.apk
+
+
+
+
+---
+kind: pipeline
+type: docker
+name: cordova-build-android-posttest
+
+
+steps:
+- name: cordova-build-android-posttest
+  image: ravino/cordova-v10-for-android:latest
+  commands:
+  - npm i
+  - cd src-cordova && yes | cordova platforms add android@9.0.0 && cd ../
+  - npm run cordova-build-android
+  - cp ./src-cordova/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk ./Olyv_Unsigned_Release_Posttest.apk
+  - echo "Sosihui_123" | jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ./Olyv.keystore ./Olyv_Unsigned_Release_Posttest.apk Olyv
+  - zipalign -v 4 ./Olyv_Unsigned_Release_Posttest.apk Olyv_Signed_Release_Posttest.apk
+  when:
+    branch:
+    - cordova-build-android-posttest
+
+- name: telegram-notification-status
+  image: appleboy/drone-telegram
+  settings:
+    token: 1421331969:AAFFxYtCvBYaJ6vsNf4KLrY1Jazl6RID4J0
+    to: -416411935
+    document: ./Olyv_Signed_Release_Posttest.apk
 
 
 
@@ -116,3 +145,4 @@ depends_on:
 - eslint
 - frontend-dev
 - cordova-build-android-test
+- cordova-build-android-posttest
