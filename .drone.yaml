@@ -22,6 +22,11 @@ steps:
       Dashboard link: {{build.link}}
 
 
+trigger:
+  event:
+  - push
+
+
 
 
 ---
@@ -55,9 +60,6 @@ steps:
   - npm run cordova-build-only-www-android
   - cd ./src-cordova && cordova build --debug android && cd ../
   - cp ./src-cordova/platforms/android/app/build/outputs/apk/debug/app-debug.apk ./Olyv_Unsigned_Debug_Pretest.apk
-  when:
-    branch:
-    - cordova-build-android-pretest
 
 - name: telegram-notification-status
   image: appleboy/drone-telegram
@@ -67,6 +69,11 @@ steps:
     document: ./Olyv_Unsigned_Debug_Pretest.apk
     message: |
       Application by date utc {{build.finished}}
+
+
+trigger:
+  branch:
+  - cordova-build-android-pretest
 
 
 
@@ -86,9 +93,6 @@ steps:
   - npm run cordova-build-only-www-android
   - cd ./src-cordova && cordova build --debug android && cd ../
   - cp ./src-cordova/platforms/android/app/build/outputs/apk/debug/app-debug.apk ./Olyv_Unsigned_Debug_Test.apk
-  when:
-    branch:
-    - cordova-build-android-test
 
 - name: telegram-notification-status
   image: appleboy/drone-telegram
@@ -96,6 +100,11 @@ steps:
     token: 1421331969:AAFFxYtCvBYaJ6vsNf4KLrY1Jazl6RID4J0
     to: -416411935
     document: ./Olyv_Unsigned_Debug_Test.apk
+
+
+trigger:
+  branch:
+  - cordova-build-android-test
 
 
 
@@ -116,9 +125,6 @@ steps:
   - cp ./src-cordova/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk ./Olyv_Unsigned_Release_Posttest.apk
   - echo "Sosihui_123" | jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ./Olyv.keystore ./Olyv_Unsigned_Release_Posttest.apk Olyv
   - zipalign -v 4 ./Olyv_Unsigned_Release_Posttest.apk Olyv_Signed_Release_Posttest.apk
-  when:
-    branch:
-    - cordova-build-android-posttest
 
 - name: telegram-notification-status
   image: appleboy/drone-telegram
@@ -126,6 +132,44 @@ steps:
     token: 1421331969:AAFFxYtCvBYaJ6vsNf4KLrY1Jazl6RID4J0
     to: -416411935
     document: ./Olyv_Signed_Release_Posttest.apk
+
+
+trigger:
+  branch:
+  - cordova-build-android-posttest
+
+
+
+
+#---
+#kind: pipeline
+#type: docker
+#name: cordova-build-android-stable
+
+
+#steps:
+
+
+#trigger:
+#  branch:
+#  - cordova-build-android-stable
+
+
+
+
+---
+#---
+#kind: pipeline
+#type: docker
+#name: cordova-build-android-release
+
+
+#steps:
+
+
+#trigger:
+#  branch:
+#  - cordova-build-android-release
 
 
 
@@ -154,8 +198,16 @@ steps:
       {{/success}}
 
 
+trigger:
+  status:
+  - success
+  - failure
+
+
 depends_on:
 - eslint
 - cordova-build-android-pretest
 - cordova-build-android-test
 - cordova-build-android-posttest
+- cordova-build-android-stable
+- cordova-build-android-release
