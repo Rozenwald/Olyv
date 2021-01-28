@@ -209,5 +209,5 @@ depends_on:
 - cordova-build-android-pretest
 - cordova-build-android-test
 - cordova-build-android-posttest
-- cordova-build-android-stable
-- cordova-build-android-release
+#- cordova-build-android-stable
+#- cordova-build-android-release
