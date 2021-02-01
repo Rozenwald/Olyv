@@ -9,31 +9,31 @@ import VueScrollmagic from './plugins/vue-scrollmagic';
 
 Vue.config.productionTip = false;
 Vue.prototype.$baseUrl = process.env.NODE_ENV === 'production'
-  ? 'http://cabinet.olyv.services:8888/'
+  ? 'http://test.cabinet.olyv.services:8888/'
   : 'http://test.cabinet.olyv.services:8888/';
 
 Vue.prototype.$baseUrlNoPort = process.env.NODE_ENV === 'production'
-  ? 'http://cabinet.olyv.services/'
+  ? 'http://test.cabinet.olyv.services/'
   : 'http://test.cabinet.olyv.services/';
 
 window.$baseUrl = process.env.NODE_ENV === 'production'
-  ? 'http://cabinet.olyv.services:8888/'
+  ? 'http://test.cabinet.olyv.services:8888/'
   : 'http://test.cabinet.olyv.services:8888/';
 
 window.$baseUrlNoPort = process.env.NODE_ENV === 'production'
-  ? 'http://cabinet.olyv.services/'
+  ? 'http://test.cabinet.olyv.services/'
   : 'http://test.cabinet.olyv.services/';
 
 Vue.prototype.$baseChatUrl = process.env.NODE_ENV === 'production'
-  ? 'http://chat.olyv.services:8888/'
+  ? 'http://test.chat.olyv.services:8888/'
   : 'http://test.chat.olyv.services:8888/';
 
 window.$baseChatUrl = process.env.NODE_ENV === 'production'
-  ? 'http://chat.olyv.services:8888/'
+  ? 'http://test.chat.olyv.services:8888/'
   : 'http://test.chat.olyv.services:8888/';
 
 Vue.prototype.$baseNotificationUrl = process.env.NODE_ENV === 'production'
-  ? 'http://.notification.olyv.services:8888/'
+  ? 'http://test.notification.olyv.services:8888/'
   : 'http://test.notification.olyv.services:8888/';
 
 window.$baseNotificationUrl = process.env.NODE_ENV === 'production'
