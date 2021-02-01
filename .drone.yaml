@@ -74,8 +74,6 @@ steps:
     to: 
       from_secret: olyv_ci_bot_id_chat_front
     document: ./Olyv_Unsigned_Debug_Pretest.apk
-    message: |
-      Application by date utc {{build.finished}}
 
 
 trigger:
