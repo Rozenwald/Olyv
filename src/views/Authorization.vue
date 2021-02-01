@@ -157,6 +157,7 @@ export default {
     },
 
     checkSignIn(response) {
+      logger.log(response);
       switch (response.data.status) {
         case 'success':
           nativeStorage.setItem('token', response.data.data);
