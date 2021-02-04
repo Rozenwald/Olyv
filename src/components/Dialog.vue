@@ -77,10 +77,8 @@ export default {
     position relative
     background-color #fFf
     padding 5px;
-      &-title{
-      }
-      &-text{
-      }
+      &-title{}
+      &-text{}
   }
   .dialog-btn {
     padding 10px;
