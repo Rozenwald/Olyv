@@ -23,6 +23,8 @@
     "cordova-plugin-androidx-adapter": "^1.1.1",
     "cordova-plugin-badge": "^0.8.8",
     "cordova-plugin-camera": "^5.0.1",
+    "cordova-plugin-customurlscheme": "^5.0.2",
+    "cordova-plugin-deeplinks": "^1.1.1",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-dialogs": "^2.0.2",
     "cordova-plugin-document-viewer": "^0.9.13",
@@ -100,7 +102,14 @@
       "cordova-plugin-filepath": {},
       "cordova-plugin-media-capture": {},
       "cordova-plugin-streaming-media": {},
-      "cordova-plugin-file-downloader": {}
+      "cordova-plugin-file-downloader": {},
+      "cordova-plugin-customurlscheme": {
+        "URL_SCHEME": "olyvapp",
+        "ANDROID_SCHEME": " ",
+        "ANDROID_HOST": " ",
+        "ANDROID_PATHPREFIX": "/"
+      },
+      "cordova-plugin-deeplinks": {}
     },
     "platforms": [
       "browser",

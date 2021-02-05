@@ -45,4 +45,12 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
+    <plugin name="cordova-plugin-customurlscheme" source="npm">
+        <param name="URL_SCHEME" value="olyvapp" />
+    </plugin>
+    <universal-links>
+        <host name="example.com">
+            <path url="/some/path" />
+        </host>
+    </universal-links>
 </widget>
