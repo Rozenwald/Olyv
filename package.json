@@ -29,6 +29,7 @@
     "axios": "^0.19.2",
     "cordova": "^10.0.0",
     "core-js": "^3.6.5",
+    "cross-env": "^7.0.3",
     "css-element-queries": "^1.2.3",
     "epic-spinners": "^1.1.0",
     "hammerjs": "^2.0.8",

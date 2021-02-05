@@ -7,18 +7,21 @@
         v-row(align='center' justify="center")
           v-card-title.dialog-text-title {{dialogTitle}}
           v-card-text.dialog-text-text {{dialogText}}
-      .dialog-btn
-        v-row.dialog-btn-center(align='center' justify="space-around")
-          v-btn.dialog-btn-center-action(v-show="secondBtn"
-                            fab x-large
+      v-row.dialog-btn(align='center' justify="space-around")
+          v-btn.dialog-btn-action(v-show="firstBtn"
+                            x-large
+                            rounded
+                            depressed
+                            color='#56D68B'
+                            @click='actionFirstBtn')
+            v-icon(color='#fff') done
+          v-btn.dialog-btn-action(v-show="secondBtn"
+                            x-large
+                            rounded
+                            color='#56D68B'
                             outlined
                             @click='actionSecondBtn')
             v-icon close
-          v-btn.dialog-btn-center-action(v-show="firstBtn"
-                            fab x-large
-                            outlined
-                            @click='actionFirstBtn')
-            v-icon done
 </template>
 
 <script>
@@ -73,28 +76,18 @@ export default {
   .dialog-text {
     position relative
     background-color #fFf
-    padding-top 5px
-    padding-bottom 15px;
-      &-title{
-      }
-      &-text{
-      }
+    padding 5px;
+      &-title{}
+      &-text{}
   }
   .dialog-btn {
-    width inherit
-    position absolute
-    right 0
-    left 0
-    bottom 75px
-
-    &-center {
-      background-color transparent !important;
-
+    padding 10px;
       &-action {
+        margin 5px;
+        width 80%;
         background #fff
         font-size: 20px !important
-        color #FFA967 !important
+        color #56D68B !important
       }
-    }
   }
 </style>
