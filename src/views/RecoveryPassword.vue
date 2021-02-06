@@ -1,5 +1,6 @@
 <template lang="pug">
   .auth-container
+
     v-row.logo(align='center' justify='center')
       img.logo-icon(src="../assets/nedomain-logo.png", alt="../assets/main-logo.png")
 
@@ -11,6 +12,7 @@
           label='E-mail'
           type='email'
           required)
+
     v-row.button(align='center' justify='center')
       .button-center
         v-btn.button-center-registration(
@@ -24,10 +26,7 @@
 <script>
 import axios from 'axios';
 import SvgIcon from '../components/SvgIcon.vue';
-import nativeStorage from '../scripts/nativeStorage';
 // eslint-disable-next-line import/no-cycle
-import cordova from '../plugins/cordova';
-import auth from '../scripts/auth';
 import dialog from '../scripts/openDialog';
 import logger from '../scripts/logger';
 import dialogMessages from '../scripts/dialogMessages';
@@ -73,229 +72,9 @@ export default {
         this.loading = false;
         return null;
       }
-
       this.$router.push('updatePassword');
       e.preventDefault();
-
       return null;
-    },
-
-    signIn() {
-      axios
-        .post(`${this.$baseUrl}api/v1/public/signin/email`, {
-          username: this.email,
-          password: this.password,
-        })
-        .then((response) => (this.checkSignIn(response)))
-        .catch((error) => {
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
-            true,
-            false,
-          );
-          logger.log(error);
-        });
-    },
-
-    checkSignIn(response) {
-      logger.log(response);
-      switch (response.data.status) {
-        case 'success':
-          nativeStorage.setItem('token', response.data.data);
-          this.$store.dispatch('setToken', response.data.data);
-          break;
-        case 'notExist':
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('invalidAuthData'),
-            true,
-            false,
-          );
-          this.loading = false;
-          break;
-        default:
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
-            true,
-            false,
-          );
-          this.loading = false;
-          logger.log(response);
-          break;
-      }
-    },
-    getUserData() {
-      axios
-        .post(`${this.$baseUrl}api/v1/private/user`, {
-          method: 'receive',
-          submethod: 'my',
-          token: this.token,
-        })
-        .then((response) => (this.checkUserData(response)))
-        .catch((error) => {
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
-            true,
-            false,
-          );
-          this.loading = false;
-          logger.log(error);
-        });
-    },
-    checkUserData(response) {
-      switch (response.data.status) {
-        case 'success':
-          this.$store.dispatch('setUser', response.data.data);
-          break;
-        default:
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
-            true,
-            false,
-          );
-          this.loading = false;
-          logger.log(response);
-          break;
-      }
-    },
-
-    getChatAuth() {
-      axios
-        .post(`${this.$baseChatUrl}api/v1/public/signin`, {
-          method: 'token',
-          token: this.currentAuthToken,
-        })
-        .then((response) => (this.checkChatAuth(response)))
-        .catch((error) => {
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
-            true,
-            false,
-          );
-          this.loading = false;
-          logger.log(error);
-        });
-    },
-
-    checkChatAuth(response) {
-      switch (response.data.status) {
-        case 'success':
-          nativeStorage.setItem('chatToken', response.data.data.token);
-          nativeStorage.setItem('idChanal', response.data.data.idChanal);
-          this.$store.dispatch('setChatToken', response.data.data.token);
-          this.$store.dispatch('setIdChanal', response.data.data.idChanal);
-          break;
-        default:
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
-            true,
-            false,
-          );
-          this.loading = false;
-          logger.log(response);
-          break;
-      }
-    },
-
-    getNotificationAuth() {
-      axios
-        .post(`${this.$baseNotificationUrl}api/v1/public/signin`, {
-          method: 'token',
-          token: this.currentAuthToken,
-        })
-        .then((response) => (this.checkNotificationAuth(response)))
-        .catch((error) => {
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
-            true,
-            false,
-          );
-          this.loading = false;
-          logger.log(error);
-        });
-    },
-
-    checkNotificationAuth(response) {
-      switch (response.data.status) {
-        case 'success':
-          nativeStorage.setItem('notificationToken', response.data.data.token);
-          nativeStorage.setItem('notificationIdChanal', response.data.data.idChanal);
-          this.$store.dispatch('setNotificationToken', response.data.data.token);
-          this.$store.dispatch('setNotificationIdChanal', response.data.data.idChanal);
-          this.loading = false;
-          logger.log(`App token => ${this.appToken}`);
-
-          if (this.appToken) {
-            this.addAppToken(this.appToken);
-          } else {
-            cordova.getToken()
-              .then((token) => {
-                this.$store.dispatch('setAppToken', token);
-                this.addAppToken(token);
-              })
-              .catch((error) => {
-                dialog.open(
-                  dialogMessages.getTitle('error'),
-                  dialogMessages.getBody('errorAuth'),
-                  true,
-                  false,
-                );
-                logger.log(error);
-                this.loading = false;
-              });
-          }
-          break;
-        default:
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
-            true,
-            false,
-          );
-          this.loading = false;
-          logger.log(response);
-          break;
-      }
-    },
-
-    addAppToken(tokenApp) {
-      axios
-        .post(`${this.$baseNotificationUrl}api/v1/private/tokenApp`, {
-          token: this.notificationToken,
-          method: 'add',
-          tokenApp,
-        })
-        .then((response) => (this.checkAppToken(response)))
-        .catch((error) => {
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
-            true,
-            false,
-          );
-          logger.log(error);
-        });
-    },
-
-    checkAppToken(response) {
-      if (response.data.status === 'success' || response.data.status === 'exist') {
-        this.isAddAppToken = true;
-      } else {
-        dialog.open(
-          dialogMessages.getTitle('error'),
-          dialogMessages.getBody('errorAuth'),
-          true,
-          false,
-        );
-        logger.log(response);
-      }
     },
   },
   computed: {
@@ -355,8 +134,6 @@ export default {
     },
   },
   created() {
-    auth.exit();
-
     this.windowHeight = window.innerHeight;
     window.addEventListener('resize', () => {
       if (window.innerHeight < this.windowHeight) {

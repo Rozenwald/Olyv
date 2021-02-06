@@ -34,15 +34,12 @@ import SvgIcon from '../components/SvgIcon.vue';
 import nativeStorage from '../scripts/nativeStorage';
 // eslint-disable-next-line import/no-cycle
 import cordova from '../plugins/cordova';
-import clientVk from '../scripts/vk/client';
-import authVk from '../scripts/vk/auth';
-import auth from '../scripts/auth';
 import dialog from '../scripts/openDialog';
 import logger from '../scripts/logger';
 import dialogMessages from '../scripts/dialogMessages';
 
 export default {
-  name: 'RecoveryPassword',
+  name: 'UpdatePassword',
   components: {
     axios,
     SvgIcon,
@@ -70,27 +67,6 @@ export default {
       const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return regex.test(email);
     },
-
-    getDataVk() {
-      clientVk.init();
-      authVk.login()
-        .then((response) => {
-          logger.log(response);
-
-          const res = JSON.parse(response);
-
-          const accessToken = res.token;
-          logger.log(accessToken);
-
-          const userId = res.user[0].id;
-          logger.log(userId);
-        });
-    },
-
-    signInVk() {
-
-    },
-
     checkForm(e) {
       this.loading = true;
       if (!this.validEmail(this.email)) {
@@ -407,8 +383,6 @@ export default {
     },
   },
   created() {
-    auth.exit();
-
     this.windowHeight = window.innerHeight;
     window.addEventListener('resize', () => {
       if (window.innerHeight < this.windowHeight) {
