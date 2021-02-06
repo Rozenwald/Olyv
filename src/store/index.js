@@ -19,6 +19,7 @@ import actionPhotoDialog from './modules/actionPhotoDialog';
 import actionFileDialog from './modules/actionFileDialog';
 import dialogMessages from './modules/dialogMessages';
 import myOrders from './modules/myOrders';
+import deepLinks from './modules/deepLinks';
 
 Vue.use(Vuex);
 
@@ -49,5 +50,6 @@ export default new Vuex.Store({
     actionFileDialog,
     dialogMessages,
     myOrders,
+    deepLinks,
   },
 });
