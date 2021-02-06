@@ -4,6 +4,7 @@ import store from '../store/index';
 import router from '../router/index';
 import logger from '../scripts/logger';
 import nativeStorage from '../scripts/nativeStorage';
+import DeepLinks from '../scripts/deep-links/deepLinks';
 
 function addAppToken(tokenApp, notificationToken) {
   axios
@@ -105,10 +106,14 @@ function notificationListener() {
 
 function onDeviceReady() {
   logger.log('onDeviceReady');
+
   cordova.plugins.notification.local.on('click', (notification) => {
     logger.log(JSON.stringify(notification));
     checkNotification(notification.data);
   }, { });
+
+  const deepLinks = new DeepLinks();
+  deepLinks.subscribeAll();
 
   getStorage();
   getToken()
