@@ -1,8 +1,6 @@
 <template lang="pug">
     v-dialog(
-        v-model="visible"
-        transition="false"
-        noClickAnimation=false)
+        v-model="visible")
       .dialog-text
         v-row(align='center' justify="center")
           v-card-title.dialog-text-title {{dialogTitle}}

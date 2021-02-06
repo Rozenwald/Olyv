@@ -10,9 +10,11 @@ import AllOrder from '../views/SpisokZakazov/AllOrder.vue';
 import AwaitOrder from '../views/SpisokZakazov/AwaitOrder.vue';
 import ProcessOrder from '../views/SpisokZakazov/ProcessOrder.vue';
 import KeyOrder from '../views/SpisokZakazov/KeyOrder.vue';
-import Registration from '../views/Registration.vue';
-import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 import Auth from '../views/Authorization.vue';
+import Registration from '../views/Registration.vue';
+import RecoveryPassword from '../views/RecoveryPassword.vue';
+import UpdatePassword from '../views/UpdatePassword.vue';
+import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
 import Verification from '../views/Verification.vue';
 import CustomerProfile from '../views/CustomerProfile.vue';
@@ -34,6 +36,18 @@ const routes = [
     path: '/keyWords',
     component: keyWords,
     meta: { index: 5 },
+  },
+  {
+    name: 'updatePassword',
+    path: '/updatePassword',
+    component: UpdatePassword,
+    meta: { index: -1 },
+  },
+  {
+    name: 'recoveryPassword',
+    path: '/recoveryPassword',
+    component: RecoveryPassword,
+    meta: { index: -1 },
   },
   {
     name: 'registration',

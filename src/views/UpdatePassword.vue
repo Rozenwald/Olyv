@@ -4,39 +4,29 @@
       img.logo-icon(src="../assets/nedomain-logo.png", alt="../assets/main-logo.png")
 
     v-row.text-field(align='center' justify='center')
-          .text-field-center
-            v-text-field.text-field-center-input(
-              v-model="email"
-              solo hide-details
-              label='E-mail'
-              type='email'
-              required)
-            v-text-field.text-field-center-input(
-              v-model="password"
-              solo hide-details
-              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="showPassword ? 'text' : 'password'"
-              @click:append="showPassword = !showPassword"
-              label='Пароль'
-              required)
-            div.recovery-password
-              a(@click="route('recoveryPassword')") Забыли пароль?
+      .text-field-center
+        v-text-field.text-field-center-input(
+          v-model="email"
+          solo hide-details
+          label='Новый пароль'
+          type='email'
+          required)
+        .text-field-center
+        v-text-field.text-field-center-input(
+          v-model="email"
+          solo hide-details
+          label='Повторите новый пароль'
+          type='email'
+          required)
     v-row.button(align='center' justify='center')
       .button-center
         v-btn.button-center-registration(
           @click="checkForm()"
           :loading='loading'
-          :disabled='loading') Войти
+          :disabled='loading') Подтвердить
         v-btn.button-center-go-to-auth(
-          @click="route('registration')"
-          v-show="!isFocus") Пройти регистрацию
-      // .button-icon(v-show="!isFocus")
-        v-btn.button-icon-svg-icon(icon @click="getDataVk()")
-          svg-icon(name='VK'  width='41' height='41')
-        v-btn.button-icon-svg-icon(icon)
-          svg-icon(name='Google'  width='41' height='41')
-        v-btn.button-icon-svg-icon(icon)
-          svg-icon(name='Facebook'  width='41' height='41')
+          @click="stepback()"
+          v-show="!isFocus") Назад
 </template>
 <script>
 import axios from 'axios';
@@ -52,7 +42,7 @@ import logger from '../scripts/logger';
 import dialogMessages from '../scripts/dialogMessages';
 
 export default {
-  name: 'Authorization',
+  name: 'RecoveryPassword',
   components: {
     axios,
     SvgIcon,
@@ -73,7 +63,9 @@ export default {
       this.$router.push(routeName);
       this.password.blur();
     },
-
+    stepback() {
+      this.$router.back();
+    },
     validEmail(email) {
       const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return regex.test(email);
@@ -437,12 +429,8 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-  a {
-    color #000 !important
-  }
   .recovery-password {
-    margin-top 10px
-    text-decoration underline
+    margin 5px
   }
   .auth-container {
     width 100%
