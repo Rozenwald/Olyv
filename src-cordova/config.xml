@@ -52,6 +52,7 @@
     <universal-links>
         <host name="cabinet.olyv.services">
             <path url="/name/" event="recoveryPassword"/>
+            <path url='*'/>
         </host>
     </universal-links>
 </widget>
