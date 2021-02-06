@@ -34,7 +34,7 @@ export default {
       return this.$store.getters.getTitle;
     },
     showAppbar() {
-      if (this.currentRouteName === 'auth' || this.currentRouteName === 'registration') return false;
+      if (this.currentRouteName === 'auth' || this.currentRouteName === 'registration' || this.currentRouteName === 'recoveryPassword' || this.currentRouteName === 'updatePassword') return false;
       return true;
     },
     showSettingBtn() {
