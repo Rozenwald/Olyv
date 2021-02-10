@@ -2,21 +2,18 @@
   .auth-container
     v-row.logo(align='center' justify='center')
       img.logo-icon(src="../assets/nedomain-logo.png", alt="../assets/main-logo.png")
-
     v-row.text-field(align='center' justify='center')
       .text-field-center
         v-text-field.text-field-center-input(
-          v-model="email"
+          v-model="password"
           solo hide-details
           label='Новый пароль'
-          type='email'
           required)
         .text-field-center
         v-text-field.text-field-center-input(
-          v-model="email"
+          v-model="passwordRepeat"
           solo hide-details
           label='Повторите новый пароль'
-          type='email'
           required)
     v-row.button(align='center' justify='center')
       .button-center
@@ -47,8 +44,6 @@ export default {
   data() {
     return {
       showPassword: false,
-      email: null,
-      password: null,
       isFocus: false,
       windowHeight: null,
       isAddAppToken: false,
@@ -63,23 +58,80 @@ export default {
     stepback() {
       this.$router.back();
     },
-    validEmail(email) {
-      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return regex.test(email);
+    updatePassword() {
+      axios
+        .post(`${this.$baseUrl}api/v1/public/recovery`, {
+          method: 'password',
+          submethod: 'reset',
+          password: this.password,
+          token: this.recoveryToken,
+        })
+        .then((response) => (this.checkUpdatePassword(response)))
+        .catch((error) => {
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidEmail'),
+            true,
+            false,
+          );
+          logger.log(error);
+        });
+    },
+    checkUpdatePassword(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.signIn();
+          break;
+        case 'notSuccess':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidAuthData'),
+            true,
+            false,
+          );
+          this.loading = false;
+          break;
+        case 'tokenExpire':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('tokenExpire'),
+            true,
+            false,
+          );
+          this.loading = false;
+          break;
+        case 'invalidPassword':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidPassword'),
+            true,
+            false,
+          );
+          this.loading = false;
+          break;
+        default:
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorAuth'),
+            true,
+            false,
+          );
+          this.loading = false;
+          logger.log(response);
+          break;
+      }
     },
     checkForm(e) {
       this.loading = true;
-      if (!this.validEmail(this.email)) {
+      if (this.password !== this.passwordRepeat) {
         dialog.open(
           dialogMessages.getTitle('error'),
-          dialogMessages.getBody('invalidEmail'),
+          dialogMessages.getBody('invalidRepeatPassword'),
           true,
           false,
         );
-        this.loading = false;
         return null;
       }
-
       if (!this.password) {
         dialog.open(
           dialogMessages.getTitle('error'),
@@ -87,10 +139,8 @@ export default {
           true,
           false,
         );
-        this.loading = false;
         return null;
       }
-
       if (this.password.length < 6) {
         dialog.open(
           dialogMessages.getTitle('error'),
@@ -98,16 +148,13 @@ export default {
           true,
           false,
         );
-        this.loading = false;
         return null;
       }
-
       this.signIn();
+      this.loading = false;
       e.preventDefault();
-
       return null;
     },
-
     signIn() {
       axios
         .post(`${this.$baseUrl}api/v1/public/signin/email`, {
@@ -125,7 +172,6 @@ export default {
           logger.log(error);
         });
     },
-
     checkSignIn(response) {
       logger.log(response);
       switch (response.data.status) {
@@ -190,7 +236,6 @@ export default {
           break;
       }
     },
-
     getChatAuth() {
       axios
         .post(`${this.$baseChatUrl}api/v1/public/signin`, {
@@ -209,7 +254,6 @@ export default {
           logger.log(error);
         });
     },
-
     checkChatAuth(response) {
       switch (response.data.status) {
         case 'success':
@@ -230,7 +274,6 @@ export default {
           break;
       }
     },
-
     getNotificationAuth() {
       axios
         .post(`${this.$baseNotificationUrl}api/v1/public/signin`, {
@@ -249,7 +292,6 @@ export default {
           logger.log(error);
         });
     },
-
     checkNotificationAuth(response) {
       switch (response.data.status) {
         case 'success':
@@ -292,7 +334,6 @@ export default {
           break;
       }
     },
-
     addAppToken(tokenApp) {
       axios
         .post(`${this.$baseNotificationUrl}api/v1/private/tokenApp`, {
@@ -311,7 +352,6 @@ export default {
           logger.log(error);
         });
     },
-
     checkAppToken(response) {
       if (response.data.status === 'success' || response.data.status === 'exist') {
         this.isAddAppToken = true;
@@ -330,23 +370,18 @@ export default {
     show() {
       return this.$store.getters.isVisibleAppbar;
     },
-
     appToken() {
       return this.$store.getters.getAppToken;
     },
-
-    token() {
-      return this.$store.getters.getToken;
+    recoveryToken() {
+      return this.$store.getters.getRecoveryPasswordToken;
     },
-
     currentAuthToken() {
       return this.$store.getters.getCurrentAuthToken;
     },
-
     chatToken() {
       return this.$store.getters.getChatToken;
     },
-
     notificationToken() {
       return this.$store.getters.getNotificationToken;
     },

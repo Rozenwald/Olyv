@@ -19,6 +19,7 @@
           @click="checkForm()"
           :loading='loading'
           :disabled='loading') Продолжить
+
         v-btn.button-center-go-to-auth(
           @click="stepback()"
           v-show="!isFocus") Назад
@@ -69,12 +70,65 @@ export default {
           true,
           false,
         );
-        this.loading = false;
-        return null;
+      } else {
+        this.recoveryPassword();
       }
-      this.$router.push('updatePassword');
       e.preventDefault();
+      this.loading = false;
       return null;
+    },
+    recoveryPassword() {
+      axios
+        .post(`${this.$baseUrl}api/v1/public/recovery`, {
+          method: 'password',
+          submethod: 'request',
+          email: this.email,
+        })
+        .then((response) => (this.checkRecoveryPassword(response)))
+        .catch((error) => {
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidEmail'),
+            true,
+            false,
+          );
+          logger.log(error);
+        });
+    },
+    checkRecoveryPassword(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.$router.back();
+          break;
+        case 'notSuccess':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidAuthData'),
+            true,
+            false,
+          );
+          this.loading = false;
+          break;
+        case 'invalidEmail':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('tokenExpire'),
+            true,
+            false,
+          );
+          this.loading = false;
+          break;
+        default:
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('error'),
+            true,
+            false,
+          );
+          this.loading = false;
+          logger.log(response);
+          break;
+      }
     },
   },
   computed: {
