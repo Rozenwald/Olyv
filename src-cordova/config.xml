@@ -51,7 +51,11 @@
     </plugin>
     <universal-links>
         <host name="cabinet.olyv.services">
-            <path url="/name/" event="recoveryPassword"/>
+            <path url="/recoveryPassword/" event="recoveryPassword"/>
+            <path url='*'/>
+        </host>
+        <host name="test.cabinet.olyv.services">
+            <path url="/recoveryPassword/" event="recoveryPassword"/>
             <path url='*'/>
         </host>
     </universal-links>
