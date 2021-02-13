@@ -1,7 +1,7 @@
 <template lang="pug">
   .auth-container
     v-row.logo(align='center' justify='center')
-      img.logo-icon(src="../assets/nedomain-logo.png", alt="../assets/main-logo.png")
+      img.logo-icon(src="../assets/nedomain-logo.png", alt="Логотип")
     v-row.text-field(align='center' justify='center')
       .text-field-center
         v-text-field.text-field-center-input(
@@ -16,9 +16,6 @@
           @click="checkForm()"
           :loading='loading'
           :disabled='loading') Подтвердить
-        v-btn.button-center-go-to-auth(
-          @click="stepback()"
-          v-show="!isFocus") Назад
 </template>
 <script>
 import axios from 'axios';
@@ -80,7 +77,7 @@ export default {
         case 'notSuccess':
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('invalidAuthData'),
+            dialogMessages.getBody('notSuccess'),
             true,
             false,
           );

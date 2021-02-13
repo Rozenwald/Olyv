@@ -2,7 +2,7 @@
   .auth-container
 
     v-row.logo(align='center' justify='center')
-      img.logo-icon(src="../assets/nedomain-logo.png", alt="../assets/main-logo.png")
+      img.logo-icon(src="../assets/nedomain-logo.png", alt="Логотип")
 
     v-row.text-field(align='center' justify='center')
       .text-field-center
@@ -99,7 +99,6 @@ export default {
         });
     },
     checkRecoveryPassword(response) {
-      console.log(this.token);
       console.log(response);
       switch (response.data.status) {
         case 'success':
@@ -136,62 +135,6 @@ export default {
           break;
       }
       this.loading = false;
-    },
-  },
-  computed: {
-    show() {
-      return this.$store.getters.isVisibleAppbar;
-    },
-
-    appToken() {
-      return this.$store.getters.getAppToken;
-    },
-
-    token() {
-      return this.$store.getters.getToken;
-    },
-
-    currentAuthToken() {
-      return this.$store.getters.getCurrentAuthToken;
-    },
-
-    chatToken() {
-      return this.$store.getters.getChatToken;
-    },
-
-    notificationToken() {
-      return this.$store.getters.getNotificationToken;
-    },
-  },
-  watch: {
-    token() {
-      if (this.token) this.getUserData();
-    },
-
-    currentAuthToken() {
-      if (this.currentAuthToken) {
-        this.getChatAuth();
-
-        if (window.cordova.platformId !== 'browser') {
-          this.getNotificationAuth();
-        } else {
-          this.isAddAppToken = true;
-        }
-      }
-    },
-
-    chatToken() {
-      if (this.chatToken && this.isAddAppToken) {
-        logger.log('good auth');
-        this.$router.replace('spisokZakazov');
-      }
-    },
-
-    isAddAppToken() {
-      if (this.chatToken && this.isAddAppToken) {
-        logger.log('good auth');
-        this.$router.replace('spisokZakazov');
-      }
     },
   },
   created() {
