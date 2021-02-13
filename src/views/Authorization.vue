@@ -69,6 +69,7 @@ export default {
     };
   },
   methods: {
+
     route(routeName) {
       this.$router.push(routeName);
       this.password.blur();
@@ -96,7 +97,6 @@ export default {
     },
 
     signInVk() {
-
     },
 
     checkForm(e) {

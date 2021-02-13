@@ -10,11 +10,6 @@
           label='Новый пароль'
           required)
         .text-field-center
-        v-text-field.text-field-center-input(
-          v-model="passwordRepeat"
-          solo hide-details
-          label='Повторите новый пароль'
-          required)
     v-row.button(align='center' justify='center')
       .button-center
         v-btn.button-center-registration(
@@ -70,7 +65,7 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('invalidEmail'),
+            dialogMessages.getBody('standartError'),
             true,
             false,
           );
@@ -123,15 +118,6 @@ export default {
     },
     checkForm(e) {
       this.loading = true;
-      if (this.password !== this.passwordRepeat) {
-        dialog.open(
-          dialogMessages.getTitle('error'),
-          dialogMessages.getBody('invalidRepeatPassword'),
-          true,
-          false,
-        );
-        return null;
-      }
       if (!this.password) {
         dialog.open(
           dialogMessages.getTitle('error'),
@@ -345,7 +331,7 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
+            dialogMessages.getBody('standartError'),
             true,
             false,
           );
@@ -358,7 +344,7 @@ export default {
       } else {
         dialog.open(
           dialogMessages.getTitle('error'),
-          dialogMessages.getBody('errorAuth'),
+          dialogMessages.getBody('standartError'),
           true,
           false,
         );

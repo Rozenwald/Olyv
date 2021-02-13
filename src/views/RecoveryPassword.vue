@@ -88,7 +88,7 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('invalidEmail'),
+            dialogMessages.getBody('standartError'),
             true,
             false,
           );
@@ -103,7 +103,7 @@ export default {
         case 'notSuccess':
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('invalidAuthData'),
+            dialogMessages.getBody('notSuccess'),
             true,
             false,
           );
@@ -112,7 +112,7 @@ export default {
         case 'invalidEmail':
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('tokenExpire'),
+            dialogMessages.getBody('invalidEmail'),
             true,
             false,
           );
