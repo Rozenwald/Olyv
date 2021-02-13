@@ -30,6 +30,7 @@ import SvgIcon from '../components/SvgIcon.vue';
 // eslint-disable-next-line import/no-cycle
 import dialog from '../scripts/openDialog';
 import logger from '../scripts/logger';
+import nativeStorage from '../scripts/nativeStorage';
 import dialogMessages from '../scripts/dialogMessages';
 
 export default {
@@ -37,11 +38,13 @@ export default {
   components: {
     axios,
     SvgIcon,
+    nativeStorage,
   },
   data() {
     return {
       showPassword: false,
       email: null,
+      emailHash: {},
       password: null,
       isFocus: false,
       windowHeight: null,
@@ -96,9 +99,15 @@ export default {
         });
     },
     checkRecoveryPassword(response) {
+      console.log(this.token);
+      console.log(response);
       switch (response.data.status) {
         case 'success':
-          this.$router.back();
+          this.emailHash[response.data.data] = this.email;
+          console.log(this.emailHash);
+          nativeStorage.setItem('emailHash', this.emailHash);
+          // console.log(nativeStorage.getItem('emailHash'));
+          this.stepback();
           break;
         case 'notSuccess':
           dialog.open(
@@ -107,7 +116,6 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           break;
         case 'invalidEmail':
           dialog.open(
@@ -116,7 +124,6 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           break;
         default:
           dialog.open(
@@ -125,10 +132,10 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(response);
           break;
       }
+      this.loading = false;
     },
   },
   computed: {
