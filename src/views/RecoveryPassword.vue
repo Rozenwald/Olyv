@@ -109,11 +109,6 @@ export default {
           this.emailHash[response.data.data] = this.email;
           console.log(this.emailHash);
           nativeStorage.setItem('emailHash', this.emailHash);
-          nativeStorage.getItem('emailHash')
-            .then((item) => {
-              console.log(item);
-            })
-            .catch();
           this.stepback();
           break;
         case 'notSuccess':

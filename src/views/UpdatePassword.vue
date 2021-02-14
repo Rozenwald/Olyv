@@ -76,7 +76,6 @@ export default {
       return null;
     },
     updatePassword() {
-      logger.log('aaa');
       logger.log(this.recoveryToken);
       axios
         .post(`${this.$baseUrl}api/v1/public/recovery`, {
