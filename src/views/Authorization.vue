@@ -72,7 +72,6 @@ export default {
 
     route(routeName) {
       this.$router.push(routeName);
-      this.password.blur();
     },
 
     validEmail(email) {

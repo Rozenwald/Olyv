@@ -57,13 +57,11 @@ export default {
       this.$router.push(routeName);
       this.password.blur();
     },
+
     stepback() {
       this.$router.back();
     },
-    validEmail(email) {
-      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return regex.test(email);
-    },
+
     checkForm(e) {
       this.loading = true;
       if (!this.validEmail(this.email)) {
@@ -80,6 +78,12 @@ export default {
       this.loading = false;
       return null;
     },
+
+    validEmail(email) {
+      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return regex.test(email);
+    },
+
     recoveryPassword() {
       axios
         .post(`${this.$baseUrl}api/v1/public/recovery`, {
@@ -105,7 +109,11 @@ export default {
           this.emailHash[response.data.data] = this.email;
           console.log(this.emailHash);
           nativeStorage.setItem('emailHash', this.emailHash);
-          // console.log(nativeStorage.getItem('emailHash'));
+          nativeStorage.getItem('emailHash')
+            .then((item) => {
+              console.log(item);
+            })
+            .catch();
           this.stepback();
           break;
         case 'notSuccess':
