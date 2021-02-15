@@ -103,11 +103,9 @@ export default {
         });
     },
     checkRecoveryPassword(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.emailHash[response.data.data] = this.email;
-          console.log(this.emailHash);
           nativeStorage.setItem('emailHash', this.emailHash);
           this.stepback();
           break;
