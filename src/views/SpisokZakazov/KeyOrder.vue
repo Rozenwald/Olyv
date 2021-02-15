@@ -159,7 +159,7 @@ export default {
             // eslint-disable-next-line no-underscore-dangle
             this.textForRegexp = `${this.textForRegexp + element._id}|`;
           });
-          this.getClearAll();
+          this.getKeyWord();
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -171,7 +171,7 @@ export default {
           );
           break;
         case 'notExist':
-          this.getClearAll();
+          this.getKeyWord();
           break;
         default:
           logger.log(response);
@@ -217,6 +217,7 @@ export default {
           } else {
             this.keyword = this.keyword.substring(0, this.keyword.length - 1);
             this.keyRegexp = new RegExp(`${this.keyword}`, 'im');
+            this.getClearAll();
           }
           break;
         default:
@@ -312,7 +313,6 @@ export default {
   watch: {
     token() {
       if (this.token) {
-        this.getKeyWord();
         this.getData();
       }
     },
@@ -321,7 +321,6 @@ export default {
     this.$store.commit('setTitle', 'Исполнитель');
     this.$store.dispatch('setChipStatus', 'keyword');
     if (this.token) {
-      this.getKeyWord();
       this.getData();
     }
   },
