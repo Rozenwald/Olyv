@@ -43,11 +43,15 @@ export default {
         })
         .then((response) => (this.checkOrderResponse(response)))
         .catch((error) => {
-          dialog.open('Ошибка', '', true);
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('errorDeleteResponse'),
+            true,
+            false,
+          );
           logger.log(error);
           this.loading = false;
         });
-      this.loading = false;
       /* eslint-enable no-underscore-dangle */
     },
     acceptOrderMyCost() {
@@ -74,7 +78,6 @@ export default {
           logger.log(error);
           this.loading = false;
         });
-      this.loading = false;
       /* eslint-enable no-return-assign */
     },
     completeOrder() {
@@ -98,7 +101,6 @@ export default {
           logger.log(error);
           this.loading = false;
         });
-      this.loading = false;
       /* eslint-enable no-underscore-dangle */
     },
     checkOrderResponse(response) {
@@ -120,6 +122,7 @@ export default {
             order.idResponse = response.data.data._id;
             this.$store.dispatch('setMyOrder', order);
           }
+          this.loading = false;
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -129,6 +132,7 @@ export default {
             true,
             () => { this.$router.push({ name: 'auth' }); },
           );
+          this.loading = false;
           break;
         default:
           dialog.open(
@@ -138,6 +142,7 @@ export default {
             false,
           );
           logger.log(response);
+          this.loading = false;
       }
     },
 
@@ -175,6 +180,7 @@ export default {
           true,
           () => { this.$router.push({ name: 'verification' }); },
         );
+        this.loading = false;
       }
     },
 
@@ -204,6 +210,7 @@ export default {
           true,
           () => { this.$router.push({ name: 'verification' }); },
         );
+        this.loading = false;
       }
     },
   },

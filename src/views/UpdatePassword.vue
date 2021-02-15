@@ -60,6 +60,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
       if (this.password.length < 6) {
@@ -69,6 +70,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
       this.updatePassword();
@@ -93,8 +95,8 @@ export default {
             false,
           );
           logger.log(error);
+          this.loading = false;
         });
-      this.loading = false;
     },
     checkUpdatePassword(response) {
       console.log(response.data);
@@ -117,6 +119,7 @@ export default {
                 false,
               );
               logger.log(error);
+              this.loading = false;
             });
           this.signIn();
           break;
@@ -127,6 +130,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           break;
         case 'tokenExpire':
           dialog.open(
@@ -135,6 +139,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           break;
         case 'invalidPassword':
           dialog.open(
@@ -143,6 +148,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           break;
         default:
           dialog.open(
@@ -152,6 +158,7 @@ export default {
             false,
           );
           logger.log(response);
+          this.loading = false;
           break;
       }
     },
@@ -170,6 +177,7 @@ export default {
             false,
           );
           logger.log(error);
+          this.loading = false;
         });
     },
     checkSignIn(response) {
@@ -195,8 +203,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(response);
+          this.loading = false;
           break;
       }
     },
@@ -215,8 +223,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(error);
+          this.loading = false;
         });
     },
     checkUserData(response) {
@@ -231,8 +239,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(response);
+          this.loading = false;
           break;
       }
     },
@@ -250,8 +258,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(error);
+          this.loading = false;
         });
     },
     checkChatAuth(response) {
@@ -269,8 +277,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(response);
+          this.loading = false;
           break;
       }
     },
@@ -288,8 +296,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(error);
+          this.loading = false;
         });
     },
     checkNotificationAuth(response) {
@@ -299,7 +307,6 @@ export default {
           nativeStorage.setItem('notificationIdChanal', response.data.data.idChanal);
           this.$store.dispatch('setNotificationToken', response.data.data.token);
           this.$store.dispatch('setNotificationIdChanal', response.data.data.idChanal);
-          this.loading = false;
           logger.log(`App token => ${this.appToken}`);
 
           if (this.appToken) {
@@ -329,8 +336,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(response);
+          this.loading = false;
           break;
       }
     },
@@ -350,6 +357,7 @@ export default {
             false,
           );
           logger.log(error);
+          this.loading = false;
         });
     },
     checkAppToken(response) {
@@ -363,6 +371,7 @@ export default {
           false,
         );
         logger.log(response);
+        this.loading = false;
       }
     },
   },
@@ -409,6 +418,7 @@ export default {
       if (this.chatToken && this.isAddAppToken) {
         logger.log('good auth chat');
         this.$router.replace('spisokZakazov');
+        this.loading = false;
       }
     },
 
@@ -416,6 +426,7 @@ export default {
       if (this.chatToken && this.isAddAppToken) {
         logger.log('good auth appToken');
         this.$router.replace('spisokZakazov');
+        this.loading = false;
       }
     },
   },

@@ -71,11 +71,11 @@ export default {
           true,
           false,
         );
+        this.loading = false;
       } else {
         this.recoveryPassword();
       }
       e.preventDefault();
-      this.loading = false;
       return null;
     },
 
@@ -100,6 +100,7 @@ export default {
             false,
           );
           logger.log(error);
+          this.loading = false;
         });
     },
     checkRecoveryPassword(response) {
@@ -109,6 +110,7 @@ export default {
           this.emailHash[response.data.data] = this.email;
           console.log(this.emailHash);
           nativeStorage.setItem('emailHash', this.emailHash);
+          this.loading = false;
           this.stepback();
           break;
         case 'notSuccess':
@@ -118,6 +120,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           break;
         case 'invalidEmail':
           dialog.open(
@@ -126,6 +129,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           break;
         default:
           dialog.open(
@@ -135,9 +139,9 @@ export default {
             false,
           );
           logger.log(response);
+          this.loading = false;
           break;
       }
-      this.loading = false;
     },
   },
   created() {

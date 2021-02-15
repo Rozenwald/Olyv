@@ -92,7 +92,6 @@ export default {
         this.loading = false;
         return null;
       }
-
       if (!this.password) {
         dialog.open(
           dialogMessages.getTitle('error'),
@@ -103,7 +102,6 @@ export default {
         this.loading = false;
         return null;
       }
-
       if (this.password.length < 6) {
         dialog.open(
           dialogMessages.getTitle('error'),
@@ -114,7 +112,6 @@ export default {
         this.loading = false;
         return null;
       }
-
       this.signUp();
       e.preventDefault();
 
@@ -147,6 +144,9 @@ export default {
 
     checkSignUp(response) {
       switch (response.data.status) {
+        case 'success':
+          this.signIn();
+          break;
         case 'invalidEmail':
           dialog.open(
             dialogMessages.getTitle('error'),
@@ -174,9 +174,6 @@ export default {
           );
           this.loading = false;
           break;
-        case 'success':
-          this.signIn();
-          break;
         default:
           dialog.open(
             dialogMessages.getTitle('error'),
@@ -184,8 +181,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(response);
+          this.loading = false;
           break;
       }
     },
@@ -204,8 +201,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(error);
+          this.loading = false;
         });
     },
 
@@ -222,8 +219,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(response);
+          this.loading = false;
           break;
       }
     },
@@ -243,8 +240,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(error);
+          this.loading = false;
         });
     },
 
@@ -260,8 +257,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(response);
+          this.loading = false;
           break;
       }
     },
@@ -280,8 +277,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(error);
+          this.loading = false;
         });
     },
 
@@ -300,8 +297,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(response);
+          this.loading = false;
           break;
       }
     },
@@ -320,8 +317,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(error);
+          this.loading = false;
         });
     },
 
@@ -350,8 +347,8 @@ export default {
                   true,
                   false,
                 );
-                this.loading = false;
                 logger.log(error);
+                this.loading = false;
               });
           }
           break;
@@ -362,8 +359,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(response);
+          this.loading = false;
           break;
       }
     },
@@ -383,15 +380,14 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(error);
+          this.loading = false;
         });
     },
 
     checkAppToken(response) {
       if (response.data.status === 'success' || response.data.status === 'exist') {
         this.isAddAppToken = true;
-        this.loading = false;
       } else {
         dialog.open(
           dialogMessages.getTitle('error'),
@@ -399,8 +395,8 @@ export default {
           true,
           false,
         );
-        this.loading = false;
         logger.log(response);
+        this.loading = false;
       }
     },
   },
@@ -437,7 +433,6 @@ export default {
     currentAuthToken() {
       if (this.currentAuthToken) {
         this.getChatAuth();
-
         if (window.cordova.platformId !== 'browser') {
           this.getNotificationAuth();
         } else {
@@ -450,6 +445,7 @@ export default {
       if (this.chatToken && this.isAddAppToken) {
         logger.log('good reg');
         this.$router.replace('spisokZakazov');
+        this.loading = false;
       }
     },
 
@@ -457,6 +453,7 @@ export default {
       if (this.chatToken && this.isAddAppToken) {
         logger.log('good reg');
         this.$router.replace('spisokZakazov');
+        this.loading = false;
       }
     },
   },
