@@ -154,6 +154,7 @@ export default {
             false,
           );
           logger.log(error);
+          this.loading = false;
         });
     },
 
@@ -180,8 +181,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(response);
+          this.loading = false;
           break;
       }
     },
@@ -200,8 +201,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(error);
+          this.loading = false;
         });
     },
     checkUserData(response) {
@@ -216,8 +217,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(response);
+          this.loading = false;
           break;
       }
     },
@@ -236,8 +237,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(error);
+          this.loading = false;
         });
     },
 
@@ -256,8 +257,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(response);
+          this.loading = false;
           break;
       }
     },
@@ -276,8 +277,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(error);
+          this.loading = false;
         });
     },
 
@@ -318,8 +319,8 @@ export default {
             true,
             false,
           );
-          this.loading = false;
           logger.log(response);
+          this.loading = false;
           break;
       }
     },
@@ -340,6 +341,7 @@ export default {
             false,
           );
           logger.log(error);
+          this.loading = false;
         });
     },
 
@@ -354,6 +356,7 @@ export default {
           false,
         );
         logger.log(response);
+        this.loading = false;
       }
     },
   },
@@ -403,6 +406,7 @@ export default {
       if (this.chatToken && this.isAddAppToken) {
         logger.log('good auth');
         this.$router.replace('spisokZakazov');
+        this.loading = false;
       }
     },
 
@@ -410,6 +414,7 @@ export default {
       if (this.chatToken && this.isAddAppToken) {
         logger.log('good auth');
         this.$router.replace('spisokZakazov');
+        this.loading = false;
       }
     },
   },

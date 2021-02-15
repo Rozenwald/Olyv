@@ -2,13 +2,13 @@
     v-bottom-sheet(v-model="open")
       v-sheet
         v-text-field.adress-field(
-              solo
-              placeholder="Адрес"
-              hide-details
-              readonly
-              v-model="addressData.value"
-              ref="adressInput"
-              @click="openField('address')")
+            solo
+            placeholder="Адрес"
+            hide-details
+            readonly
+            v-model="addressData.value"
+            ref="adressInput"
+            @click="openField('address')")
 
         v-textarea.description-field(
             solo
@@ -38,10 +38,11 @@
 
         v-row(align='center' justify='center')
             v-btn.create-btn(
-              :loading="loading"
               align-content='center'
               rounded
               @click="checkForm()"
+              :loading='loading'
+              :disabled='loading'
               v-text="loading ? null : isEdit ? 'Редактировать': 'Создать'"
             )
 </template>
@@ -60,7 +61,7 @@ export default {
   },
   data() {
     return {
-      loading: null,
+      loading: false,
     };
   },
   methods: {
@@ -82,6 +83,7 @@ export default {
     },
 
     checkForm() {
+      this.loading = true;
       if (this.addressData.value == null) {
         dialog.open(
           dialogMessages.getTitle('warning'),
@@ -89,6 +91,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
       if (this.cost == null) {
@@ -98,6 +101,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
       if (!this.validCost(this.cost)) {
@@ -107,6 +111,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
       if (this.description == null) {
@@ -116,6 +121,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
       if (this.description.length < 10) {
@@ -125,6 +131,7 @@ export default {
           true,
           false,
         );
+        this.loading = false;
         return null;
       }
 
@@ -133,15 +140,11 @@ export default {
     },
 
     sendOrder() {
-      this.loading = true;
-
       const files = [];
       this.mediaFiles.forEach((element) => {
         files.push(element.serverData);
       });
-
       logger.log(files);
-
       /* eslint-disable no-return-assign */
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
@@ -165,13 +168,18 @@ export default {
             false,
           );
           logger.log(error);
+          this.loading = false;
         });
       /* eslint-enable no-return-assign */
     },
 
     checkResonse(response) {
-      this.loading = false;
       switch (response.data.status) {
+        case 'success':
+          this.open = false;
+          if (this.isEdit) this.$store.dispatch('isEdit', false);
+          this.loading = false;
+          break;
         case 'invalidCost':
           dialog.open(
             dialogMessages.getTitle('error'),
@@ -179,6 +187,7 @@ export default {
             true,
             false,
           );
+          this.loading = false;
           break;
         case 'invalidDescription':
           dialog.open(
@@ -187,10 +196,7 @@ export default {
             true,
             false,
           );
-          break;
-        case 'success':
-          this.open = false;
-          if (this.isEdit) this.$store.dispatch('isEdit', false);
+          this.loading = false;
           break;
         case 'notAuthenticate':
           this.$store.dispatch('setBottomSheetStatus', false);
@@ -201,6 +207,7 @@ export default {
             true,
             () => { this.$router.push({ name: 'auth' }); },
           );
+          this.loading = false;
           break;
         default:
           dialog.open(
@@ -210,6 +217,7 @@ export default {
             false,
           );
           logger.log(response.data);
+          this.loading = false;
       }
     },
 
