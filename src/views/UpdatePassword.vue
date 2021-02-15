@@ -97,17 +97,13 @@ export default {
       this.loading = false;
     },
     checkUpdatePassword(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
-          // здесь - откровенно хуета
-          // я отдельно с функцией поиграюсь когда напишу логику авторизациии
-          // и вставлю после диплинка
           nativeStorage.getItem('emailHash')
             .then((item) => {
               logger.log(item);
-              this.email = item.emailHash;
-              console.log(this.email);
+              this.email = item[response.data.data];
+              this.signIn();
             })
             .catch((error) => {
               dialog.open(
@@ -118,7 +114,6 @@ export default {
               );
               logger.log(error);
             });
-          this.signIn();
           break;
         case 'notSuccess':
           dialog.open(
@@ -182,7 +177,7 @@ export default {
         case 'notExist':
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('invalidAuthData'),
+            dialogMessages.getBody('notExistEmail'),
             true,
             false,
           );
