@@ -2,7 +2,7 @@
   .auth-container
 
     v-row.logo(align='center' justify='center')
-      img.logo-icon(src="../assets/nedomain-logo.png", alt="../assets/main-logo.png")
+      img.logo-icon(src="../assets/nedomain-logo.png", alt="Логотип")
 
     v-row.text-field(align='center' justify='center')
       .text-field-center
@@ -57,13 +57,11 @@ export default {
       this.$router.push(routeName);
       this.password.blur();
     },
+
     stepback() {
       this.$router.back();
     },
-    validEmail(email) {
-      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return regex.test(email);
-    },
+
     checkForm(e) {
       this.loading = true;
       if (!this.validEmail(this.email)) {
@@ -80,6 +78,12 @@ export default {
       this.loading = false;
       return null;
     },
+
+    validEmail(email) {
+      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return regex.test(email);
+    },
+
     recoveryPassword() {
       axios
         .post(`${this.$baseUrl}api/v1/public/recovery`, {
@@ -91,7 +95,7 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('invalidEmail'),
+            dialogMessages.getBody('standartError'),
             true,
             false,
           );
@@ -99,20 +103,18 @@ export default {
         });
     },
     checkRecoveryPassword(response) {
-      console.log(this.token);
       console.log(response);
       switch (response.data.status) {
         case 'success':
           this.emailHash[response.data.data] = this.email;
           console.log(this.emailHash);
           nativeStorage.setItem('emailHash', this.emailHash);
-          // console.log(nativeStorage.getItem('emailHash'));
           this.stepback();
           break;
         case 'notSuccess':
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('invalidAuthData'),
+            dialogMessages.getBody('notSuccess'),
             true,
             false,
           );
@@ -120,7 +122,7 @@ export default {
         case 'invalidEmail':
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('tokenExpire'),
+            dialogMessages.getBody('invalidEmail'),
             true,
             false,
           );
@@ -136,62 +138,6 @@ export default {
           break;
       }
       this.loading = false;
-    },
-  },
-  computed: {
-    show() {
-      return this.$store.getters.isVisibleAppbar;
-    },
-
-    appToken() {
-      return this.$store.getters.getAppToken;
-    },
-
-    token() {
-      return this.$store.getters.getToken;
-    },
-
-    currentAuthToken() {
-      return this.$store.getters.getCurrentAuthToken;
-    },
-
-    chatToken() {
-      return this.$store.getters.getChatToken;
-    },
-
-    notificationToken() {
-      return this.$store.getters.getNotificationToken;
-    },
-  },
-  watch: {
-    token() {
-      if (this.token) this.getUserData();
-    },
-
-    currentAuthToken() {
-      if (this.currentAuthToken) {
-        this.getChatAuth();
-
-        if (window.cordova.platformId !== 'browser') {
-          this.getNotificationAuth();
-        } else {
-          this.isAddAppToken = true;
-        }
-      }
-    },
-
-    chatToken() {
-      if (this.chatToken && this.isAddAppToken) {
-        logger.log('good auth');
-        this.$router.replace('spisokZakazov');
-      }
-    },
-
-    isAddAppToken() {
-      if (this.chatToken && this.isAddAppToken) {
-        logger.log('good auth');
-        this.$router.replace('spisokZakazov');
-      }
     },
   },
   created() {

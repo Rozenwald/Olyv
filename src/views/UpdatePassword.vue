@@ -1,7 +1,7 @@
 <template lang="pug">
   .auth-container
     v-row.logo(align='center' justify='center')
-      img.logo-icon(src="../assets/nedomain-logo.png", alt="../assets/main-logo.png")
+      img.logo-icon(src="../assets/nedomain-logo.png", alt="Логотип")
     v-row.text-field(align='center' justify='center')
       .text-field-center
         v-text-field.text-field-center-input(
@@ -10,20 +10,12 @@
           label='Новый пароль'
           required)
         .text-field-center
-        v-text-field.text-field-center-input(
-          v-model="passwordRepeat"
-          solo hide-details
-          label='Повторите новый пароль'
-          required)
     v-row.button(align='center' justify='center')
       .button-center
         v-btn.button-center-registration(
           @click="checkForm()"
           :loading='loading'
           :disabled='loading') Подтвердить
-        v-btn.button-center-go-to-auth(
-          @click="stepback()"
-          v-show="!isFocus") Назад
 </template>
 <script>
 import axios from 'axios';
@@ -43,6 +35,7 @@ export default {
   },
   data() {
     return {
+      email: null,
       showPassword: false,
       isFocus: false,
       windowHeight: null,
@@ -58,80 +51,8 @@ export default {
     stepback() {
       this.$router.back();
     },
-    updatePassword() {
-      axios
-        .post(`${this.$baseUrl}api/v1/public/recovery`, {
-          method: 'password',
-          submethod: 'reset',
-          password: this.password,
-          token: this.recoveryToken,
-        })
-        .then((response) => (this.checkUpdatePassword(response)))
-        .catch((error) => {
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('invalidEmail'),
-            true,
-            false,
-          );
-          logger.log(error);
-        });
-    },
-    checkUpdatePassword(response) {
-      switch (response.data.status) {
-        case 'success':
-          this.signIn();
-          break;
-        case 'notSuccess':
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('invalidAuthData'),
-            true,
-            false,
-          );
-          this.loading = false;
-          break;
-        case 'tokenExpire':
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('tokenExpire'),
-            true,
-            false,
-          );
-          this.loading = false;
-          break;
-        case 'invalidPassword':
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('invalidPassword'),
-            true,
-            false,
-          );
-          this.loading = false;
-          break;
-        default:
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
-            true,
-            false,
-          );
-          this.loading = false;
-          logger.log(response);
-          break;
-      }
-    },
     checkForm(e) {
       this.loading = true;
-      if (this.password !== this.passwordRepeat) {
-        dialog.open(
-          dialogMessages.getTitle('error'),
-          dialogMessages.getBody('invalidRepeatPassword'),
-          true,
-          false,
-        );
-        return null;
-      }
       if (!this.password) {
         dialog.open(
           dialogMessages.getTitle('error'),
@@ -150,10 +71,89 @@ export default {
         );
         return null;
       }
-      this.signIn();
-      this.loading = false;
+      this.updatePassword();
       e.preventDefault();
       return null;
+    },
+    updatePassword() {
+      logger.log(this.recoveryToken);
+      axios
+        .post(`${this.$baseUrl}api/v1/public/recovery`, {
+          method: 'password',
+          submethod: 'reset',
+          password: this.password,
+          token: this.recoveryToken,
+        })
+        .then((response) => (this.checkUpdatePassword(response)))
+        .catch((error) => {
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(error);
+        });
+      this.loading = false;
+    },
+    checkUpdatePassword(response) {
+      console.log(response.data);
+      switch (response.data.status) {
+        case 'success':
+          // здесь - откровенно хуета
+          // я отдельно с функцией поиграюсь когда напишу логику авторизациии
+          // и вставлю после диплинка
+          nativeStorage.getItem('emailHash')
+            .then((item) => {
+              logger.log(item);
+              this.email = item.emailHash;
+              console.log(this.email);
+            })
+            .catch((error) => {
+              dialog.open(
+                dialogMessages.getTitle('error'),
+                dialogMessages.getBody('standartError'),
+                true,
+                false,
+              );
+              logger.log(error);
+            });
+          this.signIn();
+          break;
+        case 'notSuccess':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notSuccess'),
+            true,
+            false,
+          );
+          break;
+        case 'tokenExpire':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('tokenExpire'),
+            true,
+            false,
+          );
+          break;
+        case 'invalidPassword':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidPassword'),
+            true,
+            false,
+          );
+          break;
+        default:
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(response);
+          break;
+      }
     },
     signIn() {
       axios
@@ -165,7 +165,7 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
+            dialogMessages.getBody('standartError'),
             true,
             false,
           );
@@ -345,7 +345,7 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
+            dialogMessages.getBody('standartError'),
             true,
             false,
           );
@@ -358,7 +358,7 @@ export default {
       } else {
         dialog.open(
           dialogMessages.getTitle('error'),
-          dialogMessages.getBody('errorAuth'),
+          dialogMessages.getBody('standartError'),
           true,
           false,
         );
@@ -372,6 +372,9 @@ export default {
     },
     appToken() {
       return this.$store.getters.getAppToken;
+    },
+    token() {
+      return this.$store.getters.getToken;
     },
     recoveryToken() {
       return this.$store.getters.getRecoveryPasswordToken;
@@ -394,7 +397,6 @@ export default {
     currentAuthToken() {
       if (this.currentAuthToken) {
         this.getChatAuth();
-
         if (window.cordova.platformId !== 'browser') {
           this.getNotificationAuth();
         } else {
@@ -405,14 +407,14 @@ export default {
 
     chatToken() {
       if (this.chatToken && this.isAddAppToken) {
-        logger.log('good auth');
+        logger.log('good auth chat');
         this.$router.replace('spisokZakazov');
       }
     },
 
     isAddAppToken() {
       if (this.chatToken && this.isAddAppToken) {
-        logger.log('good auth');
+        logger.log('good auth appToken');
         this.$router.replace('spisokZakazov');
       }
     },
