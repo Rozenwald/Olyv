@@ -51,8 +51,16 @@
     </plugin>
     <universal-links>
         <host name="cabinet.olyv.services">
-            <path url="/name/" event="recoveryPassword"/>
-            <path url='*'/>
+            <path url="/recoveryPassword/" event="recoveryPassword"/>
+            <path url="*" event="anyPath"/>
+        </host>
+        <host name="test.cabinet.olyv.services">
+            <path url="/recoveryPassword/" event="recoveryPassword"/>
+            <path url="*" event="anyPath"/>
+        </host>
+        <host name="olyv.page.link" scheme="https">
+            <path url="/recoveryPassword/" event="recoveryPassword"/>
+            <path url="*" event="anyPath"/>
         </host>
     </universal-links>
 </widget>
