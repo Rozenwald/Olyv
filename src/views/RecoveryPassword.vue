@@ -2,7 +2,7 @@
   .auth-container
 
     v-row.logo(align='center' justify='center')
-      img.logo-icon(src="../assets/nedomain-logo.png", alt="../assets/main-logo.png")
+      img.logo-icon(src="../assets/nedomain-logo.png", alt="Логотип")
 
     v-row.text-field(align='center' justify='center')
       .text-field-center
@@ -19,6 +19,7 @@
           @click="checkForm()"
           :loading='loading'
           :disabled='loading') Продолжить
+
         v-btn.button-center-go-to-auth(
           @click="stepback()"
           v-show="!isFocus") Назад
@@ -29,6 +30,7 @@ import SvgIcon from '../components/SvgIcon.vue';
 // eslint-disable-next-line import/no-cycle
 import dialog from '../scripts/openDialog';
 import logger from '../scripts/logger';
+import nativeStorage from '../scripts/nativeStorage';
 import dialogMessages from '../scripts/dialogMessages';
 
 export default {
@@ -36,11 +38,13 @@ export default {
   components: {
     axios,
     SvgIcon,
+    nativeStorage,
   },
   data() {
     return {
       showPassword: false,
       email: null,
+      emailHash: {},
       password: null,
       isFocus: false,
       windowHeight: null,
@@ -53,13 +57,11 @@ export default {
       this.$router.push(routeName);
       this.password.blur();
     },
+
     stepback() {
       this.$router.back();
     },
-    validEmail(email) {
-      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return regex.test(email);
-    },
+
     checkForm(e) {
       this.loading = true;
       if (!this.validEmail(this.email)) {
@@ -69,68 +71,71 @@ export default {
           true,
           false,
         );
-        this.loading = false;
-        return null;
+      } else {
+        this.recoveryPassword();
       }
-      this.$router.push('updatePassword');
       e.preventDefault();
+      this.loading = false;
       return null;
     },
-  },
-  computed: {
-    show() {
-      return this.$store.getters.isVisibleAppbar;
+
+    validEmail(email) {
+      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return regex.test(email);
     },
 
-    appToken() {
-      return this.$store.getters.getAppToken;
+    recoveryPassword() {
+      axios
+        .post(`${this.$baseUrl}api/v1/public/recovery`, {
+          method: 'password',
+          submethod: 'request',
+          email: this.email,
+        })
+        .then((response) => (this.checkRecoveryPassword(response)))
+        .catch((error) => {
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(error);
+        });
     },
-
-    token() {
-      return this.$store.getters.getToken;
-    },
-
-    currentAuthToken() {
-      return this.$store.getters.getCurrentAuthToken;
-    },
-
-    chatToken() {
-      return this.$store.getters.getChatToken;
-    },
-
-    notificationToken() {
-      return this.$store.getters.getNotificationToken;
-    },
-  },
-  watch: {
-    token() {
-      if (this.token) this.getUserData();
-    },
-
-    currentAuthToken() {
-      if (this.currentAuthToken) {
-        this.getChatAuth();
-
-        if (window.cordova.platformId !== 'browser') {
-          this.getNotificationAuth();
-        } else {
-          this.isAddAppToken = true;
-        }
+    checkRecoveryPassword(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.emailHash[response.data.data] = this.email;
+          nativeStorage.setItem('emailHash', this.emailHash);
+          this.stepback();
+          break;
+        case 'notSuccess':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notSuccess'),
+            true,
+            false,
+          );
+          break;
+        case 'invalidEmail':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidEmail'),
+            true,
+            false,
+          );
+          break;
+        default:
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('error'),
+            true,
+            false,
+          );
+          logger.log(response);
+          break;
       }
-    },
-
-    chatToken() {
-      if (this.chatToken && this.isAddAppToken) {
-        logger.log('good auth');
-        this.$router.replace('spisokZakazov');
-      }
-    },
-
-    isAddAppToken() {
-      if (this.chatToken && this.isAddAppToken) {
-        logger.log('good auth');
-        this.$router.replace('spisokZakazov');
-      }
+      this.loading = false;
     },
   },
   created() {

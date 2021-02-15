@@ -1,32 +1,21 @@
 <template lang="pug">
   .auth-container
     v-row.logo(align='center' justify='center')
-      img.logo-icon(src="../assets/nedomain-logo.png", alt="../assets/main-logo.png")
-
+      img.logo-icon(src="../assets/nedomain-logo.png", alt="Логотип")
     v-row.text-field(align='center' justify='center')
       .text-field-center
         v-text-field.text-field-center-input(
-          v-model="email"
+          v-model="password"
           solo hide-details
           label='Новый пароль'
-          type='email'
           required)
         .text-field-center
-        v-text-field.text-field-center-input(
-          v-model="email"
-          solo hide-details
-          label='Повторите новый пароль'
-          type='email'
-          required)
     v-row.button(align='center' justify='center')
       .button-center
         v-btn.button-center-registration(
           @click="checkForm()"
           :loading='loading'
           :disabled='loading') Подтвердить
-        v-btn.button-center-go-to-auth(
-          @click="stepback()"
-          v-show="!isFocus") Назад
 </template>
 <script>
 import axios from 'axios';
@@ -46,9 +35,8 @@ export default {
   },
   data() {
     return {
-      showPassword: false,
       email: null,
-      password: null,
+      showPassword: false,
       isFocus: false,
       windowHeight: null,
       isAddAppToken: false,
@@ -63,23 +51,8 @@ export default {
     stepback() {
       this.$router.back();
     },
-    validEmail(email) {
-      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return regex.test(email);
-    },
     checkForm(e) {
       this.loading = true;
-      if (!this.validEmail(this.email)) {
-        dialog.open(
-          dialogMessages.getTitle('error'),
-          dialogMessages.getBody('invalidEmail'),
-          true,
-          false,
-        );
-        this.loading = false;
-        return null;
-      }
-
       if (!this.password) {
         dialog.open(
           dialogMessages.getTitle('error'),
@@ -87,10 +60,8 @@ export default {
           true,
           false,
         );
-        this.loading = false;
         return null;
       }
-
       if (this.password.length < 6) {
         dialog.open(
           dialogMessages.getTitle('error'),
@@ -98,16 +69,87 @@ export default {
           true,
           false,
         );
-        this.loading = false;
         return null;
       }
-
-      this.signIn();
+      this.updatePassword();
       e.preventDefault();
-
       return null;
     },
-
+    updatePassword() {
+      logger.log(this.recoveryToken);
+      axios
+        .post(`${this.$baseUrl}api/v1/public/recovery`, {
+          method: 'password',
+          submethod: 'reset',
+          password: this.password,
+          token: this.recoveryToken,
+        })
+        .then((response) => (this.checkUpdatePassword(response)))
+        .catch((error) => {
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(error);
+        });
+      this.loading = false;
+    },
+    checkUpdatePassword(response) {
+      switch (response.data.status) {
+        case 'success':
+          nativeStorage.getItem('emailHash')
+            .then((item) => {
+              logger.log(item);
+              this.email = item[response.data.data];
+              this.signIn();
+            })
+            .catch((error) => {
+              dialog.open(
+                dialogMessages.getTitle('error'),
+                dialogMessages.getBody('standartError'),
+                true,
+                false,
+              );
+              logger.log(error);
+            });
+          break;
+        case 'notSuccess':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notSuccess'),
+            true,
+            false,
+          );
+          break;
+        case 'tokenExpire':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('tokenExpire'),
+            true,
+            false,
+          );
+          break;
+        case 'invalidPassword':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('invalidPassword'),
+            true,
+            false,
+          );
+          break;
+        default:
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(response);
+          break;
+      }
+    },
     signIn() {
       axios
         .post(`${this.$baseUrl}api/v1/public/signin/email`, {
@@ -118,14 +160,13 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
+            dialogMessages.getBody('standartError'),
             true,
             false,
           );
           logger.log(error);
         });
     },
-
     checkSignIn(response) {
       logger.log(response);
       switch (response.data.status) {
@@ -136,7 +177,7 @@ export default {
         case 'notExist':
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('invalidAuthData'),
+            dialogMessages.getBody('notExistEmail'),
             true,
             false,
           );
@@ -190,7 +231,6 @@ export default {
           break;
       }
     },
-
     getChatAuth() {
       axios
         .post(`${this.$baseChatUrl}api/v1/public/signin`, {
@@ -209,7 +249,6 @@ export default {
           logger.log(error);
         });
     },
-
     checkChatAuth(response) {
       switch (response.data.status) {
         case 'success':
@@ -230,7 +269,6 @@ export default {
           break;
       }
     },
-
     getNotificationAuth() {
       axios
         .post(`${this.$baseNotificationUrl}api/v1/public/signin`, {
@@ -249,7 +287,6 @@ export default {
           logger.log(error);
         });
     },
-
     checkNotificationAuth(response) {
       switch (response.data.status) {
         case 'success':
@@ -292,7 +329,6 @@ export default {
           break;
       }
     },
-
     addAppToken(tokenApp) {
       axios
         .post(`${this.$baseNotificationUrl}api/v1/private/tokenApp`, {
@@ -304,21 +340,20 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('errorAuth'),
+            dialogMessages.getBody('standartError'),
             true,
             false,
           );
           logger.log(error);
         });
     },
-
     checkAppToken(response) {
       if (response.data.status === 'success' || response.data.status === 'exist') {
         this.isAddAppToken = true;
       } else {
         dialog.open(
           dialogMessages.getTitle('error'),
-          dialogMessages.getBody('errorAuth'),
+          dialogMessages.getBody('standartError'),
           true,
           false,
         );
@@ -330,23 +365,21 @@ export default {
     show() {
       return this.$store.getters.isVisibleAppbar;
     },
-
     appToken() {
       return this.$store.getters.getAppToken;
     },
-
     token() {
       return this.$store.getters.getToken;
     },
-
+    recoveryToken() {
+      return this.$store.getters.getRecoveryPasswordToken;
+    },
     currentAuthToken() {
       return this.$store.getters.getCurrentAuthToken;
     },
-
     chatToken() {
       return this.$store.getters.getChatToken;
     },
-
     notificationToken() {
       return this.$store.getters.getNotificationToken;
     },
@@ -359,7 +392,6 @@ export default {
     currentAuthToken() {
       if (this.currentAuthToken) {
         this.getChatAuth();
-
         if (window.cordova.platformId !== 'browser') {
           this.getNotificationAuth();
         } else {
@@ -370,14 +402,14 @@ export default {
 
     chatToken() {
       if (this.chatToken && this.isAddAppToken) {
-        logger.log('good auth');
+        logger.log('good auth chat');
         this.$router.replace('spisokZakazov');
       }
     },
 
     isAddAppToken() {
       if (this.chatToken && this.isAddAppToken) {
-        logger.log('good auth');
+        logger.log('good auth appToken');
         this.$router.replace('spisokZakazov');
       }
     },
