@@ -93,7 +93,7 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getTitle('standartError'),
+            dialogMessages.getBody('standartError'),
             true,
             false,
           );
@@ -114,7 +114,7 @@ export default {
             .catch((error) => {
               dialog.open(
                 dialogMessages.getTitle('error'),
-                dialogMessages.getTitle('standartError'),
+                dialogMessages.getBody('standartError'),
                 true,
                 false,
               );
@@ -171,7 +171,7 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('standartError - ', error),
+            dialogMessages.getBody('standartError'),
             true,
             false,
           );
@@ -351,7 +351,7 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('standartError - ', error),
+            dialogMessages.getBody('standartError'),
             true,
             false,
           );
