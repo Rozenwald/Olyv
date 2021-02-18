@@ -104,6 +104,7 @@ export default {
         });
     },
     checkRecoveryPassword(response) {
+      logger.log(response);
       switch (response.data.status) {
         case 'success':
           this.emailHash[response.data.data] = this.email;

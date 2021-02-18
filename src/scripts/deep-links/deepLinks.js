@@ -3,13 +3,13 @@
 
 import store from '../../store/index';
 import logger from '../logger';
+import router from '../../router';
 
 class DeepLinks {
   subscribeRecoveryPassword() {
     universalLinks.subscribe('recoveryPassword', (eventData) => {
-      logger.log('AAAAAAAAAAAAAAAAA');
-      logger.log(eventData.url);
       store.dispatch('setRecoveryPasswordToken', eventData.params.token);
+      router.replace({ name: 'updatePassword' });
     });
   }
 
