@@ -7,6 +7,9 @@
         v-text-field.text-field-center-input(
           v-model="password"
           solo hide-details
+          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="showPassword ? 'text' : 'password'"
+          @click:append="showPassword = !showPassword"
           label='Новый пароль'
           required)
         .text-field-center
@@ -90,7 +93,7 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('standartError'),
+            dialogMessages.getBody('standartError - ', error),
             true,
             false,
           );
@@ -103,14 +106,22 @@ export default {
         case 'success':
           nativeStorage.getItem('emailHash')
             .then((item) => {
+              console.log(item);
               logger.log(item);
               this.email = item[response.data.data];
+              console.log(this.email);
               this.signIn();
+              dialog.open(
+                dialogMessages.getTitle('error'),
+                `${this.email} ${item}`,
+                true,
+                false,
+              );
             })
             .catch((error) => {
               dialog.open(
                 dialogMessages.getTitle('error'),
-                dialogMessages.getBody('standartError'),
+                dialogMessages.getBody('standartError - ', error),
                 true,
                 false,
               );
@@ -167,7 +178,7 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('standartError'),
+            dialogMessages.getBody('standartError - ', error),
             true,
             false,
           );
@@ -347,7 +358,7 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('standartError'),
+            dialogMessages.getBody('standartError - ', error),
             true,
             false,
           );
