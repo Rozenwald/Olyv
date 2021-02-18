@@ -99,6 +99,7 @@ export default {
         });
     },
     checkUpdatePassword(response) {
+      logger.log(response);
       switch (response.data.status) {
         case 'success':
           nativeStorage.getItem('emailHash')
