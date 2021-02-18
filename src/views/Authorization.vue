@@ -20,7 +20,7 @@
               label='Пароль'
               required)
             div.recovery-password
-              a(@click="route('recoveryPassword')") Забыли пароль?
+              a(@click="losePassword()") Забыли пароль?
     v-row.button(align='center' justify='center')
       .button-center
         v-btn.button-center-registration(
@@ -77,6 +77,14 @@ export default {
     validEmail(email) {
       const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return regex.test(email);
+    },
+
+    losePassword() {
+      console.log(this.validEmail(this.email));
+      if (this.validEmail(this.email)) {
+        nativeStorage.setItem('lastEmail', this.email);
+      }
+      this.route('recoveryPassword');
     },
 
     getDataVk() {

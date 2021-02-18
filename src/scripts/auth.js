@@ -77,7 +77,11 @@ async function exit() {
   const notificationToken = store.getters.getNotificationToken;
   const appToken = store.getters.getAppToken;
 
-  nativeStorage.clear();
+  nativeStorage.removeItem('token');
+  nativeStorage.removeItem('chatToken');
+  nativeStorage.removeItem('idChanal');
+  nativeStorage.removeItem('notificationToken');
+  nativeStorage.removeItem('idNotificationChanal');
   store.dispatch('clear');
 
   logger.log(store.getters.getAppToken);
