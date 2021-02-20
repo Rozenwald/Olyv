@@ -6,7 +6,6 @@ import router from './router';
 import store from './store';
 import vuetify from './plugins/vuetify';
 import VueScrollmagic from './plugins/vue-scrollmagic';
-import recoveryPasswordBrowser from './views/RecoveryPasswordBrowser.vue';
 
 Vue.config.productionTip = false;
 Vue.prototype.$baseUrl = process.env.NODE_ENV === 'production'
@@ -41,21 +40,6 @@ window.$baseNotificationUrl = process.env.NODE_ENV === 'production'
   ? 'http://notification.olyv.services:8888/'
   : 'http://test.notification.olyv.services:8888/';
 
-function getCurrentUrl() {
-  switch (window.location.href) {
-    case 'http://test.cabinet.olyv.services/recoveryPassword':
-      return recoveryPasswordBrowser;
-    case 'http://cabinet.olyv.services/recoveryPassword':
-      return recoveryPasswordBrowser;
-    case 'http://test.cabinet.olyv.services/recoveryPassword/':
-      return recoveryPasswordBrowser;
-    case 'http://cabinet.olyv.services/recoveryPassword/':
-      return recoveryPasswordBrowser;
-    default:
-      return App;
-  }
-}
-
 new Vue({
   router,
   store,
@@ -63,5 +47,5 @@ new Vue({
   spring,
   VueAwesomeSwiper,
   VueScrollmagic,
-  render: (h) => h(getCurrentUrl()),
+  render: (h) => h(App),
 }).$mount('#app');
