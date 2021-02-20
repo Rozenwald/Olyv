@@ -52,5 +52,4 @@ export default new Vuex.Store({
     myOrders,
     deepLinks,
   },
-  mode: 'history',
 });
