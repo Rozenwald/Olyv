@@ -421,6 +421,8 @@ export default {
   created() {
     auth.exit();
 
+    console.log(window.location);
+
     this.windowHeight = window.innerHeight;
     window.addEventListener('resize', () => {
       if (window.innerHeight < this.windowHeight) {
