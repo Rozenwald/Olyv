@@ -29,7 +29,6 @@ export default {
   name: 'allOrder',
   data: () => ({
     processOrders: null,
-    textForUser: '',
     type: 'process',
     loadType: 'icon',
     textForUser1: '',

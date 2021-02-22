@@ -1,7 +1,18 @@
 <template lang="pug">
 v-container.orderContainerHeight
     .order-container(ref="scrollUpdate")
-      lastMsgDialog(v-for='item in messages'
+      v-row.icon-container(justify='center' align='center' v-if="loadType ==='icon'")
+        semipolar-spinner(:animation-duration="1500"
+                          :size="75"
+                          :color="'#fd7363'")
+      v-row.text-container(justify='center'
+                         align='center'
+                         v-else-if="loadType === 'text'")
+        .errorText-container
+          span.errorText-container {{textForUser1}} <br/>
+          span.errorText-container {{textForUser2}}
+      lastMsgDialog(v-else-if="loadType === 'order'"
+                v-for='item in messages'
                 :key='item._id'
                 :item='item')
 </template>
@@ -26,7 +37,9 @@ export default {
   },
   data() {
     return {
-      loadType: true,
+      loadType: 'icon',
+      textForUser1: '',
+      textForUser2: '',
       show: false,
       messages: [],
     };
@@ -53,8 +66,8 @@ export default {
         case 'success':
           response.data.data.forEach((element) => {
             this.messages.push(element);
-            this.loadType = false;
           });
+          this.loadType = 'order';
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -66,13 +79,8 @@ export default {
           );
           break;
         case 'notExist':
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('standartError'),
-            true,
-            true,
-            () => { this.$router.push({ name: 'auth' }); },
-          );
+          this.textForUser1 = 'Вы пока не начали ни один диалог';
+          this.loadType = 'text';
           break;
         default:
           dialog.open('Ошибка', '', true, false);
@@ -106,9 +114,20 @@ export default {
     width 100%
     padding 0
   }
+  .text-container{
+    position absolute
+    bottom 50vh
+    width 100%
+    margin 0
+    font-style normal
+    font-weight bold
+    font-size 18px
+  }
   .icon-container{
-    padding-bottom: 75px
-    height 100vh
+    position absolute
+    bottom 50vh
+    width 100%
+    margin 0
   }
   .chips-wrp {
     top 48px

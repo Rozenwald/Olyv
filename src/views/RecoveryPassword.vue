@@ -152,6 +152,14 @@ export default {
         this.isFocus = false;
       }
     });
+    nativeStorage.getItem('lastEmail')
+      .then((item) => {
+        this.email = item;
+      })
+      .catch((error) => {
+        logger.log(error);
+      });
+    nativeStorage.removeItem('lastEmail');
   },
   mounted() {
     this.$store.dispatch('showAppbar', false);

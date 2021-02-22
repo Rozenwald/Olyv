@@ -7,6 +7,9 @@
         v-text-field.text-field-center-input(
           v-model="password"
           solo hide-details
+          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="showPassword ? 'text' : 'password'"
+          @click:append="showPassword = !showPassword"
           label='Новый пароль'
           required)
         .text-field-center
