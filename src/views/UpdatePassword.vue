@@ -102,22 +102,27 @@ export default {
       logger.log(response);
       switch (response.data.status) {
         case 'success':
-          nativeStorage.getItem('emailHash')
-            .then((item) => {
-              logger.log(item);
-              this.email = item[response.data.data];
-              this.signIn();
-            })
-            .catch((error) => {
-              dialog.open(
-                dialogMessages.getTitle('error'),
-                dialogMessages.getBody('standartError'),
-                true,
-                false,
-              );
-              logger.log(error);
-              this.loading = false;
-            });
+          if (window.cordova.platformId === 'browser') {
+            this.successResponseBrowser = true;
+            this.loading = false;
+          } else {
+            nativeStorage.getItem('emailHash')
+              .then((item) => {
+                logger.log(item);
+                this.email = item[response.data.data];
+                this.signIn();
+              })
+              .catch((error) => {
+                dialog.open(
+                  dialogMessages.getTitle('error'),
+                  dialogMessages.getBody('standartError'),
+                  true,
+                  false,
+                );
+                logger.log(error);
+                this.loading = false;
+              });
+          }
           break;
         case 'notSuccess':
           dialog.open(
@@ -382,6 +387,10 @@ export default {
       return this.$store.getters.getToken;
     },
     recoveryToken() {
+      if (window.cordova.platformId === 'browser') {
+        return this.$route.query.token;
+      }
+
       return this.$store.getters.getRecoveryPasswordToken;
     },
     currentAuthToken() {
