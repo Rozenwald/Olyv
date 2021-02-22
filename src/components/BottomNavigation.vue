@@ -32,7 +32,8 @@ export default {
     show() {
       if (this.currentRouteName === 'auth' || this.currentRouteName === 'registration'
           || this.currentRouteName === 'customerMoreInfo' || this.currentRouteName === 'executorMoreInfo'
-          || this.currentRouteName === 'chat' || this.currentRouteName === 'keyWords') return false;
+          || this.currentRouteName === 'chat' || this.currentRouteName === 'keyWords'
+          || this.currentRouteName === 'successUpdatePassword') return false;
 
       return this.bottomNavigationStatus;
     },

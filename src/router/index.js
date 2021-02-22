@@ -18,6 +18,7 @@ import CustomerMoreInfo from '../views/CustomerMoreInfo.vue';
 import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
 import Verification from '../views/Verification.vue';
 import CustomerProfile from '../views/CustomerProfile.vue';
+import SuccessUpdatePassword from '../views/SuccessUpadatePassword.vue';
 import Chat from '../views/Chat.vue';
 import allChat from '../views/AllChat.vue';
 import keyWords from '../views/KeyWords.vue';
@@ -168,12 +169,20 @@ const routes = [
     component: CustomerProfile,
     meta: { index: 3 },
   },
+  {
+    name: 'successUpdatePassword',
+    path: '/successUpdatePassword',
+    component: SuccessUpdatePassword,
+    meta: { index: 0 },
+  },
 ];
+
+const mode = window.cordova.platformId === 'browser' ? 'history' : 'hash';
 
 const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
-  mode: 'history',
+  mode,
 });
 
 router.beforeEach((to, from, next) => {

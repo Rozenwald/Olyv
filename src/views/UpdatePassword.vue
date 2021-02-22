@@ -106,7 +106,7 @@ export default {
       switch (response.data.status) {
         case 'success':
           if (window.cordova.platformId === 'browser') {
-            this.successResponseBrowser = true;
+            this.$router.push({ name: 'successUpdatePassword' });
             this.loading = false;
           } else {
             nativeStorage.getItem('emailHash')
