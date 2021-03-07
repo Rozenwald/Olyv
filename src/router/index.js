@@ -19,6 +19,7 @@ import ExecutorMoreInfo from '../views/ExecutorMoreInfo.vue';
 import Verification from '../views/Verification.vue';
 import CustomerProfile from '../views/CustomerProfile.vue';
 import SuccessUpdatePassword from '../views/SuccessUpadatePassword.vue';
+import ConfirmCabinet from '../views/ConfirmCabinet.vue';
 import Chat from '../views/Chat.vue';
 import allChat from '../views/AllChat.vue';
 import keyWords from '../views/KeyWords.vue';
@@ -168,6 +169,12 @@ const routes = [
     path: '/customerProfile',
     component: CustomerProfile,
     meta: { index: 3 },
+  },
+  {
+    name: 'confirmCabinet',
+    path: '/confirmCabinet',
+    component: ConfirmCabinet,
+    meta: { index: 0 },
   },
   {
     name: 'successUpdatePassword',
