@@ -33,7 +33,7 @@ export default {
       if (this.currentRouteName === 'auth' || this.currentRouteName === 'registration'
           || this.currentRouteName === 'customerMoreInfo' || this.currentRouteName === 'executorMoreInfo'
           || this.currentRouteName === 'chat' || this.currentRouteName === 'keyWords'
-          || this.currentRouteName === 'successUpdatePassword') return false;
+          || this.currentRouteName === 'successUpdatePassword' || this.currentRouteName === 'confirmCabinet') return false;
 
       return this.bottomNavigationStatus;
     },

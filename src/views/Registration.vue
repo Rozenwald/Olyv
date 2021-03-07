@@ -143,9 +143,28 @@ export default {
     },
 
     checkSignUp(response) {
+      const emailObj = {};
+      logger.log(response);
+
       switch (response.data.status) {
         case 'success':
-          this.signIn();
+          // this.signIn();
+          dialog.open(
+            dialogMessages.getTitle('notification'),
+            `Для подтверждения почты мы отправили письмо на ${this.email}`,
+            true,
+            false,
+          );
+
+          emailObj[response.data.data] = { email: this.email, password: this.password };
+
+          logger.log(emailObj);
+
+          nativeStorage.setItem('confirmEmail', emailObj);
+
+          this.email = null;
+          this.password = null;
+          this.loading = false;
           break;
         case 'invalidEmail':
           dialog.open(
