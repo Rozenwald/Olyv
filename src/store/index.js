@@ -16,7 +16,9 @@ import dialog from './modules/dialog';
 import route from './modules/route';
 import map from './modules/map';
 import actionPhotoDialog from './modules/actionPhotoDialog';
+import actionPhotoDialogAvatar from './modules/actionPhotoDialogAvatar';
 import actionFileDialog from './modules/actionFileDialog';
+import actionPhotoDialogUserGallery from './modules/actionPhotoDialogUserGallery';
 import dialogMessages from './modules/dialogMessages';
 import myOrders from './modules/myOrders';
 import deepLinks from './modules/deepLinks';
@@ -51,5 +53,7 @@ export default new Vuex.Store({
     dialogMessages,
     myOrders,
     deepLinks,
+    actionPhotoDialogAvatar,
+    actionPhotoDialogUserGallery,
   },
 });

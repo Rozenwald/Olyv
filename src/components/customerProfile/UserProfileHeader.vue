@@ -2,8 +2,8 @@
   .header
     v-row.avatar(align='center' justify='center')
       v-skeleton-loader(type="avatar" :loading="!hasData")
-        v-row.avatar-wrp(@click="actionPhoto")
-          avatar(size="100" :src="photo")
+        v-row.avatar-wrp
+          avatar(size="100" :src="photo" :fullscreen="true")
     v-row.name(align='center' justify='center')
       v-skeleton-loader(type="text" :loading="!hasData" width="90")
         span {{name}} {{lastname}}
@@ -65,7 +65,7 @@ export default {
       this.$router.push(routeName);
     },
 
-    ...mapActions('actionPhotoDialog', [
+    ...mapActions('actionPhotoDialogAvatar', [
       'setStatus',
       'setSourceType',
     ]),
@@ -165,6 +165,7 @@ export default {
     },
 
     checkUserData(response) {
+      logger.log(response);
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
@@ -198,7 +199,7 @@ export default {
         options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
       }
 
-      if (srcType === 'camera') {
+      if (srcType === 'camera-photo') {
         // eslint-disable-next-line no-undef
         options.sourceType = Camera.PictureSourceType.CAMERA;
       }
@@ -249,7 +250,7 @@ export default {
     },
 
     sourceType: {
-      get() { return this.$store.state.actionPhotoDialog.sourceType; },
+      get() { return this.$store.state.actionPhotoDialogAvatar.sourceType; },
       set(value) { this.setSourceType(value); },
     },
   },
@@ -262,7 +263,7 @@ export default {
         logger.log('open gallery');
       }
 
-      if (this.sourceType === 'camera') {
+      if (this.sourceType === 'camera-photo') {
         this.choosePhoto(options);
         logger.log('open camera');
       }

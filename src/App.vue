@@ -7,6 +7,8 @@
       bottom-sheet-group
       bottom-navigation
       action-photo-dialog
+      action-photo-dialog-avatar
+      action-photo-dialog-user-gallery
       action-file-dialog
       window-dialog
 </template>
@@ -22,8 +24,11 @@ import BottomNavigation from './components/BottomNavigation.vue';
 import store from './store/index';
 import 'leaflet/dist/leaflet.css';
 import cordova from './plugins/cordova';
+import dialogMessages from './scripts/dialogMessages';
 
 const ActionPhotoDialog = () => import('./components/ActionPhotoDialog.vue');
+const ActionPhotoDialogAvatar = () => import('./components/ActionPhotoDialogAvatar.vue');
+const ActionPhotoDialogUserGallery = () => import('./components/ActionPhotoDialogUserGallery.vue');
 const ActionFileDialog = () => import('./components/ActionFileDialog.vue');
 
 export default {
@@ -36,7 +41,9 @@ export default {
     BottomNavigation,
     BottomSheetGroup,
     ActionPhotoDialog,
+    ActionPhotoDialogAvatar,
     ActionFileDialog,
+    ActionPhotoDialogUserGallery,
   },
   data() {
     return {
@@ -54,9 +61,59 @@ export default {
         .then((response) => (this.checkUserData(response)))
         // eslint-disable-next-line no-return-assign
         .catch((error) => {
-          dialog.open('Ошибка', 'Не удалось загрузить данные о пользователе', true, true);
+          dialog.open('Ошибка', 'Не удалось загрузить данные о пользователе', true, false);
           logger.log(error);
         });
+    },
+
+    getUserCard() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/userCard`, {
+          method: 'receive',
+          submethod: 'current',
+          token: this.token,
+        })
+        .then((response) => this.checkUserCard(response))
+        .catch((error) => {
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+
+          logger.log(error);
+        });
+    },
+
+    checkUserCard(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.$store.dispatch('setUserCard', response.data.data);
+          break;
+        case 'notAuthenticate':
+          this.$store.dispatch('setToken', null);
+          window.localStorage.removeItem('token');
+
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            false,
+          );
+          break;
+        case 'notExist':
+          this.$store.dispatch('setUserCard', { _id: '123' }); //! заглушка
+          break;
+        default:
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          break;
+      }
     },
 
     checkUserData(response) {
@@ -76,6 +133,12 @@ export default {
           dialog.open('Ошибка', '', true, false);
           break;
       }
+    },
+
+    openProfile(userId) {
+      // eslint-disable-next-line no-underscore-dangle
+      if (this.user._id === userId) this.$router.push({ name: 'customerProfile' });
+      else this.$router.push({ name: 'publicProfile', params: { userId } });
     },
 
     beforeLeave(element) {
@@ -105,17 +168,26 @@ export default {
     transitionName() {
       return this.$store.getters.getTransitionName;
     },
+
+    user() {
+      return this.$store.getters.getUser;
+    },
   },
   created() {
     cordova.listen();
+
     if (this.token) {
       this.getUserData();
+      this.getUserCard();
     }
+
+    this.$root.$on('openProfile', this.openProfile);
   },
   watch: {
     token() {
       if (this.token) {
         this.getUserData();
+        this.getUserCard();
       }
     },
   },
