@@ -1,7 +1,7 @@
 <template lang="pug">
   v-sheet.user-card(elevation="1" rounded)
     v-list-item(dense)
-      v-list-item-avatar
+      v-list-item-avatar(@click.stop="openProfile()")
         avatar(:src="photo")
       v-list-item-content
         v-list-item-title {{name}}
@@ -33,7 +33,7 @@ export default {
   },
   props: {
     idUser: String,
-    cost: String,
+    cost: Number,
   },
   data() {
     return {
@@ -55,8 +55,11 @@ export default {
         });
     },
 
+    openProfile() {
+      if (this.idUser) this.$root.$emit('openProfile', this.idUser);
+    },
+
     checkExecutorData(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.userData = response.data.data;

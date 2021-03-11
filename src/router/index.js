@@ -24,6 +24,7 @@ import Chat from '../views/Chat.vue';
 import allChat from '../views/AllChat.vue';
 import keyWords from '../views/KeyWords.vue';
 import store from '../store/index';
+import PublicProfile from '../views/PublicProfile.vue';
 
 Vue.use(VueRouter);
 
@@ -181,6 +182,13 @@ const routes = [
     path: '/successUpdatePassword',
     component: SuccessUpdatePassword,
     meta: { index: 0 },
+  },
+  {
+    name: 'publicProfile',
+    path: '/publicProfile',
+    component: PublicProfile,
+    meta: { index: 7 },
+    props: true,
   },
 ];
 

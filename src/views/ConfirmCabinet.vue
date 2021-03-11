@@ -58,16 +58,22 @@ export default {
 
       logger.log(confirmRes);
 
+      if (!confirmRes) return;
+
       const hashEmail = confirmRes.data.data;
 
-      if (!confirmRes) return;
+      if (!hashEmail) return;
 
       nativeStorage.getItem('confirmEmail')
         .then((confirmEmail) => {
+          logger.log(confirmEmail);
+          logger.log(hashEmail);
+
           this.email = confirmEmail[hashEmail].email;
           this.password = confirmEmail[hashEmail].password;
 
           if (window.cordova.platformId !== 'browser') this.signIn();
+          else this.loading = false;
 
           nativeStorage.removeItem(hashEmail);
         })

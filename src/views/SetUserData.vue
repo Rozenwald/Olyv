@@ -11,6 +11,7 @@
           color="#65686C"
           hide-details="auto"
           v-model="firstName"
+          placeholder="Имя"
         )
       v-skeleton-loader(type="text" :loading="!hasData")
         v-text-field.edit-data(
@@ -18,9 +19,23 @@
           color="#65686C"
           hide-details="auto"
           v-model="lastName"
+          placeholder="Фамилия"
+        )
+      v-skeleton-loader(type="text" :loading="!hasData")
+        v-textarea.edit-data(
+          solo
+          color="#65686C"
+          name="input-7-4"
+          hide-details="auto"
+          v-model="description"
+          placeholder="Описание"
         )
       v-row.btn-wrapper(align='center' justify='center')
-        v-btn.btn-save(rounded @click="checkForm") Сохранить
+        v-btn.btn-save(
+          rounded
+          @click="checkForm"
+          :loading="loading"
+          :disabled="loading") Сохранить
 </template>
 
 <script>
@@ -51,16 +66,22 @@ export default {
       lastName: null,
       file: null,
       windowHeight: null,
+      description: null,
+      loading: false,
     };
   },
   methods: {
     checkForm() {
+      this.loading = true;
+
       if (this.firstName == null) {
+        this.loading = false;
         this.$router.back();
         return undefined;
       }
 
       if (this.firstName.length === 0) {
+        this.loading = false;
         this.$router.back();
         return undefined;
       }
@@ -81,6 +102,7 @@ export default {
         .then((response) => (this.checkResponse(response)))
         // eslint-disable-next-line no-return-assign
         .catch((error) => {
+          this.loading = false;
           dialog.open(
             dialogMessages.getTitle('error'),
             dialogMessages.getBody('standartError'),
@@ -91,10 +113,158 @@ export default {
         });
     },
 
-    checkResponse(response) {
+    updateUserInfo() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/userCard`, {
+          method: 'update',
+          submethod: 'info',
+          token: this.token,
+          name: this.firstName,
+          lastname: this.lastName,
+        })
+        .then((response) => (this.checkUpdateUserInfo(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch((error) => {
+          this.loading = false;
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(error);
+        });
+    },
+
+    checkUpdateUserInfo(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.updateDescription();
+          break;
+        case 'notAuthenticate':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            () => { this.$router.push({ name: 'auth' }); },
+          );
+          this.loading = false;
+          break;
+        default:
+          this.loading = false;
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(response);
+      }
+    },
+
+    updateDescription() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/userCard`, {
+          method: 'update',
+          submethod: 'description',
+          description: this.description,
+          token: this.token,
+        })
+        .then((response) => (this.checkDescription(response)))
+        // eslint-disable-next-line no-return-assign
+        .catch((error) => {
+          this.loading = false;
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(error);
+        });
+    },
+
+    checkDescription(response) {
       switch (response.data.status) {
         case 'success':
           this.getUserData();
+          break;
+        case 'notAuthenticate':
+          this.loading = false;
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            () => { this.$router.push({ name: 'auth' }); },
+          );
+          break;
+        default:
+          this.loading = false;
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(response);
+      }
+    },
+
+    checkResponse(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.updateUserInfo();
+          break;
+        case 'notAuthenticate':
+          this.loading = false;
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            () => { this.$router.push({ name: 'auth' }); },
+          );
+          break;
+        default:
+          this.loading = false;
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          logger.log(response);
+      }
+    },
+
+    getUserCard() {
+      axios
+        .post(`${this.$baseUrl}api/v1/private/userCard`, {
+          method: 'receive',
+          submethod: 'current',
+          token: this.token,
+        })
+        .then((response) => this.checkUserCard(response))
+        .catch((error) => {
+          this.loading = false;
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+
+          logger.log(error);
+        });
+    },
+
+    checkUserCard(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.$store.dispatch('setUserCard', response.data.data);
+          this.$router.back();
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -114,6 +284,7 @@ export default {
           );
           logger.log(response);
       }
+      this.loading = false;
     },
 
     getUserData() {
@@ -125,6 +296,7 @@ export default {
         })
         .then((response) => (this.checkUserData(response)))
         .catch((error) => {
+          this.loading = false;
           dialog.open(
             dialogMessages.getTitle('error'),
             dialogMessages.getBody('standartError'),
@@ -139,10 +311,11 @@ export default {
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
-          if (!this.file) this.$router.back();
+          if (!this.file) this.getUserCard();
           this.file = null;
           break;
         case 'notAuthenticate':
+          this.loading = false;
           dialog.open(
             dialogMessages.getTitle('error'),
             dialogMessages.getBody('notAuthentucate'),
@@ -152,6 +325,7 @@ export default {
           );
           break;
         default:
+          this.loading = false;
           dialog.open(
             dialogMessages.getTitle('error'),
             dialogMessages.getBody('standartError'),
@@ -162,7 +336,7 @@ export default {
       }
     },
 
-    ...mapActions('actionPhotoDialog', [
+    ...mapActions('actionPhotoDialogAvatar', [
       'setStatus',
       'setSourceType',
     ]),
@@ -256,7 +430,7 @@ export default {
         options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
       }
 
-      if (srcType === 'camera') {
+      if (srcType === 'camera-photo') {
         // eslint-disable-next-line no-undef
         options.sourceType = Camera.PictureSourceType.CAMERA;
       }
@@ -267,6 +441,7 @@ export default {
   created() {
     this.firstName = this.user.name;
     this.lastName = this.user.lastname;
+    this.description = this.userCard.description;
 
     this.$store.commit('setTitle', 'Личный кабинет');
 
@@ -305,12 +480,16 @@ export default {
       return this.$store.getters.getUser;
     },
 
+    userCard() {
+      return this.$store.getters.getUserCard;
+    },
+
     hasData() {
       return this.$store.getters.hasData;
     },
 
     sourceType: {
-      get() { return this.$store.state.actionPhotoDialog.sourceType; },
+      get() { return this.$store.state.actionPhotoDialogAvatar.sourceType; },
       set(value) { this.setSourceType(value); },
     },
   },
@@ -323,7 +502,7 @@ export default {
         logger.log('open gallery');
       }
 
-      if (this.sourceType === 'camera') {
+      if (this.sourceType === 'camera-photo') {
         this.choosePhoto(options);
         logger.log('open camera');
       }
