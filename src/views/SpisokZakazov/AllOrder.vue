@@ -1,9 +1,9 @@
 <template lang="pug">
   .order-container(ref="scrollUpdate")
     v-row.icon-container(justify='center' align='center' v-if='loadType')
-      semipolar-spinner(:animation-duration="1500"
-                        :size="75"
-                        :color="'#fd7363'")
+      fulfilling-square-spinner(:animation-duration="1500"
+                                :size="75"
+                                :color="'#56D68B'")
     OrderCard2(v-else
                v-for='item in allClear'
                type='all'
@@ -13,7 +13,7 @@
 
 <script>
 import axios from 'axios';
-import { SemipolarSpinner } from 'epic-spinners';
+import { FulfillingSquareSpinner } from 'epic-spinners';
 import OrderCard2 from '../OrderCard2.vue';
 import logger from '../../scripts/logger';
 import dialogMessages from '../../scripts/dialogMessages';
@@ -34,7 +34,7 @@ export default {
   components: {
     OrderCard2,
     axios,
-    SemipolarSpinner,
+    FulfillingSquareSpinner,
   },
   methods: {
     // Получение заказов
