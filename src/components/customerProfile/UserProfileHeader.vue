@@ -3,7 +3,7 @@
     v-row.avatar(align='center' justify='center')
       v-skeleton-loader(type="avatar" :loading="!hasData")
         v-row.avatar-wrp
-          avatar(size="100" :src="photo" :fullscreen="true")
+          avatar(size="100" :src="photo" :fullscreen="true" :urlMax='urlMax')
     v-row.name(align='center' justify='center')
       v-skeleton-loader(type="text" :loading="!hasData" width="90")
         span {{name}} {{lastname}}
@@ -228,6 +228,17 @@ export default {
         return null;
       }
       const url = this.user.photo[this.user.photo.length - 1].urlMin.substr(1);
+      return this.$baseUrlNoPort + url;
+    },
+
+    urlMax() {
+      if (!this.hasData) {
+        return null;
+      }
+      if (!this.user.photo.length) {
+        return null;
+      }
+      const url = this.user.photo[this.user.photo.length - 1].urlMax.substr(1);
       return this.$baseUrlNoPort + url;
     },
 

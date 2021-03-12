@@ -37,6 +37,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    urlMax: {
+      type: String,
+      default: null,
+    },
   },
   components: {
     SvgIcon,
@@ -71,14 +75,14 @@ export default {
 
     loadImage() {
       const image = new Image();
-      image.src = this.src;
+      image.src = this.urlMax || this.src;
 
       image.onload = (el) => {
         this.avatar = [
           {
             w: el.target.width,
             h: el.target.height,
-            src: this.src,
+            src: this.urlMax || this.src,
           },
         ];
       };

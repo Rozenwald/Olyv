@@ -1,12 +1,8 @@
 <template lang="pug">
   .description
     .description-title Описание
-    v-row(align='center' justify='center' v-if="description == null")
-      semipolar-spinner(
-        :animation-duration="1500"
-        :size="75"
-        color="#fd7363")
-    .description-body(v-text="description || 'Нет информации'")
+    v-skeleton-loader(type="list-item-three-line" :loading="description == null")
+      .description-body(v-text="description || 'Нет информации'")
     v-row.description-actions(v-if="!description")
       v-btn(text @click="route('setUserData')") Добавить описание
 </template>

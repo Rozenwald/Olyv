@@ -3,7 +3,7 @@
     v-row.avatar(align='center' justify='center')
       v-skeleton-loader(type="avatar" :loading="!user._id")
         v-row.avatar-wrp()
-          avatar(size="100" :src="avatar" :fullscreen="true")
+          avatar(size="100" :src="avatar" :fullscreen="true" :urlMax="avatarMax")
     v-row.name(align='center' justify='center')
       v-skeleton-loader(type="text" :loading="!user._id" width="90")
         span(v-if="user.name && user.lastname") {{user.name}} {{user.lastname}}
@@ -30,6 +30,13 @@ export default {
       if (!this.user.photo?.length) return null;
 
       const url = this.user.photo[this.user.photo.length - 1].urlMin.substr(1);
+      return this.$baseUrlNoPort + url;
+    },
+
+    avatarMax() {
+      if (!this.user.photo?.length) return null;
+
+      const url = this.user.photo[this.user.photo.length - 1].urlMax.substr(1);
       return this.$baseUrlNoPort + url;
     },
   },
