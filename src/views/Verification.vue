@@ -68,7 +68,7 @@ export default {
       }
     },
 
-    ...mapActions('actionPhotoDialog', [
+    ...mapActions('actionPhotoDialogVerification', [
       'setStatus',
       'setSourceType',
     ]),
@@ -109,7 +109,7 @@ export default {
         options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
       }
 
-      if (srcType === 'camera') {
+      if (srcType === 'camera-photo') {
         // eslint-disable-next-line no-undef
         options.sourceType = Camera.PictureSourceType.CAMERA;
       }
@@ -244,7 +244,7 @@ export default {
     },
 
     sourceType: {
-      get() { return this.$store.state.actionPhotoDialog.sourceType; },
+      get() { return this.$store.state.actionPhotoDialogVerification.sourceType; },
       set(value) { this.setSourceType(value); },
     },
 
@@ -265,7 +265,7 @@ export default {
         logger.log('open gallery');
       }
 
-      if (this.sourceType === 'camera') {
+      if (this.sourceType === 'camera-photo') {
         this.choosePhoto(options);
         logger.log('open camera');
       }

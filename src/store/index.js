@@ -19,6 +19,7 @@ import actionPhotoDialog from './modules/actionPhotoDialog';
 import actionPhotoDialogAvatar from './modules/actionPhotoDialogAvatar';
 import actionFileDialog from './modules/actionFileDialog';
 import actionPhotoDialogUserGallery from './modules/actionPhotoDialogUserGallery';
+import actionPhotoDialogVerification from './modules/actionPhotoDialogVerification';
 import dialogMessages from './modules/dialogMessages';
 import myOrders from './modules/myOrders';
 import deepLinks from './modules/deepLinks';
@@ -55,5 +56,6 @@ export default new Vuex.Store({
     deepLinks,
     actionPhotoDialogAvatar,
     actionPhotoDialogUserGallery,
+    actionPhotoDialogVerification,
   },
 });

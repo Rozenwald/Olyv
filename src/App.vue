@@ -9,6 +9,7 @@
       action-photo-dialog
       action-photo-dialog-avatar
       action-photo-dialog-user-gallery
+      action-photo-dialog-verification
       action-file-dialog
       window-dialog
 </template>
@@ -30,6 +31,7 @@ const ActionPhotoDialog = () => import('./components/ActionPhotoDialog.vue');
 const ActionPhotoDialogAvatar = () => import('./components/ActionPhotoDialogAvatar.vue');
 const ActionPhotoDialogUserGallery = () => import('./components/ActionPhotoDialogUserGallery.vue');
 const ActionFileDialog = () => import('./components/ActionFileDialog.vue');
+const ActionPhotoDialogVerification = () => import('./components/ActionPhotoDialogVerification.vue');
 
 export default {
   name: 'App',
@@ -44,6 +46,7 @@ export default {
     ActionPhotoDialogAvatar,
     ActionFileDialog,
     ActionPhotoDialogUserGallery,
+    ActionPhotoDialogVerification,
   },
   data() {
     return {

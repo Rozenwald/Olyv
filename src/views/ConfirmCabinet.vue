@@ -1,10 +1,11 @@
 <template lang="pug">
   v-row.wrp( align="center" justify="center")
-    semipolar-spinner(
-      v-if="loading"
+    fulfilling-square-spinner(
       :animation-duration="1500"
       :size="75"
-      color="#fd7363")
+      color='#56D68B'
+      v-if="loading"
+    )
     .success-confirm(v-else)
       .success-confirm-text Почта успешно подверждена
       a(href="olyvapp://")

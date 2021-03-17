@@ -6,8 +6,8 @@ import logger from '../logger';
 import router from '../../router';
 
 class DeepLinks {
-  subscribeRecoveryPassword() {
-    universalLinks.subscribe('recoveryPassword', (eventData) => {
+  subscribeUpdatePassword() {
+    universalLinks.subscribe('updatePassword', (eventData) => {
       store.dispatch('setRecoveryPasswordToken', eventData.params.token);
       router.replace({ name: 'updatePassword' });
     });
@@ -26,8 +26,8 @@ class DeepLinks {
     });
   }
 
-  unsubscribeRecoveryPassword() {
-    universalLinks.unsubscribe('recoveryPassword');
+  unsubscribeUpdatePassword() {
+    universalLinks.unsubscribe('updatePassword');
   }
 
   unsubscribeConfirmEmail() {
@@ -39,13 +39,13 @@ class DeepLinks {
   }
 
   subscribeAll() {
-    this.subscribeRecoveryPassword();
+    this.subscribeUpdatePassword();
     this.subscribeConfirmEmail();
     this.subscribeAnyPath();
   }
 
   unsubscribeAll() {
-    this.unsubscribeRecoveryPassword();
+    this.unsubscribeUpdatePassword();
     this.unsubscribeConfirmEmail();
     this.unsubscribeAnyPath();
   }
