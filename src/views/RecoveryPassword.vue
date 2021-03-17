@@ -114,6 +114,7 @@ export default {
             `Мы отправили письмо для сброса пароля на ${this.email}`,
             'Успешно',
             true,
+            false,
           );
           this.stepback();
           this.loading = false;
