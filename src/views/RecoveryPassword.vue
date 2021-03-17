@@ -109,12 +109,13 @@ export default {
           this.emailHash[response.data.data] = this.email;
           nativeStorage.setItem('emailHash', this.emailHash);
           this.loading = false;
-          this.stepback();
           dialog.open(
+            dialogMessages.getTitle('notification'),
+            `Мы отправили письмо для сброса пароля на ${this.email}`,
             'Успешно',
-            '',
             true,
           );
+          this.stepback();
           this.loading = false;
           break;
         case 'notSuccess':

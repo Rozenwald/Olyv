@@ -48,7 +48,7 @@ export default {
     },
     getData() {
       axios
-        .post(`${this.$baseUrl}api/v1/priva   te/passport`, {
+        .post(`${this.$baseUrl}api/v1/private/passport`, {
           method: 'receive',
           submethod: 'comment',
           token: this.token,

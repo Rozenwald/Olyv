@@ -213,7 +213,6 @@ export default {
         });
     },
     checkUserData(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
