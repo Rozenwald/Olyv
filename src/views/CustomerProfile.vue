@@ -42,7 +42,7 @@ export default {
     },
     getData() {
       axios
-        .post(`${this.$baseUrl}api/v1/private/passport`, {
+        .post(`${this.$baseUrl}api/v1/priva   te/passport`, {
           method: 'receive',
           submethod: 'comment',
           token: this.token,
@@ -54,6 +54,7 @@ export default {
         });
     },
     checkResponse(response) {
+      console.log(response.data);
       logger.log(response);
       switch (response.data.status) {
         case 'notAuthenticate':
