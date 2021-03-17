@@ -104,13 +104,20 @@ export default {
         });
     },
     checkRecoveryPassword(response) {
-      logger.log(response);
       switch (response.data.status) {
         case 'success':
           this.emailHash[response.data.data] = this.email;
           nativeStorage.setItem('emailHash', this.emailHash);
           this.loading = false;
+          dialog.open(
+            dialogMessages.getTitle('notification'),
+            `Мы отправили письмо для сброса пароля на ${this.email}`,
+            'Успешно',
+            true,
+            false,
+          );
           this.stepback();
+          this.loading = false;
           break;
         case 'notSuccess':
           dialog.open(
@@ -152,14 +159,6 @@ export default {
         this.isFocus = false;
       }
     });
-    nativeStorage.getItem('lastEmail')
-      .then((item) => {
-        this.email = item;
-      })
-      .catch((error) => {
-        logger.log(error);
-      });
-    nativeStorage.removeItem('lastEmail');
   },
   mounted() {
     this.$store.dispatch('showAppbar', false);
