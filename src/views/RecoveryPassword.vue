@@ -110,6 +110,12 @@ export default {
           nativeStorage.setItem('emailHash', this.emailHash);
           this.loading = false;
           this.stepback();
+          dialog.open(
+            'Успешно',
+            '',
+            true,
+          );
+          this.loading = false;
           break;
         case 'notSuccess':
           dialog.open(

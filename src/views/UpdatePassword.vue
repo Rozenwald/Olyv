@@ -7,6 +7,9 @@
         v-text-field.text-field-center-input(
           v-model="password"
           solo hide-details
+          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="showPassword ? 'text' : 'password'"
+          @click:append="showPassword = !showPassword"
           label='Новый пароль'
           required)
         .text-field-center
@@ -99,24 +102,30 @@ export default {
         });
     },
     checkUpdatePassword(response) {
+      logger.log(response);
       switch (response.data.status) {
         case 'success':
-          nativeStorage.getItem('emailHash')
-            .then((item) => {
-              logger.log(item);
-              this.email = item[response.data.data];
-              this.signIn();
-            })
-            .catch((error) => {
-              dialog.open(
-                dialogMessages.getTitle('error'),
-                dialogMessages.getBody('standartError'),
-                true,
-                false,
-              );
-              logger.log(error);
-              this.loading = false;
-            });
+          if (window.cordova.platformId === 'browser') {
+            this.$router.push({ name: 'successUpdatePassword' });
+            this.loading = false;
+          } else {
+            nativeStorage.getItem('emailHash')
+              .then((item) => {
+                logger.log(item);
+                this.email = item[response.data.data];
+                this.signIn();
+              })
+              .catch((error) => {
+                dialog.open(
+                  dialogMessages.getTitle('error'),
+                  dialogMessages.getBody('standartError'),
+                  true,
+                  false,
+                );
+                logger.log(error);
+                this.loading = false;
+              });
+          }
           break;
         case 'notSuccess':
           dialog.open(
@@ -381,6 +390,10 @@ export default {
       return this.$store.getters.getToken;
     },
     recoveryToken() {
+      if (window.cordova.platformId === 'browser') {
+        return this.$route.query.token;
+      }
+
       return this.$store.getters.getRecoveryPasswordToken;
     },
     currentAuthToken() {

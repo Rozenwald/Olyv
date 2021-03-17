@@ -3,13 +3,20 @@
 
 import store from '../../store/index';
 import logger from '../logger';
+import router from '../../router';
 
 class DeepLinks {
   subscribeRecoveryPassword() {
     universalLinks.subscribe('recoveryPassword', (eventData) => {
-      logger.log('AAAAAAAAAAAAAAAAA');
-      logger.log(eventData.url);
       store.dispatch('setRecoveryPasswordToken', eventData.params.token);
+      router.replace({ name: 'updatePassword' });
+    });
+  }
+
+  subscribeConfirmEmail() {
+    universalLinks.subscribe('confirmEmail', (eventData) => {
+      store.dispatch('setConfirmEmailToken', eventData.params.token);
+      router.replace({ name: 'confirmCabinet' });
     });
   }
 
@@ -23,17 +30,23 @@ class DeepLinks {
     universalLinks.unsubscribe('recoveryPassword');
   }
 
+  unsubscribeConfirmEmail() {
+    universalLinks.unsubscribe('confirmEmail');
+  }
+
   unsubscribeAnyPath() {
     universalLinks.unsubscribe('anyPath');
   }
 
   subscribeAll() {
     this.subscribeRecoveryPassword();
+    this.subscribeConfirmEmail();
     this.subscribeAnyPath();
   }
 
   unsubscribeAll() {
     this.unsubscribeRecoveryPassword();
+    this.unsubscribeConfirmEmail();
     this.unsubscribeAnyPath();
   }
 }

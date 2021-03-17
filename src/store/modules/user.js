@@ -12,6 +12,9 @@ const mutations = {
     state.hasData = true;
     state.currentAuthToken = user.currentAuthToken;
   },
+  setUserCard(state, userCard) {
+    state.userCard = userCard;
+  },
   setCurrentAuthToken(state, chattoken) {
     state.chattoken = chattoken;
   },
@@ -67,6 +70,9 @@ const actions = {
   setUser({ commit }, user) {
     commit('setUser', user);
   },
+  setUserCard({ commit }, userCard) {
+    commit('setUserCard', userCard);
+  },
   clear({ commit }) {
     commit('clear');
   },
@@ -82,6 +88,7 @@ const getters = {
   isAuth: (state) => state.isAuth,
   getUser: (state) => state.user,
   hasData: (state) => state.hasData,
+  getUserCard: (state) => state.userCard,
 };
 
 const state = {
@@ -95,6 +102,7 @@ const state = {
   isAuth: null,
   user: {},
   hasData: false,
+  userCard: {},
 };
 
 export default {
