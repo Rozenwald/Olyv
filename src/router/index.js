@@ -5,6 +5,7 @@ import Setting from '../views/Setting.vue';
 import MoiZakazi from '../views/MoiZakazi.vue';
 import AwaitOrders from '../components/myOrders/AwaitOrders.vue';
 import ProcessOrders from '../components/myOrders/ProcessOrders.vue';
+import EndedOrders from '../components/myOrders/EndedOrders.vue';
 import SpisokZakazov from '../views/SpisokZakazov.vue';
 import AllOrder from '../views/SpisokZakazov/AllOrder.vue';
 import AwaitOrder from '../views/SpisokZakazov/AwaitOrder.vue';
@@ -81,6 +82,12 @@ const routes = [
         path: 'myProcessOrders',
         component: ProcessOrders,
         meta: { index: 1, subindex: 2 },
+      },
+      {
+        name: 'myEndedOrders',
+        path: 'myEndedOrders',
+        component: EndedOrders,
+        meta: { index: 1, subindex: 3 },
       },
       {
         path: '',
