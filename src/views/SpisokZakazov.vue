@@ -22,6 +22,11 @@
                 color="#56d67b"
                 text-color="#000"
                 @click="route('processOrder')") Сделка
+          v-chip(value="ended"
+                outlined
+                color="#56d67b"
+                text-color="#000"
+                @click="route('endedOrder')") Завершеные
     transition(:name="transitionName" mode="out-in")
       router-view.list-item(:style="{marginTop: margin}")
 </template>
