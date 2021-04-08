@@ -1,4 +1,4 @@
-`<template lang="pug">
+<template lang="pug">
   .order-container
     v-row.icon-container(justify='center' align='center' v-if="loadType ==='icon'")
       fulfilling-square-spinner(:animation-duration="1500"

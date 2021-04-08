@@ -337,7 +337,7 @@ export default {
   }
   .route-btn {
     display block
-    margin-bottom: 15px
+    margin-bottom: 5px
     background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
     color #FFF
     text-transform none
