@@ -1,4 +1,4 @@
-`<template lang="pug">
+<template lang="pug">
   .order-container
     v-row.icon-container(justify='center' align='center' v-if="loadType ==='icon'")
       fulfilling-square-spinner(:animation-duration="1500"
@@ -47,7 +47,7 @@ export default {
           token: this.token,
           method: 'receive',
           submethod: 'executor',
-          status: 'process',
+          status: 'completed',
         })
         .then((response) => (this.checkProcessOrdersResponse(response)))
         .catch((error) => {
@@ -56,6 +56,7 @@ export default {
     },
     // Создаю массив и отправляю его во Vuex
     checkProcessOrdersResponse(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.processOrders = response.data.data;

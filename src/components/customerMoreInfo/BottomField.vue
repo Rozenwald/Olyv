@@ -77,6 +77,10 @@ export default {
     order() {
       return this.$store.getters.getMyOrder;
     },
+
+    orderType() {
+      return this.$store.getters.getOrderType;
+    },
   },
 };
 </script>
