@@ -11,12 +11,12 @@
       action-photo-dialog-user-gallery
       action-photo-dialog-verification
       action-file-dialog
-      window-dialog
+      dialog
 </template>
 
 <script>
 import axios from 'axios';
-import WindowDialog from './components/Dialog.vue';
+import Dialog from './components/Dialog.vue';
 import dialog from './scripts/openDialog';
 import logger from './scripts/logger';
 import Appbar from './components/Appbar.vue';
@@ -38,7 +38,7 @@ export default {
   store,
   axios,
   components: {
-    WindowDialog,
+    Dialog,
     Appbar,
     BottomNavigation,
     BottomSheetGroup,

@@ -13,6 +13,7 @@ import allOrder from './modules/allOrders';
 import currentPosition from './modules/currentPosition';
 import permissions from './modules/permissions';
 import dialog from './modules/dialog';
+import feedbackDialog from './modules/feedbackDialog';
 import route from './modules/route';
 import map from './modules/map';
 import actionPhotoDialog from './modules/actionPhotoDialog';
@@ -47,6 +48,7 @@ export default new Vuex.Store({
     currentPosition,
     permissions,
     dialog,
+    feedbackDialog,
     route,
     map,
     actionPhotoDialog,
