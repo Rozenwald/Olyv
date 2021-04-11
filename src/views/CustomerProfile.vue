@@ -81,6 +81,10 @@ export default {
       this.loading = true;
       auth.exit();
     },
+
+    async mm() {
+      console.log(await this.$root.feedbackAPI.receiveMyCompleted());
+    },
   },
   computed: {
     token() {
@@ -104,6 +108,8 @@ export default {
   created() {
     this.$store.commit('setTitle', 'Личный кабинет');
     this.getData();
+
+    this.mm();
   },
   beforeRouteEnter(to, from, next) {
     if (!store.getters.isAuth) {
