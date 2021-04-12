@@ -24,7 +24,6 @@ import OrderCard2 from '../OrderCard2.vue';
 import logger from '../../scripts/logger';
 import dialogMessages from '../../scripts/dialogMessages';
 import dialog from '../../scripts/openDialog';
-import feedbackDialog from '../../components/FeedbackDialog.vue';
 
 export default {
   name: 'endedOrder',
@@ -39,7 +38,6 @@ export default {
     OrderCard2,
     axios,
     FulfillingSquareSpinner,
-    feedbackDialog,
   },
   methods: {
     getEndedOrders() {

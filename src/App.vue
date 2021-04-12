@@ -12,11 +12,13 @@
       action-photo-dialog-verification
       action-file-dialog
       dialog
+      feedbackDialog
 </template>
 
 <script>
 import axios from 'axios';
 import Dialog from './components/Dialog.vue';
+import feedbackDialog from './components/FeedbackDialog.vue';
 import dialog from './scripts/openDialog';
 import logger from './scripts/logger';
 import Appbar from './components/Appbar.vue';
@@ -38,6 +40,7 @@ export default {
   store,
   axios,
   components: {
+    feedbackDialog,
     Dialog,
     Appbar,
     BottomNavigation,

@@ -4,6 +4,7 @@
     responded-users.responded-users(v-if="orderType == 'await'")
     bottom-field.bottom-field(v-if="orderType == 'await'")
     executor-card.executor-card(v-if="orderType == 'process'")
+    feedbackDialog
 </template>
 
 <script>
@@ -12,6 +13,7 @@ import OrderInformation from '../components/customerMoreInfo/OrderInformation.vu
 import dialog from '../scripts/openDialog';
 import logger from '../scripts/logger';
 import dialogMessages from '../scripts/dialogMessages';
+import feedbackDialog from '../components/FeedbackDialog.vue';
 
 const BottomField = () => import('../components/customerMoreInfo/BottomField.vue');
 const ExecutorCard = () => import('../components/customerMoreInfo/ExecutorCard.vue');
@@ -25,6 +27,7 @@ export default {
     RespondedUsers,
     BottomField,
     ExecutorCard,
+    feedbackDialog,
   },
   methods: {
     getOrderResponse() {

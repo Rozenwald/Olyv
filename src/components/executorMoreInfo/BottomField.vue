@@ -156,12 +156,12 @@ export default {
     },
 
     openFeedbackDialog() {
-      console.log(feedbackDialog.open(
-        'Ой',
-        'oi',
+      feedbackDialog.open(
+        'Оцените исполнителя',
+        dialogMessages.getBody('errorDeleteResponse'),
         true,
         true,
-      ));
+      );
     },
 
     clickRightBtn() {
