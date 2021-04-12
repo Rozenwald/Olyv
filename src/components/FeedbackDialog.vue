@@ -3,33 +3,34 @@
       v-row(align='center' justify="center")
         v-card-title.dialog-title {{dialogTitle}}
       v-row(align='center' justify="center")
-        v-rating.rating(background-color="warning lighten-1"
-                color="warning"
-                length="5"
-                value="4.5")
+        v-rating.rating(
+            background-color="warning lighten-1"
+            color="warning"
+            length="5"
+            value="4.5")
       v-row(align='center' justify="center")
         v-textarea.dialog-text(v-model="keyword"
-                                      solo
-                                      outlined
-                                      flat
-                                      hide-details
-                                      placeholder=' Здесь вы можете оставить свой отзыв'
-                                      rows="1"
-                                      auto-grow)
+            solo
+            outlined
+            flat
+            hide-details
+            placeholder=' Здесь вы можете оставить свой отзыв'
+            rows="1"
+            auto-grow)
       v-row.dialog-btn(align='center' justify="space-around")
           v-btn.dialog-btn-action(v-show="firstBtn"
-                            x-large
-                            rounded
-                            depressed
-                            color='#56D68B'
-                            @click='actionFirstBtn')
+              x-large
+              rounded
+              depressed
+              color='#56D68B'
+              @click='actionFirstBtn')
             v-icon(color='#fff') done
           v-btn.dialog-btn-action(v-show="secondBtn"
-                            x-large
-                            rounded
-                            color='#56D68B'
-                            outlined
-                            @click='actionSecondBtn')
+              x-large
+              rounded
+              color='#56D68B'
+              outlined
+              @click='actionSecondBtn')
             v-icon close
 </template>
 

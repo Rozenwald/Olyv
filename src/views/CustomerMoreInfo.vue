@@ -2,7 +2,7 @@
   v-container
     order-information.order-information(:order="order")
     responded-users.responded-users(v-if="orderType == 'await'")
-    bottom-field.bottom-field(v-if="orderType == 'await'")
+    bottom-field.bottom-field(v-if="orderType == 'await' || 'ended'")
     executor-card.executor-card(v-if="orderType == 'process'")
     feedbackDialog
 </template>

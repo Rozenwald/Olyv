@@ -11,8 +11,8 @@
         span.errorText-container {{textForUser1}} <br/>
         span.errorText-container {{textForUser2}}
     OrderCard1(v-else-if="loadType === 'order'"
-              v-for='order in awaitOrders'
-              type="await"
+              v-for='order in endedOrders'
+              type="ended"
               :key='order.id'
               :item='order')
 </template>
@@ -54,7 +54,7 @@ export default {
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.$store.dispatch('setMyOrders', response.data.data);
+          this.$store.dispatch('setMyEndedOrders', response.data.data);
           this.loadType = 'order';
           break;
         case 'notAuthenticate':
@@ -80,8 +80,11 @@ export default {
     token() {
       return this.$store.getters.getToken;
     },
-    awaitOrders() {
-      return this.$store.getters.getMyOrders;
+    orderType() {
+      return this.$store.getters.getOrderType;
+    },
+    endedOrders() {
+      return this.$store.getters.getMyEndedOrders;
     },
   },
   created() {
