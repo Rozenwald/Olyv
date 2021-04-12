@@ -22,6 +22,11 @@
                 color="#56d67b"
                 text-color="#000"
                 @click="route('processOrder')") Сделка
+          v-chip(value="ended"
+                outlined
+                color="#56d67b"
+                text-color="#000"
+                @click="route('endedOrder')") Отзыв
     transition(:name="transitionName" mode="out-in")
       router-view.list-item(:style="{marginTop: margin}")
 </template>
@@ -33,6 +38,7 @@ import AllOrder from './SpisokZakazov/AllOrder.vue';
 import AwaitOrder from './SpisokZakazov/AwaitOrder.vue';
 import ProcessOrder from './SpisokZakazov/ProcessOrder.vue';
 import KeyOrder from './SpisokZakazov/KeyOrder.vue';
+import EndedOrder from './SpisokZakazov/EndedOrder.vue';
 
 export default {
   name: 'spisokZakazov',
@@ -46,6 +52,7 @@ export default {
     AllOrder,
     AwaitOrder,
     ProcessOrder,
+    EndedOrder,
   },
   methods: {
     route(name) {
@@ -102,9 +109,10 @@ export default {
   .chips-wrp {
     top 48px
     position fixed
-    width 100%
     z-index 2
     left 0
+    width 100%
+    padding-left 15px
     box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.1),
                 0px 1px 1px 0px rgba(0, 0, 0, 0.11),
                 0px 1px 3px 0px rgba(0, 0, 0, 0.01) !important;

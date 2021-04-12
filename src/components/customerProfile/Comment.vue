@@ -3,7 +3,7 @@
     v-list-item(dense)
       v-list-item-avatar(color="#56D68B")
       v-list-item-content
-        v-list-item-title Name Lastname
+        v-list-item-title {{name}} {{lastname}}
       v-list-item-action
         v-row.rating-wrp(align='center' justify='center')
           v-rating(
@@ -16,13 +16,32 @@
             background-color="#FFCA10"
             size="14"
           )
-          span 5.0
-    v-card-text Мудак какой-то. Возможно Коля. Возможно инноватик
+          span 4.8
+    v-card-text {{comment}}
 </template>
 
 <script>
 export default {
   name: 'comment',
+  data() {
+    return {
+      items: ['Мргл мргл мрльк мрльк мрррглл флллурлоккр мурчаль н лок млгггррр мурчаль мрругл дрррзя ммгр ммм мммм флллурлок'],
+    };
+  },
+  computed: {
+
+    name() {
+      return 'Коля';
+    },
+
+    lastname() {
+      return 'Иноватик';
+    },
+
+    comment() {
+      return 'Мргл мргл мрльк мрльк мрррглл флллурлоккр мурчаль н лок млгггррр мурчаль мрругл дрррзя ммгр ммм мммм флллурлок';
+    },
+  },
 };
 </script>
 

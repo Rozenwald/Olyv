@@ -10,52 +10,61 @@
       .errorText-container
         span.errorText-container {{textForUser1}} <br/>
         span.errorText-container {{textForUser2}}
-    OrderCard1(v-else-if="loadType === 'order'"
-              v-for='order in endedOrders'
-              type="ended"
-              :key='order.id'
-              :item='order')
+    OrderCard2(v-else-if="loadType === 'order'"
+               v-for='item in endedOrders'
+               type='ended'
+               :key='item._id'
+               :item='item')
 </template>
 
 <script>
 import axios from 'axios';
 import { FulfillingSquareSpinner } from 'epic-spinners';
-import OrderCard1 from '../../views/OrderCard1.vue';
+import OrderCard2 from '../OrderCard2.vue';
 import logger from '../../scripts/logger';
 import dialogMessages from '../../scripts/dialogMessages';
 import dialog from '../../scripts/openDialog';
 
 export default {
-  name: 'ended-orders',
+  name: 'endedOrder',
   data: () => ({
+    endedOrders: null,
+    type: 'ended',
     loadType: 'icon',
     textForUser1: '',
     textForUser2: '',
   }),
   components: {
+    OrderCard2,
     axios,
-    OrderCard1,
     FulfillingSquareSpinner,
   },
   methods: {
-    getData() {
+    getEndedOrders() {
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
           method: 'receive',
-          submethod: 'customer',
+          submethod: 'executor',
           status: 'completed',
         })
-        .then((response) => (this.checkResponse(response)))
+        .then((response) => (this.checkEndedOrdersResponse(response)))
         .catch((error) => {
           logger.log(error);
         });
     },
-    checkResponse(response) {
+
+    checkEndedOrdersResponse(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
-          this.$store.dispatch('setMyEndedOrders', response.data.data);
+          this.endedOrders = response.data.data;
           this.loadType = 'order';
+          // this.$store.dispatch('setProcessOrder', this.processOrders);
+          break;
+        case 'notExist':
+          this.textForUser1 = 'У вас нет завершенных заказов';
+          this.loadType = 'text';
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -66,12 +75,7 @@ export default {
             () => { this.$router.push({ name: 'auth' }); },
           );
           break;
-        case 'notExist':
-          this.textForUser1 = 'Ни один из ваших заказов еще не завершён';
-          this.loadType = 'text';
-          break;
         default:
-          logger.log(response);
           break;
       }
     },
@@ -80,16 +84,22 @@ export default {
     token() {
       return this.$store.getters.getToken;
     },
-    orderType() {
-      return this.$store.getters.getOrderType;
+    user() {
+      return this.$store.getters.getUser;
     },
-    endedOrders() {
-      return this.$store.getters.getMyEndedOrders;
+  },
+  watch: {
+    token() {
+      if (this.token) {
+        this.getEndedOrders();
+      }
     },
   },
   created() {
-    this.getData();
     this.$store.dispatch('setChipStatus', 'ended');
+    if (this.token) {
+      this.getEndedOrders();
+    }
   },
 };
 </script>
@@ -106,7 +116,7 @@ export default {
     font-weight bold
     font-size 18px
   }
-  .order-container {
+  .order-container{
     padding 0
     height 100%
   }
@@ -121,7 +131,4 @@ export default {
   .v-list-item:last-child {
     border-bottom none
   }
- .await-order-list:first-child {
-   margin-top: 48px
- }
 </style>

@@ -2,9 +2,13 @@
   v-sheet.bottom-field(elevation="3" rounded)
     v-row.bottom-field-btns-wrp
       v-col(cols="6" align="center")
-        v-btn.bottom-field-btns-wrp-delete(rounded @click="delOrder") Удалить
+        v-btn.bottom-field-btns-wrp-delete(
+          rounded
+          @click="clickLeftBtn") {{leftBtnText}}
       v-col(cols="6" align="center")
-        v-btn.bottom-field-btns-wrp-edit(rounded @click="editOrder") Редактировать
+        v-btn.bottom-field-btns-wrp-edit(
+          rounded
+          @click="clickRightBtn") {{rightBtnText}}
 </template>
 
 <script>
@@ -12,6 +16,7 @@ import axios from 'axios';
 import dialog from '../../scripts/openDialog';
 import logger from '../../scripts/logger';
 import dialogMessages from '../../scripts/dialogMessages';
+import feedbackDialog from '../../scripts/openFeedbackDialog';
 
 export default {
   name: 'bottom-field',
@@ -44,6 +49,23 @@ export default {
       this.$store.dispatch('setMainSheetStatus', true);
     },
 
+    openFeedbackDialog() {
+      feedbackDialog.open(
+        'Оцените исполнителя',
+        dialogMessages.getBody('errorDeleteResponse'),
+        true,
+        true,
+      );
+    },
+
+    goChat() {
+      this.loading = true;
+      // eslint-disable-next-line no-underscore-dangle
+      this.$store.dispatch('setIdUserRequest', this.order.idUserExecutor);
+      this.$router.push('chat');
+      this.loading = false;
+    },
+
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
@@ -68,14 +90,75 @@ export default {
           break;
       }
     },
+    clickRightBtn() {
+      switch (this.orderType) {
+        case 'await':
+          this.editOrder();
+          break;
+        case 'process':
+          this.completeOrder();
+          break;
+        case 'ended':
+          this.openFeedbackDialog();
+          break;
+        default:
+          break;
+      }
+    },
+    clickLeftBtn() {
+      switch (this.orderType) {
+        case 'await':
+          this.delOrder();
+          break;
+        case 'process':
+          this.goChat();
+          break;
+        case 'ended':
+          this.goChat();
+          break;
+        default:
+          break;
+      }
+    },
   },
   computed: {
+
+    orderType() {
+      console.log(this.$store.getters.getOrderType);
+      return this.$store.getters.getOrderType;
+    },
+
     token() {
       return this.$store.getters.getToken;
     },
 
     order() {
       return this.$store.getters.getMyOrder;
+    },
+    rightBtnText() {
+      switch (this.orderType) {
+        case 'await':
+          return 'Отменить';
+        case 'process':
+          return 'Завершить';
+        case 'ended':
+          return 'Отзыв';
+        default:
+          return 'Отозваться';
+      }
+    },
+
+    leftBtnText() {
+      switch (this.orderType) {
+        case 'await':
+          return 'Редактировать';
+        case 'process':
+          return 'Чат';
+        case 'ended':
+          return 'Чат';
+        default:
+          return 'Своя цена';
+      }
     },
   },
 };

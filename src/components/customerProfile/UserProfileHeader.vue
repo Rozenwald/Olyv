@@ -7,8 +7,8 @@
     v-row.name(align='center' justify='center')
       v-skeleton-loader(type="text" :loading="!hasData" width="90")
         span {{name}} {{lastname}}
-    <!-- v-row.ratting(align='center' justify='center') -->
-    <!--  v-skeleton-loader(type="text" :loading="!hasData" width="70")
+    v-row.ratting(align='center' justify='center')
+      v-skeleton-loader(type="text" :loading="!hasData" width="70")
         v-rating(
           :length="5"
           readonly
@@ -17,7 +17,8 @@
           color="#FFCA10"
           background-color="#FFCA10"
           size="14"
-        ) -->
+          value="3.5"
+        )
     user-profile-subheader(v-show="false")
     v-row.actions(align='center' justify='center')
       v-btn.edit-data(
@@ -301,8 +302,12 @@ export default {
     margin-bottom 12px
   }
 
-  .avatar, .ratting {
+  .avatar {
     margin-bottom 15px
+  }
+  .ratting {
+    margin-bottom 5px
+    margin-top 5px
   }
 
   .actions button {
