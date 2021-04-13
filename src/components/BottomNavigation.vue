@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-bottom-navigation#bottom-navigation(fixed grow v-show="show")
+  v-bottom-navigation#bottom-navigation(fixed v-show="show" color="teal")
     v-btn.nav-btn(v-for="(item,index) in items"
                   :key="item.title"
                   @click="clickBtn(index, item.routeName)"
@@ -7,7 +7,7 @@
                  )
       template(v-if='index!=2')
         span(v-text="item.title")
-        svg-icon.bottom-navigation-icon(:name="item.icon" height="19")
+        svg-icon.bottom-navigation-icon(:name="item.icon" :color="item.color" height="19")
       v-row#create-order-btn(v-else align='center'
                              justify='center'
                              @click.stop="clickBtn(index)"

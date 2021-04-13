@@ -2,8 +2,8 @@
   .review
     .title-review Отзывы
     .comments
-      comment(v-for="item in items" :key="item.id" v-show="items")
-      v-row.no-comments-wrp(align='center' justify='center')
+      comment(v-if="items !== null" v-for="item in items" :key="item.id" v-show="items")
+      v-row.no-comments-wrp(v-else align='center' justify='center')
         .no-comments Никто не оставил отзывов
 </template>
 
@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      items: null,
+      items: ['Мргл мргл мрльк мрльк мрррглл флллурлоккр мурчаль н лок млгггррр мурчаль мрругл дрррзя ммгр ммм мммм флллурлок'],
     };
   },
 };

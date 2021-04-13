@@ -5,10 +5,12 @@ import Setting from '../views/Setting.vue';
 import MoiZakazi from '../views/MoiZakazi.vue';
 import AwaitOrders from '../components/myOrders/AwaitOrders.vue';
 import ProcessOrders from '../components/myOrders/ProcessOrders.vue';
+import EndedOrders from '../components/myOrders/EndedOrders.vue';
 import SpisokZakazov from '../views/SpisokZakazov.vue';
 import AllOrder from '../views/SpisokZakazov/AllOrder.vue';
 import AwaitOrder from '../views/SpisokZakazov/AwaitOrder.vue';
 import ProcessOrder from '../views/SpisokZakazov/ProcessOrder.vue';
+import EndedOrder from '../views/SpisokZakazov/EndedOrder.vue';
 import KeyOrder from '../views/SpisokZakazov/KeyOrder.vue';
 import Auth from '../views/Authorization.vue';
 import Registration from '../views/Registration.vue';
@@ -83,6 +85,12 @@ const routes = [
         meta: { index: 1, subindex: 2 },
       },
       {
+        name: 'myEndedOrders',
+        path: 'myEndedOrders',
+        component: EndedOrders,
+        meta: { index: 1, subindex: 3 },
+      },
+      {
         path: '',
         redirect: 'myAwaitOrders',
       },
@@ -117,6 +125,12 @@ const routes = [
         path: 'processOrder',
         component: ProcessOrder,
         meta: { index: 2, subindex: 4 },
+      },
+      {
+        name: 'endedOrder',
+        path: 'endedOrder',
+        component: EndedOrder,
+        meta: { index: 2, subindex: 5 },
       },
       {
         path: '',

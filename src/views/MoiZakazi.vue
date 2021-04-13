@@ -13,6 +13,11 @@
                   color="#56d67b"
                   text-color="#000"
                   @click="route('myProcessOrders')") В процессе
+            v-chip(value="ended"
+                  outlined
+                  color="#56d67b"
+                  text-color="#000"
+                  @click="route('myEndedOrders')") Завершеные
       transition(:name="transitionName" mode="out-in")
         router-view.list-item
 </template>
