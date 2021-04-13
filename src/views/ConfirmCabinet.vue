@@ -1,171 +1,86 @@
 <template lang="pug">
-  .auth-container
-    v-row.logo(align='center' justify='center')
-      img.logo-icon(src="../assets/nedomain-logo.png", alt="Логотип")
-    v-row.text-field(align='center' justify='center')
-      .text-field-center
-        v-text-field.text-field-center-input(
-          v-model="password"
-          solo hide-details
-          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-          :type="showPassword ? 'text' : 'password'"
-          @click:append="showPassword = !showPassword"
-          label='Новый пароль'
-          required)
-        .text-field-center
-    v-row.button(align='center' justify='center')
-      .button-center
-        v-btn.button-center-registration(
-          @click="checkForm()"
-          :loading='loading'
-          :disabled='loading') Подтвердить
+  v-row.wrp( align="center" justify="center")
+    fulfilling-square-spinner(
+      :animation-duration="1500"
+      :size="75"
+      color='#56D68B'
+      v-if="loading"
+    )
+    .success-confirm(v-else)
+      .success-confirm-text Почта успешно подверждена
+      a(href="olyvapp://")
+        v-btn(rounded).btn-go-app Открыть в Olyv
 </template>
+
 <script>
 import axios from 'axios';
-import SvgIcon from '../components/SvgIcon.vue';
+import { SemipolarSpinner } from 'epic-spinners';
+import logger from '../scripts/logger';
+import dialog from '../scripts/openDialog';
+import dialogMessages from '../scripts/dialogMessages';
 import nativeStorage from '../scripts/nativeStorage';
 // eslint-disable-next-line import/no-cycle
 import cordova from '../plugins/cordova';
-import dialog from '../scripts/openDialog';
-import logger from '../scripts/logger';
-import dialogMessages from '../scripts/dialogMessages';
 
 export default {
-  name: 'UpdatePassword',
+  name: 'ConfirmCabinet',
   components: {
-    axios,
-    SvgIcon,
+    SemipolarSpinner,
   },
   data() {
     return {
       email: null,
-      showPassword: false,
-      isFocus: false,
-      windowHeight: null,
+      password: null,
       isAddAppToken: false,
       loading: false,
     };
   },
   methods: {
-    route(routeName) {
-      this.$router.push(routeName);
-      this.password.blur();
-    },
-    stepback() {
-      this.$router.back();
-    },
-    checkForm(e) {
-      this.loading = true;
-      if (!this.password) {
-        dialog.open(
-          dialogMessages.getTitle('error'),
-          dialogMessages.getBody('invalidPassword'),
-          true,
-          false,
-        );
-        this.loading = false;
-        return null;
+    async confirmEmail() {
+      try {
+        const res = await axios.post(`${this.$baseUrl}api/v1/public/confirm`, {
+          method: 'email',
+          token: this.confirmToken,
+        });
+        return res;
+      } catch (error) {
+        logger.log(error);
       }
-      if (this.password.length < 6) {
-        dialog.open(
-          dialogMessages.getTitle('error'),
-          dialogMessages.getBody('invalidPassword'),
-          true,
-          false,
-        );
-        this.loading = false;
-        return null;
-      }
-      this.updatePassword();
-      e.preventDefault();
+
       return null;
     },
-    updatePassword() {
-      logger.log(this.recoveryToken);
-      axios
-        .post(`${this.$baseUrl}api/v1/public/recovery`, {
-          method: 'password',
-          submethod: 'reset',
-          password: this.password,
-          token: this.recoveryToken,
+
+    async init() {
+      this.$store.commit('setTitle', 'Подтверждение почты');
+
+      this.loading = true;
+
+      const confirmRes = await this.confirmEmail();
+
+      logger.log(confirmRes);
+
+      if (!confirmRes) return;
+
+      const hashEmail = confirmRes.data.data;
+
+      if (!hashEmail) return;
+
+      nativeStorage.getItem('confirmEmail')
+        .then((confirmEmail) => {
+          logger.log(confirmEmail);
+          logger.log(hashEmail);
+
+          this.email = confirmEmail[hashEmail].email;
+          this.password = confirmEmail[hashEmail].password;
+
+          if (window.cordova.platformId !== 'browser') this.signIn();
+          else this.loading = false;
+
+          nativeStorage.removeItem(hashEmail);
         })
-        .then((response) => (this.checkUpdatePassword(response)))
-        .catch((error) => {
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('standartError - ', error),
-            true,
-            false,
-          );
-          logger.log(error);
-          this.loading = false;
-        });
+        .catch((err) => logger.log(err));
     },
-    checkUpdatePassword(response) {
-      logger.log(response);
-      switch (response.data.status) {
-        case 'success':
-          if (window.cordova.platformId === 'browser') {
-            this.$router.push({ name: 'successUpdatePassword' });
-            this.loading = false;
-          } else {
-            nativeStorage.getItem('emailHash')
-              .then((item) => {
-                logger.log(item);
-                this.email = item[response.data.data];
-                this.signIn();
-              })
-              .catch((error) => {
-                dialog.open(
-                  dialogMessages.getTitle('error'),
-                  dialogMessages.getBody('standartError'),
-                  true,
-                  false,
-                );
-                logger.log(error);
-                this.loading = false;
-              });
-          }
-          break;
-        case 'notSuccess':
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('notSuccess'),
-            true,
-            false,
-          );
-          this.loading = false;
-          break;
-        case 'tokenExpire':
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('tokenExpire'),
-            true,
-            false,
-          );
-          this.loading = false;
-          break;
-        case 'invalidPassword':
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('invalidPassword'),
-            true,
-            false,
-          );
-          this.loading = false;
-          break;
-        default:
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('standartError'),
-            true,
-            false,
-          );
-          logger.log(response);
-          this.loading = false;
-          break;
-      }
-    },
+
     signIn() {
       axios
         .post(`${this.$baseUrl}api/v1/public/signin/email`, {
@@ -176,7 +91,7 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('standartError - ', error),
+            dialogMessages.getBody('errorAuth'),
             true,
             false,
           );
@@ -184,6 +99,7 @@ export default {
           this.loading = false;
         });
     },
+
     checkSignIn(response) {
       logger.log(response);
       switch (response.data.status) {
@@ -194,7 +110,7 @@ export default {
         case 'notExist':
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('notExistEmail'),
+            dialogMessages.getBody('invalidAuthData'),
             true,
             false,
           );
@@ -212,6 +128,7 @@ export default {
           break;
       }
     },
+
     getUserData() {
       axios
         .post(`${this.$baseUrl}api/v1/private/user`, {
@@ -231,6 +148,7 @@ export default {
           this.loading = false;
         });
     },
+
     checkUserData(response) {
       switch (response.data.status) {
         case 'success':
@@ -248,6 +166,7 @@ export default {
           break;
       }
     },
+
     getChatAuth() {
       axios
         .post(`${this.$baseChatUrl}api/v1/public/signin`, {
@@ -266,6 +185,7 @@ export default {
           this.loading = false;
         });
     },
+
     checkChatAuth(response) {
       switch (response.data.status) {
         case 'success':
@@ -286,6 +206,7 @@ export default {
           break;
       }
     },
+
     getNotificationAuth() {
       axios
         .post(`${this.$baseNotificationUrl}api/v1/public/signin`, {
@@ -304,6 +225,7 @@ export default {
           this.loading = false;
         });
     },
+
     checkNotificationAuth(response) {
       switch (response.data.status) {
         case 'success':
@@ -311,6 +233,7 @@ export default {
           nativeStorage.setItem('notificationIdChanal', response.data.data.idChanal);
           this.$store.dispatch('setNotificationToken', response.data.data.token);
           this.$store.dispatch('setNotificationIdChanal', response.data.data.idChanal);
+          this.loading = false;
           logger.log(`App token => ${this.appToken}`);
 
           if (this.appToken) {
@@ -345,6 +268,7 @@ export default {
           break;
       }
     },
+
     addAppToken(tokenApp) {
       axios
         .post(`${this.$baseNotificationUrl}api/v1/private/tokenApp`, {
@@ -356,7 +280,7 @@ export default {
         .catch((error) => {
           dialog.open(
             dialogMessages.getTitle('error'),
-            dialogMessages.getBody('standartError - ', error),
+            dialogMessages.getBody('errorAuth'),
             true,
             false,
           );
@@ -364,13 +288,14 @@ export default {
           this.loading = false;
         });
     },
+
     checkAppToken(response) {
       if (response.data.status === 'success' || response.data.status === 'exist') {
         this.isAddAppToken = true;
       } else {
         dialog.open(
           dialogMessages.getTitle('error'),
-          dialogMessages.getBody('standartError'),
+          dialogMessages.getBody('errorAuth'),
           true,
           false,
         );
@@ -380,30 +305,32 @@ export default {
     },
   },
   computed: {
-    show() {
-      return this.$store.getters.isVisibleAppbar;
-    },
     appToken() {
       return this.$store.getters.getAppToken;
     },
+
     token() {
       return this.$store.getters.getToken;
     },
-    recoveryToken() {
+
+    currentAuthToken() {
+      return this.$store.getters.getCurrentAuthToken;
+    },
+
+    chatToken() {
+      return this.$store.getters.getChatToken;
+    },
+
+    notificationToken() {
+      return this.$store.getters.getNotificationToken;
+    },
+
+    confirmToken() {
       if (window.cordova.platformId === 'browser') {
         return this.$route.query.token;
       }
 
-      return this.$store.getters.getRecoveryPasswordToken;
-    },
-    currentAuthToken() {
-      return this.$store.getters.getCurrentAuthToken;
-    },
-    chatToken() {
-      return this.$store.getters.getChatToken;
-    },
-    notificationToken() {
-      return this.$store.getters.getNotificationToken;
+      return this.$store.getters.getConfirmEmailToken;
     },
   },
   watch: {
@@ -414,6 +341,7 @@ export default {
     currentAuthToken() {
       if (this.currentAuthToken) {
         this.getChatAuth();
+
         if (window.cordova.platformId !== 'browser') {
           this.getNotificationAuth();
         } else {
@@ -424,7 +352,7 @@ export default {
 
     chatToken() {
       if (this.chatToken && this.isAddAppToken) {
-        logger.log('good auth chat');
+        logger.log('good auth');
         this.$router.replace('spisokZakazov');
         this.loading = false;
       }
@@ -432,119 +360,28 @@ export default {
 
     isAddAppToken() {
       if (this.chatToken && this.isAddAppToken) {
-        logger.log('good auth appToken');
+        logger.log('good auth');
         this.$router.replace('spisokZakazov');
         this.loading = false;
       }
     },
   },
   created() {
-    this.windowHeight = window.innerHeight;
-    window.addEventListener('resize', () => {
-      if (window.innerHeight < this.windowHeight) {
-        this.isFocus = true;
-      } else {
-        this.isFocus = false;
-      }
-    });
-  },
-  mounted() {
-    this.$store.dispatch('showAppbar', false);
-    this.$store.dispatch('showBottomNavigation', false);
-  },
-  beforeDestroy() {
-    this.$store.dispatch('showAppbar', true);
-    this.$store.dispatch('showBottomNavigation', true);
+    this.init();
   },
 };
 </script>
-<style lang="stylus" scoped>
-  .recovery-password {
-    margin 5px
-  }
-  .auth-container {
-    width 100%
-    height 100%
-    padding 0
-    text-align: center;
-    vertical-align middle
-  }
-  .logo {
-    position relative
-    height: 33vh;
-    width: 100%;
-    margin-bottom 0
-    margin-right 0
-    margin-left 0
-    margin-top 0
-    text-align: center;
-      &-icon {
-        position relative
-        vertical-align middle
-        width:auto;
-        height:100%;
-      }
-  }
-  .text-field {
-    width 100%;
-    height 33vh;
-    margin 0;
-      &-center {
-        width 100%;
-        padding-right 10px;
-        padding-left 10px;
-          &-input {
-            padding-right 10px;
-            padding-left 10px;
-            margin-top 10px
-          }
-          &-rules-text {
-            margin-top 20px
-            font-size 13px
-            word-break: normal
-          }
-          &-rules-button {
-            font-size 13px
-            margin-top 5px
-            text-decoration:underline
-            word-break: normal
-          }
-      }
-  }
-  .button {
-    width 100% !important
-    height 34vh;
-    margin 0;
-    &-center {
-      width 100% !important;
-        &-registration {
-          height 56px !important
-          color #56D68B
-          font-size: 13px
-          background: transparent
-          border 1px solid #56D68B
-          border-radius 30px
-          width 72% !important
-        }
-        &-go-to-auth {
-          height 56px !important
-          margin-top 10px
-          color #FFA967
-          font-size: 13px
-          background: transparent
-          border 1px solid #FFA967
-          border-radius 30px
-          width 72%
-        }
-    }
-    &-icon {
-      width 100%
 
-      &-svg-icon{
-        width 41px
-        height 41px
-        margin 5px
-      }
-    }
+<style lang="stylus">
+  .wrp {
+    margin 0
+    text-align center
+  }
+
+  .btn-go-app {
+    color #FFA967
+    font-size: 13px
+    border 1px solid #FFA967
+    margin-top 40px
   }
 </style>

@@ -21,6 +21,7 @@ import axios from 'axios';
 import dialog from '../../scripts/openDialog';
 import logger from '../../scripts/logger';
 import dialogMessages from '../../scripts/dialogMessages';
+import feedbackDialog from '../../scripts/openFeedbackDialog';
 
 export default {
   name: 'bottom-field',
@@ -154,6 +155,15 @@ export default {
       this.loading = false;
     },
 
+    openFeedbackDialog() {
+      feedbackDialog.open(
+        'Оцените исполнителя',
+        dialogMessages.getBody('errorDeleteResponse'),
+        true,
+        true,
+      );
+    },
+
     clickRightBtn() {
       if (this.user.verification === 'completed') {
         switch (this.orderType) {
@@ -168,6 +178,9 @@ export default {
             break;
           case 'process':
             this.completeOrder();
+            break;
+          case 'ended':
+            this.openFeedbackDialog();
             break;
           default:
             break;
@@ -197,6 +210,9 @@ export default {
             this.goChat();
             break;
           case 'process':
+            this.goChat();
+            break;
+          case 'ended':
             this.goChat();
             break;
           default:
@@ -248,6 +264,8 @@ export default {
           return 'Отменить';
         case 'process':
           return 'Завершить';
+        case 'ended':
+          return 'Отзыв';
         default:
           return 'Отозваться';
       }
@@ -262,6 +280,8 @@ export default {
         case 'await':
           return 'Чат';
         case 'process':
+          return 'Чат';
+        case 'ended':
           return 'Чат';
         default:
           return 'Своя цена';

@@ -8,8 +8,7 @@
 </template>
 
 <script>
-import BottomSheet from './bottomSheet/BottomSheet.vue';
-
+const BottomSheet = () => import('./bottomSheet/BottomSheet.vue');
 const AddressSheet = () => import('./bottomSheet/AddressSheet.vue');
 const DescriptionSheet = () => import('./bottomSheet/DescriptionSheet.vue');
 const CostSheet = () => import('./bottomSheet/CostSheet.vue');

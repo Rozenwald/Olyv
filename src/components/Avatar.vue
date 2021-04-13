@@ -1,10 +1,17 @@
 <template lang="pug">
-  v-avatar(:size='size' :color='color')
+  v-avatar(:size='size' :color='color' @click="openFullScreen()")
     v-icon(v-if="!src" color="#FFFFFF" ) no_photography
     v-img(:src="src" v-else)
+
+    photo-swipe(
+      :isOpen="isOpenGallery"
+      :items="avatar"
+      :options="optionsGallery"
+      @close="hidePhotoGallery")
 </template>
 
 <script>
+import { PhotoSwipe } from 'v-photoswipe';
 import SvgIcon from './SvgIcon.vue';
 
 export default {
@@ -26,17 +33,63 @@ export default {
       type: String,
       default: 'private',
     },
-
+    fullscreen: {
+      type: Boolean,
+      default: false,
+    },
+    urlMax: {
+      type: String,
+      default: null,
+    },
   },
   components: {
     SvgIcon,
+    PhotoSwipe,
+  },
+  data() {
+    return {
+      isOpenGallery: false,
+      optionsGallery: {
+        index: 0,
+        showHideOpacity: true,
+        fullscreenEl: false,
+        zoomEl: false,
+        shareEl: false,
+        arrowEl: false,
+        counterEl: false,
+      },
+      avatar: [],
+    };
+  },
+  methods: {
+    openFullScreen() {
+      if (this.fullscreen && this.src) {
+        this.isOpenGallery = true;
+        this.$set(this.optionsGallery, 'index', 0);
+      }
+    },
+
+    hidePhotoGallery() {
+      this.isOpenGallery = false;
+    },
+
+    loadImage() {
+      const image = new Image();
+      image.src = this.urlMax || this.src;
+
+      image.onload = (el) => {
+        this.avatar = [
+          {
+            w: el.target.width,
+            h: el.target.height,
+            src: this.urlMax || this.src,
+          },
+        ];
+      };
+    },
+  },
+  created() {
+    if (this.src) this.loadImage();
   },
 };
 </script>
-
-<style lang="stylus" scoped>
-  input[type="file"] {
-    position absolute
-    left -500px
-  }
-</style>

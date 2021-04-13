@@ -1,9 +1,9 @@
 `<template lang="pug">
   .order-container
     v-row.icon-container(justify='center' align='center' v-if="loadType ==='icon'")
-      semipolar-spinner(:animation-duration="1500"
+      fulfilling-square-spinner(:animation-duration="1500"
                         :size="75"
-                        :color="'#fd7363'")
+                        :color="'#56D68B'")
     v-row.text-container(justify='center'
                          align='center'
                          v-else-if="loadType === 'text'")
@@ -24,7 +24,7 @@
 
 <script>
 import axios from 'axios';
-import { SemipolarSpinner } from 'epic-spinners';
+import { FulfillingSquareSpinner } from 'epic-spinners';
 import OrderCard2 from '../OrderCard2.vue';
 import dialog from '../../scripts/openDialog';
 import logger from '../../scripts/logger';
@@ -51,7 +51,7 @@ export default {
   components: {
     OrderCard2,
     axios,
-    SemipolarSpinner,
+    FulfillingSquareSpinner,
   },
   methods: {
     route(routeName) {
@@ -337,7 +337,7 @@ export default {
   }
   .route-btn {
     display block
-    margin-bottom: 15px
+    margin-bottom: 5px
     background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
     color #FFF
     text-transform none

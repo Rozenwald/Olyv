@@ -51,18 +51,17 @@
     </plugin>
     <universal-links>
         <host name="cabinet.olyv.services">
-            <path url="/recoveryPassword/" event="recoveryPassword"/>
-            <path url="/recoveryPassword" event="recoveryPassword"/>
+            <path url="/updatePassword/" event="updatePassword"/>
+            <path url="/updatePassword" event="updatePassword"/>
+            <path url="/confirmCabinet/" event="confirmEmail"/>
+            <path url="/confirmCabinet" event="confirmEmail"/>
             <path url="*" event="anyPath"/>
         </host>
         <host name="test.cabinet.olyv.services">
-            <path url="/recoveryPassword/" event="recoveryPassword"/>
-            <path url="/recoveryPassword" event="recoveryPassword"/>
-            <path url="*" event="anyPath"/>
-        </host>
-        <host name="olyv.page.link" scheme="https">
-            <path url="/recoveryPassword/" event="recoveryPassword"/>
-            <path url="/recoveryPassword" event="recoveryPassword"/>
+            <path url="/updatePassword/" event="updatePassword"/>
+            <path url="/updatePassword" event="updatePassword"/>
+            <path url="/confirmCabinet/" event="confirmEmail"/>
+            <path url="/confirmCabinet" event="confirmEmail"/>
             <path url="*" event="anyPath"/>
         </host>
     </universal-links>

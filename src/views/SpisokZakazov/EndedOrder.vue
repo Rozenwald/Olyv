@@ -1,4 +1,4 @@
-`<template lang="pug">
+<template lang="pug">
   .order-container
     v-row.icon-container(justify='center' align='center' v-if="loadType ==='icon'")
       fulfilling-square-spinner(:animation-duration="1500"
@@ -11,8 +11,8 @@
         span.errorText-container {{textForUser1}} <br/>
         span.errorText-container {{textForUser2}}
     OrderCard2(v-else-if="loadType === 'order'"
-               v-for='item in processOrders'
-               type='process'
+               v-for='item in endedOrders'
+               type='ended'
                :key='item._id'
                :item='item')
 </template>
@@ -21,15 +21,15 @@
 import axios from 'axios';
 import { FulfillingSquareSpinner } from 'epic-spinners';
 import OrderCard2 from '../OrderCard2.vue';
-import dialog from '../../scripts/openDialog';
 import logger from '../../scripts/logger';
 import dialogMessages from '../../scripts/dialogMessages';
+import dialog from '../../scripts/openDialog';
 
 export default {
-  name: 'allOrder',
+  name: 'endedOrder',
   data: () => ({
-    processOrders: null,
-    type: 'process',
+    endedOrders: null,
+    type: 'ended',
     loadType: 'icon',
     textForUser1: '',
     textForUser2: '',
@@ -40,31 +40,30 @@ export default {
     FulfillingSquareSpinner,
   },
   methods: {
-    // Получаю объект с массивом заказов которые в исполнении
-    getProcessOrders() {
+    getEndedOrders() {
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
           method: 'receive',
           submethod: 'executor',
-          status: 'process',
+          status: 'completed',
         })
-        .then((response) => (this.checkProcessOrdersResponse(response)))
+        .then((response) => (this.checkEndedOrdersResponse(response)))
         .catch((error) => {
           logger.log(error);
         });
     },
-    // Создаю массив и отправляю его во Vuex
-    checkProcessOrdersResponse(response) {
+
+    checkEndedOrdersResponse(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
-          this.processOrders = response.data.data;
+          this.endedOrders = response.data.data;
           this.loadType = 'order';
           // this.$store.dispatch('setProcessOrder', this.processOrders);
           break;
         case 'notExist':
-          this.textForUser1 = 'Вас пока не взяли исполнителем';
-          this.textForUser2 = 'Советуем предложить заказчику более интересные условия';
+          this.textForUser1 = 'У вас нет завершенных заказов';
           this.loadType = 'text';
           break;
         case 'notAuthenticate':
@@ -92,14 +91,14 @@ export default {
   watch: {
     token() {
       if (this.token) {
-        this.getProcessOrders();
+        this.getEndedOrders();
       }
     },
   },
   created() {
-    this.$store.dispatch('setChipStatus', 'process');
+    this.$store.dispatch('setChipStatus', 'ended');
     if (this.token) {
-      this.getProcessOrders();
+      this.getEndedOrders();
     }
   },
 };

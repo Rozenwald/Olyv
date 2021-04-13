@@ -2,13 +2,15 @@
   v-container
     v-row.verification(align='center' justify='center' ref="wrp")
       v-sheet.center-wrp(elevation="1" v-if="!content")
+
         .verification-description(
           v-text="description"
-          v-show="user.verification == 'notCompleted' && !content && !comment"
-        )
+          v-show="user.verification == 'notCompleted' && !content && !comment")
+
         .comment-wrp(v-show="comment")
           .comment-description(v-text="commentDescription")
           .comment(v-text="comment")
+
         .await-description(
           v-text="descriptionAwait"
           v-show="user.verification == 'await' && !comment")
@@ -22,6 +24,13 @@
             rounded
             @click="actionPhoto"
             v-text="comment ? 'Выбрать другое фото' : 'Добавить фото'")
+
+        v-row.btn-open-text(align='center' justify='center' v-if="!content")
+          v-expansion-panels
+            v-expansion-panel(v-for="(item,i) in 1" :key="i")
+              v-expansion-panel-header(
+                v-show="!isFocus") Почему это безопасно?
+              v-expansion-panel-content.panel-description(v-text="descriptionPanel")
 
       v-sheet.selected-img-wrp(v-else)
         .img-wrp(@click="setMoreActionImg")
@@ -54,7 +63,8 @@ export default {
     photoIsLoad: false,
     descriptionAwait: 'Ожидание верификации',
     commentDescription: 'Вам было отказано в верификации со следующим комментарием:',
-    description: 'Для получения статуса исполнителя необходимо пройти верификацию. Пожалуйста, загрузите фотографию паспорта.',
+    description: 'Подтвердите, пожалуйста, свою личность для получения статуса "Исполнитель". Необходимы фотографии двух страниц паспорта: основная и разворот с регистрацией.',
+    descriptionPanel: 'Верификация абсолютно безопасна, и  необходима для предотвращения возможных мошеннических действий, направленных против Вас или других пользователей Приложения. Данная мера необходима для восстановления Вами входа в аккаунт(в случае утери e-mail), для помощи Вам в решении спорных рабочих ситуаций, а также повышает уровень доверия к Вам Заказчиков. Ваша персональная информация  размещается и обрабатывается строго конфиденциально: Ваши данные защищены множеством протоколов шифрования с применением современных технологий безопасности. Все взаимодействия с Вашими персональными данными, строго регламентируются и охраняются Законами Российской Федерации (Федеральный Закон #152) и нормами международного права.',
     content: '',
     wrpWidth: null,
     moreActionImg: false,
@@ -68,7 +78,7 @@ export default {
       }
     },
 
-    ...mapActions('actionPhotoDialog', [
+    ...mapActions('actionPhotoDialogVerification', [
       'setStatus',
       'setSourceType',
     ]),
@@ -109,7 +119,7 @@ export default {
         options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
       }
 
-      if (srcType === 'camera') {
+      if (srcType === 'camera-photo') {
         // eslint-disable-next-line no-undef
         options.sourceType = Camera.PictureSourceType.CAMERA;
       }
@@ -244,7 +254,7 @@ export default {
     },
 
     sourceType: {
-      get() { return this.$store.state.actionPhotoDialog.sourceType; },
+      get() { return this.$store.state.actionPhotoDialogVerification.sourceType; },
       set(value) { this.setSourceType(value); },
     },
 
@@ -265,7 +275,7 @@ export default {
         logger.log('open gallery');
       }
 
-      if (this.sourceType === 'camera') {
+      if (this.sourceType === 'camera-photo') {
         this.choosePhoto(options);
         logger.log('open camera');
       }
@@ -368,5 +378,14 @@ export default {
     font-weight 400
     margin-top: 12px;
   }
-
+  .panel-description {
+    margin 10px
+    font-size 14px
+    margin-top 5px
+    word-break: normal
+  }
+  .btn-open-text{
+    margin 5px
+    margin-top 25px
+  }
 </style>

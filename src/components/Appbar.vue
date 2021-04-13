@@ -8,9 +8,9 @@
         @click="stepback()")
       v-icon(color="white") arrow_back
     v-row(align='center', justify='center')
-      .toolbar-avatar(v-show="currentRouteName == 'chat'")
+      .toolbar-avatar(v-show="currentRouteName == 'chat'"  @click='openProfile()')
         avatar(size="36" color="#AEAEAE" :src="photo")
-      .toolbar-title
+      .toolbar-title( @click='openProfile()')
         .toolbar-title-text {{title}}
     v-btn.toolbar-setting-btn(
         v-if="showSettingBtn"
@@ -67,6 +67,12 @@ export default {
           return false;
         case 'processOrder':
           return false;
+        case 'endedOrder':
+          return false;
+        case 'successUpdatePassword':
+          return false;
+        case 'confirmCabinet':
+          return false;
         default:
           return true;
       }
@@ -104,8 +110,14 @@ export default {
     route() {
       this.$router.push({ name: 'setting' });
     },
+
     stepback() {
       this.$router.back();
+    },
+
+    openProfile() {
+      // eslint-disable-next-line no-underscore-dangle
+      if (this.userRequest._id && this.currentRouteName === 'chat') this.$root.$emit('openProfile', this.userRequest._id);
     },
   },
 };

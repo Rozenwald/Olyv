@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-sheet.user-field(elevation="1" rounded)
+  v-sheet.user-field(elevation="1" rounded @click='openProfile()')
     v-list-item
       v-list-item-avatar(size="62")
         avatar(type="public" size="62" :src="photo")
@@ -28,6 +28,12 @@ export default {
     user: {
       type: Object,
       default: () => ({}),
+    },
+  },
+  methods: {
+    openProfile() {
+      // eslint-disable-next-line no-underscore-dangle
+      if (this.user._id) this.$root.$emit('openProfile', this.user._id);
     },
   },
   computed: {

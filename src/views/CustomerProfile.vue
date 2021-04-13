@@ -2,7 +2,9 @@
   v-container
     user-profile-header
     verification-status
-    // review
+    description
+    gallery
+    review
     v-btn.exit-btn(block :loading='loading' @click='exit')
       v-icon(dense color="red") exit_to_app
       span.text Выход
@@ -20,6 +22,8 @@ import logger from '../scripts/logger';
 import dialogMessages from '../scripts/dialogMessages';
 // eslint-disable-next-line import/no-cycle
 import router from '../router';
+import Description from '../components/customerProfile/Description.vue';
+import Gallery from '../components/customerProfile/Gallery.vue';
 
 export default {
   name: 'CustomerProfile',
@@ -29,6 +33,8 @@ export default {
     Review,
     store,
     axios,
+    Description,
+    Gallery,
   },
   data() {
     return {
@@ -54,7 +60,6 @@ export default {
         });
     },
     checkResponse(response) {
-      logger.log(response);
       switch (response.data.status) {
         case 'notAuthenticate':
           dialog.open(
@@ -75,16 +80,6 @@ export default {
     exit() {
       this.loading = true;
       auth.exit();
-    },
-
-    receive() {
-      axios.post(`${this.$baseNotificationUrl}api/v1/private/tokenApp`, {
-        token: this.notificationToken,
-        method: 'receive',
-        submethod: 'tokenApp',
-      })
-        .then((response) => logger.log(response))
-        .catch((error) => logger.log(error));
     },
   },
   computed: {
@@ -107,11 +102,7 @@ export default {
     },
   },
   created() {
-    this.receive();
     this.$store.commit('setTitle', 'Личный кабинет');
-    if (this.user.verification === 'notCompleted') {
-      this.getData();
-    }
     this.getData();
   },
   beforeRouteEnter(to, from, next) {
