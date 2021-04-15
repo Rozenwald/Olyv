@@ -179,7 +179,7 @@ export default {
           case 'process':
             this.completeOrder();
             break;
-          case 'ended':
+          case ('endedExecutor'):
             this.openFeedbackDialog();
             break;
           default:
@@ -212,7 +212,7 @@ export default {
           case 'process':
             this.goChat();
             break;
-          case 'ended':
+          case ('endedExecutor'):
             this.goChat();
             break;
           default:
@@ -243,7 +243,10 @@ export default {
     },
 
     order() {
-      return this.$store.getters.getMyOrder;
+      if (this.orderType !== 'endedExecutor') {
+        return this.$store.getters.getMyOrder;
+      }
+      return this.$store.getters.getMyFeedbackOrder;
     },
 
     formatedCost() {
@@ -264,7 +267,7 @@ export default {
           return 'Отменить';
         case 'process':
           return 'Завершить';
-        case 'ended':
+        case 'endedExecutor':
           return 'Отзыв';
         default:
           return 'Отозваться';
@@ -281,7 +284,7 @@ export default {
           return 'Чат';
         case 'process':
           return 'Чат';
-        case 'ended':
+        case 'endedExecutor':
           return 'Чат';
         default:
           return 'Своя цена';

@@ -7,7 +7,7 @@
     v-btn.exit-btn(block :loading='loading' @click='exit')
       v-icon(dense color="red") exit_to_app
       span.text Выход
-    review
+    review(type="myProfile")
 </template>
 
 <script>

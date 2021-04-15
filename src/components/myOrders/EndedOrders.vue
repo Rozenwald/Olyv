@@ -11,10 +11,10 @@
         span.errorText-container {{textForUser1}} <br/>
         span.errorText-container {{textForUser2}}
     FeedbackOrderCard(v-else-if="loadType === 'order'"
-              v-for='order in endedOrders'
-              type="ended"
-              :key='order.idOrder'
-              :item='order')
+              v-for='item in endedOrders'
+              type="endedCustomer"
+              :key='item.idOrder'
+              :item='item')
 </template>
 
 <script>

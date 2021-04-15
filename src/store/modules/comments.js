@@ -1,22 +1,22 @@
 const mutations = {
-  setMyComments(state, data) {
-    state.myComments = data;
-    console.log(state.myComments);
+  setComments(state, data) {
+    state.comments = data;
+    console.log(state.comments);
   },
 };
 
 const actions = {
-  setMyComments({ commit }, data) {
-    commit('setMyComments', data);
+  setComments({ commit }, data) {
+    commit('setComments', data);
   },
 };
 
 const getters = {
-  getMyComments: (state) => state.myComments,
+  getComments: (state) => state.comments,
 };
 
 const state = {
-  myComments: null,
+  comments: null,
 };
 
 export default {

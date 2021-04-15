@@ -2,12 +2,12 @@
   .review
     .title-review Отзывы
     .comments
-      comment(v-if="myComments !== null"
-              v-for='item in myComments'
+      comment(v-if="comments !== null"
+              v-for='item in comments'
               type='comments'
               :key='item._id'
               :item='item'
-              v-show="myComments")
+              v-show="comments")
       v-row.no-comments-wrp(v-else align='center' justify='center')
         .no-comments Никто не оставил отзывов
 </template>
@@ -23,24 +23,32 @@ export default {
   components: {
     Comment,
   },
+  props: {
+    type: String,
+    idUser: String,
+  },
   data() {
     return {
-      comments: null,
+
     };
   },
   methods: {
-    async getFeedbacks() {
-      const res = await this.$root.feedbackAPI.receiveInner();
-      console.log(res);
-      this.comments = this.checkFeedbackResponse(res);
-      console.log(this.comments);
+    async init() {
+      console.log(this.type);
+      console.log(this.idUser);
+      if (this.type === 'myProfile') {
+        const response = await this.$root.feedbackAPI.receiveInner();
+        return this.checkFeedbackResponse(response) || {};
+      }
+      const response = await this.$root.feedbackAPI.receiveByUserId(this.idUser);
+      return this.checkFeedbackResponse(response) || {};
     },
 
     checkFeedbackResponse(response) {
       console.log(response);
       switch (response.data.status) {
         case 'success':
-          this.$store.dispatch('setMyComments', response.data.data);
+          this.$store.dispatch('setComments', response.data.data);
           return response.data.data;
         case 'notExist':
           return null;
@@ -61,12 +69,12 @@ export default {
     },
   },
   computed: {
-    myComments() {
-      return this.$store.getters.getMyComments;
+    comments() {
+      return this.$store.getters.getComments;
     },
   },
   created() {
-    this.getFeedbacks();
+    this.init();
   },
 };
 </script>

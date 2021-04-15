@@ -149,7 +149,7 @@ export default {
           return 'Ожидание';
         case 'process':
           return 'В процессе';
-        case 'ended':
+        case 'endedCustomer':
           return 'Ожидает отзыв';
         default:
           return '';
@@ -162,7 +162,7 @@ export default {
           return '#FBC02D';
         case 'process':
           return '#FE7664';
-        case 'ended':
+        case 'endedCustomer':
           return '#FBC02D';
         default:
           return 'inherit';

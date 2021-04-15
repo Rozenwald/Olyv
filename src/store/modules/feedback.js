@@ -19,6 +19,7 @@ const mutations = {
 
   setMyFeedbackOrder(state, data) {
     state.myFeedbackOrder = data;
+    console.log(state.myFeedbackOrder);
   },
 };
 

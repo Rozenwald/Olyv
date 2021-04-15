@@ -32,11 +32,12 @@
               rounded
               color='#56D68B'
               outlined
-              @click='secondBtn()')
+              @click='close()')
             v-icon close
 </template>
 
 <script>
+import feedbackDialog from '../scripts/openFeedbackDialog';
 
 export default {
   name: 'FeedbackDialog',
@@ -59,6 +60,10 @@ export default {
       };
       const res = await this.$root.feedbackAPI.add(feedbackObject);
       console.log(res);
+      feedbackDialog.close();
+    },
+    close() {
+      feedbackDialog.close();
     },
   },
   computed: {

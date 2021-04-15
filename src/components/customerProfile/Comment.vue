@@ -1,24 +1,23 @@
 <template lang="pug">
   v-card.comment
     v-list-item(dense)
-      avatar.avatar(czolor="#56D68B" :src="photo")
+      avatar.avatar(color="#56D68B" :src="photo")
       v-list-item-content
         v-list-item-title {{user.name}} {{user.lastname}}
       v-list-item-action
-        v-row.rating-wrp(align='center' justify='center')
-          v-rating(
-            :length="1"
+        v-row.rating-wrp(v-if="item.rating" align='center' justify='center')
+          v-rating.rating-wrp-star(
+            :length="5"
             readonly
-            :value="1"
             :half-increments="true"
             :dense="true"
             color="#FFCA10"
             background-color="#FFCA10"
-            size="14"
+            :value="item.rating"
+            size="10"
           )
-          span {{user.rating}}
-    v-card-text {{item.comment}}
-    v-card-text Оценка: {{item.rating}}
+          span.rating-text ({{item.rating}})
+    v-card-text.comment-text {{item.comment}}
 </template>
 
 <script>
@@ -50,12 +49,9 @@ export default {
       let response = await this.getUserData(this.item.from);
       this.user = this.checkResponse(response) || {};
 
-      this.idUserCard = this.user;
+      this.idUserCard = this.user.idUserCard;
       response = await this.getUserCardData(this.idUserCard);
       this.userCard = this.checkResponse(response) || { _id: '123' };
-
-      console.log(this.user);
-      console.log(this.userCard);
     },
 
     async getUserData(id) {
@@ -88,8 +84,8 @@ export default {
       }
       return null;
     },
+
     checkResponse(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           return response.data.data;
@@ -115,7 +111,6 @@ export default {
       return this.$store.getters.getToken;
     },
     photo() {
-      console.log(this.user);
       if (!this.user) {
         return '';
       }
@@ -126,7 +121,6 @@ export default {
         return null;
       }
       const url = this.user.photo[this.user.photo.length - 1].urlMin.substr(1);
-      console.log(url);
       return this.$baseUrlNoPort + url;
     },
   },
@@ -143,7 +137,14 @@ export default {
     box-shadow none !important
     margin-top 15px
   }
-
+  .rating-text {
+    margin-left 10px
+  }
+  .comment-text {
+    margin-top 5px
+    margin-left 5px
+    margin-right 5px
+  }
   .avatar {
     margin-right 16px
     margin-bottom 8px
@@ -160,16 +161,17 @@ export default {
 
   .rating-wrp {
     margin 0
-    font-size 14px
-    line-height 1
+    font-size 12px
+    line-height 1;
+  }
+  .rating-wrp {
+    margin 0
+    font-size 12px
+    line-height 1;
   }
 
   .v-list-item__title {
     font-weight bold
     font-size 14px
-  }
-
-  .v-rating {
-    margin-right 3px
   }
 </style>

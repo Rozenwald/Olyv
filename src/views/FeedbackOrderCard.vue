@@ -28,7 +28,7 @@ import moment from 'moment';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
-  name: 'OrderCard1',
+  name: 'FeedbackOrderCard',
   components: {
     SvgIcon,
   },
@@ -45,13 +45,16 @@ export default {
     route() {
       // eslint-disable-next-line no-underscore-dangle
       this.$store.dispatch('setType', this.type);
-      console.log(this.item);
-      if (this.orderType !== 'ended') {
-        this.$store.dispatch('setMyOrder', this.item);
-      } else {
+      if ((this.orderType === 'endedCustomer') || (this.orderType === 'endedExecutor')) {
         this.$store.dispatch('setMyFeedbackOrder', this.item);
+      } else {
+        this.$store.dispatch('setMyOrder', this.item);
       }
-      this.$router.push({ name: 'customerMoreInfo' });
+      if (this.type === 'endedCustomer') {
+        this.$router.push({ name: 'customerMoreInfo' });
+      } else {
+        this.$router.push({ name: 'executorMoreInfo' });
+      }
     },
   },
   computed: {
