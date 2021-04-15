@@ -8,17 +8,19 @@
       v-skeleton-loader(type="text" :loading="!hasData" width="90")
         span {{name}} {{lastname}}
     v-row.ratting(align='center' justify='center')
-      v-skeleton-loader(type="text" :loading="!hasData" width="70")
-        v-rating(
-          :length="5"
-          readonly
-          :half-increments="true"
-          dense
-          color="#FFCA10"
-          background-color="#FFCA10"
-          size="14"
-          value="3.5"
-        )
+      v-skeleton-loader.ratting__skeleton(type="text" :loading="!hasData" width="70")
+        v-row.ratting(align='center' justify='center')
+          v-rating.ratting__skeleton__star(
+            :length="5"
+            readonly
+            :half-increments="true"
+            dense
+            color="#FFCA10"
+            background-color="#FFCA10"
+            size="14"
+            :value="userCard.rating"
+          )
+          span.ratting__skeleton__text ({{userCard.rating}})
     user-profile-subheader(v-show="false")
     v-row.actions(align='center' justify='center')
       v-btn.edit-data(
@@ -209,6 +211,11 @@ export default {
     },
   },
   computed: {
+
+    userCard() {
+      return this.$store.getters.getUserCard;
+    },
+
     user() {
       return this.$store.getters.getUser;
     },
@@ -307,7 +314,14 @@ export default {
   }
   .ratting {
     margin-bottom 5px
-    margin-top 5px
+    margin-top 5px;
+    &__skeleton {
+      &__star {
+        margin-right 5px
+      }
+      &__text {
+      }
+    }
   }
 
   .actions button {

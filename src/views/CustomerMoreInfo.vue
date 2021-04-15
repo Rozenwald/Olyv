@@ -1,6 +1,6 @@
 <template lang="pug">
   v-container
-    order-information.order-information(:order="order")
+    order-information.order-information(:order="(orderType !== 'ended') ? order : order.order")
     responded-users.responded-users(v-if="orderType == 'await'")
     bottom-field.bottom-field(v-if="orderType == 'await' || 'ended'")
     executor-card.executor-card(v-if="orderType == 'process'")
@@ -68,19 +68,21 @@ export default {
     },
   },
   computed: {
-    token() {
-      return this.$store.getters.getToken;
-    },
-
     orderType() {
       return this.$store.getters.getOrderType;
     },
-
+    token() {
+      return this.$store.getters.getToken;
+    },
     order() {
-      return this.$store.getters.getMyOrder;
+      if (this.orderType !== 'ended') {
+        return this.$store.getters.getMyOrder;
+      }
+      return this.$store.getters.getMyFeedbackOrder;
     },
   },
   created() {
+    console.log(this.orderType);
     console.log(this.order);
     this.$store.commit('setTitle', 'Мои заказы');
 

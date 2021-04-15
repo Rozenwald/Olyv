@@ -2,13 +2,21 @@
   .review
     .title-review Отзывы
     .comments
-      comment(v-if="items !== null" v-for="item in items" :key="item.id" v-show="items")
+      comment(v-if="myComments !== null"
+              v-for='item in myComments'
+              type='comments'
+              :key='item._id'
+              :item='item'
+              v-show="myComments")
       v-row.no-comments-wrp(v-else align='center' justify='center')
         .no-comments Никто не оставил отзывов
 </template>
 
 <script>
 import Comment from './Comment.vue';
+import dialog from '../../scripts/openDialog';
+import logger from '../../scripts/logger';
+import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
   name: 'review',
@@ -17,8 +25,48 @@ export default {
   },
   data() {
     return {
-      items: ['Мргл мргл мрльк мрльк мрррглл флллурлоккр мурчаль н лок млгггррр мурчаль мрругл дрррзя ммгр ммм мммм флллурлок'],
+      comments: null,
     };
+  },
+  methods: {
+    async getFeedbacks() {
+      const res = await this.$root.feedbackAPI.receiveInner();
+      console.log(res);
+      this.comments = this.checkFeedbackResponse(res);
+      console.log(this.comments);
+    },
+
+    checkFeedbackResponse(response) {
+      console.log(response);
+      switch (response.data.status) {
+        case 'success':
+          this.$store.dispatch('setMyComments', response.data.data);
+          return response.data.data;
+        case 'notExist':
+          return null;
+        case 'notAuthentucate':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            false,
+            () => { this.$router.push({ name: 'auth' }); },
+          );
+          break;
+        default:
+          logger.log(response.status);
+          break;
+      }
+      return null;
+    },
+  },
+  computed: {
+    myComments() {
+      return this.$store.getters.getMyComments;
+    },
+  },
+  created() {
+    this.getFeedbacks();
   },
 };
 </script>

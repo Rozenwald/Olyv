@@ -12,6 +12,7 @@ class FeedbackAPI {
       method: 'add',
       idFeedback: feedback.id,
       rating: feedback.rating,
+      comment: feedback.comment || null,
       token: this.token,
     };
 
