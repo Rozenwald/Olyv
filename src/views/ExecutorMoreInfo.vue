@@ -1,9 +1,12 @@
 <template lang="pug">
   v-container.executor-more-info-wrp
     user-card.user-card(:user="customerUser")
-    address-field.address-field(:order="order")
-    order-information.order-information(:order="order")
-    bottom-field.bottom-field(:order="order")
+    address-field.address-field(
+      :order="(orderType !== 'endedExecutor') ? order : order.order")
+    order-information.order-information(
+      :order="(orderType !== 'endedExecutor') ? order : order.order")
+    bottom-field.bottom-field(
+      :order="(orderType !== 'endedExecutor') ? order : order.order")
 </template>
 
 <script>
@@ -48,7 +51,7 @@ export default {
           method: 'receive',
           submethod: 'id',
           token: this.token,
-          id: this.order.idUserCustomer,
+          id: (this.orderType !== 'endedExecutor') ? this.order.idUserCustomer : this.order.order.idUserCustomer,
         })
         .then((response) => (this.checkCustomerUserData(response)))
         // eslint-disable-next-line no-return-assign
@@ -79,16 +82,19 @@ export default {
 
   },
   computed: {
-    order() {
-      return this.$store.getters.getMyOrder || {};
+    token() {
+      return this.$store.getters.getToken;
     },
 
     orderType() {
       return this.$store.getters.getOrderType;
     },
 
-    token() {
-      return this.$store.getters.getToken;
+    order() {
+      if (this.orderType !== 'endedExecutor') {
+        return this.$store.getters.getMyOrder;
+      }
+      return this.$store.getters.getMyFeedbackOrder;
     },
   },
   watch: {

@@ -8,12 +8,14 @@ import comment from './modules/comment';
 import userDataDialog from './modules/userDataDialog';
 import user from './modules/user';
 import chat from './modules/chat';
+import comments from './modules/comments';
 import myOrder from './modules/myOrder';
 import allOrder from './modules/allOrders';
 import currentPosition from './modules/currentPosition';
 import permissions from './modules/permissions';
 import dialog from './modules/dialog';
 import feedbackDialog from './modules/feedbackDialog';
+import feedback from './modules/feedback';
 import route from './modules/route';
 import map from './modules/map';
 import actionPhotoDialog from './modules/actionPhotoDialog';
@@ -36,6 +38,7 @@ export default new Vuex.Store({
   },
   modules: {
     bottomSheet,
+    comments,
     bottomNavigation,
     appbar,
     setting,
@@ -49,6 +52,7 @@ export default new Vuex.Store({
     permissions,
     dialog,
     feedbackDialog,
+    feedback,
     route,
     map,
     actionPhotoDialog,

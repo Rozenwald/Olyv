@@ -10,17 +10,17 @@
       .errorText-container
         span.errorText-container {{textForUser1}} <br/>
         span.errorText-container {{textForUser2}}
-    OrderCard1(v-else-if="loadType === 'order'"
-              v-for='order in endedOrders'
-              type="ended"
-              :key='order.id'
-              :item='order')
+    FeedbackOrderCard(v-else-if="loadType === 'order'"
+              v-for='item in endedOrders'
+              type="endedCustomer"
+              :key='item.idOrder'
+              :item='item')
 </template>
 
 <script>
 import axios from 'axios';
 import { FulfillingSquareSpinner } from 'epic-spinners';
-import OrderCard1 from '../../views/OrderCard1.vue';
+import FeedbackOrderCard from '../../views/FeedbackOrderCard.vue';
 import logger from '../../scripts/logger';
 import dialogMessages from '../../scripts/dialogMessages';
 import dialog from '../../scripts/openDialog';
@@ -28,34 +28,59 @@ import dialog from '../../scripts/openDialog';
 export default {
   name: 'ended-orders',
   data: () => ({
+    orders: [],
     loadType: 'icon',
     textForUser1: '',
     textForUser2: '',
   }),
   components: {
     axios,
-    OrderCard1,
+    FeedbackOrderCard,
     FulfillingSquareSpinner,
   },
   methods: {
-    getData() {
-      axios
-        .post(`${this.$baseUrl}api/v1/private/order`, {
-          token: this.token,
-          method: 'receive',
-          submethod: 'customer',
-          status: 'completed',
-        })
-        .then((response) => (this.checkResponse(response)))
-        .catch((error) => {
-          logger.log(error);
-        });
-    },
-    checkResponse(response) {
-      switch (response.data.status) {
+    async getFeedbacks() {
+      console.log(this.token);
+      const res = await this.$root.feedbackAPI.receiveMyAwait();
+      console.log(res);
+      switch (res.data.status) {
         case 'success':
-          this.$store.dispatch('setMyEndedOrders', response.data.data);
+          res.data.data.forEach((el) => {
+            if (el.order.idUserCustomer === el.from) {
+              this.orders.push(el);
+            }
+          });
+          this.orders.reverse();
+          console.log(this.orders);
+          this.$store.dispatch('setAwaitCustomerFeedbacks', this.orders);
           this.loadType = 'order';
+          break;
+        case 'notAccess':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            () => { this.$router.push({ name: 'auth' }); },
+          );
+          break;
+        case 'notSuccess':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          break;
+        case 'alreadyExist':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('alreadyExist'),
+            true,
+            false,
+          );
+          break;
+        case 'notExist ':
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -66,12 +91,8 @@ export default {
             () => { this.$router.push({ name: 'auth' }); },
           );
           break;
-        case 'notExist':
-          this.textForUser1 = 'Ни один из ваших заказов еще не завершён';
-          this.loadType = 'text';
-          break;
         default:
-          logger.log(response);
+          logger.log(res);
           break;
       }
     },
@@ -84,11 +105,11 @@ export default {
       return this.$store.getters.getOrderType;
     },
     endedOrders() {
-      return this.$store.getters.getMyEndedOrders;
+      return this.$store.getters.getAwaitCustomerFeedbacks;
     },
   },
   created() {
-    this.getData();
+    this.getFeedbacks();
     this.$store.dispatch('setChipStatus', 'ended');
   },
 };

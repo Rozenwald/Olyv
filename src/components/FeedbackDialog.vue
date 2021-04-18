@@ -4,12 +4,14 @@
         v-card-title.dialog-title {{dialogTitle}}
       v-row(align='center' justify="center")
         v-rating.rating(
+            v-model="rating"
             background-color="warning lighten-1"
             color="warning"
             length="5"
-            value="4.5")
+            :value="0")
       v-row(align='center' justify="center")
-        v-textarea.dialog-text(v-model="keyword"
+        v-textarea.dialog-text(
+            v-model="comment"
             solo
             outlined
             flat
@@ -23,21 +25,24 @@
               rounded
               depressed
               color='#56D68B'
-              @click='actionFirstBtn')
+              @click='addFeedback()')
             v-icon(color='#fff') done
           v-btn.dialog-btn-action(v-show="secondBtn"
               x-large
               rounded
               color='#56D68B'
               outlined
-              @click='actionSecondBtn')
+              @click='close()')
             v-icon close
 </template>
 
 <script>
+import feedbackDialog from '../scripts/openFeedbackDialog';
 
 export default {
   name: 'FeedbackDialog',
+  components: {
+  },
   data() {
     return {
     };
@@ -46,8 +51,25 @@ export default {
     show: Boolean,
   },
   methods: {
+    async addFeedback() {
+      console.log(this.rating);
+      const feedbackObject = {
+        id: this.order._id,
+        comment: this.comment,
+        rating: this.rating,
+      };
+      const res = await this.$root.feedbackAPI.add(feedbackObject);
+      console.log(res);
+      feedbackDialog.close();
+    },
+    close() {
+      feedbackDialog.close();
+    },
   },
   computed: {
+    order() {
+      return this.$store.getters.getMyFeedbackOrder;
+    },
     visible: {
       get() {
         return this.$store.getters.getFeedbackVisibleDialog;
@@ -89,8 +111,8 @@ export default {
   .dialog-text {
     position relative
     background-color #fFf;
-    margin-right 10px !important
-    margin-left 10px !important
+    margin-right 20px !important
+    margin-left 20px !important
     text-align center
   }
 
