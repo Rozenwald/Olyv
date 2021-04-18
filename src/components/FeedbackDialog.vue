@@ -1,17 +1,17 @@
-<template lang="pug">
+  <template lang="pug">
     v-dialog.dialog(v-model="visible")
       v-row(align='center' justify="center")
         v-card-title.dialog-title {{dialogTitle}}
       v-row(align='center' justify="center")
         v-rating.rating(
             v-model="rating"
+            half-increments
             background-color="warning lighten-1"
             color="warning"
             length="5"
-            :value="0")
+            value="4.5")
       v-row(align='center' justify="center")
         v-textarea.dialog-text(
-            v-model="comment"
             solo
             outlined
             flat
@@ -32,16 +32,17 @@
               rounded
               color='#56D68B'
               outlined
-              @click='close()')
+              @click='actionSecondBtn')
             v-icon close
 </template>
 
 <script>
-import feedbackDialog from '../scripts/openFeedbackDialog';
+import Feedback from '../classes/Models/Feedback';
 
 export default {
   name: 'FeedbackDialog',
   components: {
+    FeedbackAPI,
   },
   data() {
     return {
@@ -52,23 +53,20 @@ export default {
   },
   methods: {
     async addFeedback() {
-      console.log(this.rating);
-      const feedbackObject = {
-        id: this.order._id,
-        comment: this.comment,
-        rating: this.rating,
-      };
-      const res = await this.$root.feedbackAPI.add(feedbackObject);
-      console.log(res);
-      feedbackDialog.close();
-    },
-    close() {
-      feedbackDialog.close();
+      const raw = await this.$root.feedbackAPI.receiveMyAwait();
+
+      const rawData = raw.data.data;
+      rawData.foreach((el) => {
+        const feedback = new Feedback(el);
+        arr.push( );
+      });
+      const res = await this.$root.feedbackAPI.add()
     },
   },
   computed: {
     order() {
-      return this.$store.getters.getMyFeedbackOrder;
+      console.log(this.$store.getters.getMyOrder);
+      return this.$store.getters.getMyOrder;
     },
     visible: {
       get() {
