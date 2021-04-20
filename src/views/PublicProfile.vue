@@ -3,6 +3,7 @@
     ProfileHeader(:user='user')
     ProfileDescription(:userCard='userCard')
     ProfileGallery(:userCard='userCard')
+    review(type="publicProfile" :idUser='this.userId')
 </template>
 
 <script>
@@ -13,6 +14,7 @@ import logger from '../scripts/logger';
 import dialog from '../scripts/openDialog';
 import dialogMessages from '../scripts/dialogMessages';
 
+import Review from '../components/customerProfile/Review.vue';
 import ProfileHeader from '../components/publicProfile/Header.vue';
 import ProfileDescription from '../components/publicProfile/Description.vue';
 import ProfileGallery from '../components/publicProfile/Gallery.vue';
@@ -20,6 +22,7 @@ import ProfileGallery from '../components/publicProfile/Gallery.vue';
 export default {
   name: 'public-header',
   components: {
+    Review,
     ProfileHeader,
     ProfileDescription,
     ProfileGallery,

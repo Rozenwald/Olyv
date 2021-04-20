@@ -25,7 +25,7 @@ const actions = {
 const getters = {
   getMyOrders: (state) => state.myOrders,
   getMyProcessOrders: (state) => state.myProcessOrders,
-  getMyEndedOrders: (state) => state.myProcessOrders,
+  getMyEndedOrders: (state) => state.myEndedOrders,
 };
 
 const state = {

@@ -3,7 +3,7 @@
     v-row(align="center")
       v-row.address-field-address(align="center") {{order.address}}
 
-      v-row.address-field-btn(align="center" justify="end" @click="fullscreenMap")
+      v-row.address-field-btn(align="center" justify="center" @click="fullscreenMap")
         span.address-field-map-text На карте
 
     .map-wrp
@@ -29,8 +29,14 @@ export default {
     },
   },
   computed: {
+    orderType() {
+      return this.$store.getters.getOrderType;
+    },
     order() {
-      return this.$store.getters.getMyOrder;
+      if (this.orderType !== 'endedExecutor') {
+        return this.$store.getters.getMyOrder;
+      }
+      return this.$store.getters.getMyFeedbackOrder.order;
     },
   },
 };
@@ -38,7 +44,9 @@ export default {
 
 <style lang="stylus" scoped>
 .address-field {
-  padding 12px
+  padding-top 12px
+  padding-left 12px
+  padding-bottom 12px
 
   .row {
     margin 0
@@ -53,6 +61,7 @@ export default {
   &-btn {
     width 20%
     max-width 20%
+    border-left 1px solid #777777
   }
 
   &-divider {

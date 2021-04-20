@@ -8,6 +8,7 @@
       v-col(cols="6" align="center")
         v-btn.bottom-field-btns-wrp-edit(
           rounded
+          :disabled="orderType === 'completed'"
           @click="clickRightBtn") {{rightBtnText}}
 </template>
 
@@ -93,12 +94,12 @@ export default {
     clickRightBtn() {
       switch (this.orderType) {
         case 'await':
-          this.editOrder();
+          this.delOrder();
           break;
         case 'process':
           this.completeOrder();
           break;
-        case 'ended':
+        case 'endedCustomer':
           this.openFeedbackDialog();
           break;
         default:
@@ -108,12 +109,15 @@ export default {
     clickLeftBtn() {
       switch (this.orderType) {
         case 'await':
-          this.delOrder();
+          this.editOrder();
           break;
         case 'process':
           this.goChat();
           break;
-        case 'ended':
+        case 'endedCustomer':
+          this.goChat();
+          break;
+        case 'completed':
           this.goChat();
           break;
         default:
@@ -141,7 +145,9 @@ export default {
           return 'Отменить';
         case 'process':
           return 'Завершить';
-        case 'ended':
+        case 'endedCustomer':
+          return 'Отзыв';
+        case 'completed':
           return 'Отзыв';
         default:
           return 'Отозваться';
@@ -154,7 +160,9 @@ export default {
           return 'Редактировать';
         case 'process':
           return 'Чат';
-        case 'ended':
+        case 'endedCustomer':
+          return 'Чат';
+        case 'completed':
           return 'Чат';
         default:
           return 'Своя цена';
