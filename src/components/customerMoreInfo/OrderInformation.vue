@@ -151,6 +151,8 @@ export default {
           return 'В процессе';
         case 'endedCustomer':
           return 'Ожидает отзыв';
+        case 'completed':
+          return 'Завершен';
         default:
           return '';
       }
@@ -164,6 +166,8 @@ export default {
           return '#FE7664';
         case 'endedCustomer':
           return '#FBC02D';
+        case 'completed':
+          return '#56D68B';
         default:
           return 'inherit';
       }
@@ -178,7 +182,6 @@ export default {
     },
   },
   created() {
-    console.log(this.order.files);
     this.mediaSort(this.order.files);
   },
 };

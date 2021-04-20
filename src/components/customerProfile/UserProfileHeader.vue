@@ -7,7 +7,7 @@
     v-row.name(align='center' justify='center')
       v-skeleton-loader(type="text" :loading="!hasData" width="90")
         span {{name}} {{lastname}}
-    v-row.ratting(align='center' justify='center')
+    v-row.ratting(v-if="userCard.rating" align='center' justify='center')
       v-skeleton-loader.ratting__skeleton(type="text" :loading="!hasData" width="70")
         v-row.ratting(align='center' justify='center')
           v-rating.ratting__skeleton__star(

@@ -45,11 +45,10 @@ export default {
     },
 
     checkFeedbackResponse(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setComments', response.data.data);
-          return response.data.data;
+          return response.data.data.reverse();
         case 'notExist':
           return null;
         case 'notAuthentucate':
@@ -70,6 +69,7 @@ export default {
   },
   computed: {
     comments() {
+      console.log(this.$store.getters.getComments);
       return this.$store.getters.getComments;
     },
   },

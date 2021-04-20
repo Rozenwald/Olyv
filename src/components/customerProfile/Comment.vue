@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-card.comment
+  v-card.comment(@click='openProfile()')
     v-list-item(dense)
       avatar.avatar(color="#56D68B" :src="photo")
       v-list-item-content
@@ -18,6 +18,7 @@
           )
           span.rating-text ({{item.rating}})
     v-card-text.comment-text {{item.comment}}
+    v-divider
 </template>
 
 <script>
@@ -39,19 +40,15 @@ export default {
   data() {
     return {
       user: {},
-      userCard: {},
     };
   },
   methods: {
+
     async init() {
       this.$store.commit('setTitle', 'Профиль');
 
-      let response = await this.getUserData(this.item.from);
+      const response = await this.getUserData(this.item.from);
       this.user = this.checkResponse(response) || {};
-
-      this.idUserCard = this.user.idUserCard;
-      response = await this.getUserCardData(this.idUserCard);
-      this.userCard = this.checkResponse(response) || { _id: '123' };
     },
 
     async getUserData(id) {
@@ -68,20 +65,6 @@ export default {
         logger.log(error);
       }
 
-      return null;
-    },
-    async getUserCardData(idUserCard) {
-      const body = {
-        method: 'receive',
-        submethod: 'byId',
-        token: this.token,
-        idUserCard,
-      };
-      try {
-        return await axios.post(`${this.$baseUrl}api/v1/private/userCard`, body);
-      } catch (error) {
-        logger.log(error);
-      }
       return null;
     },
 
@@ -104,6 +87,10 @@ export default {
           break;
       }
       return null;
+    },
+
+    openProfile() {
+      if (this.user._id) this.$root.$emit('openProfile', this.user._id);
     },
   },
   computed: {

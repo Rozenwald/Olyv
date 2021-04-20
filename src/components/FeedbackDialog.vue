@@ -1,17 +1,17 @@
-  <template lang="pug">
+<template lang="pug">
     v-dialog.dialog(v-model="visible")
       v-row(align='center' justify="center")
         v-card-title.dialog-title {{dialogTitle}}
       v-row(align='center' justify="center")
         v-rating.rating(
             v-model="rating"
-            half-increments
             background-color="warning lighten-1"
             color="warning"
             length="5"
-            value="4.5")
+            :value="0")
       v-row(align='center' justify="center")
         v-textarea.dialog-text(
+            v-model="comment"
             solo
             outlined
             flat
@@ -32,17 +32,19 @@
               rounded
               color='#56D68B'
               outlined
-              @click='actionSecondBtn')
+              @click='close()')
             v-icon close
 </template>
 
 <script>
-import Feedback from '../classes/Models/Feedback';
+import feedbackDialog from '../scripts/openFeedbackDialog';
+import logger from '../scripts/logger';
+import dialogMessages from '../scripts/dialogMessages';
+import dialog from '../scripts/openDialog';
 
 export default {
   name: 'FeedbackDialog',
   components: {
-    FeedbackAPI,
   },
   data() {
     return {
@@ -53,20 +55,48 @@ export default {
   },
   methods: {
     async addFeedback() {
-      const raw = await this.$root.feedbackAPI.receiveMyAwait();
-
-      const rawData = raw.data.data;
-      rawData.foreach((el) => {
-        const feedback = new Feedback(el);
-        arr.push( );
-      });
-      const res = await this.$root.feedbackAPI.add()
+      const feedbackObject = {
+        id: this.order._id,
+        comment: this.comment,
+        rating: this.rating,
+      };
+      const res = await this.$root.feedbackAPI.add(feedbackObject);
+      return this.checkResponse(res);
+    },
+    checkResponse(response) {
+      switch (response.data.status) {
+        case 'success':
+          this.close();
+          this.$store.dispatch('setType', 'completed');
+          break;
+        case 'notExist':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notExist'),
+            true,
+            false,
+          );
+          break;
+        case 'notAuthenticate':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthenticate'),
+            true,
+            false,
+          );
+          break;
+        default:
+          logger.log();
+          break;
+      }
+    },
+    close() {
+      feedbackDialog.close();
     },
   },
   computed: {
     order() {
-      console.log(this.$store.getters.getMyOrder);
-      return this.$store.getters.getMyOrder;
+      return this.$store.getters.getMyFeedbackOrder;
     },
     visible: {
       get() {
@@ -113,7 +143,6 @@ export default {
     margin-left 20px !important
     text-align center
   }
-
   .dialog-title {
     position relative
     background-color #fFf;

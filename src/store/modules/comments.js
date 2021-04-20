@@ -1,7 +1,6 @@
 const mutations = {
   setComments(state, data) {
     state.comments = data;
-    console.log(state.comments);
   },
 };
 

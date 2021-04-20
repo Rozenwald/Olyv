@@ -8,6 +8,7 @@
       v-col(cols="6" align="center")
         v-btn.bottom-field-btns-wrp-edit(
           rounded
+          :disabled="orderType === 'completed'"
           @click="clickRightBtn") {{rightBtnText}}
 </template>
 
@@ -116,6 +117,9 @@ export default {
         case 'endedCustomer':
           this.goChat();
           break;
+        case 'completed':
+          this.goChat();
+          break;
         default:
           break;
       }
@@ -143,6 +147,8 @@ export default {
           return 'Завершить';
         case 'endedCustomer':
           return 'Отзыв';
+        case 'completed':
+          return 'Отзыв';
         default:
           return 'Отозваться';
       }
@@ -155,6 +161,8 @@ export default {
         case 'process':
           return 'Чат';
         case 'endedCustomer':
+          return 'Чат';
+        case 'completed':
           return 'Чат';
         default:
           return 'Своя цена';

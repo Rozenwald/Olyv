@@ -50,10 +50,17 @@ export default {
               this.orders.push(el);
             }
           });
-          this.orders.reverse();
-          console.log(this.orders);
-          this.$store.dispatch('setAwaitCustomerFeedbacks', this.orders);
-          this.loadType = 'order';
+          console.log(this.orders[0]);
+          if (!this.orders[0]) {
+            this.textForUser1 = 'Пока что ни один из ваших заказов не завершен';
+            this.textForUser2 = 'Завершите заказ чтобы оставить отзыв исполнителю';
+            this.loadType = 'text';
+          } else {
+            this.orders.reverse();
+            this.$store.dispatch('setAwaitCustomerFeedbacks', this.orders);
+            this.loadType = 'order';
+          }
+          console.log(this.loadType);
           break;
         case 'notAccess':
           dialog.open(
