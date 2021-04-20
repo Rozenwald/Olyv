@@ -55,6 +55,8 @@ export default {
           return false;
         case 'myProcessOrders':
           return false;
+        case 'myEndedOrders':
+          return false;
         case 'spisokZakazov':
           return false;
         case 'customerProfile':

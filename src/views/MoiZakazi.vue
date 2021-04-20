@@ -17,7 +17,7 @@
                   outlined
                   color="#56d67b"
                   text-color="#000"
-                  @click="route('myEndedOrders')") Завершеные
+                  @click="route('myEndedOrders')") Отзыв
       transition(:name="transitionName" mode="out-in")
         router-view.list-item
 </template>

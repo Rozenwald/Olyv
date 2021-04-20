@@ -2,7 +2,7 @@
     v-card.card(@click='this.route')
       v-row.main-part(no-gutters)
         v-col(cols="8").description-wrp
-          .description {{item.description}}
+          .description {{item.order.description}}
 
         v-col(cols="4" align='right')
             v-row.cost-wrp(align='center' justify='center')
@@ -28,7 +28,7 @@ import moment from 'moment';
 import SvgIcon from '../components/SvgIcon.vue';
 
 export default {
-  name: 'OrderCard1',
+  name: 'FeedbackOrderCard',
   components: {
     SvgIcon,
   },
@@ -44,37 +44,51 @@ export default {
   methods: {
     route() {
       // eslint-disable-next-line no-underscore-dangle
-      this.$store.dispatch('setMyOrder', this.item);
       this.$store.dispatch('setType', this.type);
-      this.$router.push({ name: 'customerMoreInfo' });
+      if ((this.orderType === 'endedCustomer') || (this.orderType === 'endedExecutor')) {
+        this.$store.dispatch('setMyFeedbackOrder', this.item);
+      } else {
+        this.$store.dispatch('setMyOrder', this.item);
+      }
+      if (this.type === 'endedCustomer') {
+        this.$router.push({ name: 'customerMoreInfo' });
+      } else {
+        this.$router.push({ name: 'executorMoreInfo' });
+      }
     },
   },
   computed: {
+    orderType() {
+      return this.$store.getters.getOrderType;
+    },
+    order() {
+      return this.$store.getters.getMyFeedbackOrder;
+    },
     userCount() {
-      return this.item.countResponse;
+      return this.item.order.countResponse;
     },
     lowcost() {
-      const lowCostStr = String(this.item.lowCost);
+      const lowCostStr = String(this.item.order.lowCost);
       if (lowCostStr.length > 6) {
         return `${lowCostStr.substr(0, 1)}М`;
       }
       if (lowCostStr.length > 5) {
         return `${lowCostStr.substr(0, 3)}K`;
       }
-      return `${this.item.lowCost}`;
+      return `${this.item.order.lowCost}`;
     },
     token() {
       return this.$store.getters.getToken;
     },
     cost() {
-      const costStr = String(this.item.cost);
+      const costStr = String(this.item.order.cost);
       if (costStr.length > 6) {
         return `${costStr.substr(0, 1)}М`;
       }
       if (costStr.length > 5) {
         return `${costStr.substr(0, 3)}K`;
       }
-      return `${this.item.cost}`;
+      return `${this.item.order.cost}`;
     },
     time() {
       return moment(this.item.createDate);

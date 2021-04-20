@@ -8,35 +8,35 @@ import vuetify from './plugins/vuetify';
 import VueScrollmagic from './plugins/vue-scrollmagic';
 
 Vue.config.productionTip = false;
-Vue.prototype.$baseUrl = process.env.NODE_ENV === 'production'
+Vue.prototype.$baseUrl = process.env.NODE_ENV === 'development'
   ? 'http://test.cabinet.olyv.services:8888/'
   : 'https://cabinet.production.sopki.team:8888/';
 
-Vue.prototype.$baseUrlNoPort = process.env.NODE_ENV === 'production'
+Vue.prototype.$baseUrlNoPort = process.env.NODE_ENV === 'development'
   ? 'http://test.cabinet.olyv.services/'
   : 'https://cabinet.production.sopki.team/';
 
-window.$baseUrl = process.env.NODE_ENV === 'production'
+window.$baseUrl = process.env.NODE_ENV === 'development'
   ? 'http://test.cabinet.olyv.services:8888/'
   : 'https://cabinet.production.sopki.team:8888/';
 
-window.$baseUrlNoPort = process.env.NODE_ENV === 'production'
+window.$baseUrlNoPort = process.env.NODE_ENV === 'development'
   ? 'http://test.cabinet.olyv.services/'
   : 'https://cabinet.production.sopki.team/';
 
-Vue.prototype.$baseChatUrl = process.env.NODE_ENV === 'production'
+Vue.prototype.$baseChatUrl = process.env.NODE_ENV === 'development'
   ? 'http://test.chat.olyv.services:8888/'
   : 'https://chat.production.sopki.team:8888/';
 
-window.$baseChatUrl = process.env.NODE_ENV === 'production'
+window.$baseChatUrl = process.env.NODE_ENV === 'development'
   ? 'http://test.chat.olyv.services:8888/'
   : 'https://chat.production.sopki.team:8888/';
 
-Vue.prototype.$baseNotificationUrl = process.env.NODE_ENV === 'production'
+Vue.prototype.$baseNotificationUrl = process.env.NODE_ENV === 'development'
   ? 'http://test.notification.olyv.services:8888/'
   : 'https://notification.production.sopki.team:8888/';
 
-window.$baseNotificationUrl = process.env.NODE_ENV === 'production'
+window.$baseNotificationUrl = process.env.NODE_ENV === 'development'
   ? 'http://notification.olyv.services:8888/'
   : 'https://notification.production.sopki.team:8888/';
 

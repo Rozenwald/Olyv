@@ -4,10 +4,10 @@
     verification-status
     description
     gallery
-    review
     v-btn.exit-btn(block :loading='loading' @click='exit')
       v-icon(dense color="red") exit_to_app
       span.text Выход
+    review(type="myProfile")
 </template>
 
 <script>

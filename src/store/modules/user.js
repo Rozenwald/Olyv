@@ -11,9 +11,11 @@ const mutations = {
     state.user = user;
     state.hasData = true;
     state.currentAuthToken = user.currentAuthToken;
+    console.log(state.user);
   },
   setUserCard(state, userCard) {
     state.userCard = userCard;
+    console.log(state.userCard);
   },
   setCurrentAuthToken(state, chattoken) {
     state.chattoken = chattoken;

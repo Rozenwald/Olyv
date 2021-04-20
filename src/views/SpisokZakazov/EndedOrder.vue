@@ -10,17 +10,17 @@
       .errorText-container
         span.errorText-container {{textForUser1}} <br/>
         span.errorText-container {{textForUser2}}
-    OrderCard2(v-else-if="loadType === 'order'"
+    FeedbackOrderCard(v-else-if="loadType === 'order'"
                v-for='item in endedOrders'
-               type='ended'
-               :key='item._id'
+               type='endedExecutor'
+               :key='item.idOrder'
                :item='item')
 </template>
 
 <script>
 import axios from 'axios';
 import { FulfillingSquareSpinner } from 'epic-spinners';
-import OrderCard2 from '../OrderCard2.vue';
+import FeedbackOrderCard from '../FeedbackOrderCard.vue';
 import logger from '../../scripts/logger';
 import dialogMessages from '../../scripts/dialogMessages';
 import dialog from '../../scripts/openDialog';
@@ -28,43 +28,57 @@ import dialog from '../../scripts/openDialog';
 export default {
   name: 'endedOrder',
   data: () => ({
-    endedOrders: null,
+    orders: [],
     type: 'ended',
     loadType: 'icon',
     textForUser1: '',
     textForUser2: '',
   }),
   components: {
-    OrderCard2,
+    FeedbackOrderCard,
     axios,
     FulfillingSquareSpinner,
   },
   methods: {
-    getEndedOrders() {
-      axios
-        .post(`${this.$baseUrl}api/v1/private/order`, {
-          token: this.token,
-          method: 'receive',
-          submethod: 'executor',
-          status: 'completed',
-        })
-        .then((response) => (this.checkEndedOrdersResponse(response)))
-        .catch((error) => {
-          logger.log(error);
-        });
-    },
-
-    checkEndedOrdersResponse(response) {
-      console.log(response);
-      switch (response.data.status) {
+    async getFeedbacks() {
+      const res = await this.$root.feedbackAPI.receiveMyAwait();
+      switch (res.data.status) {
         case 'success':
-          this.endedOrders = response.data.data;
+          res.data.data.forEach((el) => {
+            if (el.order.idUserExecutor === el.from) {
+              this.orders.push(el);
+            }
+          });
+          this.orders.reverse();
+          this.$store.dispatch('setAwaitExecutorFeedbacks', this.orders);
           this.loadType = 'order';
-          // this.$store.dispatch('setProcessOrder', this.processOrders);
           break;
-        case 'notExist':
-          this.textForUser1 = 'У вас нет завершенных заказов';
-          this.loadType = 'text';
+        case 'notAccess':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('notAuthentucate'),
+            true,
+            true,
+            () => { this.$router.push({ name: 'auth' }); },
+          );
+          break;
+        case 'notSuccess':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('standartError'),
+            true,
+            false,
+          );
+          break;
+        case 'alreadyExist':
+          dialog.open(
+            dialogMessages.getTitle('error'),
+            dialogMessages.getBody('alreadyExist'),
+            true,
+            false,
+          );
+          break;
+        case 'notExist ':
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -76,6 +90,7 @@ export default {
           );
           break;
         default:
+          logger.log(res);
           break;
       }
     },
@@ -84,21 +99,24 @@ export default {
     token() {
       return this.$store.getters.getToken;
     },
-    user() {
-      return this.$store.getters.getUser;
+    orderType() {
+      return this.$store.getters.getOrderType;
+    },
+    endedOrders() {
+      return this.$store.getters.getAwaitExecutorFeedbacks;
     },
   },
   watch: {
     token() {
       if (this.token) {
-        this.getEndedOrders();
+        this.getFeedbacks();
       }
     },
   },
   created() {
     this.$store.dispatch('setChipStatus', 'ended');
     if (this.token) {
-      this.getEndedOrders();
+      this.getFeedbacks();
     }
   },
 };

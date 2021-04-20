@@ -28,6 +28,8 @@ import store from './store/index';
 import 'leaflet/dist/leaflet.css';
 import cordova from './plugins/cordova';
 import dialogMessages from './scripts/dialogMessages';
+import BaseAPI from './classes/API/BaseAPI';
+import FeedbackAPI from './classes/API/FeedbackAPI';
 
 const ActionPhotoDialog = () => import('./components/ActionPhotoDialog.vue');
 const ActionPhotoDialogAvatar = () => import('./components/ActionPhotoDialogAvatar.vue');
@@ -143,6 +145,8 @@ export default {
 
     openProfile(userId) {
       // eslint-disable-next-line no-underscore-dangle
+      console.log(userId);
+      console.log(this.user._id);
       if (this.user._id === userId) this.$router.push({ name: 'customerProfile' });
       else this.$router.push({ name: 'publicProfile', params: { userId } });
     },
@@ -188,11 +192,18 @@ export default {
     }
 
     this.$root.$on('openProfile', this.openProfile);
+
+    const baseAPI = new BaseAPI(this.$root);
+    this.$root.baseAPI = baseAPI;
+    this.$root.feedbackAPI = new FeedbackAPI(baseAPI);
   },
   watch: {
     token() {
       if (this.token) {
         this.getUserData();
+        const baseAPI = new BaseAPI(this.$root);
+        this.$root.baseAPI = baseAPI;
+        this.$root.feedbackAPI = new FeedbackAPI(baseAPI);
         this.getUserCard();
       }
     },
