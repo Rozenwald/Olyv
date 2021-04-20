@@ -15,6 +15,7 @@ import OrderInformation from '../components/executorMoreInfo/OrderInformation.vu
 import dialog from '../scripts/openDialog';
 import logger from '../scripts/logger';
 import dialogMessages from '../scripts/dialogMessages';
+import feedbackDialog from '../components/FeedbackDialog.vue';
 
 export default {
   name: 'moreInfoOrder',
@@ -24,6 +25,7 @@ export default {
     BottomField,
     AddressField,
     OrderInformation,
+    feedbackDialog,
   },
   data() {
     return {

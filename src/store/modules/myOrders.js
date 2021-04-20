@@ -5,6 +5,9 @@ const mutations = {
   setMyProcessOrders(state, data) {
     state.myProcessOrders = data;
   },
+  setMyEndedOrders(state, data) {
+    state.myEndedOrders = data;
+  },
 };
 
 const actions = {
@@ -14,16 +17,21 @@ const actions = {
   setMyProcessOrders({ commit }, data) {
     commit('setMyProcessOrders', data);
   },
+  setMyEndedOrders({ commit }, data) {
+    commit('setMyEndedOrders', data);
+  },
 };
 
 const getters = {
   getMyOrders: (state) => state.myOrders,
   getMyProcessOrders: (state) => state.myProcessOrders,
+  getMyEndedOrders: (state) => state.myProcessOrders,
 };
 
 const state = {
   myOrders: null,
   myProcessOrders: null,
+  myEndedOrders: null,
 };
 
 export default {

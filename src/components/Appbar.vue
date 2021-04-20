@@ -67,6 +67,8 @@ export default {
           return false;
         case 'processOrder':
           return false;
+        case 'endedOrder':
+          return false;
         case 'successUpdatePassword':
           return false;
         case 'confirmCabinet':
