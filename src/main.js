@@ -37,7 +37,7 @@ Vue.prototype.$baseNotificationUrl = process.env.NODE_ENV === 'development'
   : 'https://notification.production.sopki.team:8888/';
 
 window.$baseNotificationUrl = process.env.NODE_ENV === 'development'
-  ? 'http://notification.olyv.services:8888/'
+  ? 'http://test.notification.olyv.services:8888/'
   : 'https://notification.production.sopki.team:8888/';
 
 new Vue({
