@@ -21,6 +21,9 @@
         v-row.date-time-wrp(align='center' justify='start')
           svg-icon(name="Time")
           .distantion-text {{formatedTime}}
+        v-row.date-time-wrp(v-if='adres' align='center' justify='start')
+          svg-icon(name="Time")
+          .distantion-text {{adres}}
 </template>
 
 <script>
@@ -84,6 +87,14 @@ export default {
         return this.time.calendar();
       }
       return this.time.format('D MMMM, HH:mm');
+    },
+    adres() {
+      const nightCity = this.item.address;
+      const index = nightCity.indexOf(',', 0);
+      if (index !== '-1') {
+        return nightCity.slice(index + 1);
+      }
+      return nightCity;
     },
   },
   created() {
