@@ -57,16 +57,16 @@ function checkNotification(messageData) {
     case 'process':
       store.dispatch('setMyOrder', messageData.order);
       store.dispatch('setType', 'process');
-      router.replace({ name: 'executorMoreInfo' });
+      router.push({ name: 'executorMoreInfo' });
       break;
     case 'response':
       store.dispatch('setMyOrder', messageData.order);
       store.dispatch('setType', 'await');
-      router.replace({ name: 'customerMoreInfo' });
+      router.push({ name: 'customerMoreInfo' });
       break;
     case 'chat':
       store.dispatch('setIdUserRequest', messageData.idUserRequest);
-      router.replace({ name: 'chat' });
+      router.push({ name: 'chat' });
       break;
     default:
       break;
