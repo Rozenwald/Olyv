@@ -86,9 +86,13 @@ export default {
     },
     adres() {
       const nightCity = this.item.address;
+      while (nightCity[0].toLowerCase() !== nightCity[0]) {
+        const index = nightCity.indexOf(',', 0);
+        nightCity.slice(index + 1);
+      }
       const index = nightCity.indexOf(',', 0);
       if (index !== '-1') {
-        return nightCity.slice(index + 1);
+        nightCity.slice(0, index);
       }
       return nightCity;
     },
