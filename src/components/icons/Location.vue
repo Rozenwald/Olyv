@@ -1,5 +1,5 @@
 <template lang="pug">
-  img(src='@/assets/icons/location.svg')
+  img(src='@/assets/icons/Location.svg')
 </template>
 
 <script>
