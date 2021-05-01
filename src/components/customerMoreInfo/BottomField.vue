@@ -68,6 +68,7 @@ export default {
     },
 
     checkResponse(response) {
+      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.$router.back();
@@ -128,7 +129,6 @@ export default {
   computed: {
 
     orderType() {
-      console.log(this.$store.getters.getOrderType);
       return this.$store.getters.getOrderType;
     },
 

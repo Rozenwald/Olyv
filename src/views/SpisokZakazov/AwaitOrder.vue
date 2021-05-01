@@ -109,7 +109,7 @@ export default {
     },
     // Добавляю этот элемент в массив заказов на которые я откликнулся
     checkOrder(response, element) {
-      console.log(response.data);
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.awaitOrders.push(response.data.data[0]);
@@ -117,12 +117,6 @@ export default {
           this.awaitOrders[this.awaitOrders.length - 1].idResponse = element._id;
           break;
         case 'notExist':
-          dialog.open(
-            dialogMessages.getTitle('error'),
-            dialogMessages.getBody('notExist'),
-            true,
-            false,
-          );
           break;
         case 'notAuthenticate':
           dialog.open(
