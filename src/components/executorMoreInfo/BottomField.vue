@@ -158,7 +158,7 @@ export default {
     openFeedbackDialog() {
       feedbackDialog.open(
         'Оцените исполнителя',
-        dialogMessages.getBody('errorDeleteResponse'),
+        '',
         true,
         true,
       );

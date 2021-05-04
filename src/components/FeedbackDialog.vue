@@ -16,7 +16,7 @@
             outlined
             flat
             hide-details
-            placeholder=' Здесь вы можете оставить свой отзыв'
+            placeholder='Здесь вы можете оставить свой отзыв'
             rows="1"
             auto-grow)
       v-row.dialog-btn(align='center' justify="space-around")
@@ -66,8 +66,8 @@ export default {
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.close();
           this.$store.dispatch('setType', 'completed');
+          this.close();
           break;
         case 'notExist':
           dialog.open(
@@ -92,6 +92,8 @@ export default {
     },
     close() {
       feedbackDialog.close();
+      this.comment = null;
+      this.rating = null;
     },
   },
   computed: {

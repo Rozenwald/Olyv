@@ -22,7 +22,7 @@
           svg-icon(name="Time")
           .distantion-text {{formatedTime}}
         v-row.date-time-wrp(v-if='address' align='center' justify='start')
-          svg-icon(name="Time")
+          v-icon(color='#33CD74') mdi-Place
           .distantion-text {{address}}
 </template>
 
@@ -90,11 +90,19 @@ export default {
     },
     address() {
       let nightCity = this.item.address;
+      let index = nightCity.indexOf(',', 0);
       while (nightCity[0].toLowerCase() !== nightCity[0]) {
-        const index = nightCity.indexOf(',', 0);
-        nightCity = nightCity.slice(index + 2);
+        index = nightCity.indexOf(',', 0);
+        if (index !== -1) {
+          nightCity = nightCity.slice(index + 2);
+        } else {
+          nightCity[0] = nightCity[0].toLowerCase();
+        }
       }
-      const index = nightCity.indexOf(',', 0);
+      if (index === -1) {
+        nightCity[0] = nightCity[0].toUpperCase();
+      }
+      index = nightCity.indexOf(',', 0);
       if (index !== -1) {
         nightCity = nightCity.slice(0, index);
       }

@@ -142,7 +142,7 @@ export default {
     rightBtnText() {
       switch (this.orderType) {
         case 'await':
-          return 'Отменить';
+          return 'Удалить';
         case 'process':
           return 'Завершить';
         case 'endedCustomer':

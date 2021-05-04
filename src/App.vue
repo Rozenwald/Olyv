@@ -148,7 +148,7 @@ export default {
       console.log(userId);
       console.log(this.user._id);
       if (this.user._id === userId) this.$router.push({ name: 'customerProfile' });
-      else this.$router.push({ name: 'publicProfile', params: { userId } });
+      else this.$router.replace({ name: 'publicProfile', params: { userId } });
     },
 
     beforeLeave(element) {
