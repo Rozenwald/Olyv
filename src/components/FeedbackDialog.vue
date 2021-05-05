@@ -68,6 +68,8 @@ export default {
         case 'success':
           this.$store.dispatch('setType', 'completed');
           this.close();
+          this.$store.dispatch('setSnackbarVisible', true);
+          this.$store.dispatch('setSnackbarText', 'Отзыв оставлен успешно');
           break;
         case 'notExist':
           dialog.open(
@@ -91,8 +93,6 @@ export default {
       }
     },
     close() {
-      this.$store.dispatch('setSnackbarVisible', true);
-      this.$store.dispatch('setSnackbarText', 'Отзыв оставлен успешно');
       feedbackDialog.close();
       this.comment = null;
       this.rating = null;
