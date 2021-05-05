@@ -50,7 +50,7 @@
         <param name="URL_SCHEME" value="olyvapp" />
     </plugin>
     <universal-links>
-        <host name="cabinet.olyv.services">
+        <host name="test.cabinet.olyv.services">
             <path url="/updatePassword/" event="updatePassword"/>
             <path url="/updatePassword" event="updatePassword"/>
             <path url="/confirmCabinet/" event="confirmEmail"/>
