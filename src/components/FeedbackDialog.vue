@@ -91,6 +91,8 @@ export default {
       }
     },
     close() {
+      this.$store.dispatch('setSnackbarVisible', true);
+      this.$store.dispatch('setSnackbarText', 'Отзыв оставлен успешно');
       feedbackDialog.close();
       this.comment = null;
       this.rating = null;

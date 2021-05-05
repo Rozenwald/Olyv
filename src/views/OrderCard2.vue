@@ -87,23 +87,13 @@ export default {
     address() {
       let nightCity = this.item.address;
       let index = nightCity.indexOf(',', 0);
-      while (nightCity[0].toLowerCase() !== nightCity[0]) {
-        index = nightCity.indexOf(',', 0);
-        if (index !== -1) {
+      while (index !== -1) {
+        if (nightCity[0].toLowerCase() !== nightCity[0]) {
           nightCity = nightCity.slice(index + 2);
         } else {
-          console.log(nightCity[0]);
-          console.log(nightCity[0].toLowerCase());
-          console.log(nightCity);
-          console.log(nightCity[0] = nightCity[0].toLowerCase());
+          nightCity = nightCity.slice(0, index);
         }
-      }
-      if (index === -1) {
-        nightCity[0].toUpperCase();
-      }
-      index = nightCity.indexOf(',', 0);
-      if (index !== -1) {
-        nightCity = nightCity.slice(0, index);
+        index = nightCity.indexOf(',', 0);
       }
       return nightCity;
     },

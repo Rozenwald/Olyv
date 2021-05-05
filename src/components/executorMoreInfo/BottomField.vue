@@ -10,9 +10,10 @@
           :disabled='loading'
           @click="clickLeftBtn") {{leftBtnText}}
       v-row(cols="6" align="center" justify="center")
-        v-btn.bottom-field-btns-wrp-accept(rounded
+        v-btn.bottom-field-btns-wrp-accept(
+          rounded
           :loading='loading'
-          :disabled='loading'
+          :disabled="((orderType === 'completed') || loading)"
           @click="clickRightBtn") {{rightBtnText}}
 </template>
 

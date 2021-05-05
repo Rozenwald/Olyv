@@ -7,6 +7,7 @@
       :order="(orderType !== 'endedExecutor') ? order : order.order")
     bottom-field.bottom-field(
       :order="(orderType !== 'endedExecutor') ? order : order.order")
+    snackbar(feedbackText)
 </template>
 
 <script>
@@ -19,6 +20,7 @@ import dialog from '../scripts/openDialog';
 import logger from '../scripts/logger';
 import dialogMessages from '../scripts/dialogMessages';
 import feedbackDialog from '../components/FeedbackDialog.vue';
+import Snackbar from '../components/Snackbar.vue';
 
 export default {
   name: 'moreInfoOrder',
@@ -29,6 +31,7 @@ export default {
     AddressField,
     OrderInformation,
     feedbackDialog,
+    Snackbar,
   },
   data() {
     return {
@@ -36,6 +39,9 @@ export default {
     };
   },
   methods: {
+    feedbackText() {
+      return 'Отзыв оставлен';
+    },
     route(routeName) {
       this.$router.push(routeName);
     },

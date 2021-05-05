@@ -26,6 +26,7 @@ import actionPhotoDialogVerification from './modules/actionPhotoDialogVerificati
 import dialogMessages from './modules/dialogMessages';
 import myOrders from './modules/myOrders';
 import deepLinks from './modules/deepLinks';
+import snackbar from './modules/snackbar';
 
 Vue.use(Vuex);
 
@@ -39,6 +40,7 @@ export default new Vuex.Store({
   modules: {
     bottomSheet,
     comments,
+    snackbar,
     bottomNavigation,
     appbar,
     setting,

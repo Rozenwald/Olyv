@@ -4,11 +4,14 @@
       v-col(cols="6" align="center")
         v-btn.bottom-field-btns-wrp-delete(
           rounded
+          :loading='loading'
+          :disabled='loading'
           @click="clickLeftBtn") {{leftBtnText}}
       v-col(cols="6" align="center")
         v-btn.bottom-field-btns-wrp-edit(
           rounded
-          :disabled="orderType === 'completed'"
+          :loading='loading'
+          :disabled="((orderType === 'completed') || (loading))"
           @click="clickRightBtn") {{rightBtnText}}
 </template>
 
