@@ -125,7 +125,11 @@ export default {
   },
   watch: {
     userCard() {
-      if (this.userCard.photos?.length) this.prepareMediaFiles(this.userCard.photos);
+      console.log(this.userCard.photos?.length);
+      this.mediaFiles = [];
+      if (this.userCard.photos?.length > 0) {
+        this.prepareMediaFiles(this.userCard.photos);
+      }
     },
   },
 };

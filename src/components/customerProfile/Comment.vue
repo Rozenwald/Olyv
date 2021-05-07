@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-card.comment(@click='openProfile(idUser)')
+  v-card.comment(@click='openProfile()')
     v-list-item(dense)
       avatar.avatar(color="#56D68B" :src="photo")
       v-list-item-content
@@ -40,7 +40,6 @@ export default {
   data() {
     return {
       user: {},
-      idUser: null,
     };
   },
   methods: {

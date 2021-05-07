@@ -25,25 +25,18 @@ export default {
   },
   props: {
     type: String,
-    idUser: String,
-  },
-  beforeRouteUpdate(to, from, next) {
-    const { idUser } = to.params;
-    next();
-    this.init(idUser);
   },
   data() {
     return {
-
     };
   },
   methods: {
-    async init(idUser) {
+    async init() {
       if (this.type === 'myProfile') {
         const response = await this.$root.feedbackAPI.receiveInner();
         return this.checkFeedbackResponse(response) || {};
       }
-      const response = await this.$root.feedbackAPI.receiveByUserId(idUser);
+      const response = await this.$root.feedbackAPI.receiveByUserId(this.idUser);
       return this.checkFeedbackResponse(response) || {};
     },
 
@@ -74,10 +67,21 @@ export default {
     comments() {
       return this.$store.getters.getComments;
     },
+    idUser() {
+      return this.$route.params.idUser;
+    },
+  },
+  watch: {
+    idUser() {
+      this.init();
+    },
+    comments() {
+      return this.$store.getters.getComments;
+    },
   },
   created() {
-    console.log('createdHook');
-    this.init(this.idUser);
+    this.idUser = this.$route.params.idUser;
+    this.init();
   },
 };
 </script>

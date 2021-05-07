@@ -202,6 +202,7 @@ const routes = [
     path: '/publicProfile/:idUser',
     component: PublicProfile,
     meta: { index: 7 },
+    props: true,
   },
 ];
 

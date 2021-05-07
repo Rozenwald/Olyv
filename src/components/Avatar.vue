@@ -88,6 +88,11 @@ export default {
       };
     },
   },
+  watch: {
+    urlMax() {
+      this.loadImage();
+    },
+  },
   created() {
     if (this.src) this.loadImage();
   },

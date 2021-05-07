@@ -3,7 +3,7 @@
     ProfileHeader(:user='user')
     ProfileDescription(:userCard='userCard')
     ProfileGallery(:userCard='userCard' )
-    review(type="publicProfile" :idUser='idUser')
+    review(type="publicProfile")
 </template>
 
 <script>
@@ -28,15 +28,13 @@ export default {
     ProfileGallery,
   },
   beforeRouteUpdate(to, from, next) {
-    const { idUser } = to.params;
+    this.idUser = to.params.idUser;
     next();
-    this.init(idUser);
-  },
-  props: {
-    idUser: String,
+    this.init(this.idUser);
   },
   data() {
     return {
+      idUser: null,
       user: {},
       userCard: {},
     };
@@ -44,10 +42,8 @@ export default {
   methods: {
     async init(idUser) {
       this.$store.commit('setTitle', 'Профиль');
-      console.log(idUser);
       let response = await this.getUserData(idUser);
       this.user = this.checkResponse(response) || {};
-      console.log(this.user);
 
       const { idUserCard } = this.user;
       response = await this.getUserCardData(idUserCard);
@@ -96,7 +92,6 @@ export default {
           true,
           false,
         );
-
         logger.log(error);
       }
 
@@ -139,6 +134,7 @@ export default {
     },
   },
   created() {
+    this.idUser = this.$route.params.idUser;
     this.init(this.idUser);
   },
 };
