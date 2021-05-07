@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-card.comment(@click='openProfile()')
+  v-card.comment(@click='openProfile(idUser)')
     v-list-item(dense)
       avatar.avatar(color="#56D68B" :src="photo")
       v-list-item-content
@@ -30,12 +30,6 @@ import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
   name: 'comment',
-  beforeRouteUpdate(to, from, next) {
-    console.log('aa');
-    console.log('to: ', to);
-    console.log('from: ', from);
-    console.log('next: ', next);
-  },
   props: {
     type: String,
     item: Object,
@@ -46,6 +40,7 @@ export default {
   data() {
     return {
       user: {},
+      idUser: null,
     };
   },
   methods: {
@@ -95,9 +90,8 @@ export default {
 
     openProfile() {
       console.log(this.$route.params);
-      const userId = this.user._id;
-      if (this.user._id !== this.appUser._id) this.$router.push({ name: 'publicProfile', params: { userId } });
-      else this.$router.push({ name: 'customerProfile' });
+      console.log(this.user._id);
+      if (this.user._id) this.$root.$emit('openProfile', this.user._id);
     },
   },
   computed: {

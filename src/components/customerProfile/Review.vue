@@ -25,14 +25,12 @@ export default {
   },
   props: {
     type: String,
-    userId: String,
+    idUser: String,
   },
   beforeRouteUpdate(to, from, next) {
-    console.log('to: ', to);
-    console.log('from: ', from);
-    const { userId } = to.params;
+    const { idUser } = to.params;
     next();
-    this.init(userId);
+    this.init(idUser);
   },
   data() {
     return {
@@ -40,12 +38,12 @@ export default {
     };
   },
   methods: {
-    async init(userId) {
+    async init(idUser) {
       if (this.type === 'myProfile') {
         const response = await this.$root.feedbackAPI.receiveInner();
         return this.checkFeedbackResponse(response) || {};
       }
-      const response = await this.$root.feedbackAPI.receiveByUserId(userId);
+      const response = await this.$root.feedbackAPI.receiveByUserId(idUser);
       return this.checkFeedbackResponse(response) || {};
     },
 
@@ -74,13 +72,12 @@ export default {
   },
   computed: {
     comments() {
-      console.log(this.$store.getters.getComments);
       return this.$store.getters.getComments;
     },
   },
   created() {
     console.log('createdHook');
-    this.init(this.userId);
+    this.init(this.idUser);
   },
 };
 </script>

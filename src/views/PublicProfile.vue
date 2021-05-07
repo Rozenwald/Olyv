@@ -3,7 +3,7 @@
     ProfileHeader(:user='user')
     ProfileDescription(:userCard='userCard')
     ProfileGallery(:userCard='userCard' )
-    review(type="publicProfile" :userId='userId')
+    review(type="publicProfile" :idUser='idUser')
 </template>
 
 <script>
@@ -28,30 +28,31 @@ export default {
     ProfileGallery,
   },
   beforeRouteUpdate(to, from, next) {
-    const { userId } = to.params;
+    const { idUser } = to.params;
     next();
-    this.init(userId);
+    this.init(idUser);
   },
   props: {
-    userId: String,
+    idUser: String,
   },
   data() {
     return {
-      idUser: null,
       user: {},
       userCard: {},
     };
   },
   methods: {
-    async init(userId) {
+    async init(idUser) {
       this.$store.commit('setTitle', 'Профиль');
-      let response = await this.getUserData(userId);
+      console.log(idUser);
+      let response = await this.getUserData(idUser);
       this.user = this.checkResponse(response) || {};
+      console.log(this.user);
 
       const { idUserCard } = this.user;
       response = await this.getUserCardData(idUserCard);
       this.userCard = this.checkResponse(response) || { _id: '123' }; //! заглушка
-      this.idUser = this.userId;
+      console.log(this.userCard);
     },
 
     async getUserData(id) {
@@ -138,7 +139,7 @@ export default {
     },
   },
   created() {
-    this.init(this.userId);
+    this.init(this.idUser);
   },
 };
 </script>

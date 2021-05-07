@@ -143,10 +143,11 @@ export default {
       }
     },
 
-    openProfile(userId) {
+    openProfile(idUser) {
+      console.log(idUser);
       // eslint-disable-next-line no-underscore-dangle
-      if (this.user._id === userId) this.$router.replace({ name: 'customerProfile' });
-      else this.$router.replace({ name: 'publicProfile', params: { userId } });
+      if (this.user._id === idUser) this.$router.push({ name: 'customerProfile' });
+      else this.$router.push({ name: 'publicProfile', params: { idUser } });
     },
 
     beforeLeave(element) {
