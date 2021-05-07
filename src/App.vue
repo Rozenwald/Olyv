@@ -145,9 +145,7 @@ export default {
 
     openProfile(userId) {
       // eslint-disable-next-line no-underscore-dangle
-      console.log(userId);
-      console.log(this.user._id);
-      if (this.user._id === userId) this.$router.push({ name: 'customerProfile' });
+      if (this.user._id === userId) this.$router.replace({ name: 'customerProfile' });
       else this.$router.replace({ name: 'publicProfile', params: { userId } });
     },
 

@@ -8,7 +8,7 @@
             background-color="warning lighten-1"
             color="warning"
             length="5"
-            :value="0")
+            :value="rating")
       v-row(align='center' justify="center")
         v-textarea.dialog-text(
             v-model="comment"
@@ -48,6 +48,8 @@ export default {
   },
   data() {
     return {
+      comment: '',
+      rating: 0,
     };
   },
   props: {
@@ -93,9 +95,9 @@ export default {
       }
     },
     close() {
-      feedbackDialog.close();
       this.comment = null;
       this.rating = null;
+      feedbackDialog.close();
     },
   },
   computed: {
@@ -108,6 +110,8 @@ export default {
       },
       set(val) {
         this.$store.dispatch('setFeedbackVisibleDialog', val);
+        this.comment = null;
+        this.rating = null;
       },
     },
     firstBtn() {

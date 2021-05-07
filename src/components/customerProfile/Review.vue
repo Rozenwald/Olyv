@@ -25,7 +25,14 @@ export default {
   },
   props: {
     type: String,
-    idUser: String,
+    userId: String,
+  },
+  beforeRouteUpdate(to, from, next) {
+    console.log('to: ', to);
+    console.log('from: ', from);
+    const { userId } = to.params;
+    next();
+    this.init(userId);
   },
   data() {
     return {
@@ -33,14 +40,12 @@ export default {
     };
   },
   methods: {
-    async init() {
-      console.log(this.type);
-      console.log(this.idUser);
+    async init(userId) {
       if (this.type === 'myProfile') {
         const response = await this.$root.feedbackAPI.receiveInner();
         return this.checkFeedbackResponse(response) || {};
       }
-      const response = await this.$root.feedbackAPI.receiveByUserId(this.idUser);
+      const response = await this.$root.feedbackAPI.receiveByUserId(userId);
       return this.checkFeedbackResponse(response) || {};
     },
 
@@ -74,7 +79,8 @@ export default {
     },
   },
   created() {
-    this.init();
+    console.log('createdHook');
+    this.init(this.userId);
   },
 };
 </script>

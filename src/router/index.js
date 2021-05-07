@@ -180,12 +180,6 @@ const routes = [
     meta: { index: 5 },
   },
   {
-    name: 'customerProfile',
-    path: '/customerProfile',
-    component: CustomerProfile,
-    meta: { index: 3 },
-  },
-  {
     name: 'confirmCabinet',
     path: '/confirmCabinet',
     component: ConfirmCabinet,
@@ -198,8 +192,14 @@ const routes = [
     meta: { index: 0 },
   },
   {
+    name: 'customerProfile',
+    path: '/customerProfile',
+    component: CustomerProfile,
+    meta: { index: 3 },
+  },
+  {
     name: 'publicProfile',
-    path: '/publicProfile',
+    path: '/publicProfile/:userId',
     component: PublicProfile,
     meta: { index: 7 },
     props: true,

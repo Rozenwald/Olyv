@@ -1,10 +1,10 @@
 <template lang="pug">
   v-sheet.bottom-field(elevation="3" rounded)
-    v-row.bottom-field-cost-wrp(align="center" justify="center")
+    v-row.bottom-field-cost-wrp(v-if="orderType === 'completed'" align="center" justify="center")
       .bottom-field-text-cost Заказчик предложил
       .bottom-field-cost {{formatedCost}}
     v-row.bottom-field-btns-wrp
-      v-row(cols="6" align="center" justify="center")
+      v-row(v-if="orderType === 'completed'" cols="6" align="center" justify="center")
         v-btn.bottom-field-btns-wrp-accept-my-cost(rounded
           :loading='loading'
           :disabled='loading'

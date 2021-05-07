@@ -30,6 +30,12 @@ import dialogMessages from '../../scripts/dialogMessages';
 
 export default {
   name: 'comment',
+  beforeRouteUpdate(to, from, next) {
+    console.log('aa');
+    console.log('to: ', to);
+    console.log('from: ', from);
+    console.log('next: ', next);
+  },
   props: {
     type: String,
     item: Object,
@@ -45,8 +51,6 @@ export default {
   methods: {
 
     async init() {
-      this.$store.commit('setTitle', 'Профиль');
-
       const response = await this.getUserData(this.item.from);
       this.user = this.checkResponse(response) || {};
     },
@@ -90,7 +94,10 @@ export default {
     },
 
     openProfile() {
-      if (this.user._id) this.$root.$emit('openProfile', this.user._id);
+      console.log(this.$route.params);
+      const userId = this.user._id;
+      if (this.user._id !== this.appUser._id) this.$router.push({ name: 'publicProfile', params: { userId } });
+      else this.$router.push({ name: 'customerProfile' });
     },
   },
   computed: {
@@ -109,6 +116,10 @@ export default {
       }
       const url = this.user.photo[this.user.photo.length - 1].urlMin.substr(1);
       return this.$baseUrlNoPort + url;
+    },
+
+    appUser() {
+      return this.$store.getters.getUser;
     },
   },
   created() {

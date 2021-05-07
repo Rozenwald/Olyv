@@ -1,7 +1,7 @@
 <template lang="pug">
   v-sheet.bottom-field(elevation="3" rounded)
     v-row.bottom-field-btns-wrp
-      v-col(cols="6" align="center")
+      v-col(v-if="orderType === 'completed'" cols="6" align="center")
         v-btn.bottom-field-btns-wrp-delete(
           rounded
           :loading='loading'
