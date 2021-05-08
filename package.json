@@ -11,6 +11,7 @@
     "cordova-build-browser": "cross-env CORDOVA_PLATFORM=browser vue-cli-service cordova-build-browser",
     "cordova-build-electron": "cross-env CORDOVA_PLATFORM=electron vue-cli-service cordova-build-electron",
     "cordova-build-ios": "cross-env CORDOVA_PLATFORM=ios vue-cli-service cordova-build-ios",
+    "cordova-build-only-www-android-dev": "cross-env CORDOVA_PLATFORM=android NODE_ENV=development vue-cli-service cordova-build-only-www-android",
     "cordova-build-only-www-android": "cross-env CORDOVA_PLATFORM=android vue-cli-service cordova-build-only-www-android",
     "cordova-build-only-www-browser": "cross-env CORDOVA_PLATFORM=browser vue-cli-service cordova-build-only-www-browser",
     "cordova-build-only-www-electron": "cross-env CORDOVA_PLATFORM=electron vue-cli-service cordova-build-only-www-electron",
