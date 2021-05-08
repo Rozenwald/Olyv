@@ -88,8 +88,6 @@ export default {
     },
 
     openProfile() {
-      console.log(this.$route.params);
-      console.log(this.user._id);
       if (this.user._id) this.$root.$emit('openProfile', this.user._id);
     },
   },

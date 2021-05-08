@@ -1,13 +1,17 @@
 <template lang="pug">
   v-sheet.bottom-field(elevation="3" rounded)
     v-row.bottom-field-btns-wrp
-      v-col(v-if="orderType === 'completed'" cols="6" align="center")
+      // eslint-disable-next-line max-len
+      v-row(v-if="!((orderType === 'completed') || (orderType === 'endedCustomer'))"
+            cols="6"
+            align="center"
+            justify="center")
         v-btn.bottom-field-btns-wrp-delete(
           rounded
           :loading='loading'
           :disabled='loading'
           @click="clickLeftBtn") {{leftBtnText}}
-      v-col(cols="6" align="center")
+      v-row(cols="6" align="center" justify="center")
         v-btn.bottom-field-btns-wrp-edit(
           rounded
           :loading='loading'
@@ -132,6 +136,7 @@ export default {
   computed: {
 
     orderType() {
+      console.log('customer', this.$store.getters.getOrderType);
       return this.$store.getters.getOrderType;
     },
 
