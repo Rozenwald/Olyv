@@ -22,7 +22,7 @@
           svg-icon(name="Time")
           .distantion-text {{formatedTime}}
         v-row.date-time-wrp(v-if='address' align='center' justify='start')
-          v-icon(color='#33CD74') mdi-Place
+          v-icon(color='#33CD74') place
           .distantion-text {{address}}
 </template>
 

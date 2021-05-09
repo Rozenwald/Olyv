@@ -1,5 +1,5 @@
 <template lang="pug">
-  .public-profile
+  .public-profile(ref="profileScroll")
     ProfileHeader(:user='user')
     ProfileDescription(:userCard='userCard')
     ProfileGallery(:userCard='userCard' )
@@ -31,6 +31,7 @@ export default {
     this.idUser = to.params.idUser;
     next();
     this.init(this.idUser);
+    window.scroll(0, 0);
   },
   data() {
     return {

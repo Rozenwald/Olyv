@@ -17,6 +17,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 import DialogWindow from './components/Dialog.vue';
 import feedbackDialog from './components/FeedbackDialog.vue';
 import dialog from './scripts/openDialog';
@@ -184,6 +185,7 @@ export default {
   },
   created() {
     cordova.listen();
+    moment.locale('RU');
 
     if (this.token) {
       this.getUserData();
