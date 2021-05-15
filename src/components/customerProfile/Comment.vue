@@ -45,8 +45,6 @@ export default {
   methods: {
 
     async init() {
-      this.$store.commit('setTitle', 'Профиль');
-
       const response = await this.getUserData(this.item.from);
       this.user = this.checkResponse(response) || {};
     },
@@ -109,6 +107,10 @@ export default {
       }
       const url = this.user.photo[this.user.photo.length - 1].urlMin.substr(1);
       return this.$baseUrlNoPort + url;
+    },
+
+    appUser() {
+      return this.$store.getters.getUser;
     },
   },
   created() {

@@ -25,17 +25,13 @@ export default {
   },
   props: {
     type: String,
-    idUser: String,
   },
   data() {
     return {
-
     };
   },
   methods: {
     async init() {
-      console.log(this.type);
-      console.log(this.idUser);
       if (this.type === 'myProfile') {
         const response = await this.$root.feedbackAPI.receiveInner();
         return this.checkFeedbackResponse(response) || {};
@@ -69,11 +65,22 @@ export default {
   },
   computed: {
     comments() {
-      console.log(this.$store.getters.getComments);
+      return this.$store.getters.getComments;
+    },
+    idUser() {
+      return this.$route.params.idUser;
+    },
+  },
+  watch: {
+    idUser() {
+      this.init();
+    },
+    comments() {
       return this.$store.getters.getComments;
     },
   },
   created() {
+    this.idUser = this.$route.params.idUser;
     this.init();
   },
 };

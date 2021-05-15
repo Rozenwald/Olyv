@@ -8,7 +8,7 @@
             background-color="warning lighten-1"
             color="warning"
             length="5"
-            :value="0")
+            :value="rating")
       v-row(align='center' justify="center")
         v-textarea.dialog-text(
             v-model="comment"
@@ -16,7 +16,7 @@
             outlined
             flat
             hide-details
-            placeholder=' Здесь вы можете оставить свой отзыв'
+            placeholder='Здесь вы можете оставить свой отзыв'
             rows="1"
             auto-grow)
       v-row.dialog-btn(align='center' justify="space-around")
@@ -48,6 +48,8 @@ export default {
   },
   data() {
     return {
+      comment: '',
+      rating: 0,
     };
   },
   props: {
@@ -66,8 +68,10 @@ export default {
     checkResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.close();
           this.$store.dispatch('setType', 'completed');
+          this.close();
+          this.$store.dispatch('setSnackbarVisible', true);
+          this.$store.dispatch('setSnackbarText', 'Отзыв оставлен успешно');
           break;
         case 'notExist':
           dialog.open(
@@ -91,6 +95,8 @@ export default {
       }
     },
     close() {
+      this.comment = null;
+      this.rating = null;
       feedbackDialog.close();
     },
   },
@@ -104,6 +110,8 @@ export default {
       },
       set(val) {
         this.$store.dispatch('setFeedbackVisibleDialog', val);
+        this.comment = null;
+        this.rating = null;
       },
     },
     firstBtn() {

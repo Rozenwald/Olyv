@@ -8,8 +8,7 @@
                          align='center'
                          v-else-if="loadType === 'text'")
       .errorText-container
-        span.errorText-container {{textForUser1}} <br/>
-        span.errorText-container {{textForUser2}}
+        span.errorText-container {{textForUser1}}
     FeedbackOrderCard(v-else-if="loadType === 'order'"
                v-for='item in endedOrders'
                type='endedExecutor'
@@ -49,9 +48,14 @@ export default {
               this.orders.push(el);
             }
           });
-          this.orders.reverse();
-          this.$store.dispatch('setAwaitExecutorFeedbacks', this.orders);
-          this.loadType = 'order';
+          if (!this.orders[0]) {
+            this.textForUser1 = 'Пока что ни один из ваших заказов не завершен';
+            this.loadType = 'text';
+          } else {
+            this.orders.reverse();
+            this.$store.dispatch('setAwaitExecutorFeedbacks', this.orders);
+            this.loadType = 'order';
+          }
           break;
         case 'notAccess':
           dialog.open(

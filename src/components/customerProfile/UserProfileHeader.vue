@@ -20,7 +20,7 @@
             size="14"
             :value="userCard.rating"
           )
-          span.ratting__skeleton__text ({{userCard.rating}})
+          span.ratting__skeleton__text ({{rating}})
     user-profile-subheader(v-show="false")
     v-row.actions(align='center' justify='center')
       v-btn.edit-data(
@@ -211,7 +211,13 @@ export default {
     },
   },
   computed: {
-
+    rating() {
+      let userRating = this.userCard.rating;
+      console.log(userRating);
+      userRating = userRating.toFixed(2);
+      console.log(userRating);
+      return userRating;
+    },
     userCard() {
       return this.$store.getters.getUserCard;
     },

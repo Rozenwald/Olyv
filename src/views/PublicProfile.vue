@@ -1,9 +1,9 @@
 <template lang="pug">
-  .public-profile
+  .public-profile(ref="profileScroll")
     ProfileHeader(:user='user')
     ProfileDescription(:userCard='userCard')
-    ProfileGallery(:userCard='userCard')
-    review(type="publicProfile" :idUser='this.userId')
+    ProfileGallery(:userCard='userCard' )
+    review(type="publicProfile")
 </template>
 
 <script>
@@ -27,26 +27,29 @@ export default {
     ProfileDescription,
     ProfileGallery,
   },
-  props: {
-    userId: String,
+  beforeRouteUpdate(to, from, next) {
+    this.idUser = to.params.idUser;
+    next();
+    this.init(this.idUser);
+    window.scroll(0, 0);
   },
   data() {
     return {
+      idUser: null,
       user: {},
       userCard: {},
     };
   },
   methods: {
-    async init() {
+    async init(idUser) {
       this.$store.commit('setTitle', 'Профиль');
-
-      const { userId } = this;
-      let response = await this.getUserData(userId);
+      let response = await this.getUserData(idUser);
       this.user = this.checkResponse(response) || {};
 
       const { idUserCard } = this.user;
       response = await this.getUserCardData(idUserCard);
       this.userCard = this.checkResponse(response) || { _id: '123' }; //! заглушка
+      console.log(this.userCard);
     },
 
     async getUserData(id) {
@@ -90,7 +93,6 @@ export default {
           true,
           false,
         );
-
         logger.log(error);
       }
 
@@ -133,7 +135,8 @@ export default {
     },
   },
   created() {
-    this.init();
+    this.idUser = this.$route.params.idUser;
+    this.init(this.idUser);
   },
 };
 </script>

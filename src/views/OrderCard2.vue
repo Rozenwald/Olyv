@@ -15,7 +15,7 @@
           svg-icon(name="Time")
           .distantion-text {{formatedTime}}
         v-row.date-time-wrp(v-if='address' align='center' justify='start')
-          svg-icon(name="Location")
+          v-icon(color='#33CD74') place
           .distantion-text {{address}}
 </template>
 
@@ -86,13 +86,14 @@ export default {
     },
     address() {
       let nightCity = this.item.address;
-      while (nightCity[0].toLowerCase() !== nightCity[0]) {
-        const index = nightCity.indexOf(',', 0);
-        nightCity = nightCity.slice(index + 2);
-      }
-      const index = nightCity.indexOf(',', 0);
-      if (index !== -1) {
-        nightCity = nightCity.slice(0, index);
+      let index = nightCity.indexOf(',', 0);
+      while (index !== -1) {
+        if (nightCity[0].toLowerCase() !== nightCity[0]) {
+          nightCity = nightCity.slice(index + 2);
+        } else {
+          nightCity = nightCity.slice(0, index);
+        }
+        index = nightCity.indexOf(',', 0);
       }
       return nightCity;
     },

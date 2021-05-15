@@ -222,11 +222,8 @@ export default {
       this.watchScroll();
     },
     watchScroll() {
-      console.log(this.lastDate);
       this.lastDate = this.all[this.all.length - 1].ofCreateDate;
-      console.log(this.lastDate);
       const date = new Date(this.lastDate).getTime() - 1000;
-      console.log(this.date);
       window.onscroll = () => {
         if ((this.$refs.scrollUpdate.clientHeight - window.scrollY) <= 1000) {
           this.getMoreOrder(date);

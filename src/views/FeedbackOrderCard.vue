@@ -21,6 +21,9 @@
         v-row.date-time-wrp(align='center' justify='start')
           svg-icon(name="Time")
           .distantion-text {{formatedTime}}
+        v-row.date-time-wrp(v-if='address' align='center' justify='start')
+          v-icon(color='#33CD74') place
+          .distantion-text {{address}}
 </template>
 
 <script>
@@ -98,6 +101,19 @@ export default {
         return this.time.calendar();
       }
       return this.time.format('D MMMM, HH:mm');
+    },
+    address() {
+      let nightCity = this.item.order.address;
+      let index = nightCity.indexOf(',', 0);
+      while (index !== -1) {
+        if (nightCity[0].toLowerCase() !== nightCity[0]) {
+          nightCity = nightCity.slice(index + 2);
+        } else {
+          nightCity = nightCity.slice(0, index);
+        }
+        index = nightCity.indexOf(',', 0);
+      }
+      return nightCity;
     },
   },
   created() {

@@ -17,6 +17,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 import DialogWindow from './components/Dialog.vue';
 import feedbackDialog from './components/FeedbackDialog.vue';
 import dialog from './scripts/openDialog';
@@ -143,12 +144,11 @@ export default {
       }
     },
 
-    openProfile(userId) {
+    openProfile(idUser) {
+      console.log(idUser);
       // eslint-disable-next-line no-underscore-dangle
-      console.log(userId);
-      console.log(this.user._id);
-      if (this.user._id === userId) this.$router.push({ name: 'customerProfile' });
-      else this.$router.push({ name: 'publicProfile', params: { userId } });
+      if (this.user._id === idUser) this.$router.push({ name: 'customerProfile' });
+      else this.$router.push({ name: 'publicProfile', params: { idUser } });
     },
 
     beforeLeave(element) {
@@ -185,6 +185,7 @@ export default {
   },
   created() {
     cordova.listen();
+    moment.locale('RU');
 
     if (this.token) {
       this.getUserData();
