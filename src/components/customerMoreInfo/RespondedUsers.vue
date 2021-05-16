@@ -37,7 +37,11 @@ export default {
     checkOrderResponse(response) {
       switch (response.data.status) {
         case 'success':
-          this.$store.dispatch('setRespondedList', response.data.data);
+          response.data.data.forEach((el) => {
+            if (el.lock === false) {
+              this.$store.dispatch('setRespondedList', el);
+            }
+          });
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -58,6 +62,7 @@ export default {
     respondedList() {
       return this.$store.getters.getRespondedList || [];
     },
+
     token() {
       return this.$store.getters.getToken;
     },
@@ -66,12 +71,8 @@ export default {
       return this.$store.getters.getMyOrder;
     },
   },
-  watch: {
-    respondedList() {
-      if (!this.respondedList.length) {
-        this.getOrderResponse();
-      }
-    },
+  created() {
+    this.getOrderResponse();
   },
 };
 </script>

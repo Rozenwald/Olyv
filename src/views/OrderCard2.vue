@@ -1,5 +1,5 @@
 <template lang="pug">
-    v-card.card(@click='this.route')
+    v-card.card(@click='this.route' v-if="item.lock === false")
       v-row.main-part(no-gutters)
           v-col(cols="8").description-wrp
             .description {{item.description}}

@@ -332,7 +332,7 @@ export default {
       color #56D68B
       border 1px solid #56D68B
       max-width 90%
-      font-size 13px
+      font-size 12px
       width 90%
       box-shadow none !important
     }
@@ -340,7 +340,7 @@ export default {
     &-accept {
       background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
       color #FFFFFF
-      font-size 13px
+      font-size 12px
       max-width 90%
       width 90%
       box-shadow none !important

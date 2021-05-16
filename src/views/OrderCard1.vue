@@ -102,9 +102,6 @@ export default {
       return nightCity;
     },
   },
-  created() {
-    moment.locale('RU');
-  },
 };
 </script>
 

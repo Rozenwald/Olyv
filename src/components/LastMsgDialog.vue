@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-sheet.user-field(@click="goChat()")
+  v-sheet.user-field(@click="goChat()" v-if="item.message.lock === false")
     v-list-item
       v-list-item-avatar(size="62")
         avatar(type="public" size="62" :src="photo")
@@ -66,11 +66,9 @@ export default {
         });
     },
     checkGetUser(response) {
-      console.log(response.data.data);
       switch (response.data.status) {
         case 'success':
           this.user = response.data.data;
-          console.log(this.user);
           break;
         case 'notExist':
           dialog.open(

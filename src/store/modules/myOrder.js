@@ -5,11 +5,10 @@ const mutations = {
   },
   setType(state, type) {
     state.type = type;
-    console.log(state.type);
   },
   setRespondedList(state, respondedList) {
-    state.respondedList = respondedList;
-    console.log(state.respondedList);
+    state.respondedList = [...state.respondedList, ...respondedList];
+    console.log('respondedList', state.respondedList);
   },
 };
 

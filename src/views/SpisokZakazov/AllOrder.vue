@@ -39,7 +39,7 @@ export default {
   methods: {
     // Получение заказов
     getData() {
-      console.log('private');
+      console.log('privateGetOrder');
       axios
         .post(`${this.$baseUrl}api/v1/private/order`, {
           token: this.token,
@@ -55,7 +55,7 @@ export default {
 
     // Получение заказов без авторизации
     getPublicData() {
-      console.log('public');
+      console.log('publicGetOrder');
       axios
         .post(`${this.$baseUrl}api/v1/public/order`, {
           method: 'receive',
@@ -66,7 +66,6 @@ export default {
         });
     },
     checkPublicResponse(response) {
-      console.log(response);
       switch (response.data.status) {
         case 'success':
           this.allClear = response.data.data.reverse();
@@ -80,6 +79,7 @@ export default {
             true,
             () => { this.$router.push({ name: 'auth' }); },
           );
+          console.log('getPublicData notAuthentucate');
           break;
         default:
           this.error = 'Ошибка';
@@ -105,6 +105,7 @@ export default {
             true,
             () => { this.$router.push({ name: 'auth' }); },
           );
+          console.log('getPrivateData notAuthentucate');
           break;
         default:
           this.error = 'Ошибка';
@@ -125,6 +126,7 @@ export default {
         });
     },
     checkAwaitOrder(response) {
+      console.log(response);
       switch (response.data.status) {
         case 'success':
           response.data.data.forEach((element) => {
@@ -141,6 +143,7 @@ export default {
             true,
             () => { this.$router.push({ name: 'auth' }); },
           );
+          console.log('getAwaitOrder invalidSubmethod');
           break;
         case 'notAuthenticate':
           dialog.open(
@@ -150,6 +153,7 @@ export default {
             true,
             () => { this.$router.push({ name: 'auth' }); },
           );
+          console.log('getAwaitOrder notAuthentucate');
           break;
         case 'notExist':
           this.getMyOrder();
@@ -189,6 +193,7 @@ export default {
             true,
             () => { this.$router.push({ name: 'auth' }); },
           );
+          console.log('getMyOrder notAuthentucate');
           break;
         case 'notExist':
           this.createRegular();

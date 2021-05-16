@@ -38,6 +38,7 @@ export default {
   },
   methods: {
     itemClick(index) {
+      console.log(this.$refs.list);
       this.$refs.list.closeActions();
       this.$refs.list.revealRight(index);
     },

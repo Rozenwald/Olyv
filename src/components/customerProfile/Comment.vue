@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-card.comment(@click='openProfile()')
+  v-card.comment(@click='openProfile()' v-if="item.order.lock === false")
     v-list-item(dense)
       avatar.avatar(color="#56D68B" :src="photo")
       v-list-item-content
@@ -114,6 +114,7 @@ export default {
     },
   },
   created() {
+    console.log(this.item);
     this.init();
   },
 };

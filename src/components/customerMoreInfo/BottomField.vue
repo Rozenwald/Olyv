@@ -75,7 +75,6 @@ export default {
     },
 
     checkResponse(response) {
-      console.log(response.data);
       switch (response.data.status) {
         case 'success':
           this.$router.back();
@@ -136,7 +135,6 @@ export default {
   computed: {
 
     orderType() {
-      console.log('customer', this.$store.getters.getOrderType);
       return this.$store.getters.getOrderType;
     },
 
@@ -202,9 +200,9 @@ export default {
         background none !important
         color #56D68B
         border 1px solid #56D68B
-        max-width 100%
+        max-width 90%
         font-size 12px
-        width 100%
+        width 90%
         box-shadow none !important
       }
 
@@ -212,8 +210,8 @@ export default {
         background linear-gradient(180deg, #FFA967 0%, #FD7363 100%)
         color #FFFFFF
         font-size 12px
-        max-width 100%
-        width 100%
+        max-width 90%
+        width 90%
         box-shadow none !important
       }
     }
