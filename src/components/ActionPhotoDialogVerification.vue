@@ -10,40 +10,38 @@
       v-row.dialog-main-btn-camera( @click="openCamera" align="center" v-ripple="{ center: true }")
         span Сделать фото
 
+      v-row.dialog-main-btn-close(
+        @click="close"
+        align="center"
+        v-ripple="{ center: true }")
+        span Выйти
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 
 export default {
   name: 'action-photo-dialog-verification',
   methods: {
-    ...mapActions('actionPhotoDialogVerification', [
-      'setStatus',
-      'setSourceType',
-    ]),
-
     openGallery() {
-      this.setSourceType('gallery');
+      this.$store.dispatch('setSourceTypePhotoDialogVerification', 'gallery');
       this.open = false;
     },
 
     openCamera() {
-      this.setSourceType('camera-photo');
+      this.$store.dispatch('setSourceTypePhotoDialogVerification', 'camera-photo');
       this.open = false;
+    },
+    close() {
+      this.$store.dispatch('setStatusPhotoDialogVerification', false);
     },
   },
   computed: {
     open: {
-      get() { return this.$store.state.actionPhotoDialogVerification.status; },
-      set(value) { this.setStatus(value); },
-    },
-    visible: {
       get() {
-        return this.$store.state.actionPhotoDialogVerification.status;
+        return this.$store.getters.getStatusPhotoDialogVerification;
       },
       set(val) {
-        this.setStatus(val);
+        this.$store.dispatch('setStatusPhotoDialogVerification', val);
       },
     },
   },
@@ -72,6 +70,11 @@ export default {
       }
 
       &-btn-camera {
+        font-size 16px
+        padding 6px 12px 6px 12px
+      }
+
+      &-btn-close {
         font-size 16px
         padding 6px 12px 6px 12px
       }

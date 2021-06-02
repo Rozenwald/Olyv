@@ -46,6 +46,7 @@
     "v-photoswipe": "^1.0.3-1",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.1",
+    "vue-click-outside": "^1.1.0",
     "vue-dadata": "^1.4.10",
     "vue-pdf": "^4.2.0",
     "vue-pose": "^0.5.1",

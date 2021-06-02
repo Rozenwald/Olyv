@@ -1,8 +1,12 @@
 const mutations = {
   setStatusPhotoDialogAvatar(state, status) {
-    state.status = status;
+    if ((state.status === true) && (status === true)) {
+      state.status = false;
+    } else {
+      state.status = status;
+    }
   },
-  setSourceType(state, type) {
+  setSourceTypePhotoDialogAvatar(state, type) {
     state.sourceType = type;
   },
 };
@@ -12,14 +16,14 @@ const actions = {
     commit('setStatusPhotoDialogAvatar', status);
   },
 
-  setSourceType({ commit }, type) {
-    commit('setSourceType', type);
+  setSourceTypePhotoDialogAvatar({ commit }, type) {
+    commit('setSourceTypePhotoDialogAvatar', type);
   },
 };
 
 const getters = {
   getStatusPhotoDialogAvatar: (state) => state.status,
-  getSourceType: (state) => state.sourceType,
+  getSourceTypePhotoDialogAvatar: (state) => state.sourceType,
 };
 
 const state = {
@@ -28,7 +32,6 @@ const state = {
 };
 
 export default {
-  namespaced: true,
   state,
   mutations,
   getters,

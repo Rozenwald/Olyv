@@ -40,7 +40,6 @@
 
 <script>
 import axios from 'axios';
-import { mapActions } from 'vuex';
 // eslint-disable-next-line import/no-cycle
 import router from '../router';
 import store from '../store';
@@ -336,17 +335,8 @@ export default {
       }
     },
 
-    ...mapActions('actionPhotoDialogAvatar', [
-      'setStatusPhotoDialogAvatar',
-      'setSourceType',
-    ]),
-
     actionPhoto() {
-      console.log(this.$store.getters.getStatusPhotoDialogAvatar);
-      this.setStatusPhotoDialogAvatar(true);
-      console.log(this.$store.getters.getStatusPhotoDialogAvatar);
       this.$store.dispatch('setStatusPhotoDialogAvatar', true);
-      console.log(this.$store.getters.getStatusPhotoDialogAvatar);
     },
 
     choosePhoto(innerOptions) {
@@ -493,8 +483,12 @@ export default {
     },
 
     sourceType: {
-      get() { return this.$store.state.actionPhotoDialogAvatar.sourceType; },
-      set(value) { this.setSourceType(value); },
+      get() {
+        return this.$store.getters.getSourceTypePhotoDialogAvatar;
+      },
+      set(val) {
+        this.$store.dispatch('setSourceTypePhotoDialogAvatar', val);
+      },
     },
   },
   watch: {

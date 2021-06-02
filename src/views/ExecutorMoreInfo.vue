@@ -1,6 +1,6 @@
 <template lang="pug">
   v-container.executor-more-info-wrp
-    user-card.user-card(:user="customerUser")
+    user-card.user-card(:user="customerUser" v-if='isAuth === true')
     address-field.address-field(
       :order="(orderType !== 'endedExecutor') ? order : order.order")
     order-information.order-information(
@@ -52,18 +52,20 @@ export default {
     },
 
     getCustomerUserData() {
-      axios
-        .post(`${this.$baseUrl}api/v1/private/user`, {
-          method: 'receive',
-          submethod: 'id',
-          token: this.token,
-          id: (this.orderType !== 'endedExecutor') ? this.order.idUserCustomer : this.order.order.idUserCustomer,
-        })
-        .then((response) => (this.checkCustomerUserData(response)))
-        // eslint-disable-next-line no-return-assign
-        .catch((error) => {
-          logger.log(error);
-        });
+      if (this.isAuth === true) {
+        axios
+          .post(`${this.$baseUrl}api/v1/private/user`, {
+            method: 'receive',
+            submethod: 'id',
+            token: this.token,
+            id: (this.orderType !== 'endedExecutor') ? this.order.idUserCustomer : this.order.order.idUserCustomer,
+          })
+          .then((response) => (this.checkCustomerUserData(response)))
+          // eslint-disable-next-line no-return-assign
+          .catch((error) => {
+            logger.log(error);
+          });
+      }
     },
 
     checkCustomerUserData(response) {
@@ -88,6 +90,10 @@ export default {
 
   },
   computed: {
+    isAuth() {
+      return this.$store.getters.isAuth;
+    },
+
     token() {
       return this.$store.getters.getToken;
     },

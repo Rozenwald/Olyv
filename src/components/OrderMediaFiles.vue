@@ -49,7 +49,6 @@
 
 <script>
 import axios from 'axios';
-import { mapActions } from 'vuex';
 import { PhotoSwipe } from 'v-photoswipe';
 import SvgIcon from './SvgIcon.vue';
 import camera from '../scripts/device-modules/camera';
@@ -132,18 +131,14 @@ export default {
       logger.log(this.$refs.file.files[0].size);
       this.sendFile(mediaFile.file, mediaFile);
     },
-    ...mapActions('actionPhotoDialog', [
-      'setStatus',
-      'setSourceType',
-    ]),
 
     actionAddMedia() {
       file.isStorageEnabled()
         .then((enable) => {
-          if (enable) this.setStatus(true);
+          if (enable) this.$store.dispatch('setStatusPhotoDialog', true);
           else storagePermissions.checkStorageAuthorization();
         });
-      this.setStatus(true);
+      this.$store.dispatch('setStatusPhotoDialog', true);
     },
 
     async deleteMediaFile(mediaFile) {
@@ -437,8 +432,12 @@ export default {
   },
   computed: {
     sourceType: {
-      get() { return this.$store.state.actionPhotoDialog.sourceType; },
-      set(value) { this.setSourceType(value); },
+      get() {
+        return this.$store.getters.getSourceTypePhotoDialog;
+      },
+      set(val) {
+        this.$store.dispatch('setSourceTypePhotoDialogr', val);
+      },
     },
     token() {
       return this.$store.getters.getToken;
