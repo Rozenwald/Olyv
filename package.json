@@ -55,7 +55,7 @@
     "vue-swipe-actions": "^2.0.0-beta.20",
     "vue-swipeable-bottom-sheet": "0.0.5",
     "vue2-leaflet": "^2.5.2",
-    "vue2-leaflet-fullscreen": "^1.0.0",
+    "vue2-leaflet-fullscreen": "^1.0.1",
     "vue2-leaflet-geosearch": "^1.0.6",
     "vuetify": "^2.2.11",
     "vuex": "^3.4.0"

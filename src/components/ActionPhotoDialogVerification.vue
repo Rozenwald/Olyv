@@ -38,6 +38,14 @@ export default {
       get() { return this.$store.state.actionPhotoDialogVerification.status; },
       set(value) { this.setStatus(value); },
     },
+    visible: {
+      get() {
+        return this.$store.state.actionPhotoDialogVerification.status;
+      },
+      set(val) {
+        this.setStatus(val);
+      },
+    },
   },
 };
 </script>

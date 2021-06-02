@@ -51,17 +51,17 @@
     </plugin>
     <universal-links>
         <host name="test.cabinet.olyv.services">
-            <path url="/updatePassword/" event="updatePassword"/>
-            <path url="/updatePassword" event="updatePassword"/>
-            <path url="/confirmCabinet/" event="confirmEmail"/>
-            <path url="/confirmCabinet" event="confirmEmail"/>
+            <path url="/recovery/password/" event="updatePassword"/>
+            <path url="/recovery/password" event="updatePassword"/>
+            <path url="/confirmEmail/" event="confirmEmail"/>
+            <path url="/confirmEmail" event="confirmEmail"/>
             <path url="*" event="anyPath"/>
         </host>
         <host name="cabinet.production.sopki.team" scheme="https">
-            <path url="/updatePassword/" event="updatePassword"/>
-            <path url="/updatePassword" event="updatePassword"/>
-            <path url="/confirmCabinet/" event="confirmEmail"/>
-            <path url="/confirmCabinet" event="confirmEmail"/>
+            <path url="/recovery/password/" event="updatePassword"/>
+            <path url="/recovery/password" event="updatePassword"/>
+            <path url="/confirmEmail/" event="confirmEmail"/>
+            <path url="/confirmEmail" event="confirmEmail"/>
             <path url="*" event="anyPath"/>
         </host>
     </universal-links>
