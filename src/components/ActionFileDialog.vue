@@ -52,6 +52,14 @@ export default {
       get() { return this.$store.state.actionFileDialog.status; },
       set(value) { this.setStatus(value); },
     },
+    visible: {
+      get() {
+        return this.$store.state.actionFileDialog.status;
+      },
+      set(val) {
+        this.setStatus(val);
+      },
+    },
   },
 };
 </script>
