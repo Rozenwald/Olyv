@@ -31,6 +31,7 @@ export default {
     openCamera() {
       this.setSourceType('camera-photo');
       this.open = false;
+      this.open.set = false;
     },
   },
   computed: {

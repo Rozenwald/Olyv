@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-dialog.dialog( v-model="open" )
+  v-dialog.dialog( v-model="visible" )
     v-sheet.dialog-main
       v-row.dialog-main-title
         span Фотография
@@ -31,6 +31,7 @@ export default {
     openCamera() {
       this.setSourceType('camera-photo');
       this.open = false;
+      this.open = false;
     },
   },
   computed: {
@@ -40,9 +41,11 @@ export default {
     },
     visible: {
       get() {
-        return this.$store.state.actionPhotoDialogAvatar.status;
+        console.log(this.$store.getters.getStatusPhotoDialogAvatar);
+        return this.$store.getters.getStatusPhotoDialogAvatar;
       },
       set(val) {
+        console.log(val);
         this.setStatus(val);
       },
     },

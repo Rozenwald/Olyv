@@ -1,5 +1,5 @@
 const mutations = {
-  setStatus(state, status) {
+  setStatusPhotoDialogAvatar(state, status) {
     state.status = status;
   },
   setSourceType(state, type) {
@@ -8,8 +8,8 @@ const mutations = {
 };
 
 const actions = {
-  setStatus({ commit }, status) {
-    commit('setStatus', status);
+  setStatusPhotoDialogAvatar({ commit }, status) {
+    commit('setStatusPhotoDialogAvatar', status);
   },
 
   setSourceType({ commit }, type) {
@@ -18,7 +18,7 @@ const actions = {
 };
 
 const getters = {
-  getStatus: (state) => state.status,
+  getStatusPhotoDialogAvatar: (state) => state.status,
   getSourceType: (state) => state.sourceType,
 };
 

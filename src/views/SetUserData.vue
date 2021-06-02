@@ -337,12 +337,16 @@ export default {
     },
 
     ...mapActions('actionPhotoDialogAvatar', [
-      'setStatus',
+      'setStatusPhotoDialogAvatar',
       'setSourceType',
     ]),
 
     actionPhoto() {
-      this.setStatus(true);
+      console.log(this.$store.getters.getStatusPhotoDialogAvatar);
+      this.setStatusPhotoDialogAvatar(true);
+      console.log(this.$store.getters.getStatusPhotoDialogAvatar);
+      this.$store.dispatch('setStatusPhotoDialogAvatar', true);
+      console.log(this.$store.getters.getStatusPhotoDialogAvatar);
     },
 
     choosePhoto(innerOptions) {
