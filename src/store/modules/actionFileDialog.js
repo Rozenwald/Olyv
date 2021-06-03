@@ -1,25 +1,29 @@
 const mutations = {
-  setStatus(state, status) {
-    state.status = status;
+  setStatusFileDialog(state, status) {
+    if ((state.status === true) && (status === true)) {
+      state.status = false;
+    } else {
+      state.status = status;
+    }
   },
-  setSourceType(state, type) {
+  setSourceTypeFileDialog(state, type) {
     state.sourceType = type;
   },
 };
 
 const actions = {
-  setStatus({ commit }, status) {
-    commit('setStatus', status);
+  setStatusFileDialog({ commit }, status) {
+    commit('setStatusFileDialog', status);
   },
 
-  setSourceType({ commit }, type) {
-    commit('setSourceType', type);
+  setSourceTypeFileDialog({ commit }, type) {
+    commit('setSourceTypeFileDialog', type);
   },
 };
 
 const getters = {
-  getStatus: (state) => state.status,
-  getSourceType: (state) => state.sourceType,
+  getStatusFileDialog: (state) => state.status,
+  getSourceTypeFileDialog: (state) => state.sourceType,
 };
 
 const state = {
@@ -28,7 +32,6 @@ const state = {
 };
 
 export default {
-  namespaced: true,
   state,
   mutations,
   getters,

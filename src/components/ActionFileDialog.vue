@@ -19,45 +19,44 @@
         v-ripple="{ center: true }")
         span Сделать видео
 
+      v-row.dialog-main-btn-close(
+        @click="close"
+        align="center"
+        v-ripple="{ center: true }")
+        span Выйти
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 
 export default {
   name: 'action-file-dialog',
   methods: {
-    ...mapActions('actionFileDialog', [
-      'setStatus',
-      'setSourceType',
-    ]),
 
     openGallery() {
-      this.setSourceType('gallery');
+      this.$store.dispatch('setSourceTypeFileDialog', 'gallery');
       this.open = false;
     },
 
     openCameraPhoto() {
-      this.setSourceType('camera-photo');
+      this.$store.dispatch('setSourceTypeFileDialog', 'camera-photo');
       this.open = false;
     },
 
     openCameraVideo() {
-      this.setSourceType('camera-video');
+      this.$store.dispatch('setSourceTypeFileDialog', 'camera-video');
       this.open = false;
+    },
+    close() {
+      this.$store.dispatch('setStatusFileDialog', false);
     },
   },
   computed: {
     open: {
-      get() { return this.$store.state.actionFileDialog.status; },
-      set(value) { this.setStatus(value); },
-    },
-    visible: {
       get() {
-        return this.$store.state.actionFileDialog.status;
+        return this.$store.getters.getStatusFileDialog;
       },
       set(val) {
-        this.setStatus(val);
+        this.$store.dispatch('setStatusFileDialog', val);
       },
     },
   },
@@ -86,6 +85,11 @@ export default {
       }
 
       &-btn-camera-video {
+        font-size 16px
+        padding 6px 12px 6px 12px
+      }
+
+      &-btn-close {
         font-size 16px
         padding 6px 12px 6px 12px
       }

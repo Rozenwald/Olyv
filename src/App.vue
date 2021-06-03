@@ -187,6 +187,8 @@ export default {
     cordova.listen();
     moment.locale('RU');
 
+    this.$on('test', () => console.log('sdsd'));
+
     if (this.token) {
       this.getUserData();
       this.getUserCard();

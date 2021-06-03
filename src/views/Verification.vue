@@ -43,7 +43,6 @@
 
 <script>
 import axios from 'axios';
-import { mapActions } from 'vuex';
 import store from '../store';
 import SvgIcon from '../components/SvgIcon.vue';
 import camera from '../scripts/device-modules/camera';
@@ -78,13 +77,8 @@ export default {
       }
     },
 
-    ...mapActions('actionPhotoDialogVerification', [
-      'setStatus',
-      'setSourceType',
-    ]),
-
     actionPhoto() {
-      this.setStatus(true);
+      this.$store.dispatch('setStatusPhotoDialogVerification', true);
     },
 
     choosePhoto(innerOptions) {
@@ -254,8 +248,12 @@ export default {
     },
 
     sourceType: {
-      get() { return this.$store.state.actionPhotoDialogVerification.sourceType; },
-      set(value) { this.setSourceType(value); },
+      get() {
+        return this.$store.getters.getSourceTypePhotoDialogVerification;
+      },
+      set(val) {
+        this.$store.dispatch('setSourceTypePhotoDialogVerification', val);
+      },
     },
 
     user() {
