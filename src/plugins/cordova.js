@@ -59,6 +59,11 @@ function checkNotification(messageData) {
       store.dispatch('setType', 'process');
       router.push({ name: 'executorMoreInfo' });
       break;
+    case 'keyword':
+      store.dispatch('setMyOrder', messageData.order);
+      store.dispatch('setType', 'keyword');
+      router.push({ name: 'executorMoreInfo' });
+      break;
     case 'response':
       store.dispatch('setMyOrder', messageData.order);
       store.dispatch('setType', 'await');
