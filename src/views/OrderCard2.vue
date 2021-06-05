@@ -22,8 +22,6 @@
 <script>
 import moment from 'moment';
 import SvgIcon from '../components/SvgIcon.vue';
-import dialog from '../scripts/openDialog';
-import dialogMessages from '../scripts/dialogMessages';
 
 export default {
   name: 'OrderCard2',
@@ -36,20 +34,9 @@ export default {
   },
   methods: {
     route() {
-      // eslint-disable-next-line no-underscore-dangle
-      if (this.isAuth === true) {
-        this.$store.dispatch('setMyOrder', this.item);
-        this.$store.dispatch('setType', this.type);
-        this.$router.push({ name: 'executorMoreInfo' });
-      } else {
-        dialog.open(
-          dialogMessages.getTitle('needToAuth'),
-          dialogMessages.getBody('needToAuth'),
-          true,
-          true,
-          () => { this.$router.push({ name: 'auth' }); },
-        );
-      }
+      this.$store.dispatch('setMyOrder', this.item);
+      this.$store.dispatch('setType', this.type);
+      this.$router.push({ name: 'executorMoreInfo' });
     },
   },
   computed: {
