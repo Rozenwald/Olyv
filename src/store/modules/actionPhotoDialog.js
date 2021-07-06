@@ -6,24 +6,24 @@ const mutations = {
       state.status = status;
     }
   },
-  setSourceTypePhotoDialo(state, type) {
+  setSourceTypePhotoDialog(state, type) {
     state.sourceType = type;
   },
 };
 
 const actions = {
-  setStatusPhotoDialo({ commit }, status) {
-    commit('setStatusPhotoDialo', status);
+  setStatusPhotoDialog({ commit }, status) {
+    commit('setStatusPhotoDialog', status);
   },
 
-  setSourceTypePhotoDialo({ commit }, type) {
-    commit('setSourceTypePhotoDialo', type);
+  setSourceTypePhotoDialog({ commit }, type) {
+    commit('setSourceTypePhotoDialog', type);
   },
 };
 
 const getters = {
-  getStatusPhotoDialo: (state) => state.status,
-  getSourceTypePhotoDialo: (state) => state.sourceType,
+  getStatusPhotoDialog: (state) => state.status,
+  getSourceTypePhotoDialog: (state) => state.sourceType,
 };
 
 const state = {

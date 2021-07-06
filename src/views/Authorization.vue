@@ -166,7 +166,6 @@ export default {
     },
 
     checkSignIn(response) {
-      console.log('signIN', response);
       logger.log(response);
       switch (response.data.status) {
         case 'success':
@@ -214,7 +213,6 @@ export default {
         });
     },
     checkUserData(response) {
-      console.log('UserData', response);
       switch (response.data.status) {
         case 'success':
           this.$store.dispatch('setUser', response.data.data);
@@ -252,7 +250,6 @@ export default {
     },
 
     checkChatAuth(response) {
-      console.log('ChatAuth', response);
       switch (response.data.status) {
         case 'success':
           nativeStorage.setItem('chatToken', response.data.data.token);
@@ -293,7 +290,6 @@ export default {
     },
 
     checkNotificationAuth(response) {
-      console.log('NotofocationAuth', response);
       switch (response.data.status) {
         case 'success':
           nativeStorage.setItem('notificationToken', response.data.data.token);
@@ -357,7 +353,6 @@ export default {
     },
 
     checkAppToken(response) {
-      console.log('AppToken', response);
       if (response.data.status === 'success' || response.data.status === 'exist') {
         this.isAddAppToken = true;
       } else {
